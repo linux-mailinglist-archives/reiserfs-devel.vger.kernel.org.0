@@ -2,214 +2,94 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B56928DA8
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 24 May 2019 01:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B34B729A3F
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 24 May 2019 16:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388137AbfEWXKg (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 23 May 2019 19:10:36 -0400
-Received: from mail7.static.mailgun.info ([104.130.122.7]:51997 "EHLO
-        mail7.static.mailgun.info" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388015AbfEWXKg (ORCPT
+        id S2404159AbfEXOq6 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 24 May 2019 10:46:58 -0400
+Received: from mail-wr1-f44.google.com ([209.85.221.44]:37600 "EHLO
+        mail-wr1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403927AbfEXOq5 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 23 May 2019 19:10:36 -0400
-X-Greylist: delayed 300 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 May 2019 19:10:25 EDT
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mixtli.metztli.it; q=dns/txt;
- s=mx; t=1558653035; h=Content-Transfer-Encoding: MIME-Version:
- Reply-To: References: In-Reply-To: Message-Id: Date: Subject: Cc: To:
- From: Sender; bh=ZQ5Ww+WDI5Qy7Yeh6u/x0Q23qARJi0rvUxcfeqbfBCY=; b=xxDxJQSC8Kg4rcBP7nSrPCKbXGerz8eDwZ7FL22lRotUg/r1gpsfn7iLXDhxptHJZzzYhduu
- koht609vtPBCqdllNRccQ5/ObJ+IB+DBjtEJ0GByVW7lOvhwuZbK23Q9w1qvt7KISh7e8OFQ
- Q+EpSkm6dscHbqrRsPy7fO4eOQk=
-X-Mailgun-Sending-Ip: 104.130.122.7
-X-Mailgun-Sid: WyIxM2M2YSIsICJyZWlzZXJmcy1kZXZlbEB2Z2VyLmtlcm5lbC5vcmciLCAiMTdiNTQiXQ==
-Received: from huitzilopochtli.metztli-it.com (99-130-254-3.lightspeed.sntcca.sbcglobal.net [99.130.254.3])
- by mxa.mailgun.org with ESMTP id 5ce7273e.7fbe293648a0-smtp-out-n01;
- Thu, 23 May 2019 23:05:34 -0000 (UTC)
-Received: by huitzilopochtli.metztli-it.com (Postfix, from userid 1000)
-        id D11A03C53E0C; Thu, 23 May 2019 16:05:32 -0700 (PDT)
-From:   Metztli Information Technology <jose@metztli.it>
-To:     reiserfs-devel@vger.kernel.org
-Cc:     Metztli Information Technology <jose@metztli.it>
-Subject: [PATCH] Reiser4 probe updating GNU Parted v3.2 from git repo
-Date:   Thu, 23 May 2019 16:05:02 -0700
-Message-Id: <20190523230502.12152-2-jose@metztli.it>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190523230502.12152-1-jose@metztli.it>
+        Fri, 24 May 2019 10:46:57 -0400
+Received: by mail-wr1-f44.google.com with SMTP id e15so10326474wrs.4
+        for <reiserfs-devel@vger.kernel.org>; Fri, 24 May 2019 07:46:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-transfer-encoding:content-language;
+        bh=7gAHVL9VfHfG8AuOuqTzrq4qQHdKJryhIvc7MA+TJVM=;
+        b=uw+WmTR0mkxFro72PL8Dk4O1fheQE1bB8tN82Uhkc0LFPWedltL4PwmHB7O9ASH2OI
+         lRlk10uJSaCo8B6yp5g8aqJkMx7M56GUz12XTC5bxUMNB9lfLJ0HAFWe6FoaSLMIJYqF
+         GQR+JWra8eDOA8Eiiz9EODNZjb8KptPUr+PzY+KARnzD0IuMe9SJ4AG/YobgB1Lk/dcC
+         /Uaz1EjTtYLn1yBVCIfkxN4ey68uMkwvPx7g71aJ2a15Qg0lA8H/Ej8GHa3VKwcksweq
+         6b981Dfjg5Z3c38yxZbKWq/84meoS47PtmueITuRbtZEULR3dbZmrWSaejTv8Be8UG1l
+         4aKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=7gAHVL9VfHfG8AuOuqTzrq4qQHdKJryhIvc7MA+TJVM=;
+        b=YayxT4kyjt26lihb56BfrTAVd+N/lNmNMfFRiryNGqDPulV9rdKI2Ak13ESHztDKwd
+         A+4XSPhN0DyPjrLnNRhv4Jjg1LmBiAXKe1IUfpaRHs+g132B6h8KTlxQI7oaZa4y7pf1
+         pbamjvqQZjrcbtDSBVky3ocpoL1yKrKWHC1is7UlZKBIn/M6HlUhrD2uTtAwUT3VkzKK
+         bLo6dNb86Qzql4mIrH78y1E75jUBXGE1QcIOGSkWV+4zRs4mc/r82NkyrVjxd2h+5S8S
+         L9Lklb7sE0HjxFUgJfs2fXRcQlt8yUwvCN18/3bxOAxTbkY9SlVyOQdQH0G4u2c7g/AC
+         1jHQ==
+X-Gm-Message-State: APjAAAWuXIgUFYtDHUFzOavOHHsqO6ZpErYGYrjQMlv2n8tXgr5+v4Z6
+        Rc1adHyCWMcCVEgaHfeC+xqx6OLS
+X-Google-Smtp-Source: APXvYqziuqjHv0jGSiIKskl13++ZkvUqyZxYkU3bwnIwgP/IZZADaC88zr0qGoGraPMCi/HCobMrmA==
+X-Received: by 2002:adf:cd11:: with SMTP id w17mr29984934wrm.83.1558709216122;
+        Fri, 24 May 2019 07:46:56 -0700 (PDT)
+Received: from [192.168.0.48] (ip5f5ac62d.dynamic.kabel-deutschland.de. [95.90.198.45])
+        by smtp.gmail.com with ESMTPSA id v184sm4167582wma.6.2019.05.24.07.46.54
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 24 May 2019 07:46:55 -0700 (PDT)
+Subject: Re: PATCH: Updated Reiser4 probe enabled against GNU Parted
+ git://git.sv.gnu.org/parted.git
+To:     jose.r.r@metztli.com, reiserfs-devel@vger.kernel.org
 References: <20190523230502.12152-1-jose@metztli.it>
-Reply-To: jose.r.r@metztli.com
+From:   Edward Shishkin <edward.shishkin@gmail.com>
+Message-ID: <84b24297-6e20-eb8f-eab3-9ca1c19d6301@gmail.com>
+Date:   Fri, 24 May 2019 16:46:54 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.5.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190523230502.12152-1-jose@metztli.it>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
----
- include/parted/unit.in.h       |  2 +-
- libparted/Makefile.am          |  1 +
- libparted/fs/Makefile.am       |  3 ++
- libparted/fs/reiser4/reiser4.c | 71 ++++++++++++++++++++++++++++++++++
- libparted/libparted.c          |  4 ++
- 5 files changed, 80 insertions(+), 1 deletion(-)
- create mode 100644 libparted/fs/reiser4/reiser4.c
+On 05/24/2019 01:05 AM, Metztli Information Technology wrote:
+> Niltze [Hello]-
+>
+> Just updated Reiser for patch against GNU Parted
+> git clone git://git.sv.gnu.org/parted.git
 
-diff --git a/include/parted/unit.in.h b/include/parted/unit.in.h
-index 315660d..9d6e06a 100644
---- a/include/parted/unit.in.h
-+++ b/include/parted/unit.in.h
-@@ -66,7 +66,7 @@ typedef enum {
- 
- extern long long ped_unit_get_size (const PedDevice* dev, PedUnit unit);
- extern const char *ped_unit_get_name (PedUnit unit)
--  _GL_ATTRIBUTE_PURE;
-+  _GL_ATTRIBUTE_PURE _GL_ATTRIBUTE_CONST;
- extern PedUnit ped_unit_get_by_name (const char* unit_name) _GL_ATTRIBUTE_PURE;
- 
- extern void ped_unit_set_default (PedUnit unit);
-diff --git a/libparted/Makefile.am b/libparted/Makefile.am
-index e4a8049..bee3a99 100644
---- a/libparted/Makefile.am
-+++ b/libparted/Makefile.am
-@@ -3,6 +3,7 @@
- #
- # This file may be modified and/or distributed without restriction.
- 
-+AUTOMAKE_OPTIONS = subdir-objects
- SUBDIRS_CHECK =
- if HAVE_CHECK
- SUBDIRS_CHECK += tests
-diff --git a/libparted/fs/Makefile.am b/libparted/fs/Makefile.am
-index cab32c7..b41ac06 100644
---- a/libparted/fs/Makefile.am
-+++ b/libparted/fs/Makefile.am
-@@ -3,6 +3,8 @@
- #
- # This file may be modified and/or distributed without restriction.
- 
-+AUTOMAKE_OPTIONS = subdir-objects
-+
- partedincludedir = -I$(top_builddir)/include -I$(top_srcdir)/include
- 
- AM_CFLAGS = $(WARN_CFLAGS)
-@@ -44,6 +46,7 @@ libfs_la_SOURCES =		\
-   ntfs/ntfs.c			\
-   reiserfs/reiserfs.c		\
-   reiserfs/reiserfs.h		\
-+  reiser4/reiser4.c		\
-   udf/udf.c			\
-   ufs/ufs.c			\
-   xfs/platform_defs.h		\
-diff --git a/libparted/fs/reiser4/reiser4.c b/libparted/fs/reiser4/reiser4.c
-new file mode 100644
-index 0000000..0a86e0c
---- /dev/null
-+++ b/libparted/fs/reiser4/reiser4.c
-@@ -0,0 +1,71 @@
-+/*
-+    libparted - a library for manipulating disk partitions
-+    Copyright (C) 2000 Free Software Foundation, Inc.
-+
-+    This program is free software; you can redistribute it and/or modify
-+    it under the terms of the GNU General Public License as published by
-+    the Free Software Foundation; either version 2 of the License, or
-+    (at your option) any later version.
-+
-+    This program is distributed in the hope that it will be useful,
-+    but WITHOUT ANY WARRANTY; without even the implied warranty of
-+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+    GNU General Public License for more details.
-+
-+    You should have received a copy of the GNU General Public License
-+    along with this program; if not, write to the Free Software
-+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-+*/
-+
-+#include <config.h>
-+
-+#include <parted/parted.h>
-+#include <parted/endian.h>
-+
-+#if ENABLE_NLS
-+#  include <libintl.h>
-+#  define _(String) dgettext (PACKAGE, String)
-+#else
-+#  define _(String) (String)
-+#endif /* ENABLE_NLS */
-+
-+#include <unistd.h>
-+#include <string.h>
-+
-+static PedGeometry*
-+reiser4_probe (PedGeometry* geom)
-+{
-+	char	buf[512];
-+
-+	if (!ped_geometry_read (geom, buf, 128, 1))
-+		return 0;	
-+	
-+	if ( strcmp( buf, "ReIsEr4" ) == 0 )
-+		return ped_geometry_duplicate( geom ) ;
-+
-+	else
-+		return NULL;
-+}
-+
-+static PedFileSystemOps reiser4_ops = {
-+	probe:		reiser4_probe,
-+};
-+
-+static PedFileSystemType reiser4_type = {
-+	next:	NULL,
-+	ops:	&reiser4_ops,
-+	name:	"reiser4"
-+};
-+
-+void
-+ped_file_system_reiser4_init ()
-+{
-+	ped_file_system_type_register (&reiser4_type);
-+}
-+
-+void
-+ped_file_system_reiser4_done ()
-+{
-+	ped_file_system_type_unregister (&reiser4_type);
-+}
-+
-diff --git a/libparted/libparted.c b/libparted/libparted.c
-index e517875..bc8ea35 100644
---- a/libparted/libparted.c
-+++ b/libparted/libparted.c
-@@ -110,6 +110,7 @@ extern void ped_file_system_jfs_init (void);
- extern void ped_file_system_hfs_init (void);
- extern void ped_file_system_fat_init (void);
- extern void ped_file_system_ext2_init (void);
-+extern void ped_file_system_reiser4_init (void);
- extern void ped_file_system_nilfs2_init (void);
- extern void ped_file_system_btrfs_init (void);
- extern void ped_file_system_udf_init (void);
-@@ -127,6 +128,7 @@ init_file_system_types ()
- 	ped_file_system_hfs_init ();
- 	ped_file_system_fat_init ();
- 	ped_file_system_ext2_init ();
-+	ped_file_system_reiser4_init ();
- 	ped_file_system_nilfs2_init ();
- 	ped_file_system_btrfs_init ();
- 	ped_file_system_udf_init ();
-@@ -193,6 +195,7 @@ extern void ped_file_system_ntfs_done (void);
- extern void ped_file_system_reiserfs_done (void);
- extern void ped_file_system_ufs_done (void);
- extern void ped_file_system_xfs_done (void);
-+extern void ped_file_system_reiser4_done (void);
- extern void ped_file_system_amiga_done (void);
- extern void ped_file_system_btrfs_done (void);
- extern void ped_file_system_udf_done (void);
-@@ -210,6 +213,7 @@ done_file_system_types ()
- 	ped_file_system_reiserfs_done ();
- 	ped_file_system_ufs_done ();
- 	ped_file_system_xfs_done ();
-+	ped_file_system_reiser4_done ();
- 	ped_file_system_amiga_done ();
- 	ped_file_system_btrfs_done ();
- 	ped_file_system_udf_done ();
--- 
-2.20.1
+Uh, it is in upstream already?
+Someone must have died ...
+
+Thanks,
+Edward.
+
+>
+> apply patch
+>
+> ./bootstrap
+>
+> ./configure
+>
+> make
+>
+> make install
+>
+>
+> Huelmati [Enjoy]!
+>
+>
+
