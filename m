@@ -2,34 +2,35 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 113852A0DA
-	for <lists+reiserfs-devel@lfdr.de>; Sat, 25 May 2019 00:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB6C72A2ED
+	for <lists+reiserfs-devel@lfdr.de>; Sat, 25 May 2019 06:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404445AbfEXWBb (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 24 May 2019 18:01:31 -0400
-Received: from mail7.static.mailgun.info ([104.130.122.7]:39871 "EHLO
+        id S1726072AbfEYE41 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sat, 25 May 2019 00:56:27 -0400
+Received: from mail7.static.mailgun.info ([104.130.122.7]:61572 "EHLO
         mail7.static.mailgun.info" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404303AbfEXWBa (ORCPT
+        with ESMTP id S1726063AbfEYE40 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 24 May 2019 18:01:30 -0400
+        Sat, 25 May 2019 00:56:26 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mixtli.metztli.it; q=dns/txt;
- s=mx; t=1558735289; h=From: Date: Message-Id: To: Subject: Sender;
- bh=XG+4PTxCXrXFYd5HCm0mwZr9N0Np8jiHB/B+451g/Ic=; b=ipoRy2UUxlgd1Nz8NslNUaAtrKIeQMJPR+hHde6WqAjTqk6nYtRIXGDAjqb78zZmCNl06EU0
- KUGdjTZiDHCvCVAqlyTB7ozKnoEcOMIBdCsBZTk+CSLbLCAQBsXYzsHOW2Tn7Z7P++/GogfG
- SSA+E6gODyzZWFmDXutcmhN6FCI=
+ s=mx; t=1558760182; h=From: Date: Message-Id: To: Subject: Sender;
+ bh=EeExCq4EgGO1gZC02X4qVhpiTBJLFCaJ8TMgjZZAkME=; b=h1AGcFzehot0ZVOpghybfRnTpsdBLfd/xl/+fYYt5An1L4Vum779Ucf3LInCH/oUaMnDS7ao
+ 4HSTu95v3/J3BGamms/AJrOepUPbO7ZF33BBLiAuJ2oBkQBXgkqmPcID/jaOUehGgDvYv8M4
+ GK4LsqADwqbl4y5PNI9T+iw0/S0=
 X-Mailgun-Sending-Ip: 104.130.122.7
 X-Mailgun-Sid: WyIxM2M2YSIsICJyZWlzZXJmcy1kZXZlbEB2Z2VyLmtlcm5lbC5vcmciLCAiMTdiNTQiXQ==
 Received: from huitzilopochtli.metztli-it.com (99-130-254-3.lightspeed.sntcca.sbcglobal.net [99.130.254.3])
- by mxa.mailgun.org with ESMTP id 5ce869b9.7f9510639a08-smtp-out-n02;
- Fri, 24 May 2019 22:01:29 -0000 (UTC)
+ by mxa.mailgun.org with ESMTP id 5ce8caf1.7f334d2fbae0-smtp-out-n02;
+ Sat, 25 May 2019 04:56:17 -0000 (UTC)
 Received: by huitzilopochtli.metztli-it.com (Postfix, from userid 1000)
-        id A6F013C59B12; Fri, 24 May 2019 15:01:27 -0700 (PDT)
-Subject: Re: PATCH: Updated Reiser4 probe enabled against GNU Parted git://git.sv.gnu.org/parted.git
-To:     <edward.shishkin@gmail.com>, <reiserfs-devel@vger.kernel.org>,
-        <22113@debbugs.gnu.org>, <bcl@redhat.com>
+        id ABDC73C5C02A; Fri, 24 May 2019 21:56:16 -0700 (PDT)
+Subject: Re: bug#22113: PATCH: Updated Reiser4 probe enabled against GNU Parted git://git.sv.gnu.org/parted.git
+To:     <usr.src.linux@gmail.com>, <edward.shishkin@gmail.com>,
+        <reiserfs-devel@vger.kernel.org>, <22113@debbugs.gnu.org>,
+        <bcl@redhat.com>
 X-Mailer: mail (GNU Mailutils 3.1.1)
-Message-Id: <20190524220127.A6F013C59B12@huitzilopochtli.metztli-it.com>
-Date:   Fri, 24 May 2019 15:01:27 -0700 (PDT)
+Message-Id: <20190525045616.ABDC73C5C02A@huitzilopochtli.metztli-it.com>
+Date:   Fri, 24 May 2019 21:56:16 -0700 (PDT)
 From:   jose.r.r@metztli.com (Metztli Information Technology)
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
@@ -37,27 +38,34 @@ List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
 
-
-On Fri, May 24, 2019 at 7:46 AM Edward Shishkin <edward.shishkin@gmail.com> wrote:
+On Fri, May 24, 2019 at 4:03 PM Harry Duncan <usr.src.linux@gmail.com> wrote:
 >
-> On 05/24/2019 01:05 AM, Metztli Information Technology wrote:
-> > Niltze [Hello]-
-> >
-> > Just updated Reiser for patch against GNU Parted
-> > git clone git://git.sv.gnu.org/parted.git
 >
-> Uh, it is in upstream already?
-LOL, no.
+>
+> On Fri, May 24, 2019 at 11:02 PM Metztli Information Technology <jose.r.r@metztli.com> wrote:
+>>
+>>
+>>
+>> On Fri, May 24, 2019 at 7:46 AM Edward Shishkin <edward.shishkin@gmail.com> wrote:
+>> >
+>> > On 05/24/2019 01:05 AM, Metztli Information Technology wrote:
+>> > > Niltze [Hello]-
+>> > >
+>> > > Just updated Reiser for patch against GNU Parted
+>> > > git clone git://git.sv.gnu.org/parted.git
+>> >
+>> > Uh, it is in upstream already?
+>> LOL, no.
+>>
+>> I just followed Debian maintainer's original advice on updating patch against git branch of GNU Parted.
+>> < https://marc.info/?l=reiserfs-devel&m=155865303620491&w=2 >
+>>
+>> > Someone must have died ...
+>
+>
+> Or someone was perhaps convicted of second degree murder after a plea deal for revealing the location of his wife's corpse. 
 
-I just followed Debian maintainer's original advice on updating patch against git branch of GNU Parted.
-< https://marc.info/?l=reiserfs-devel&m=155865303620491&w=2 >
-
-> Someone must have died ...
-
-Well, that's the reasoning behind GNU Parted gatekeeper
-< https://www.brianlane.com/about-brian-c-lane/ >
-
-for not merging reiser4 patch.
+umh...  why cherry pick? Below is reprint of complementary argument you are omitting:
 
 I just wonder if now that 'Big Blue' acquired Red Hat, the GNU Parted gatekeeper will act in a consistent
 manner and quit his employer on 'ethical and moral' grounds in light of Watson's complicity tainting the company.
@@ -74,26 +82,22 @@ Well, maybe I quoted him too soon. Unlike Reiser, who is down and dirt-poor and 
 scorn onto, 'Big Blue's wealth quells USA technology ecosystem and their employees' ethical and moral sophistry, as is evidenced by, say no issues with JFS,
 for instance.
 
->
-> Thanks,
-> Edward.
->
-> >
-> > apply patch
-> >
-> > ./bootstrap
-> >
-> > ./configure
-> >
-> > make
-> >
-> > make install
-> >
-> >
-> > Huelmati [Enjoy]!
-> >
-> >
->
+> ReiserFS wasn't production quality when it was mainstream, ie. its own filessystem check tools were incapable of repairing a filesystem that was improperly closed under the majority of scenarios.
+
+The topic is Reiser4 different technology and thus different beast than ReiserFS. Apropos, hang issues and corruption are prevalent in BtrFS and ext4,
+i.e., for a couple of instances,
+< https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=908216 >
+< https://www.phoronix.com/scan.php?page=news_item&px=EXT4-Linux-4.19-Corruption >
+
+ > I'd strongly suggest whatever your need is for this filesystem, re-evaluate your position.
+thus your advice should be directed at the 'ethically and morally righteous' maintainers of those filesystems.
+With all its quirks and issues, Reiser4 is a different beast which has not corrupted any of my data during my several years of daily use in Google Cloud images
+as well as in remote bare metal servers and/or my local development environment(s) where I develop my kernels and installers.
+
+Accordingly, and with all due respect, I don't request sanctimonious crap from mudslingers.
+
+
+Best Professional Regards.
 
 -- 
 Jose R R
