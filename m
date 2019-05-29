@@ -2,212 +2,249 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B032A2C914
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 28 May 2019 16:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C762D37B
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 29 May 2019 03:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726973AbfE1Omn (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 28 May 2019 10:42:43 -0400
-Received: from [198.50.183.10] ([198.50.183.10]:59290 "EHLO mahatta.net"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726713AbfE1Omn (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 28 May 2019 10:42:43 -0400
-X-Greylist: delayed 8686 seconds by postgrey-1.27 at vger.kernel.org; Tue, 28 May 2019 10:42:41 EDT
-From:   aishatu@mahatta.net
+        id S1725816AbfE2BqN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 28 May 2019 21:46:13 -0400
+Received: from mail.wl.linuxfoundation.org ([198.145.29.98]:50764 "EHLO
+        mail.wl.linuxfoundation.org" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725805AbfE2BqM (ORCPT
+        <rfc822;reiserfs-devel@vger.kernel.org>);
+        Tue, 28 May 2019 21:46:12 -0400
+Received: from mail.wl.linuxfoundation.org (localhost [127.0.0.1])
+        by mail.wl.linuxfoundation.org (Postfix) with ESMTP id 79A0A28721
+        for <reiserfs-devel@vger.kernel.org>; Wed, 29 May 2019 01:46:11 +0000 (UTC)
+Received: by mail.wl.linuxfoundation.org (Postfix, from userid 486)
+        id 69A3028783; Wed, 29 May 2019 01:46:11 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on
+        pdx-wl-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=2.0 tests=BAYES_00,NO_RECEIVED,
+        NO_RELAYS autolearn=ham version=3.3.1
+From:   bugzilla-daemon@bugzilla.kernel.org
 To:     reiserfs-devel@vger.kernel.org
-Subject: Purchase_rfq
-Date:   28 May 2019 16:42:37 +0200
-Message-ID: <20190528164237.5F20A2222D686A3B@mahatta.net>
+Subject: [Bug 203749] New: Reiserfs: kernel BUG at fs/reiserfs/prints.c:390!
+Date:   Wed, 29 May 2019 01:46:10 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: File System
+X-Bugzilla-Component: ReiserFS
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: midwinter1993@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: reiserfs-devel@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression attachments.created
+Message-ID: <bug-203749-695@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
-        boundary="----=_NextPart_000_0012_3B38604D.07CDCD19"
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-This is a multi-part message in MIME format.
+https://bugzilla.kernel.org/show_bug.cgi?id=203749
 
-------=_NextPart_000_0012_3B38604D.07CDCD19
+            Bug ID: 203749
+           Summary: Reiserfs: kernel BUG at fs/reiserfs/prints.c:390!
+           Product: File System
+           Version: 2.5
+    Kernel Version: 5.1.3
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: ReiserFS
+          Assignee: reiserfs-devel@vger.kernel.org
+          Reporter: midwinter1993@gmail.com
+        Regression: No
 
-------=_NextPart_000_0012_3B38604D.07CDCD19
-Content-Type: application/octet-stream; name="INQUIRY_4178916..xlsx"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="INQUIRY_4178916..xlsx"
+Created attachment 282999
+  --> https://bugzilla.kernel.org/attachment.cgi?id=282999&action=edit
+Crafted image
 
-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
-AAB6IAAAAAA=
+When mounting the crafted image (in the attached file), a kernel bug occurred.
+Tested under kernel-5.1.3.
 
-------=_NextPart_000_0012_3B38604D.07CDCD19--
+Reproduce
+
+1. download image.tar.gz
+2. uncompress it:
+  > tar -xzvf image.tar.gz
+
+3. mount it:
+  > mkdir dd
+  > mount bingo.img dd
+
+4. check result:
+  > dmesg
+
+--- Core dump ---
+```
+[   47.197126] REISERFS (device loop0): found reiserfs format "3.6" with
+standard journal
+[   47.198331] REISERFS warning (device loop0):  reiserfs_fill_super:
+CONFIG_REISERFS_CHECK is set ON
+[   47.199625] REISERFS warning (device loop0):  reiserfs_fill_super: - it is
+slow mode for debugging.
+[   47.200903] REISERFS (device loop0): using ordered data mode
+[   47.201507] reiserfs: using flush barriers
+[   47.202886] REISERFS (device loop0): journal params: device loop0, size
+8192, journal first block 18, max trans len 1024, max batch 900, max commit age
+30, max trans age 30
+[   47.205342] REISERFS (device loop0): checking transaction log (loop0)
+[   47.257453] REISERFS (device loop0): Using r5 hash to sort names
+[   47.258473] CPU: 1 PID: 2025 Comm: mount Not tainted 5.1.3 #4
+[   47.259286] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+Ubuntu-1.8.2-1ubuntu1 04/01/2014
+[   47.260646] Call Trace:
+[   47.261030]  dump_stack+0x79/0xae
+[   47.261517]  __reiserfs_panic+0x64/0x80
+[   47.262074]  direntry_create_vi+0x4a0/0x4a0
+[   47.262700]  create_virtual_node+0x2b3/0xc20
+[   47.263307]  fix_nodes+0x1a35/0x36c0
+[   47.263841]  reiserfs_insert_item+0x290/0x580
+[   47.264472]  reiserfs_new_inode+0x69a/0xe20
+[   47.265069]  ? selinux_determine_inode_label+0xb1/0x140
+[   47.265825]  reiserfs_mkdir+0x216/0x3c0
+[   47.266387]  reiserfs_xattr_init+0x1e6/0x350
+[   47.266996]  reiserfs_fill_super+0xfd6/0x1580
+[   47.267626]  mount_bdev+0x217/0x260
+[   47.268111]  ? finish_unfinished+0x820/0x820
+[   47.268719]  legacy_get_tree+0x2b/0x90
+[   47.269256]  vfs_get_tree+0x2e/0x140
+[   47.269776]  do_mount+0xc3d/0x1610
+[   47.270264]  ? copy_mount_options+0x1b5/0x2c0
+[   47.270883]  ksys_mount+0xd7/0x150
+[   47.271372]  __x64_sys_mount+0x22/0x30
+[   47.271908]  do_syscall_64+0x75/0x1d0
+[   47.272449]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[   47.273176] RIP: 0033:0x7f7e3c5e148a
+[   47.273688] Code: 48 8b 0d 11 fa 2a 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e
+0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01
+f0 ff ff 73 01 c3 48 8b 0d de f9 2a 00 f7 d8 64 89 01 48
+[   47.275644] RSP: 002b:00007ffd256e66a8 EFLAGS: 00000202 ORIG_RAX:
+00000000000000a5
+[   47.276707] RAX: ffffffffffffffda RBX: 0000557c9a4a8500 RCX:
+00007f7e3c5e148a
+[   47.277705] RDX: 0000557c9a4aaba0 RSI: 0000557c9a4aa3a0 RDI:
+0000557c9a4aedf0
+[   47.278712] RBP: 0000000000000000 R08: 0000000000000000 R09:
+0000000000000020
+[   47.279711] R10: 00000000c0ed0000 R11: 0000000000000202 R12:
+0000557c9a4aedf0
+[   47.280727] R13: 0000557c9a4aaba0 R14: 0000000000000000 R15:
+00000000ffffffff
+[   47.281810] REISERFS panic: vs-8025 direntry_create_vi: (mode==i,
+insert_size==68), invalid length of directory item
+[   47.283310] ------------[ cut here ]------------
+[   47.283965] kernel BUG at fs/reiserfs/prints.c:390!
+[   47.284678] invalid opcode: 0000 [#1] SMP PTI
+[   47.285300] CPU: 1 PID: 2025 Comm: mount Not tainted 5.1.3 #4
+[   47.286113] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+Ubuntu-1.8.2-1ubuntu1 04/01/2014
+[   47.287445] RIP: 0010:__reiserfs_panic.cold+0x37/0x8a
+[   47.288164] Code: 85 ed 74 6d e8 8c 0a df ff 4c 89 f1 4c 89 e2 4c 89 ee 49
+c7 c0 e0 45 7d ba 48 c7 c7 c1 49 c8 b9 e8 53 f1 d6 ff e8 6b 0a df ff <0f> 0b e8
+64 0a df ff 49 c7 c4 5e 50 d3 b9 4d 85 ed 75 0a 49 c7 c4
+[   47.290758] RSP: 0018:ffffb4230041b4e0 EFLAGS: 00010293
+[   47.291500] RAX: ffff96a7f1400c40 RBX: 0000000000000000 RCX:
+ffffffffb8588175
+[   47.292497] RDX: 0000000000000000 RSI: 0000000000000000 RDI:
+0000000000000001
+[   47.293499] RBP: ffffb4230041b550 R08: ffff96a7f1400c40 R09:
+0000000000000068
+[   47.294267] R10: ffffffffba1e1050 R11: ffffb4230041afc0 R12:
+ffffffffb9d3505e
+[   47.295260] R13: ffffffffb9c8abd6 R14: ffffffffb9a2cd60 R15:
+0000000000000060
+[   47.296275] FS:  00007f7e3cf26e40(0000) GS:ffff96a7fdb00000(0000)
+knlGS:0000000000000000
+[   47.297458] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   47.298359] CR2: 0000557c11ec0878 CR3: 0000000070e3a000 CR4:
+00000000000006e0
+[   47.299357] Call Trace:
+[   47.299719]  direntry_create_vi+0x4a0/0x4a0
+[   47.300316]  create_virtual_node+0x2b3/0xc20
+[   47.300923]  fix_nodes+0x1a35/0x36c0
+[   47.301435]  reiserfs_insert_item+0x290/0x580
+[   47.302062]  reiserfs_new_inode+0x69a/0xe20
+[   47.302659]  ? selinux_determine_inode_label+0xb1/0x140
+[   47.303397]  reiserfs_mkdir+0x216/0x3c0
+[   47.303944]  reiserfs_xattr_init+0x1e6/0x350
+[   47.304549]  reiserfs_fill_super+0xfd6/0x1580
+[   47.305168]  mount_bdev+0x217/0x260
+[   47.305667]  ? finish_unfinished+0x820/0x820
+[   47.306281]  legacy_get_tree+0x2b/0x90
+[   47.306818]  vfs_get_tree+0x2e/0x140
+[   47.307180]  do_mount+0xc3d/0x1610
+[   47.307512]  ? copy_mount_options+0x1b5/0x2c0
+[   47.307929]  ksys_mount+0xd7/0x150
+[   47.308259]  __x64_sys_mount+0x22/0x30
+[   47.308626]  do_syscall_64+0x75/0x1d0
+[   47.308987]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[   47.309479] RIP: 0033:0x7f7e3c5e148a
+[   47.309996] Code: 48 8b 0d 11 fa 2a 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e
+0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01
+f0 ff ff 73 01 c3 48 8b 0d de f9 2a 00 f7 d8 64 89 01 48
+[   47.312597] RSP: 002b:00007ffd256e66a8 EFLAGS: 00000202 ORIG_RAX:
+00000000000000a5
+[   47.313661] RAX: ffffffffffffffda RBX: 0000557c9a4a8500 RCX:
+00007f7e3c5e148a
+[   47.314667] RDX: 0000557c9a4aaba0 RSI: 0000557c9a4aa3a0 RDI:
+0000557c9a4aedf0
+[   47.315670] RBP: 0000000000000000 R08: 0000000000000000 R09:
+0000000000000020
+[   47.316676] R10: 00000000c0ed0000 R11: 0000000000000202 R12:
+0000557c9a4aedf0
+[   47.317685] R13: 0000557c9a4aaba0 R14: 0000000000000000 R15:
+00000000ffffffff
+[   47.318439] Modules linked in:
+[   47.318768] Dumping ftrace buffer:
+[   47.319127]    (ftrace buffer empty)
+[   47.319548] ---[ end trace 9addae312bf755ec ]---
+[   47.320052] RIP: 0010:__reiserfs_panic.cold+0x37/0x8a
+[   47.320579] Code: 85 ed 74 6d e8 8c 0a df ff 4c 89 f1 4c 89 e2 4c 89 ee 49
+c7 c0 e0 45 7d ba 48 c7 c7 c1 49 c8 b9 e8 53 f1 d6 ff e8 6b 0a df ff <0f> 0b e8
+64 0a df ff 49 c7 c4 5e 50 d3 b9 4d 85 ed 75 0a 49 c7 c4
+[   47.322733] RSP: 0018:ffffb4230041b4e0 EFLAGS: 00010293
+[   47.323451] RAX: ffff96a7f1400c40 RBX: 0000000000000000 RCX:
+ffffffffb8588175
+[   47.324295] RDX: 0000000000000000 RSI: 0000000000000000 RDI:
+0000000000000001
+[   47.324968] RBP: ffffb4230041b550 R08: ffff96a7f1400c40 R09:
+0000000000000068
+[   47.325649] R10: ffffffffba1e1050 R11: ffffb4230041afc0 R12:
+ffffffffb9d3505e
+[   47.326650] R13: ffffffffb9c8abd6 R14: ffffffffb9a2cd60 R15:
+0000000000000060
+[   47.327629] FS:  00007f7e3cf26e40(0000) GS:ffff96a7fdb00000(0000)
+knlGS:0000000000000000
+[   47.328737] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   47.329535] CR2: 0000557c11ec0878 CR3: 0000000070e3a000 CR4:
+00000000000006e0
+[   47.330515] Kernel panic - not syncing: Fatal exception
+[   47.331466] Dumping ftrace buffer:
+[   47.331929]    (ftrace buffer empty)
+[   47.332413] Kernel Offset: 0x37200000 from 0xffffffff81000000 (relocation
+range: 0xffffffff80000000-0xffffffffbfffffff)
+```
+
+-- 
+You are receiving this mail because:
+You are the assignee for the bug.
