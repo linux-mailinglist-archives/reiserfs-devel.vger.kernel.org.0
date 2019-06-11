@@ -2,156 +2,166 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 661E23C314
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 11 Jun 2019 06:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C17463CD35
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 11 Jun 2019 15:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391167AbfFKEuO (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 11 Jun 2019 00:50:14 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:46456 "EHLO
+        id S2403885AbfFKNmd (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 11 Jun 2019 09:42:33 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:56844 "EHLO
         userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389620AbfFKEuO (ORCPT
+        with ESMTP id S2387770AbfFKNmc (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 11 Jun 2019 00:50:14 -0400
+        Tue, 11 Jun 2019 09:42:32 -0400
 Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5B4hbtt159138;
-        Tue, 11 Jun 2019 04:49:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : from : to :
- cc : date : message-id : in-reply-to : references : mime-version :
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5BDXuFW010141;
+        Tue, 11 Jun 2019 13:41:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
  content-type : content-transfer-encoding; s=corp-2018-07-02;
- bh=w6B62XWgEySnIWZsve79cF+lTRasJpmyyQueK4g93UE=;
- b=xr/OkVp95W9CZa1qjVKbtngLN9J+a0uZavn2r3ArsGbLa3Idt+XiHAevESEnFd2Muawd
- IDeKByu9gQWLom5QvFu9SB6aGdiFJoCp0tz7vKlzNewkahhwnjXvO0YFc7SwTBUu/TXr
- 1JAzKRa/DZxlP4ZZpnIqV/L0X1JujwSoecEOGG343C3b9FaK4zuy1R0cRIGXh59pnwVC
- rgO1+qT0i60g5fCtoX0xlqOK/qTFrDgQsRkvoiZce/aNAuX3Lrp5ll2wDFoSsEQSMY+0
- xO05b6rP2HVkV4MLCu2gbQsaloZCyjVElf52i0un57IO4AUWcCHG2FJLiCzCFi61Ne0u iQ== 
+ bh=NlP/8NoKwtwwPiK6Zh1fsHc3R+zGZgX5fbehxJ41bPs=;
+ b=fO36X8sFP3+EfmjD1qFJI4e23MY2tyn5GrMGkga7jQZUJnO4m7H9+qnmLaCnOaQ+tDx0
+ mk3M2lRa9Cbj7kpmmQEY4qrPHAbzSOcu/BbnlYiMJ4X2ScIR5NAkP5jkYdVv2eMy2JaE
+ KkaOyErzk5GvM1QvdRbE+eSZPIOfRXHWvwf9KTJ+aG/PVXlbkb6ebDLYndonGsER32rZ
+ fpc2ufouW5kg849gr1iGvsmibnA0HUne/nwZrbkGeibheDzV4rF8bm5GpZOAIHPGZkuH
+ xTczLsghU0CS0fvWWbzlw/loPzasCqJTTH3O+hPZU8mnKlG9HqwnJR6GqkXHrSdTfSJj 0Q== 
 Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 2t04etjm38-1
+        by userp2130.oracle.com with ESMTP id 2t04etn7yt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jun 2019 04:49:06 +0000
+        Tue, 11 Jun 2019 13:41:24 +0000
 Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5B4jGrX167613;
-        Tue, 11 Jun 2019 04:47:06 GMT
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5BDfJow189988;
+        Tue, 11 Jun 2019 13:41:24 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3030.oracle.com with ESMTP id 2t024u6kpg-1
+        by userp3030.oracle.com with ESMTP id 2t024udh64-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 11 Jun 2019 04:47:06 +0000
+        Tue, 11 Jun 2019 13:41:24 +0000
 Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x5B4l5Gj171026;
-        Tue, 11 Jun 2019 04:47:06 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 2t024u6kpc-1
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x5BDfOsq190063;
+        Tue, 11 Jun 2019 13:41:24 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 2t024udh5x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jun 2019 04:47:05 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5B4l4Q5023284;
-        Tue, 11 Jun 2019 04:47:04 GMT
-Received: from localhost (/67.169.218.210)
+        Tue, 11 Jun 2019 13:41:24 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5BDfF4f012930;
+        Tue, 11 Jun 2019 13:41:15 GMT
+Received: from [192.168.1.84] (/99.156.91.244)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 10 Jun 2019 21:47:04 -0700
-Subject: [PATCH 6/6] xfs: clean up xfs_merge_ioc_xflags
-From:   "Darrick J. Wong" <darrick.wong@oracle.com>
-To:     matthew.garrett@nebula.com, yuchao0@huawei.com, tytso@mit.edu,
-        darrick.wong@oracle.com, ard.biesheuvel@linaro.org,
-        josef@toxicpanda.com, clm@fb.com, adilger.kernel@dilger.ca,
-        viro@zeniv.linux.org.uk, jack@suse.com, dsterba@suse.com,
-        jaegeuk@kernel.org, jk@ozlabs.org
-Cc:     reiserfs-devel@vger.kernel.org, linux-efi@vger.kernel.org,
-        devel@lists.orangefs.org, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
-        linux-mtd@lists.infradead.org, ocfs2-devel@oss.oracle.com,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-Date:   Mon, 10 Jun 2019 21:47:01 -0700
-Message-ID: <156022842153.3227213.3285668171167534801.stgit@magnolia>
-In-Reply-To: <156022836912.3227213.13598042497272336695.stgit@magnolia>
-References: <156022836912.3227213.13598042497272336695.stgit@magnolia>
-User-Agent: StGit/0.17.1-dirty
+        with ESMTP ; Tue, 11 Jun 2019 06:41:15 -0700
+Subject: Re: [Jfs-discussion] [PATCH 1/4] vfs: create a generic checking
+ function for FS_IOC_SETFLAGS
+To:     "Darrick J. Wong" <darrick.wong@oracle.com>,
+        matthew.garrett@nebula.com, yuchao0@huawei.com, tytso@mit.edu,
+        shaggy@kernel.org, ard.biesheuvel@linaro.org, josef@toxicpanda.com,
+        clm@fb.com, adilger.kernel@dilger.ca, jk@ozlabs.org, jack@suse.com,
+        dsterba@suse.com, jaegeuk@kernel.org, viro@zeniv.linux.org.uk
+Cc:     linux-xfs@vger.kernel.org, jfs-discussion@lists.sourceforge.net,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
+        linux-nilfs@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, ocfs2-devel@oss.oracle.com
+References: <156022833285.3227089.11990489625041926920.stgit@magnolia>
+ <156022834076.3227089.14763553158562888103.stgit@magnolia>
+From:   Dave Kleikamp <dave.kleikamp@oracle.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=dave.kleikamp@oracle.com; prefer-encrypt=mutual; keydata=
+ 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
+ rnNNL3zBkwD3nWcTxFnX
+Message-ID: <fb974a33-2192-30ab-9f31-885c3796360b@oracle.com>
+Date:   Tue, 11 Jun 2019 08:41:06 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <156022834076.3227089.14763553158562888103.stgit@magnolia>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9284 signatures=668687
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=605 adultscore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906110033
+ definitions=main-1906110093
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-From: Darrick J. Wong <darrick.wong@oracle.com>
+On 6/10/19 11:45 PM, Darrick J. Wong wrote:
+> From: Darrick J. Wong <darrick.wong@oracle.com>
+> 
+> Create a generic checking function for the incoming FS_IOC_SETFLAGS flag
+> values so that we can standardize the implementations that follow ext4's
+> flag values.
+> 
+> Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
 
-Clean up the calling convention since we're editing the fsxattr struct
-anyway.
+ -- clip --
 
-Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
----
- fs/xfs/xfs_ioctl.c |   32 ++++++++++++++------------------
- 1 file changed, 14 insertions(+), 18 deletions(-)
+> diff --git a/fs/jfs/ioctl.c b/fs/jfs/ioctl.c
+> index ba34dae8bd9f..c8446d2cd0c7 100644
+> --- a/fs/jfs/ioctl.c
+> +++ b/fs/jfs/ioctl.c
+> @@ -98,6 +98,12 @@ long jfs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>  		/* Lock against other parallel changes of flags */
+>  		inode_lock(inode);
+>  
+> +		oldflags = jfs_map_ext2(jfs_inode->mode2 & JFS_FL_USER_VISIBLE,
+> +					0);
+> +		err = vfs_ioc_setflags_check(inode, oldflags, flags);
+> +		if (err)
+> +			goto setflags_out;
 
+inode_unlock(inode) is not called on the error path.
 
-diff --git a/fs/xfs/xfs_ioctl.c b/fs/xfs/xfs_ioctl.c
-index 7b19ba2956ad..a67bc9afdd0b 100644
---- a/fs/xfs/xfs_ioctl.c
-+++ b/fs/xfs/xfs_ioctl.c
-@@ -829,35 +829,31 @@ xfs_ioc_ag_geometry(
-  * Linux extended inode flags interface.
-  */
- 
--STATIC unsigned int
-+static inline void
- xfs_merge_ioc_xflags(
--	unsigned int	flags,
--	unsigned int	start)
-+	struct fsxattr	*fa,
-+	unsigned int	flags)
- {
--	unsigned int	xflags = start;
--
- 	if (flags & FS_IMMUTABLE_FL)
--		xflags |= FS_XFLAG_IMMUTABLE;
-+		fa->fsx_xflags |= FS_XFLAG_IMMUTABLE;
- 	else
--		xflags &= ~FS_XFLAG_IMMUTABLE;
-+		fa->fsx_xflags &= ~FS_XFLAG_IMMUTABLE;
- 	if (flags & FS_APPEND_FL)
--		xflags |= FS_XFLAG_APPEND;
-+		fa->fsx_xflags |= FS_XFLAG_APPEND;
- 	else
--		xflags &= ~FS_XFLAG_APPEND;
-+		fa->fsx_xflags &= ~FS_XFLAG_APPEND;
- 	if (flags & FS_SYNC_FL)
--		xflags |= FS_XFLAG_SYNC;
-+		fa->fsx_xflags |= FS_XFLAG_SYNC;
- 	else
--		xflags &= ~FS_XFLAG_SYNC;
-+		fa->fsx_xflags &= ~FS_XFLAG_SYNC;
- 	if (flags & FS_NOATIME_FL)
--		xflags |= FS_XFLAG_NOATIME;
-+		fa->fsx_xflags |= FS_XFLAG_NOATIME;
- 	else
--		xflags &= ~FS_XFLAG_NOATIME;
-+		fa->fsx_xflags &= ~FS_XFLAG_NOATIME;
- 	if (flags & FS_NODUMP_FL)
--		xflags |= FS_XFLAG_NODUMP;
-+		fa->fsx_xflags |= FS_XFLAG_NODUMP;
- 	else
--		xflags &= ~FS_XFLAG_NODUMP;
--
--	return xflags;
-+		fa->fsx_xflags &= ~FS_XFLAG_NODUMP;
- }
- 
- STATIC unsigned int
-@@ -1504,7 +1500,7 @@ xfs_ioc_setxflags(
- 		return -EOPNOTSUPP;
- 
- 	__xfs_ioc_fsgetxattr(ip, false, &fa);
--	fa.fsx_xflags = xfs_merge_ioc_xflags(flags, fa.fsx_xflags);
-+	xfs_merge_ioc_xflags(&fa, flags);
- 
- 	error = mnt_want_write_file(filp);
- 	if (error)
+> +
+>  		oldflags = jfs_inode->mode2;
+>  
+>  		/*
 
+This patch leaves jfs's open-coded version of the same check.
+
+Thanks,
+Shaggy
