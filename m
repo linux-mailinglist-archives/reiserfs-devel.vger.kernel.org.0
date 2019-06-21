@@ -2,90 +2,104 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 562024DE3B
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 21 Jun 2019 02:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2BA34F164
+	for <lists+reiserfs-devel@lfdr.de>; Sat, 22 Jun 2019 01:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726127AbfFUA4F (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 20 Jun 2019 20:56:05 -0400
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:59656 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725906AbfFUA4E (ORCPT
+        id S1726243AbfFUX5G (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 21 Jun 2019 19:57:06 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:48302 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726045AbfFUX5F (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 20 Jun 2019 20:56:04 -0400
-Received: from callcc.thunk.org (guestnat-104-133-0-109.corp.google.com [104.133.0.109] (may be forged))
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x5L0sK0h000800
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Jun 2019 20:54:21 -0400
-Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id 28403420484; Thu, 20 Jun 2019 20:54:20 -0400 (EDT)
-Date:   Thu, 20 Jun 2019 20:54:20 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     "Darrick J. Wong" <darrick.wong@oracle.com>
-Cc:     matthew.garrett@nebula.com, yuchao0@huawei.com,
+        Fri, 21 Jun 2019 19:57:05 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5LNsGrX052403;
+        Fri, 21 Jun 2019 23:56:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : from : to :
+ cc : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=corp-2018-07-02;
+ bh=cAdDQjLmw3paRsCYayAMtBFRH59fRNc4vYLBHuqjsSA=;
+ b=TzR6Wru1xSjTTRJAS5YLkE/BrGnsLOB3oXc++TPNZTilrEotX+w/PXZSlo2GmgalFn6q
+ EFIn2g7OnCMHKiU/KYZQjoVVDHvaifoE42AmpxsuNL7wnDmrtZhKVTyFzOJI7etrK4kK
+ KEBGejr346UOlFcuSkyuDnIO/5wd6UqT/S/KQGVF+NHJ5J7mmhYyVd5c2jc+HbQbg3wB
+ wa4pvaZQ8fS5HuyXYBN1pV+PfgLDpbPcaxs+KsA+sgcG7mAhRxGd5p97mdMZnG6Ft3yd
+ IEh9EmQpStxpaanEvQR/EobOi//ZfTjzIl0oWYndnxgPHklvyg0k1RPOB0QGCH15ATwX mw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2t7809rsvw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 Jun 2019 23:56:27 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5LNtFqW105530;
+        Fri, 21 Jun 2019 23:56:27 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3020.oracle.com with ESMTP id 2t77ypet01-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 21 Jun 2019 23:56:27 +0000
+Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x5LNuRFa107024;
+        Fri, 21 Jun 2019 23:56:27 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 2t77ypesyw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 Jun 2019 23:56:27 +0000
+Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5LNuGUs018756;
+        Fri, 21 Jun 2019 23:56:16 GMT
+Received: from localhost (/10.159.131.214)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 21 Jun 2019 16:56:16 -0700
+Subject: [PATCH v2 0/4] vfs: clean up SETFLAGS and FSSETXATTR option
+ processing
+From:   "Darrick J. Wong" <darrick.wong@oracle.com>
+To:     matthew.garrett@nebula.com, yuchao0@huawei.com, tytso@mit.edu,
+        darrick.wong@oracle.com, shaggy@kernel.org,
         ard.biesheuvel@linaro.org, josef@toxicpanda.com, clm@fb.com,
-        adilger.kernel@dilger.ca, viro@zeniv.linux.org.uk, jack@suse.com,
-        dsterba@suse.com, jaegeuk@kernel.org, jk@ozlabs.org,
-        reiserfs-devel@vger.kernel.org, linux-efi@vger.kernel.org,
-        devel@lists.orangefs.org, linux-kernel@vger.kernel.org,
+        adilger.kernel@dilger.ca, jk@ozlabs.org, jack@suse.com,
+        dsterba@suse.com, jaegeuk@kernel.org, viro@zeniv.linux.org.uk
+Cc:     cluster-devel@redhat.com, jfs-discussion@lists.sourceforge.net,
+        linux-efi@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
-        linux-mtd@lists.infradead.org, ocfs2-devel@oss.oracle.com,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH 1/6] mm/fs: don't allow writes to immutable files
-Message-ID: <20190621005420.GH4650@mit.edu>
-Mail-Followup-To: Theodore Ts'o <tytso@mit.edu>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        matthew.garrett@nebula.com, yuchao0@huawei.com,
-        ard.biesheuvel@linaro.org, josef@toxicpanda.com, clm@fb.com,
-        adilger.kernel@dilger.ca, viro@zeniv.linux.org.uk, jack@suse.com,
-        dsterba@suse.com, jaegeuk@kernel.org, jk@ozlabs.org,
-        reiserfs-devel@vger.kernel.org, linux-efi@vger.kernel.org,
-        devel@lists.orangefs.org, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
-        linux-mtd@lists.infradead.org, ocfs2-devel@oss.oracle.com,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-References: <156022836912.3227213.13598042497272336695.stgit@magnolia>
- <156022837711.3227213.11787906519006016743.stgit@magnolia>
- <20190620215212.GG4650@mit.edu>
- <20190620221306.GD5375@magnolia>
+        linux-nilfs@vger.kernel.org, linux-mtd@lists.infradead.org,
+        ocfs2-devel@oss.oracle.com, linux-fsdevel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-btrfs@vger.kernel.org
+Date:   Fri, 21 Jun 2019 16:56:07 -0700
+Message-ID: <156116136742.1664814.17093419199766834123.stgit@magnolia>
+User-Agent: StGit/0.17.1-dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190620221306.GD5375@magnolia>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9295 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=851 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906210182
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Thu, Jun 20, 2019 at 03:13:06PM -0700, Darrick J. Wong wrote:
-> > I note that this patch doesn't allow writes to swap files.  So Amir's
-> > generic/554 test will still fail for those file systems that don't use
-> > copy_file_range.
-> 
-> I didn't add any IS_SWAPFILE checks here, so I'm not sure to what you're
-> referring?
+Hi all,
 
-Sorry, my bad; I mistyped.  What I should have said is this patch
-doesn't *prohibit* writes to swap files....
+The FS_IOC_SETFLAGS and FS_IOC_FSSETXATTR ioctls were promoted from ext4
+and XFS, respectively, into the VFS.  However, we didn't promote any of
+the parameter checking code from those filesystems, which lead to a mess
+where each filesystem open-codes whatever parameter checks they want and
+the behavior across filesystems is no longer consistent.
 
-(And so Amir's generic/554 test, even modified so it allow reads from
-swapfiles, but not writes, when using copy_file_range, is still
-failing for ext4.  I was looking to see if I could remove it from my
-exclude list, but not yet.  :-)
+Therefore, create some generic checking functions in the VFS and remove
+all the open-coded pieces in each filesystem.  This preserves the
+current behavior where a filesystem can choose to ignore fields it
+doesn't understand.
 
-> > I'm indifferent as to whether you add a new patch, or include that
-> > change in this patch, but perhaps we should fix this while we're
-> > making changes in these code paths?
-> 
-> The swapfile patches should be in a separate patch, which I was planning
-> to work on but hadn't really gotten around to it.
+If you're going to start using this mess, you probably ought to just
+pull from my git trees, which are linked below.
 
-Ok, great, thanks!!
+This has been lightly tested with fstests.  Enjoy!
+Comments and questions are, as always, welcome.
 
-				- Ted
+--D
+
+kernel git tree:
+https://git.kernel.org/cgit/linux/kernel/git/djwong/xfs-linux.git/log/?h=file-ioctl-cleanups
