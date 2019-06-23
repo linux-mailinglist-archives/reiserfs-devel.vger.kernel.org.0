@@ -2,188 +2,94 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D33E74F1F7
-	for <lists+reiserfs-devel@lfdr.de>; Sat, 22 Jun 2019 01:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC144FD7F
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 23 Jun 2019 20:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726761AbfFUX7G (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 21 Jun 2019 19:59:06 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:50284 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726058AbfFUX7C (ORCPT
+        id S1726719AbfFWSVT (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 23 Jun 2019 14:21:19 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:45420 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726399AbfFWSVS (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 21 Jun 2019 19:59:02 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5LNt22Y052769;
-        Fri, 21 Jun 2019 23:57:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : from : to :
- cc : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2018-07-02;
- bh=rwZuzZLu2QSuxM1deZeCZnnfsOeZtWtWWa3iVLz4Y0o=;
- b=j4pMav0SW7e9IFJcTpCLcn4neiQwevtJo2J+lHllOH0GrPdCMsB8iQfSOQ1NgxlBqbVT
- OICMIQi3C2UlR7VmtDc28J0RWQyGpW/svba+WkpNuDwnYYbtGkzIR9onweaaZ42Hjd4v
- 7+6DtESjx18TSxlVMjfOZTOLmVoXhIFnHLJx/ZuAg0EjP7ntcN5y53Ydpo+wlR3McVro
- P/X2vkBxkiaF5hh8rtBC9Y3IHL9TJQU9hmFMqtuN/6D9K20cct8ZF1rNphEDE4665jhl
- j72tS2nlAV7F8v5YLxysiYVfhqU1R1I/qPp3EaMXTsfzZ3rfbLk0QJO1ozCXzn3jkiUu FA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 2t7809rsyd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 21 Jun 2019 23:57:53 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5LNvFfg108897;
-        Fri, 21 Jun 2019 23:57:52 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 2t77ypetb6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 21 Jun 2019 23:57:52 +0000
-Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x5LNvq84109606;
-        Fri, 21 Jun 2019 23:57:52 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 2t77ypetb3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 21 Jun 2019 23:57:52 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5LNvocq020839;
-        Fri, 21 Jun 2019 23:57:50 GMT
-Received: from localhost (/10.159.131.214)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 21 Jun 2019 16:57:49 -0700
-Subject: [PATCH 7/7] vfs: don't allow writes to swap files
-From:   "Darrick J. Wong" <darrick.wong@oracle.com>
-To:     matthew.garrett@nebula.com, yuchao0@huawei.com, tytso@mit.edu,
-        darrick.wong@oracle.com, ard.biesheuvel@linaro.org,
-        josef@toxicpanda.com, clm@fb.com, adilger.kernel@dilger.ca,
-        viro@zeniv.linux.org.uk, jack@suse.com, dsterba@suse.com,
-        jaegeuk@kernel.org, jk@ozlabs.org
-Cc:     reiserfs-devel@vger.kernel.org, linux-efi@vger.kernel.org,
-        devel@lists.orangefs.org, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
-        linux-mtd@lists.infradead.org, ocfs2-devel@oss.oracle.com,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-Date:   Fri, 21 Jun 2019 16:57:46 -0700
-Message-ID: <156116146628.1664939.13724544486987830540.stgit@magnolia>
-In-Reply-To: <156116141046.1664939.11424021489724835645.stgit@magnolia>
-References: <156116141046.1664939.11424021489724835645.stgit@magnolia>
-User-Agent: StGit/0.17.1-dirty
+        Sun, 23 Jun 2019 14:21:18 -0400
+Received: by mail-ot1-f65.google.com with SMTP id x21so11247211otq.12
+        for <reiserfs-devel@vger.kernel.org>; Sun, 23 Jun 2019 11:21:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Un5Ke0Ru3iTFXv9DrHEizflVlYGBaDhARoB+8+C5nXM=;
+        b=uYWmRdEL5wMUg3i3cvYvIT6w94lvxCxlU52aeRMLjlo66s6DiYOMX77UvtGHLw4p/k
+         0BR0uJ3cizwFTzQvFMoOco9ckmCHII8ij+jz5quNu1PW1qoaznX1Jwl5RN04wk9O+SGq
+         47agis/Oi4W8CO4833ssfhBN9g66gYyio/sdcUaJfj0lkOarP35KdgZDthAv90Mx3NFk
+         Fa8/bLsuETz0ZhSD6zl7aNPKmbfrEBnzOzHJhK2CoQILEmjvd6fXuPp7r75wjreGBXNc
+         5K5s4V4280ack2fJ8h3NvzKeEYvvwWkkT6kCpF9junlWVDELLtqAjjGccUhrz5QI7o5e
+         oWSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Un5Ke0Ru3iTFXv9DrHEizflVlYGBaDhARoB+8+C5nXM=;
+        b=ZtQ7/qEuT0OFgBZtCr4WWYTrg3ilMk7lxrWkolFF+VaQMnfsTvAz2I6GFS23bHVJaF
+         MVgDEUtcH+cJll35iwlUeKzW//o3eBrh/uzyMdxmQjWAyEqf8USlvlYlAY4N0erG30yd
+         TUQotoA+jqjolkM5aFEWKG46w79QlDmBorIN9+oVYmjjtISBmNfxCOtrnC2ov9dVflgD
+         Hye5tj4v+URXHUXGImPOGJ0iD3hwywmLhggbnVRO9OjoZzZO0SsA9ty9wl5qRz6XXYb0
+         TFUQlcGNAhwOg3ffd6y94ElBrj6izMW3FXMYEUY25FoKQUeI577Dfy+A7ncU+uVeKahE
+         c04A==
+X-Gm-Message-State: APjAAAV9T+SaY1qq+TssXbvTUuJ17On9TIENlDrkhd7MJNb+bX9Uhgi4
+        Sa42oEQYY7Ae55ujLYIIC1hANulA1n2e3BXtViw=
+X-Google-Smtp-Source: APXvYqxg4xScZj4oZvpX6rVP32DlJ0lNO9KVW6vyUnNY4s3qixExdIikLMqFn4yaWhIyAP7pS99eKoWLoMEaO0cE0lk=
+X-Received: by 2002:a9d:60b:: with SMTP id 11mr8053858otn.9.1561314078371;
+ Sun, 23 Jun 2019 11:21:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9295 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=969 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906210182
+Received: by 2002:ac9:2a4d:0:0:0:0:0 with HTTP; Sun, 23 Jun 2019 11:21:17
+ -0700 (PDT)
+Reply-To: miss.fatimayusuf11@gmail.com
+From:   "Miss.Fatima Yusuf" <yusuffatima960@gmail.com>
+Date:   Sun, 23 Jun 2019 18:21:17 +0000
+Message-ID: <CAPU6Qrtznm0SyfOgM=5PfT7SjV4cPLwt12WimZHjuMXsy-UuzQ@mail.gmail.com>
+Subject: From:Miss: Fatima Yusuf.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-From: Darrick J. Wong <darrick.wong@oracle.com>
+From:Miss: Fatima Yusuf.
 
-Don't let userspace write to an active swap file because the kernel
-effectively has a long term lease on the storage and things could get
-seriously corrupted if we let this happen.
+For sure this mail would definitely come to you as a surprise, but do
+take your good time to go through it, My name is Ms. Fatima Yusuf,i am
+from Ivory Coast.
 
-Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
----
- fs/attr.c     |    3 +++
- mm/filemap.c  |    3 +++
- mm/memory.c   |    4 +++-
- mm/mmap.c     |    2 ++
- mm/swapfile.c |   15 +++++++++++++--
- 5 files changed, 24 insertions(+), 3 deletions(-)
+I lost my parents a year and couple of months ago. My father was a
+serving director of the Agro-exporting board until his death. He was
+assassinated by his business partners.Before his death, he made a
+deposit of US$9.7 Million Dollars here in Cote d'ivoire which was for
+the purchase of cocoa processing machine and development of another
+factory before his untimely death.
 
+Being that this part of the world experiences political and crises
+time without number, there is no guarantee of lives and properties. I
+cannot invest this money here any long, despite the fact it had been
+my late father's industrial plans.
 
-diff --git a/fs/attr.c b/fs/attr.c
-index 1fcfdcc5b367..42f4d4fb0631 100644
---- a/fs/attr.c
-+++ b/fs/attr.c
-@@ -236,6 +236,9 @@ int notify_change(struct dentry * dentry, struct iattr * attr, struct inode **de
- 	if (IS_IMMUTABLE(inode))
- 		return -EPERM;
- 
-+	if (IS_SWAPFILE(inode))
-+		return -ETXTBSY;
-+
- 	if ((ia_valid & (ATTR_MODE | ATTR_UID | ATTR_GID | ATTR_TIMES_SET)) &&
- 	    IS_APPEND(inode))
- 		return -EPERM;
-diff --git a/mm/filemap.c b/mm/filemap.c
-index dad85e10f5f8..fd80bc20e30a 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2938,6 +2938,9 @@ inline ssize_t generic_write_checks(struct kiocb *iocb, struct iov_iter *from)
- 	if (IS_IMMUTABLE(inode))
- 		return -EPERM;
- 
-+	if (IS_SWAPFILE(inode))
-+		return -ETXTBSY;
-+
- 	if (!iov_iter_count(from))
- 		return 0;
- 
-diff --git a/mm/memory.c b/mm/memory.c
-index 4311cfdade90..c04c6a689995 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -2235,7 +2235,9 @@ static vm_fault_t do_page_mkwrite(struct vm_fault *vmf)
- 
- 	vmf->flags = FAULT_FLAG_WRITE|FAULT_FLAG_MKWRITE;
- 
--	if (vmf->vma->vm_file && IS_IMMUTABLE(file_inode(vmf->vma->vm_file)))
-+	if (vmf->vma->vm_file &&
-+	    (IS_IMMUTABLE(file_inode(vmf->vma->vm_file)) ||
-+	     IS_SWAPFILE(file_inode(vmf->vma->vm_file))))
- 		return VM_FAULT_SIGBUS;
- 
- 	ret = vmf->vma->vm_ops->page_mkwrite(vmf);
-diff --git a/mm/mmap.c b/mm/mmap.c
-index ac1e32205237..031807339869 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1488,6 +1488,8 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
- 					return -EACCES;
- 				if (IS_IMMUTABLE(file_inode(file)))
- 					return -EPERM;
-+				if (IS_SWAPFILE(file_inode(file)))
-+					return -ETXTBSY;
- 			}
- 
- 			/*
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 596ac98051c5..390859785558 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -3165,6 +3165,19 @@ SYSCALL_DEFINE2(swapon, const char __user *, specialfile, int, swap_flags)
- 	if (error)
- 		goto bad_swap;
- 
-+	/*
-+	 * Flush any pending IO and dirty mappings before we start using this
-+	 * swap file.
-+	 */
-+	if (S_ISREG(inode->i_mode)) {
-+		inode->i_flags |= S_SWAPFILE;
-+		error = inode_flush_data(inode);
-+		if (error) {
-+			inode->i_flags &= ~S_SWAPFILE;
-+			goto bad_swap;
-+		}
-+	}
-+
- 	mutex_lock(&swapon_mutex);
- 	prio = -1;
- 	if (swap_flags & SWAP_FLAG_PREFER)
-@@ -3185,8 +3198,6 @@ SYSCALL_DEFINE2(swapon, const char __user *, specialfile, int, swap_flags)
- 	atomic_inc(&proc_poll_event);
- 	wake_up_interruptible(&proc_poll_wait);
- 
--	if (S_ISREG(inode->i_mode))
--		inode->i_flags |= S_SWAPFILE;
- 	error = 0;
- 	goto out;
- bad_swap:
+I want you to do me a favor to receive this funds into your country or
+any safer place as the beneficiary, I have plans to invest this money
+in continuation with the investment vision of my late father, but not
+in this place again rather in your country. I have the vision of going
+into real estate and industrial production or any profitable business
+venture.
 
+I will be ready to compensate you with 20% of the total Amount, now
+all my hope is banked on you and i really wants to invest this money
+in your country, where there is stability of Government, political and
+economic welfare.
+
+My greatest worry now is how to move out of this country because my
+uncle is threatening to kill me as he killed my father,Please do not
+let anybody hear about this, it is between me and you alone because of
+my security reason.
+
+I am waiting to hear from you.
+Yours Sincerely,
+Miss.Fatima Yusuf.
