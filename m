@@ -2,94 +2,172 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC144FD7F
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 23 Jun 2019 20:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE2250983
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 24 Jun 2019 13:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726719AbfFWSVT (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sun, 23 Jun 2019 14:21:19 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:45420 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726399AbfFWSVS (ORCPT
-        <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sun, 23 Jun 2019 14:21:18 -0400
-Received: by mail-ot1-f65.google.com with SMTP id x21so11247211otq.12
-        for <reiserfs-devel@vger.kernel.org>; Sun, 23 Jun 2019 11:21:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Un5Ke0Ru3iTFXv9DrHEizflVlYGBaDhARoB+8+C5nXM=;
-        b=uYWmRdEL5wMUg3i3cvYvIT6w94lvxCxlU52aeRMLjlo66s6DiYOMX77UvtGHLw4p/k
-         0BR0uJ3cizwFTzQvFMoOco9ckmCHII8ij+jz5quNu1PW1qoaznX1Jwl5RN04wk9O+SGq
-         47agis/Oi4W8CO4833ssfhBN9g66gYyio/sdcUaJfj0lkOarP35KdgZDthAv90Mx3NFk
-         Fa8/bLsuETz0ZhSD6zl7aNPKmbfrEBnzOzHJhK2CoQILEmjvd6fXuPp7r75wjreGBXNc
-         5K5s4V4280ack2fJ8h3NvzKeEYvvwWkkT6kCpF9junlWVDELLtqAjjGccUhrz5QI7o5e
-         oWSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Un5Ke0Ru3iTFXv9DrHEizflVlYGBaDhARoB+8+C5nXM=;
-        b=ZtQ7/qEuT0OFgBZtCr4WWYTrg3ilMk7lxrWkolFF+VaQMnfsTvAz2I6GFS23bHVJaF
-         MVgDEUtcH+cJll35iwlUeKzW//o3eBrh/uzyMdxmQjWAyEqf8USlvlYlAY4N0erG30yd
-         TUQotoA+jqjolkM5aFEWKG46w79QlDmBorIN9+oVYmjjtISBmNfxCOtrnC2ov9dVflgD
-         Hye5tj4v+URXHUXGImPOGJ0iD3hwywmLhggbnVRO9OjoZzZO0SsA9ty9wl5qRz6XXYb0
-         TFUQlcGNAhwOg3ffd6y94ElBrj6izMW3FXMYEUY25FoKQUeI577Dfy+A7ncU+uVeKahE
-         c04A==
-X-Gm-Message-State: APjAAAV9T+SaY1qq+TssXbvTUuJ17On9TIENlDrkhd7MJNb+bX9Uhgi4
-        Sa42oEQYY7Ae55ujLYIIC1hANulA1n2e3BXtViw=
-X-Google-Smtp-Source: APXvYqxg4xScZj4oZvpX6rVP32DlJ0lNO9KVW6vyUnNY4s3qixExdIikLMqFn4yaWhIyAP7pS99eKoWLoMEaO0cE0lk=
-X-Received: by 2002:a9d:60b:: with SMTP id 11mr8053858otn.9.1561314078371;
- Sun, 23 Jun 2019 11:21:18 -0700 (PDT)
+        id S1729680AbfFXLNz (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 24 Jun 2019 07:13:55 -0400
+Received: from mx2.suse.de ([195.135.220.15]:50242 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727103AbfFXLNz (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Mon, 24 Jun 2019 07:13:55 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id EE700AC20;
+        Mon, 24 Jun 2019 11:13:51 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id 6211D1E2F23; Mon, 24 Jun 2019 13:13:49 +0200 (CEST)
+Date:   Mon, 24 Jun 2019 13:13:49 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     "Darrick J. Wong" <darrick.wong@oracle.com>
+Cc:     matthew.garrett@nebula.com, yuchao0@huawei.com, tytso@mit.edu,
+        ard.biesheuvel@linaro.org, josef@toxicpanda.com, clm@fb.com,
+        adilger.kernel@dilger.ca, viro@zeniv.linux.org.uk, jack@suse.com,
+        dsterba@suse.com, jaegeuk@kernel.org, jk@ozlabs.org,
+        reiserfs-devel@vger.kernel.org, linux-efi@vger.kernel.org,
+        devel@lists.orangefs.org, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
+        linux-mtd@lists.infradead.org, ocfs2-devel@oss.oracle.com,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH 1/7] mm/fs: don't allow writes to immutable files
+Message-ID: <20190624111349.GF32376@quack2.suse.cz>
+References: <156116141046.1664939.11424021489724835645.stgit@magnolia>
+ <156116141836.1664939.12249697737780481978.stgit@magnolia>
 MIME-Version: 1.0
-Received: by 2002:ac9:2a4d:0:0:0:0:0 with HTTP; Sun, 23 Jun 2019 11:21:17
- -0700 (PDT)
-Reply-To: miss.fatimayusuf11@gmail.com
-From:   "Miss.Fatima Yusuf" <yusuffatima960@gmail.com>
-Date:   Sun, 23 Jun 2019 18:21:17 +0000
-Message-ID: <CAPU6Qrtznm0SyfOgM=5PfT7SjV4cPLwt12WimZHjuMXsy-UuzQ@mail.gmail.com>
-Subject: From:Miss: Fatima Yusuf.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <156116141836.1664939.12249697737780481978.stgit@magnolia>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-From:Miss: Fatima Yusuf.
+On Fri 21-06-19 16:56:58, Darrick J. Wong wrote:
+> From: Darrick J. Wong <darrick.wong@oracle.com>
+> 
+> The chattr manpage has this to say about immutable files:
+> 
+> "A file with the 'i' attribute cannot be modified: it cannot be deleted
+> or renamed, no link can be created to this file, most of the file's
+> metadata can not be modified, and the file can not be opened in write
+> mode."
+> 
+> Once the flag is set, it is enforced for quite a few file operations,
+> such as fallocate, fpunch, fzero, rm, touch, open, etc.  However, we
+> don't check for immutability when doing a write(), a PROT_WRITE mmap(),
+> a truncate(), or a write to a previously established mmap.
+> 
+> If a program has an open write fd to a file that the administrator
+> subsequently marks immutable, the program still can change the file
+> contents.  Weird!
+> 
+> The ability to write to an immutable file does not follow the manpage
+> promise that immutable files cannot be modified.  Worse yet it's
+> inconsistent with the behavior of other syscalls which don't allow
+> modifications of immutable files.
+> 
+> Therefore, add the necessary checks to make the write, mmap, and
+> truncate behavior consistent with what the manpage says and consistent
+> with other syscalls on filesystems which support IMMUTABLE.
+> 
+> Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
 
-For sure this mail would definitely come to you as a surprise, but do
-take your good time to go through it, My name is Ms. Fatima Yusuf,i am
-from Ivory Coast.
+Looks good to me. You can add:
 
-I lost my parents a year and couple of months ago. My father was a
-serving director of the Agro-exporting board until his death. He was
-assassinated by his business partners.Before his death, he made a
-deposit of US$9.7 Million Dollars here in Cote d'ivoire which was for
-the purchase of cocoa processing machine and development of another
-factory before his untimely death.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-Being that this part of the world experiences political and crises
-time without number, there is no guarantee of lives and properties. I
-cannot invest this money here any long, despite the fact it had been
-my late father's industrial plans.
+								Honza
 
-I want you to do me a favor to receive this funds into your country or
-any safer place as the beneficiary, I have plans to invest this money
-in continuation with the investment vision of my late father, but not
-in this place again rather in your country. I have the vision of going
-into real estate and industrial production or any profitable business
-venture.
-
-I will be ready to compensate you with 20% of the total Amount, now
-all my hope is banked on you and i really wants to invest this money
-in your country, where there is stability of Government, political and
-economic welfare.
-
-My greatest worry now is how to move out of this country because my
-uncle is threatening to kill me as he killed my father,Please do not
-let anybody hear about this, it is between me and you alone because of
-my security reason.
-
-I am waiting to hear from you.
-Yours Sincerely,
-Miss.Fatima Yusuf.
+> ---
+>  fs/attr.c    |   13 ++++++-------
+>  mm/filemap.c |    3 +++
+>  mm/memory.c  |    3 +++
+>  mm/mmap.c    |    8 ++++++--
+>  4 files changed, 18 insertions(+), 9 deletions(-)
+> 
+> 
+> diff --git a/fs/attr.c b/fs/attr.c
+> index d22e8187477f..1fcfdcc5b367 100644
+> --- a/fs/attr.c
+> +++ b/fs/attr.c
+> @@ -233,19 +233,18 @@ int notify_change(struct dentry * dentry, struct iattr * attr, struct inode **de
+>  
+>  	WARN_ON_ONCE(!inode_is_locked(inode));
+>  
+> -	if (ia_valid & (ATTR_MODE | ATTR_UID | ATTR_GID | ATTR_TIMES_SET)) {
+> -		if (IS_IMMUTABLE(inode) || IS_APPEND(inode))
+> -			return -EPERM;
+> -	}
+> +	if (IS_IMMUTABLE(inode))
+> +		return -EPERM;
+> +
+> +	if ((ia_valid & (ATTR_MODE | ATTR_UID | ATTR_GID | ATTR_TIMES_SET)) &&
+> +	    IS_APPEND(inode))
+> +		return -EPERM;
+>  
+>  	/*
+>  	 * If utimes(2) and friends are called with times == NULL (or both
+>  	 * times are UTIME_NOW), then we need to check for write permission
+>  	 */
+>  	if (ia_valid & ATTR_TOUCH) {
+> -		if (IS_IMMUTABLE(inode))
+> -			return -EPERM;
+> -
+>  		if (!inode_owner_or_capable(inode)) {
+>  			error = inode_permission(inode, MAY_WRITE);
+>  			if (error)
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index aac71aef4c61..dad85e10f5f8 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -2935,6 +2935,9 @@ inline ssize_t generic_write_checks(struct kiocb *iocb, struct iov_iter *from)
+>  	loff_t count;
+>  	int ret;
+>  
+> +	if (IS_IMMUTABLE(inode))
+> +		return -EPERM;
+> +
+>  	if (!iov_iter_count(from))
+>  		return 0;
+>  
+> diff --git a/mm/memory.c b/mm/memory.c
+> index ddf20bd0c317..4311cfdade90 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -2235,6 +2235,9 @@ static vm_fault_t do_page_mkwrite(struct vm_fault *vmf)
+>  
+>  	vmf->flags = FAULT_FLAG_WRITE|FAULT_FLAG_MKWRITE;
+>  
+> +	if (vmf->vma->vm_file && IS_IMMUTABLE(file_inode(vmf->vma->vm_file)))
+> +		return VM_FAULT_SIGBUS;
+> +
+>  	ret = vmf->vma->vm_ops->page_mkwrite(vmf);
+>  	/* Restore original flags so that caller is not surprised */
+>  	vmf->flags = old_flags;
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 7e8c3e8ae75f..ac1e32205237 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -1483,8 +1483,12 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
+>  		case MAP_SHARED_VALIDATE:
+>  			if (flags & ~flags_mask)
+>  				return -EOPNOTSUPP;
+> -			if ((prot&PROT_WRITE) && !(file->f_mode&FMODE_WRITE))
+> -				return -EACCES;
+> +			if (prot & PROT_WRITE) {
+> +				if (!(file->f_mode & FMODE_WRITE))
+> +					return -EACCES;
+> +				if (IS_IMMUTABLE(file_inode(file)))
+> +					return -EPERM;
+> +			}
+>  
+>  			/*
+>  			 * Make sure we don't allow writing to an append-only
+> 
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
