@@ -2,69 +2,159 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DECF961A60
-	for <lists+reiserfs-devel@lfdr.de>; Mon,  8 Jul 2019 07:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D4B63CB3
+	for <lists+reiserfs-devel@lfdr.de>; Tue,  9 Jul 2019 22:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728118AbfGHFnJ (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 8 Jul 2019 01:43:09 -0400
-Received: from [197.254.217.239] ([197.254.217.239]:36968 "EHLO mail.cert.sd"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726284AbfGHFnJ (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 8 Jul 2019 01:43:09 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.cert.sd (Postfix) with ESMTP id 9BFF739F48E;
-        Mon,  8 Jul 2019 00:47:23 +0200 (CAT)
-Received: from mail.cert.sd ([127.0.0.1])
-        by localhost (mail.cert.sd [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 7Za_CbTNZN-8; Mon,  8 Jul 2019 00:47:23 +0200 (CAT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.cert.sd (Postfix) with ESMTP id A34584F0C7F;
-        Sun,  7 Jul 2019 22:16:52 +0200 (CAT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.cert.sd A34584F0C7F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cert.sd;
-        s=3B54D788-828F-11E8-945F-63B06BDA8568; t=1562530612;
-        bh=i6jGklZsYhvyS6O+r4vHl3fsu2UV4hnEJS7rdZ4svBg=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=mwt+nfNuWNf56CDa8CBayG+NGEA2Pyv3dgWZjp8iW/5seuriNe1aRzLWVAa74ZK0k
-         vmZVEn4tCGNxCKaw2PBdrm+RsI8BRs4c9ZLcu/pY/QqRWZTYY5EkCgBYq3muVGZbSd
-         6PCov2KqvJaspZgooDqWJCM3nyoJ0Bzjbi3KNOH1XjIuspTxVrEL8JvI8TSi0hfGoj
-         JK89JRqbsIv6QYUdtdBVBxcHSo7XppVPgcv1TyMBCWK7E1Gf3tmanZPww36fFQMDxs
-         RwGY1lZr9w9Ykl1ALNjVCw/9opaHEU4djJffmY/i9G/NgZq1yBCMoAM4/DFfkaZQaq
-         ycXHUwK6zMyCg==
-X-Virus-Scanned: amavisd-new at mail.cert.sd
-Received: from mail.cert.sd ([127.0.0.1])
-        by localhost (mail.cert.sd [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id HnmEUxO83Lsf; Sun,  7 Jul 2019 22:16:52 +0200 (CAT)
-Received: from [192.168.0.103] (unknown [105.112.51.76])
-        by mail.cert.sd (Postfix) with ESMTPSA id 5A5AA42EB3E;
-        Sun,  7 Jul 2019 21:41:14 +0200 (CAT)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1727241AbfGIU0o (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 9 Jul 2019 16:26:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51840 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729532AbfGIU0o (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Tue, 9 Jul 2019 16:26:44 -0400
+Received: from sol.localdomain (c-24-5-143-220.hsd1.ca.comcast.net [24.5.143.220])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7B7742087F;
+        Tue,  9 Jul 2019 20:26:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562704002;
+        bh=Q8lJunzvHA1hNJvcYCrAGVr7+FzwmbTZShJ9CiwF6vc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CEm7vztHVchPlqxQQwL8bd4TKtK7i9+bFCQT1iWKsKpqwACTJxo1Ghx9B+f6zpocr
+         lhixxGyF9mUAe4zLWq3UcO6R7xSK5G25FdeYpRpoWDgjsqIWM2Hg4RCU3bkBiY6A4y
+         H6R1crB4Q0J/q4Pv0PctlRjyd+a03TFM6owI3OfY=
+Date:   Tue, 9 Jul 2019 13:26:41 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     reiserfs-devel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Reminder: 5 open syzbot bugs in "fs/reiserfs" subsystem
+Message-ID: <20190709202641.GK641@sol.localdomain>
+Mail-Followup-To: reiserfs-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: CASH GRANT / SPENDEN !!!
-To:     Recipients <moamar@cert.sd>
-From:   "LISA ROBINSON" <moamar@cert.sd>
-Date:   Sun, 07 Jul 2019 20:31:46 +0100
-Reply-To: charitylisajohnrobinson900@usa.com
-X-Antivirus: Avast (VPS 190707-4, 07/07/2019), Outbound message
-X-Antivirus-Status: Clean
-Message-Id: <20190707194115.5A5AA42EB3E@mail.cert.sd>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Sehr geehrter Empf=E4nger, Sie wurden ausgew=E4hlt, um von Frau Lisa Robins=
-on (1.200.000,00 USD) als wohlt=E4tige Spende / Stipendium zu erhalten. Dah=
-er m=FCssen Sie sie f=FCr weitere Informationen per E-Mail kontaktieren.
+[This email was generated by a script.  Let me know if you have any suggestions
+to make it better, or if you want it re-generated with the latest status.]
 
+Of the currently open syzbot reports against the upstream kernel, I've manually
+marked 5 of them as possibly being bugs in the "fs/reiserfs" subsystem.  I've
+listed these reports below, sorted by an algorithm that tries to list first the
+reports most likely to be still valid, important, and actionable.
 
-Dear Beneficiary, You have been selected to receive ($1,200,000.00 USD) as =
-charity donation/grant from Mrs. Lisa Robinson.Therefore, you are required =
-to contact her through email for more details. 
+If you believe a bug is no longer valid, please close the syzbot report by
+sending a '#syz fix', '#syz dup', or '#syz invalid' command in reply to the
+original thread, as explained at https://goo.gl/tpsmEJ#status
 
----
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
+If you believe I misattributed a bug to the "fs/reiserfs" subsystem, please let
+me know, and if possible forward the report to the correct people or mailing
+list.
+
+Here are the bugs:
+
+--------------------------------------------------------------------------------
+Title:              KASAN: use-after-free Read in blkdev_get
+Last occurred:      19 days ago
+Reported:           391 days ago
+Branches:           Mainline and others
+Dashboard link:     https://syzkaller.appspot.com/bug?id=00965426fe7ceec1fd2d8756770d4c7c3cacdc4b
+Original thread:    https://lkml.kernel.org/lkml/000000000000e59aab056e8873ae@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug received 1 reply, 215 days ago.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+eaeb616d85c9a0afec7d@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/000000000000e59aab056e8873ae@google.com
+
+--------------------------------------------------------------------------------
+Title:              BUG: unable to handle kernel paging request in cleanup_bitmap_list
+Last occurred:      13 days ago
+Reported:           464 days ago
+Branches:           Mainline
+Dashboard link:     https://syzkaller.appspot.com/bug?id=f7a51e226194a72ab7364a64af1b8fb1e80e94bb
+Original thread:    https://lkml.kernel.org/lkml/001a1140e9201dd16b0568cc6beb@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one replied to the original thread for this bug.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+008ac33be9dec51e0ca3@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/001a1140e9201dd16b0568cc6beb@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in unlock_new_inode
+Last occurred:      446 days ago
+Reported:           446 days ago
+Branches:           Mainline
+Dashboard link:     https://syzkaller.appspot.com/bug?id=ef79070d08a744686c4db202d9ba6817bba86ebb
+Original thread:    https://lkml.kernel.org/lkml/0000000000002ab8c5056a35b12b@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one replied to the original thread for this bug.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+187510916eb6a14598f7@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/0000000000002ab8c5056a35b12b@google.com
+
+--------------------------------------------------------------------------------
+Title:              kernel BUG at fs/reiserfs/journal.c:LINE!
+Last occurred:      445 days ago
+Reported:           465 days ago
+Branches:           Mainline
+Dashboard link:     https://syzkaller.appspot.com/bug?id=4f66f3287ba3341410ff35b736339628173a5aaa
+Original thread:    https://lkml.kernel.org/lkml/001a113eba282f2ffc0568b76123@google.com/T/#u
+
+This bug has a syzkaller reproducer only.
+
+No one replied to the original thread for this bug.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+6820505ae5978f4f8f2f@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/001a113eba282f2ffc0568b76123@google.com
+
+--------------------------------------------------------------------------------
+Title:              kernel BUG at fs/reiserfs/lock.c:LINE!
+Last occurred:      78 days ago
+Reported:           364 days ago
+Branches:           Mainline and others
+Dashboard link:     https://syzkaller.appspot.com/bug?id=633d4e446a638abe31cc3054b5a69a42a4cd25d6
+Original thread:    https://lkml.kernel.org/lkml/0000000000002bd65e0570aa16f2@google.com/T/#u
+
+Unfortunately, this bug does not have a reproducer.
+
+No one replied to the original thread for this bug.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+66d2c2155ece8b6d3fc0@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lkml.kernel.org/r/0000000000002bd65e0570aa16f2@google.com
 
