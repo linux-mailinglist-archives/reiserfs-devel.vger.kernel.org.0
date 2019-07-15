@@ -2,49 +2,51 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D565964E70
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 11 Jul 2019 00:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F0F68573
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 15 Jul 2019 10:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728009AbfGJWEg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 10 Jul 2019 18:04:36 -0400
-Received: from 50-244-196-250-static.hfc.comcastbusiness.net ([50.244.196.250]:56929
-        "EHLO hometime.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728003AbfGJWEf (ORCPT
+        id S1729442AbfGOIbU (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 15 Jul 2019 04:31:20 -0400
+Received: from s2mx02.siteserve.jp ([210.248.135.119]:7912 "EHLO
+        s2mx02.siteserve.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729257AbfGOIbT (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 10 Jul 2019 18:04:35 -0400
-X-Greylist: delayed 18198 seconds by postgrey-1.27 at vger.kernel.org; Wed, 10 Jul 2019 18:04:22 EDT
-Received: from [100.120.45.199] ([195.181.172.132]) by hometime.com with Microsoft SMTPSVC(6.0.3790.4675);
-         Wed, 10 Jul 2019 01:04:54 -0500
-Content-Type: text/plain; charset="iso-8859-1"
+        Mon, 15 Jul 2019 04:31:19 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by s2mx02.siteserve.jp (Postfix) with ESMTP id F0A7F11BF19;
+        Mon, 15 Jul 2019 17:10:53 +0900 (JST)
+X-Virus-Scanned: amavisd-new at s2mx02.siteserve.jp
+Received: from s2mx02.siteserve.jp ([127.0.0.1])
+        by localhost (mail.siteserve.jp [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id grSmxW-WI2il; Mon, 15 Jul 2019 17:10:53 +0900 (JST)
+Received: from webmail.nakagawa-consul.com (localhost.localdomain [127.0.0.1])
+        by s2mx02.siteserve.jp (Postfix) with ESMTP id D280B11BDB1;
+        Mon, 15 Jul 2019 17:10:49 +0900 (JST)
+Received: from 174.128.236.106
+        (RisuMail authenticated user morita@nakagawa-consul.com)
+        by webmail.nakagawa-consul.com with HTTP;
+        Mon, 15 Jul 2019 17:10:50 +0900 (JST)
+Message-ID: <50258.174.128.236.106.1563178250.risu@webmail.nakagawa-consul.com>
+Date:   Mon, 15 Jul 2019 17:10:50 +0900 (JST)
+Subject: Loan offer !!
+From:   "Smith Jerry" <morita@nakagawa-consul.com>
+Reply-To: kasaperkoloans@yahoo.com.hk
+User-Agent: RisuMail 3.1
+X-Mailer: RisuMail 3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Greetings!
-To:     Recipients <fuqingzheng@asia.com>
-From:   fuqingzheng@asia.com
-Date:   Wed, 10 Jul 2019 08:04:19 +0200
-Reply-To: zhengfuqing@yandex.com
-X-Antivirus: Avast (VPS 190709-4, 09-07-2019), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <SBS6oDVbDqfojBasZ3P000093b1@hometime.com>
-X-OriginalArrivalTime: 10 Jul 2019 06:04:55.0214 (UTC) FILETIME=[654B44E0:01D536E5]
+Content-Type: text/plain;charset=us-ascii
+Content-Transfer-Encoding: 8bit
+X-Priority: 3 (Normal)
+Importance: Normal
+To:     undisclosed-recipients:;
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Good day,
 
-  I have a mutual business proposal, which refers to the transfer of a large amount of money to an account abroad, with your help as a foreign partner as a beneficiary of the funds. Everything about this transaction will be legal without any bridge of financial authority both in my country and yours. If you are interested and I will give you more information about the project as soon as I receive your positive response.
 
-Best regards,
 
-Executive Director.
- 
-ICBC. China
-
----
-Dit e-mailbericht is gecontroleerd op virussen met Avast antivirussoftware.
-https://www.avast.com/antivirus
+Do you need a Loan? email us now on kasaperkoloans@yahoo.com.hk and get
+more details on the loan we offer
 
