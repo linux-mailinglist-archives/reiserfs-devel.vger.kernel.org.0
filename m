@@ -2,100 +2,63 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BC195D80
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 20 Aug 2019 13:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26BF295E81
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 20 Aug 2019 14:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729699AbfHTLfZ (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 20 Aug 2019 07:35:25 -0400
-Received: from mail.alarsen.net ([144.76.18.233]:41056 "EHLO mail.alarsen.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729308AbfHTLfZ (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 20 Aug 2019 07:35:25 -0400
-X-Greylist: delayed 417 seconds by postgrey-1.27 at vger.kernel.org; Tue, 20 Aug 2019 07:35:24 EDT
-Received: from oscar.alarsen.net (unknown [IPv6:2001:470:1f0b:246:3924:9405:bfa9:9e67])
-        by joe.alarsen.net (Postfix) with ESMTPS id E9D242B80E32;
-        Tue, 20 Aug 2019 13:28:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alarsen.net; s=joe;
-        t=1566300504; bh=mDk8OlCGIB6EhD5weVd+fJ6RnWW2vsYjn5UPSJ49uVE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SEh2P2AZ2TnUVaY61ToGPfeBiJ9MSzdTp97WuG6X/ffbN9fYq6MysDpCQT3EX4Yf0
-         xicb80NRjLi5IbI5SarXz2OYSswAH8TKM+qJCIeP+idML96WA5znjZZVoEOG5kB8O2
-         qXeM0uhYorlnqqauep/RqWer5HjmA4IP1WCerrMs=
-Received: from oscar.localnet (localhost [IPv6:::1])
-        by oscar.alarsen.net (Postfix) with ESMTP id 4117F27C0945;
-        Tue, 20 Aug 2019 13:28:23 +0200 (CEST)
-From:   Anders Larsen <al@alarsen.net>
-To:     Deepa Dinamani <deepa.kernel@gmail.com>
-Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, y2038@lists.linaro.org,
-        arnd@arndb.de, aivazian.tigran@gmail.com, coda@cs.cmu.edu,
-        darrick.wong@oracle.com, dushistov@mail.ru, dwmw2@infradead.org,
-        hch@infradead.org, jack@suse.com, jaharkes@cs.cmu.edu,
-        luisbg@kernel.org, nico@fluxnic.net, phillip@squashfs.org.uk,
-        richard@nod.at, salah.triki@gmail.com, shaggy@kernel.org,
-        linux-xfs@vger.kernel.org, codalist@coda.cs.cmu.edu,
-        linux-ext4@vger.kernel.org, linux-mtd@lists.infradead.org,
-        jfs-discussion@lists.sourceforge.net,
-        reiserfs-devel@vger.kernel.org
-Subject: Re: [PATCH v8 06/20] fs: Fill in max and min timestamps in superblock
-Date:   Tue, 20 Aug 2019 13:28:23 +0200
-Message-ID: <10056508.664JITJLOY@alarsen.net>
-In-Reply-To: <20190818165817.32634-7-deepa.kernel@gmail.com>
-References: <20190818165817.32634-1-deepa.kernel@gmail.com> <20190818165817.32634-7-deepa.kernel@gmail.com>
+        id S1729833AbfHTM2q (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 20 Aug 2019 08:28:46 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:36712 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728771AbfHTM2q (ORCPT
+        <rfc822;reiserfs-devel@vger.kernel.org>);
+        Tue, 20 Aug 2019 08:28:46 -0400
+Received: by mail-wm1-f66.google.com with SMTP id g67so2496136wme.1;
+        Tue, 20 Aug 2019 05:28:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tSR8sb1uotjnjfdOyV2jp4tciGn/c2mOxbn+GtlfYOs=;
+        b=Sb8IcfXuDfRdmyL0CRWnFamS5vXoAjqTViv3zIBCL7F76sefcdcrviBEAfc8hUN6mY
+         3T2bTygs2djOmtPhghEO8PRH2iKMYaNCw9HCKu3MztXx0199Y3m3lZm7qg1ygnF5ZipV
+         9zTNPxjLh3mxv/gSW7AFCAFg96NijzXXkpMMfyZz9iK9Gu8BRzkt5jsP6rSh45v6mZaD
+         1Mp00pCMqRSNjKv24+RZJwwcK2onM8os9c3AzSupDq/Y6Tuboo7p5U9mMSviFfCMGbyH
+         4/mgJa/JCVh7gCKrE/mr+4oGqLmlc/13oohkYaUKNtCUmwcT0ufYIDDwRe4pOWb9o4KN
+         lcbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tSR8sb1uotjnjfdOyV2jp4tciGn/c2mOxbn+GtlfYOs=;
+        b=FaMCm9tr2jksjCKWASEHmgRjWJ6XAE1RI0zxJp/GHsPdP4OhGFrGg38qam+hnNiuFZ
+         Kkx/LAWajyEL/QACoibwbQbhPZKF9PsR0yTzx3s9evK1c9wSz/s07TNHoNPVHON3dIrO
+         XQaet/EcnUPlVdCoktN8EjUAy+OGuYSKblikpQYRWIh5rjeJMMLcGjes6qWTUAPZTdx+
+         +02wCCingD+LaUTrzTbQ6XGvk1qwdlKveefr2noa8fu9YLn5/I1mEp7OyitaDKRR2y3i
+         JvTbq8zf/ZIX/1SH6wEs1MJKa/ZkwsJ49NCIafYVMQU2poQ4jv4ek+T9xZgEh+O466c7
+         DSEw==
+X-Gm-Message-State: APjAAAUX53w8VbFdei8PAuQEJ/6cAnPB9JHbAIcSXg6NN/SL09kmh5g4
+        /eJbzBw9qXfboHUzHuS2ItmeQUMP6KCQHLe0RFrBmMcc
+X-Google-Smtp-Source: APXvYqyRVbaXH5E+zsLwPDG0vuC0U7wlFSG7bKGWfN7PgLa4N/DQBhMBCHvfrfvM80hn+6Il6g7uH/noqPunFBw5Yzk=
+X-Received: by 2002:a1c:dd8a:: with SMTP id u132mr498571wmg.1.1566304123445;
+ Tue, 20 Aug 2019 05:28:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <20190818165817.32634-1-deepa.kernel@gmail.com>
+ <20190818165817.32634-7-deepa.kernel@gmail.com> <CAK+_RLmK0Vy79giAZnUCmmivvRT+GLZXyiMqBoFB0_Ed1W8BkA@mail.gmail.com>
+In-Reply-To: <CAK+_RLmK0Vy79giAZnUCmmivvRT+GLZXyiMqBoFB0_Ed1W8BkA@mail.gmail.com>
+From:   Tigran Aivazian <aivazian.tigran@gmail.com>
+Date:   Tue, 20 Aug 2019 13:28:32 +0100
+Message-ID: <CAK+_RL=ZK40XWY_c8wskAwNw8-Q3DY-+B0GoYo0JEVmqxYD7ig@mail.gmail.com>
+Subject: Re: [PATCH v8 06/20] fs: Fill in max and min timestamps in superblock
+To:     Deepa Dinamani <deepa.kernel@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-xfs@vger.kernel.org, linux-mtd@lists.infradead.org,
+        reiserfs-devel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Sunday, 2019-08-18 18:58 Deepa Dinamani wrote:
-> Fill in the appropriate limits to avoid inconsistencies
-> in the vfs cached inode times when timestamps are
-> outside the permitted range.
-> 
-> Even though some filesystems are read-only, fill in the
-> timestamps to reflect the on-disk representation.
-> 
-> Signed-off-by: Deepa Dinamani <deepa.kernel@gmail.com>
-> Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
-> Cc: aivazian.tigran@gmail.com
-> Cc: al@alarsen.net
-> Cc: coda@cs.cmu.edu
-> Cc: darrick.wong@oracle.com
-> Cc: dushistov@mail.ru
-> Cc: dwmw2@infradead.org
-> Cc: hch@infradead.org
-> Cc: jack@suse.com
-> Cc: jaharkes@cs.cmu.edu
-> Cc: luisbg@kernel.org
-> Cc: nico@fluxnic.net
-> Cc: phillip@squashfs.org.uk
-> Cc: richard@nod.at
-> Cc: salah.triki@gmail.com
-> Cc: shaggy@kernel.org
-> Cc: linux-xfs@vger.kernel.org
-> Cc: codalist@coda.cs.cmu.edu
-> Cc: linux-ext4@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: jfs-discussion@lists.sourceforge.net
-> Cc: reiserfs-devel@vger.kernel.org
-> ---
->  fs/befs/linuxvfs.c       | 2 ++
->  fs/bfs/inode.c           | 2 ++
->  fs/coda/inode.c          | 3 +++
->  fs/cramfs/inode.c        | 2 ++
->  fs/efs/super.c           | 2 ++
->  fs/ext2/super.c          | 2 ++
->  fs/freevxfs/vxfs_super.c | 2 ++
->  fs/jffs2/fs.c            | 3 +++
->  fs/jfs/super.c           | 2 ++
->  fs/minix/inode.c         | 2 ++
->  fs/qnx4/inode.c          | 2 ++
-
-wrt qnx4, feel free to add
-Acked-by: Anders Larsen <al@alarsen.net>
-
-
-
+I see no problems for BFS.
+Acked-By: Tigran Aivazian <aivazian.tigran@gmail.com>
