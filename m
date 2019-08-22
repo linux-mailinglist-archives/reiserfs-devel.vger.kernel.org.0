@@ -2,126 +2,92 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2D99760D
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 21 Aug 2019 11:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2C4993AA
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 22 Aug 2019 14:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726648AbfHUJZw (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 21 Aug 2019 05:25:52 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:5171 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726227AbfHUJZw (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 21 Aug 2019 05:25:52 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 4CC4E37B125968F7928A;
-        Wed, 21 Aug 2019 17:25:48 +0800 (CST)
-Received: from huawei.com (10.90.53.225) by DGGEMS406-HUB.china.huawei.com
- (10.3.19.206) with Microsoft SMTP Server id 14.3.439.0; Wed, 21 Aug 2019
- 17:25:41 +0800
-From:   zhengbin <zhengbin13@huawei.com>
-To:     <jack@suse.cz>, <akpm@linux-foundation.org>,
-        <linux.bhar@gmail.com>, <arnd@arndb.de>,
-        <hariprasad.kelam@gmail.com>, <reiserfs-devel@vger.kernel.org>
-CC:     <yi.zhang@huawei.com>, <zhengbin13@huawei.com>
-Subject: [PATCH 7/7] fs/reiserfs/do_balan.c: remove set but not used variables
-Date:   Wed, 21 Aug 2019 17:32:09 +0800
-Message-ID: <1566379929-118398-8-git-send-email-zhengbin13@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1566379929-118398-1-git-send-email-zhengbin13@huawei.com>
-References: <1566379929-118398-1-git-send-email-zhengbin13@huawei.com>
+        id S2388611AbfHVMdS (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 22 Aug 2019 08:33:18 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:45018 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387583AbfHVMdS (ORCPT
+        <rfc822;reiserfs-devel@vger.kernel.org>);
+        Thu, 22 Aug 2019 08:33:18 -0400
+Received: by mail-lf1-f67.google.com with SMTP id v16so4378653lfg.11
+        for <reiserfs-devel@vger.kernel.org>; Thu, 22 Aug 2019 05:33:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=nfhgajuufA7rWI/YoBLFz2MWYaw/EzcvL2MRwGBVBXpJ+tHWl2GL+cxwap1G98IxOg
+         Ob8ehEbbgRZ3WBc6H6INDo6rFKWg1dShWne+N7WlaDMjxzobTy9bfGotsqwkLgth0oBn
+         aFRE9bDH3zL9ejw2DLDEghsx62j9+IoAMKFY7exQ52raYsJyqYnlEmgXZQ9/smkmqgEX
+         EQAP508jHUPPlenbqzaW7zl1nbW0QVhHxOtJ6BjCBPObzqbvZUQubv/1ZBGu34QxLlzr
+         g5VyuWeEvTh0mpgHHzh7oUHX6eiZr48bFwQE9pIAipVx1Ls3pv2tH/0wsMuzyRz0o8Dy
+         fVYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=rwxP137I4SBZxtZwmxIYkpa8mmKpprIoKVPtrEgIKml4ytfO94okY+gIv8B0wyaxhj
+         /7TI4xmFrKdxA20GwAXg9j7oX2sS+btV4BE1OoB1WVTZ1vNn+69MbxK4WVNap/9Hcmzy
+         +an8g0GL2HUV+ZNL5g6SeJr0g8TR06hd87xEMeM9hCaVEQBb1UKVQ5YfgDIcrRZ7ilcB
+         rxK4LjlLeq/jQPEBXinK1JCntGuPyBJgvkUvThQssJth3xK8zJmmMQvd8gpfrFD3AlZu
+         nbV99Y6n8ZPnHuW9TrVl2nHSR61QNFaerdB+47GSos7u+9xsz1NYHh/LdrrQT11BZrNn
+         FkyA==
+X-Gm-Message-State: APjAAAXeOPj2f/wo7R7F1exN2b1PV2dIDOybCR+NrAFaeA7RA9f55IBy
+        Ca19Y4IXnekigE4jGlj63+y/PzX6eoqocHZRP9g=
+X-Google-Smtp-Source: APXvYqxAIR78YU+T6kxFuF/fM9DMLrbHL7/RRwQn0EMggjH+Xv1U3mJHoN258ezWnIEWlEwEkubNeP3e4OaNpSk81nY=
+X-Received: by 2002:ac2:54bc:: with SMTP id w28mr222870lfk.17.1566477196677;
+ Thu, 22 Aug 2019 05:33:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.90.53.225]
-X-CFilter-Loop: Reflected
+Received: by 2002:ab3:6a0f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:33:16
+ -0700 (PDT)
+Reply-To: eku.lawfirm@gmail.com
+From:   "Law firm(Eku and Associates)" <ezeobodo1@gmail.com>
+Date:   Thu, 22 Aug 2019 12:33:16 +0000
+Message-ID: <CAN-_bTYkX9Q_V1vycr99xF0J=w6om=+jKr8KLhHqjcjhJ7XE6A@mail.gmail.com>
+Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-fs/reiserfs/do_balan.c: In function balance_leaf_when_delete:
-fs/reiserfs/do_balan.c:245:20: warning: variable ih set but not used [-Wunused-but-set-variable]
-fs/reiserfs/do_balan.c: In function balance_leaf_insert_left:
-fs/reiserfs/do_balan.c:301:7: warning: variable version set but not used [-Wunused-but-set-variable]
-fs/reiserfs/do_balan.c: In function balance_leaf_insert_right:
-fs/reiserfs/do_balan.c:649:7: warning: variable version set but not used [-Wunused-but-set-variable]
-fs/reiserfs/do_balan.c: In function balance_leaf_new_nodes_insert:
-fs/reiserfs/do_balan.c:953:7: warning: variable version set but not used [-Wunused-but-set-variable]
+--=20
+Dear,
+With due respect this is not spam or Scam mail, because I have
+contacted you before and there was no response from you,I apologise if
+the contents of this mail are contrary to your moral ethics, which I
+feel may be of great disturbance to your person, but please treat this
+with absolute confidentiality, believing that this email reaches you
+in good faith. My contacting you is not a mistake or a coincidence
+because God can use any person known or unknown to accomplish great
+things.
+I am a lawyer and I have an investment business proposal to offer you.
+It is not official but should be considered as legal and confidential
+business. I have a customer's deposit of $US25 million dollars ready
+to be moved for investment if you can partner with us. We are ready to
+offer you 10% of this total amount as your compensation for supporting
+the transaction to completion. If you are interested to help me please
+reply me with your full details as stated below:
+(1) Your full names:
+(2) Your address:
+(3) Your occupation:
+(4) Your mobile telephone number:
+(5) Your nationality:
+(6) Your present location:
+(7) Your age:
+So that I will provide you more details on what to do and what is
+required for successful completion.
+Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
+MENTIONED DETAILS
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: zhengbin <zhengbin13@huawei.com>
----
- fs/reiserfs/do_balan.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
-
-diff --git a/fs/reiserfs/do_balan.c b/fs/reiserfs/do_balan.c
-index 9c02d96..ffb6d7f 100644
---- a/fs/reiserfs/do_balan.c
-+++ b/fs/reiserfs/do_balan.c
-@@ -239,10 +239,8 @@ static int balance_leaf_when_delete_left(struct tree_balance *tb)
- static int balance_leaf_when_delete(struct tree_balance *tb, int flag)
- {
- 	struct buffer_head *tbS0 = PATH_PLAST_BUFFER(tb->tb_path);
--	int item_pos = PATH_LAST_POSITION(tb->tb_path);
- 	struct buffer_info bi;
- 	int n;
--	struct item_head *ih;
-
- 	RFALSE(tb->FR[0] && B_LEVEL(tb->FR[0]) != DISK_LEAF_NODE_LEVEL + 1,
- 	       "vs- 12000: level: wrong FR %z", tb->FR[0]);
-@@ -251,7 +249,6 @@ static int balance_leaf_when_delete(struct tree_balance *tb, int flag)
- 	RFALSE(!tb->blknum[0] && !PATH_H_PPARENT(tb->tb_path, 0),
- 	       "PAP-12010: tree can not be empty");
-
--	ih = item_head(tbS0, item_pos);
- 	buffer_info_init_tbS0(tb, &bi);
-
- 	/* Delete or truncate the item */
-@@ -298,7 +295,6 @@ static unsigned int balance_leaf_insert_left(struct tree_balance *tb,
- 	if (tb->item_pos == tb->lnum[0] - 1 && tb->lbytes != -1) {
- 		/* part of new item falls into L[0] */
- 		int new_item_len, shift;
--		int version;
-
- 		ret = leaf_shift_left(tb, tb->lnum[0] - 1, -1);
-
-@@ -317,8 +313,6 @@ static unsigned int balance_leaf_insert_left(struct tree_balance *tb,
- 		leaf_insert_into_buf(&bi, n + tb->item_pos - ret, ih, body,
- 			     min_t(int, tb->zeroes_num, ih_item_len(ih)));
-
--		version = ih_version(ih);
--
- 		/*
- 		 * Calculate key component, item length and body to
- 		 * insert into S[0]
-@@ -646,13 +640,11 @@ static void balance_leaf_insert_right(struct tree_balance *tb,
- 	if (tb->item_pos == n - tb->rnum[0] + 1 && tb->rbytes != -1) {
- 		loff_t old_key_comp, old_len, r_zeroes_number;
- 		const char *r_body;
--		int version, shift;
-+		int shift;
- 		loff_t offset;
-
- 		leaf_shift_right(tb, tb->rnum[0] - 1, -1);
-
--		version = ih_version(ih);
--
- 		/* Remember key component and item length */
- 		old_key_comp = le_ih_k_offset(ih);
- 		old_len = ih_item_len(ih);
-@@ -950,14 +942,12 @@ static void balance_leaf_new_nodes_insert(struct tree_balance *tb,
- 	if (tb->item_pos == n - tb->snum[i] + 1 && tb->sbytes[i] != -1) {
- 		int old_key_comp, old_len, r_zeroes_number;
- 		const char *r_body;
--		int version;
-
- 		/* Move snum[i]-1 items from S[0] to S_new[i] */
- 		leaf_move_items(LEAF_FROM_S_TO_SNEW, tb, tb->snum[i] - 1, -1,
- 				tb->S_new[i]);
-
- 		/* Remember key component and item length */
--		version = ih_version(ih);
- 		old_key_comp = le_ih_k_offset(ih);
- 		old_len = ih_item_len(ih);
-
---
-2.7.4
-
+Sinc=C3=A8rement v=C3=B4tre,
+Avocat Etienne Eku Esq.(Lawfirm)
+Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
+=E2=80=99ouest.
+Skype:westafricalawfirm
