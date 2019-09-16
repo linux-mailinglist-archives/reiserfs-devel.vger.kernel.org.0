@@ -2,19 +2,19 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2551FB3949
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 16 Sep 2019 13:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CADD2B3A78
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 16 Sep 2019 14:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727479AbfIPL0k (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 16 Sep 2019 07:26:40 -0400
-Received: from mtax.cdmx.gob.mx ([187.141.35.197]:12889 "EHLO mtaw.cdmx.gob.mx"
+        id S1732518AbfIPMh5 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 16 Sep 2019 08:37:57 -0400
+Received: from mtax.cdmx.gob.mx ([187.141.35.197]:9866 "EHLO mtaw.cdmx.gob.mx"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725971AbfIPL0k (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 16 Sep 2019 07:26:40 -0400
+        id S1727950AbfIPMh5 (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Mon, 16 Sep 2019 08:37:57 -0400
 X-NAI-Header: Modified by McAfee Email Gateway (4500)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cdmx.gob.mx; s=72359050-3965-11E6-920A-0192F7A2F08E;
-        t=1568624513; h=X-Virus-Scanned:Content-Type:
+        t=1568628118; h=X-Virus-Scanned:Content-Type:
          MIME-Version:Content-Transfer-Encoding:Content-Description:
          Subject:To:From:Date:Reply-To:Message-Id:X-AnalysisOut:
          X-AnalysisOut:X-AnalysisOut:X-AnalysisOut:
@@ -23,29 +23,29 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
          X-NAI-Spam-Flag:X-NAI-Spam-Threshold:X-NAI-Spam-Score:
          X-NAI-Spam-Rules:X-NAI-Spam-Version; bh=6
         /pZmFQC6AfQtx64WCm5mpv4OcL2DRwqn08dcLKFTI
-        w=; b=rIEkiOA2a6I1HeYA74zltGCn7ToiJ5QD5nQalzwjpyLg
-        y+HPybs5tAoAHiZIp74QNjqLz3vYWOoed+gwsM93irHGuxzkzi
-        72l/2abiqBHTvKLjuNhpu7u/QExSYjM6fOcGQpsHhexkXPNoXl
-        aBVIiw2b2jHb4a0ber0qJyvqiEk=
+        w=; b=Xp7fFvOIhfdrHq3u/+/ixv2hfE6beONNIjvA0nSZdo4e
+        5XaRdjQYUHs5dA7YaGyo5hJra/dg/uWhvJ4tPtYog0hAuzyppp
+        fPm3MPQ6BBpdPboQ1BKujxSMBfqC15ehOGO/V9w2hRrXLL4fvF
+        PIiILGN1DzNnRlV6hUGSkmaRx7o=
 Received: from correo.seciti.cdmx.gob.mx (gdf-correo.cdmx.gob.mx [10.250.102.17]) by mtaw.cdmx.gob.mx with smtp
-         id 3007_ac44_e02a12c6_ea3c_43a8_9936_a8955afd66eb;
-        Mon, 16 Sep 2019 04:01:53 -0500
+         id 165c_ae9e_f5842ca5_7cc6_47b4_aa3f_192b1993cf71;
+        Mon, 16 Sep 2019 05:01:58 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by gdf-correo.df.gob.mx (Postfix) with ESMTP id F07372F63;
-        Mon, 16 Sep 2019 04:01:50 -0500 (CDT)
+        by gdf-correo.df.gob.mx (Postfix) with ESMTP id 13D9D3581;
+        Mon, 16 Sep 2019 05:01:55 -0500 (CDT)
 Received: from correo.seciti.cdmx.gob.mx ([127.0.0.1])
         by localhost (gdf-correo.df.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id AvDUM58-_KZR; Mon, 16 Sep 2019 04:01:50 -0500 (CDT)
+        with ESMTP id LYPNfHDEgfdt; Mon, 16 Sep 2019 05:01:54 -0500 (CDT)
 Received: from localhost (localhost [127.0.0.1])
-        by gdf-correo.df.gob.mx (Postfix) with ESMTP id 81EF534D4;
-        Mon, 16 Sep 2019 04:01:26 -0500 (CDT)
+        by gdf-correo.df.gob.mx (Postfix) with ESMTP id 9AFE03464;
+        Mon, 16 Sep 2019 05:00:39 -0500 (CDT)
 X-Virus-Scanned: amavisd-new at gdf-correo.df.gob.mx
 Received: from correo.seciti.cdmx.gob.mx ([127.0.0.1])
         by localhost (gdf-correo.df.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id APCJvpAmBZKN; Mon, 16 Sep 2019 04:01:26 -0500 (CDT)
-Received: from [100.88.209.140] (8ta-250-4-63.telkomadsl.co.za [102.250.4.63])
-        by gdf-correo.df.gob.mx (Postfix) with ESMTPSA id CA122357E;
-        Mon, 16 Sep 2019 04:00:19 -0500 (CDT)
+        with ESMTP id BrMOOW1KnF61; Mon, 16 Sep 2019 05:00:39 -0500 (CDT)
+Received: from [100.88.209.140] (8ta-250-4-72.telkomadsl.co.za [102.250.4.72])
+        by gdf-correo.df.gob.mx (Postfix) with ESMTPSA id 0A8E334BD;
+        Mon, 16 Sep 2019 04:59:04 -0500 (CDT)
 Content-Type: text/plain;
   charset="utf-8"
 MIME-Version: 1.0
@@ -54,17 +54,17 @@ Content-Description: Mail message body
 Subject: Spende von 5 Millionen Euro
 To:     Recipients <mramirezg@mexicocity.gob.mx>
 From:   "Shane Missler" <mramirezg@mexicocity.gob.mx>
-Date:   Mon, 16 Sep 2019 10:59:59 +0200
+Date:   Mon, 16 Sep 2019 11:58:40 +0200
 Reply-To: shanemissler.spende1@gmail.com
-Message-Id: <20190916090019.CA122357E@gdf-correo.df.gob.mx>
-X-AnalysisOut: [v=2.2 cv=crfrqxwi c=1 sm=1 tr=0 p=NAessOE28N0A:10 p=01NpVV]
+Message-Id: <20190916095905.0A8E334BD@gdf-correo.df.gob.mx>
+X-AnalysisOut: [v=2.2 cv=AanBJzfG c=1 sm=1 tr=0 p=NAessOE28N0A:10 p=01NpVV]
 X-AnalysisOut: [4txKbuBquBCNIA:9 p=OPvaR162FBY78wYZ:21 p=wwp16yEzG9Fj4K8O:]
 X-AnalysisOut: [21 p=09-KjHS_CW8A:10 p=bEr4i4eggGkA:10 p=-7VjjQDN59lQbO9Es]
 X-AnalysisOut: [jZ6:22 p=Lyqu6MUUigPyaOuRX7ce:22 a=KsSCQl7LcZej77FuluUcQw=]
-X-AnalysisOut: [=:117 a=XbdjHrFpJLAoAGD2hiQkuQ==:17 a=8nJEP1OIZ-IA:10 a=x7]
+X-AnalysisOut: [=:117 a=e+lCeTWI1jHVzFLzZf7TwA==:17 a=8nJEP1OIZ-IA:10 a=x7]
 X-AnalysisOut: [bEGLp0ZPQA:10 a=J70Eh1EUuV4A:10 a=pGLkceISAAAA:8 a=wPNLvfG]
 X-AnalysisOut: [TeEIA:10]
-X-SAAS-TrackingID: 18f4f7d5.0.78189638.00-2328.131658610.s12p02m015.mxlogic.net
+X-SAAS-TrackingID: 79d5f7d5.0.78381560.00-2244.131930088.s12p02m012.mxlogic.net
 X-NAIMIME-Disclaimer: 1
 X-NAIMIME-Modified: 1
 X-NAI-Spam-Flag: NO
@@ -73,7 +73,7 @@ X-NAI-Spam-Score: -5000
 X-NAI-Spam-Rules: 1 Rules triggered
         WHITELISTED=-5000
 X-NAI-Spam-Version: 2.3.0.9418 : core <6634> : inlines <7140> : streams
- <1832908> : uri <2904392>
+ <1832912> : uri <2904411>
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
