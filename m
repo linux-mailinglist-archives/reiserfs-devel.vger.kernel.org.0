@@ -2,65 +2,61 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4BDB4080
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 16 Sep 2019 20:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D0EB4C02
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 17 Sep 2019 12:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730095AbfIPSoz (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 16 Sep 2019 14:44:55 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:37537 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730086AbfIPSoy (ORCPT
+        id S1726074AbfIQKcg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 17 Sep 2019 06:32:36 -0400
+Received: from mail.11d03.mspz7.gob.ec ([190.214.23.250]:33492 "EHLO
+        mail.11d03.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725927AbfIQKcf (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 16 Sep 2019 14:44:54 -0400
-Received: by mail-wr1-f65.google.com with SMTP id i1so533160wro.4
-        for <reiserfs-devel@vger.kernel.org>; Mon, 16 Sep 2019 11:44:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=K/UkQ76H4Yb0u9Kc+6rxPH3RXPAqgIPPv6jR+GQOvDc=;
-        b=kc3WQpuLV5Z+y/Tvzt2h3HM2ZdNCBcm79NhSngIbxbLKutZ7U7TJ7q4hqbSNVannxI
-         uQQEUuGZ6Z4cjy2ogwbNBvEH4TlOTFH8tMCx/bkHfnnb/UIMRFrwTpcPtPu75IynvoR7
-         BZHtovPAIwZfqcwCEWPsyvLtixhm33FQskB9O++wN1WDvR2dmpwMK0ADBz6FELqVYSrW
-         aiEAWmV9upg4xaiBNEhxWJsqjCh4ooyteTkEaxDiA0skP8gLUiPUUlPInJYlGoQ4cMTF
-         eYrO9tZz4MihdUKS2rcvwcNIdLZwJRWt/V0DhyxgpYjJtu2VYQukcUTnzyJyPuntwz0k
-         A2xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=K/UkQ76H4Yb0u9Kc+6rxPH3RXPAqgIPPv6jR+GQOvDc=;
-        b=C4INYK5jcH/L2O9pj9D4ThT0/GEcxMJqXTwuGPoIXeHoNqX3lvTYttQtXO3KjDVSt6
-         w1Fe3neK4ugUrFpPdNV+Luz+VJQzEfD1NpwsCtlzWuycKXbbBG0vJHdFvIQ7BiAC3EnJ
-         EOD0KZ0thTy9rw/iGQhpazSj9C6b9fc5OKsL2FRU/NAE3gLXtwLQ0qvfA2OX8lv0+tAa
-         q2lQT5v8f8dpsb9AHyvxGJhhJDPe78RtrDcccjNqFFwA21hUOhpvE29QhahAf6ij7CM5
-         xW8Eb2NZCpC0GuZcVyxvnI1gW2QqXol/NDICwx0okJUvIWNnZOv1BHKXtsf63oa3iGO6
-         z3Cg==
-X-Gm-Message-State: APjAAAWYv5jCTMG7bhmm23O9XY19Pxd21u5LVwFBW/8Ki6QYu7lmQwec
-        ZV8azARQ1FNNfGGreGzxkDXOnytAlAXXi4hHIRk=
-X-Google-Smtp-Source: APXvYqx47AMgrW28mwD5EO2x1DL7uFV3XVA15to1pr/aW068UDEakJLTzMt3SOYBqLQaGW08xfYTjp486Ya3QVKu9J0=
-X-Received: by 2002:adf:e945:: with SMTP id m5mr965657wrn.25.1568659493411;
- Mon, 16 Sep 2019 11:44:53 -0700 (PDT)
+        Tue, 17 Sep 2019 06:32:35 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.11d03.mspz7.gob.ec (Postfix) with ESMTP id 8A3C34058AF5F;
+        Mon, 16 Sep 2019 23:44:08 -0500 (-05)
+Received: from mail.11d03.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.11d03.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id uiQtBL_txdgc; Mon, 16 Sep 2019 23:44:08 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.11d03.mspz7.gob.ec (Postfix) with ESMTP id 1DF3D4058AF60;
+        Mon, 16 Sep 2019 23:44:03 -0500 (-05)
+X-Virus-Scanned: amavisd-new at 11d03.mspz7.gob.ec
+Received: from mail.11d03.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.11d03.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 3BdnClWe_VWi; Mon, 16 Sep 2019 23:44:02 -0500 (-05)
+Received: from [10.33.79.142] (unknown [105.4.0.133])
+        by mail.11d03.mspz7.gob.ec (Postfix) with ESMTPSA id A1BCD40591C12;
+        Mon, 16 Sep 2019 23:43:50 -0500 (-05)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:adf:ee06:0:0:0:0:0 with HTTP; Mon, 16 Sep 2019 11:44:53
- -0700 (PDT)
-From:   ben beneth <pinkbirds20191@gmail.com>
-Date:   Mon, 16 Sep 2019 11:44:53 -0700
-Message-ID: <CANpTnE5dChptWjVQ3JTSL_id0M54Wsh2vSxa-WkYAhmJEqp9sA@mail.gmail.com>
-Subject: Urgent Assistance please
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Millionen_Euro?=
+To:     Recipients <vicenta.sinche@11d03.mspz7.gob.ec>
+From:   ''Tayeb souami'' <vicenta.sinche@11d03.mspz7.gob.ec>
+Date:   Tue, 17 Sep 2019 06:43:40 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20190917044350.A1BCD40591C12@mail.11d03.mspz7.gob.ec>
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+Lieber Freund,
 
-My name is MR Ben,  I am very happy to be in contact with you.
+Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden, um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite unten.
 
-Please I want you to assist me to invest my inherited funds in your country.
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
 
-Reply  for more details to this  myprivate Email ID:
-pinkbirds2019@gmail.com   if you are willing to assist me.
+Das ist dein Spendencode: [TS530342018]
 
-Sincerely,
-MR Ben,
+Antworten Sie mit dem SPENDE-CODE an diese 
+
+E-Mail:Tayebsouam.spende@gmail.com
+
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+
+Grüße
+Herr Tayeb Souami
