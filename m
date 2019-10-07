@@ -2,138 +2,66 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC10123C7CC
-	for <lists+reiserfs-devel@lfdr.de>; Wed,  5 Aug 2020 10:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E22523D15D
+	for <lists+reiserfs-devel@lfdr.de>; Wed,  5 Aug 2020 22:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726459AbgHEIaV (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 5 Aug 2020 04:30:21 -0400
-Received: from mx2.suse.de ([195.135.220.15]:43938 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726439AbgHEIaU (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 5 Aug 2020 04:30:20 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id F1681B63A;
-        Wed,  5 Aug 2020 08:30:34 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 3C5381E12CB; Wed,  5 Aug 2020 10:30:17 +0200 (CEST)
-Date:   Wed, 5 Aug 2020 10:30:17 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-fsdevel@vger.kernel.org, Jan Kara <jack@suse.com>,
-        Jeff Mahoney <jeffm@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        reiserfs-devel@vger.kernel.org
-Subject: Re: [PATCH] reiserfs: delete duplicated words
-Message-ID: <20200805083017.GA4117@quack2.suse.cz>
-References: <20200805024925.12281-1-rdunlap@infradead.org>
+        id S1728485AbgHET71 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 5 Aug 2020 15:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727908AbgHEQmL (ORCPT
+        <rfc822;reiserfs-devel@vger.kernel.org>);
+        Wed, 5 Aug 2020 12:42:11 -0400
+Received: from dockerbox (unknown [IPv6:2001:4800:7817:101:be76:4eff:fe04:a215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95601C03460D
+        for <reiserfs-devel@vger.kernel.org>; Wed,  5 Aug 2020 05:08:41 -0700 (PDT)
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by dockerbox (Postfix) with SMTP id 66CC25EDE1;
+        Mon,  7 Oct 2019 19:31:21 -0500 (CDT)
+Received: from [158.231.165.172] by 127.0.0.1 id rEdge3G8bymp; Mon, 07 Oct 2019 22:23:26 -0200
+Message-ID: <zzzo-1d$zf1--2@dg69opyk>
+From:   "Mr Barrister Hans Erich" <dave@dbsoundfactory.com>
+Reply-To: "Mr Barrister Hans Erich" <dave@dbsoundfactory.com>
+To:     register@vilniusopen.euhttp
+Subject: RE:PERSONAL LETTER FROM MRS RASHIA AMIRA
+Date:   Mon, 07 Oct 19 22:23:26 GMT
+X-Mailer: Microsoft Outlook Express 5.00.2615.200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200805024925.12281-1-rdunlap@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/alternative;
+        boundary="_.A4476ECDD73A3"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Tue 04-08-20 19:49:25, Randy Dunlap wrote:
-> Delete repeated words in fs/reiserfs/.
-> {from, not, we, are}
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> To: linux-fsdevel@vger.kernel.org
-> Cc: Jan Kara <jack@suse.com>
-> Cc: Jeff Mahoney <jeffm@suse.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: reiserfs-devel@vger.kernel.org
 
-Thanks. I've added the patch to my tree.
+--_.A4476ECDD73A3
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-								Honza
+Greetings
 
-> ---
->  fs/reiserfs/dir.c       |    8 ++++----
->  fs/reiserfs/fix_node.c  |    4 ++--
->  fs/reiserfs/journal.c   |    2 +-
->  fs/reiserfs/xattr_acl.c |    2 +-
->  4 files changed, 8 insertions(+), 8 deletions(-)
-> 
-> --- linux-next-20200804.orig/fs/reiserfs/dir.c
-> +++ linux-next-20200804/fs/reiserfs/dir.c
-> @@ -289,7 +289,7 @@ void make_empty_dir_item_v1(char *body,
->  
->  	/* direntry header of "." */
->  	put_deh_offset(dot, DOT_OFFSET);
-> -	/* these two are from make_le_item_head, and are are LE */
-> +	/* these two are from make_le_item_head, and are LE */
->  	dot->deh_dir_id = dirid;
->  	dot->deh_objectid = objid;
->  	dot->deh_state = 0;	/* Endian safe if 0 */
-> @@ -299,7 +299,7 @@ void make_empty_dir_item_v1(char *body,
->  	/* direntry header of ".." */
->  	put_deh_offset(dotdot, DOT_DOT_OFFSET);
->  	/* key of ".." for the root directory */
-> -	/* these two are from the inode, and are are LE */
-> +	/* these two are from the inode, and are LE */
->  	dotdot->deh_dir_id = par_dirid;
->  	dotdot->deh_objectid = par_objid;
->  	dotdot->deh_state = 0;	/* Endian safe if 0 */
-> @@ -323,7 +323,7 @@ void make_empty_dir_item(char *body, __l
->  
->  	/* direntry header of "." */
->  	put_deh_offset(dot, DOT_OFFSET);
-> -	/* these two are from make_le_item_head, and are are LE */
-> +	/* these two are from make_le_item_head, and are LE */
->  	dot->deh_dir_id = dirid;
->  	dot->deh_objectid = objid;
->  	dot->deh_state = 0;	/* Endian safe if 0 */
-> @@ -333,7 +333,7 @@ void make_empty_dir_item(char *body, __l
->  	/* direntry header of ".." */
->  	put_deh_offset(dotdot, DOT_DOT_OFFSET);
->  	/* key of ".." for the root directory */
-> -	/* these two are from the inode, and are are LE */
-> +	/* these two are from the inode, and are LE */
->  	dotdot->deh_dir_id = par_dirid;
->  	dotdot->deh_objectid = par_objid;
->  	dotdot->deh_state = 0;	/* Endian safe if 0 */
-> --- linux-next-20200804.orig/fs/reiserfs/fix_node.c
-> +++ linux-next-20200804/fs/reiserfs/fix_node.c
-> @@ -611,9 +611,9 @@ static int get_num_ver(int mode, struct
->   *	blk_num	number of blocks that S[h] will be splitted into;
->   *	s012	number of items that fall into splitted nodes.
->   *	lbytes	number of bytes which flow to the left neighbor from the
-> - *              item that is not not shifted entirely
-> + *              item that is not shifted entirely
->   *	rbytes	number of bytes which flow to the right neighbor from the
-> - *              item that is not not shifted entirely
-> + *              item that is not shifted entirely
->   *	s1bytes	number of bytes which flow to the first  new node when
->   *              S[0] splits (this number is contained in s012 array)
->   */
-> --- linux-next-20200804.orig/fs/reiserfs/journal.c
-> +++ linux-next-20200804/fs/reiserfs/journal.c
-> @@ -32,7 +32,7 @@
->   *                      to disk for all backgrounded commits that have been
->   *                      around too long.
->   *		     -- Note, if you call this as an immediate flush from
-> - *		        from within kupdate, it will ignore the immediate flag
-> + *		        within kupdate, it will ignore the immediate flag
->   */
->  
->  #include <linux/time.h>
-> --- linux-next-20200804.orig/fs/reiserfs/xattr_acl.c
-> +++ linux-next-20200804/fs/reiserfs/xattr_acl.c
-> @@ -373,7 +373,7 @@ int reiserfs_cache_default_acl(struct in
->  
->  		/* Other xattrs can be created during inode creation. We don't
->  		 * want to claim too many blocks, so we check to see if we
-> -		 * we need to create the tree to the xattrs, and then we
-> +		 * need to create the tree to the xattrs, and then we
->  		 * just want two files. */
->  		nblocks = reiserfs_xattr_jcreate_nblocks(inode);
->  		nblocks += JOURNAL_BLOCKS_PER_OBJECT(inode->i_sb);
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+My name is Barrister Hans Erich.
+
+I have a client who is interested to invest in your country, she is a well=
+ known politician in her country and deserve a lucrative investment partne=
+rship with you outside her country without any delay   Please can you mana=
+ge such investment please Kindly reply for further details.
+
+Your full names --------
+
+
+Your urgent response will be appreciated
+
+Thank you and God bless you.
+
+Barrister Hans Erich
+
+Yours sincerely,
+Barrister Hans Erich
+CONTACT: hanserich9helmut@gmail.com
+
+--_.A4476ECDD73A3--
+
