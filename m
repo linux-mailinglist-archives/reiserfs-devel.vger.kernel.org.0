@@ -2,257 +2,232 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB379E0750
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 22 Oct 2019 17:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4873EE359B
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 24 Oct 2019 16:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388979AbfJVP1Q (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 22 Oct 2019 11:27:16 -0400
-Received: from mail7.static.mailgun.info ([104.130.122.7]:16425 "EHLO
-        mail7.static.mailgun.info" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388835AbfJVP1Q (ORCPT
-        <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 22 Oct 2019 11:27:16 -0400
-X-Greylist: delayed 307 seconds by postgrey-1.27 at vger.kernel.org; Tue, 22 Oct 2019 11:27:14 EDT
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mixtli.metztli.it; q=dns/txt;
- s=mx; t=1571758035; h=From: Date: Message-Id: To: Subject:
- Content-Type: MIME-Version: Sender;
- bh=8p8wLHX5JA8TCBMYjh0xSrzVjRifnf/Woq1nL0/W8Po=; b=D+NDRBmb6iQX4rirAcHAA0J4W4gI9L32T5pwXbKXCbNc7evD7peHtmn2PkiSc8tWU+UAVRgC
- nVLnQE9Qidql5b1nVxQZ8VtBP7IHHpuar5PiXEb33m2MMwUx7qh/u6DHEAPCrh0VCKiA40qv
- XVf1s+lkYa/k+ELkkqK2z9ZWjZ8=
-X-Mailgun-Sending-Ip: 104.130.122.7
-X-Mailgun-Sid: WyIxM2M2YSIsICJyZWlzZXJmcy1kZXZlbEB2Z2VyLmtlcm5lbC5vcmciLCAiMTdiNTQiXQ==
-Received: from huitzilopochtli.metztli-it.com (99-130-254-3.lightspeed.sntcca.sbcglobal.net [99.130.254.3])
- by mxa.mailgun.org with ESMTP id 5daf1e9b.7f412baaa3d8-smtp-out-n01;
- Tue, 22 Oct 2019 15:22:03 -0000 (UTC)
-Received: by huitzilopochtli.metztli-it.com (Postfix, from userid 1000)
-        id E2D13477D0F0; Tue, 22 Oct 2019 08:21:54 -0700 (PDT)
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="1024707763-1571757714=:21309"
-Subject: PATCH for libguestfs: tools for accessing and modifying virtual machine disk images
-To:     <edward.shishkin@gmail.com>, <reiserfs-devel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-X-Mailer: mail (GNU Mailutils 3.5)
-Message-Id: <20191022152158.E2D13477D0F0@huitzilopochtli.metztli-it.com>
-Date:   Tue, 22 Oct 2019 08:21:54 -0700 (PDT)
-From:   Metztli Information Technology <jose.r.r@metztli.com>
+        id S2391483AbfJXObh (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 24 Oct 2019 10:31:37 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53542 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1732293AbfJXObh (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Thu, 24 Oct 2019 10:31:37 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id A7E0AB376;
+        Thu, 24 Oct 2019 14:31:34 +0000 (UTC)
+Received: from starscream.home.jeffm.io (starscream-1.home.jeffm.io [192.168.1.254])
+        by mail.home.jeffm.io (Postfix) with ESMTPS id 618F281AD3D1;
+        Thu, 24 Oct 2019 11:33:23 -0400 (EDT)
+Received: by starscream.home.jeffm.io (Postfix, from userid 1000)
+        id 8E03E6F26EA; Thu, 24 Oct 2019 10:31:28 -0400 (EDT)
+From:   jeffm@suse.com
+To:     reiserfs-devel@vger.kernel.org
+Cc:     jack@suse.cz, Jeff Mahoney <jeffm@suse.com>
+Subject: [PATCH] reiserfs: fix extended attributes on the root directory
+Date:   Thu, 24 Oct 2019 10:31:27 -0400
+Message-Id: <20191024143127.17509-1-jeffm@suse.com>
+X-Mailer: git-send-email 2.16.4
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
---1024707763-1571757714=:21309
-Content-Type: text/plain; charset=UTF-8
-Content-Disposition: attachment
-Content-Transfer-Encoding: 8bit
-Content-ID: <20191022082154.21309.1@huitzilopochtli.metztli-it.com>
+From: Jeff Mahoney <jeffm@suse.com>
 
-Niltze all-
+Since commit d0a5b995a30 (vfs: Add IOP_XATTR inode operations flag)
+extended attributes haven't worked on the root directory in reiserfs.
 
-Enabled reiser4 in libguestfs 1.40.2 < http://libguestfs.org/ > since my Virtual Machines are formatted in reiser4.
+This is due to reiserfs conditionally setting the sb->s_xattrs handler
+array depending on whether it located or create the internal privroot
+directory.  It necessarily does this after the root inode is already
+read in.  The IOP_XATTR flag is set during inode initialization, so
+it never gets set on the root directory.
 
-Limited testing, though, as I only made sure I could peek into a VirtualBox VDI image, i.e.,
+This commit unconditionally assigns sb->s_xattrs and clears IOP_XATTR on
+internal inodes.  The old return values due to the conditional assignment
+are handled via open_xa_root, which now returns EOPNOTSUPP as the VFS
+would have done.
 
-guestfish --ro -i -a metztli-reiser4.vdi
+Signed-off-by: Jeff Mahoney <jeffm@suse.com>
+---
+ fs/reiserfs/inode.c     | 12 ++++++++++--
+ fs/reiserfs/namei.c     |  7 +++++--
+ fs/reiserfs/reiserfs.h  |  2 ++
+ fs/reiserfs/super.c     |  2 ++
+ fs/reiserfs/xattr.c     | 19 ++++++++++++-------
+ fs/reiserfs/xattr_acl.c |  4 +---
+ 6 files changed, 32 insertions(+), 14 deletions(-)
 
-Given the fact that "man 2 statfs" did not provide a REISER4_SUPER_MAGIC 0x52345362 entry, (heck, entry is blacklisted in Debian, etc. *all* GNU / Linux's "man 2 statfs", /usr/include/linux/magic.h, coreutils' src/fs.h, libguestfs-1.40.2/gnulib/lib/fts.c, etc., WHY!?)
-
-I created my own statfs(2) for reiser4 man page in html:
-
-short link:
-https://metztli.blog/index.php/amatl/aP3
-
-long link:
-https://metztli.blog/index.php/amatl/reiser-nahui/adding-reiser4_super_magic-to-man-2-statfs
-
-It would be cool, though, if that reiser4 MAGIC string was included in
-< https://www.kernel.org/doc/man-pages/ > (thanks in advance for your consideration)
-
-
-The first patch applies against libguestfs 1.40.2 source; the second patch applies against Debian packaging for libguestfs 1.40.2 from 
-< https://packages.debian.org/bullseye/libguestfs-tools >
-
-
-Best Professional Regards.
-
+diff --git a/fs/reiserfs/inode.c b/fs/reiserfs/inode.c
+index 132ec4406ed0..6419e6dacc39 100644
+--- a/fs/reiserfs/inode.c
++++ b/fs/reiserfs/inode.c
+@@ -2097,6 +2097,15 @@ int reiserfs_new_inode(struct reiserfs_transaction_handle *th,
+ 		goto out_inserted_sd;
+ 	}
+ 
++	/*
++	 * Mark it private if we're creating the privroot
++	 * or something under it.
++	 */
++	if (IS_PRIVATE(dir) || dentry == REISERFS_SB(sb)->priv_root) {
++		inode->i_flags |= S_PRIVATE;
++		inode->i_opflags &= ~IOP_XATTR;
++	}
++
+ 	if (reiserfs_posixacl(inode->i_sb)) {
+ 		reiserfs_write_unlock(inode->i_sb);
+ 		retval = reiserfs_inherit_default_acl(th, dir, dentry, inode);
+@@ -2111,8 +2120,7 @@ int reiserfs_new_inode(struct reiserfs_transaction_handle *th,
+ 		reiserfs_warning(inode->i_sb, "jdm-13090",
+ 				 "ACLs aren't enabled in the fs, "
+ 				 "but vfs thinks they are!");
+-	} else if (IS_PRIVATE(dir))
+-		inode->i_flags |= S_PRIVATE;
++	}
+ 
+ 	if (security->name) {
+ 		reiserfs_write_unlock(inode->i_sb);
+diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
+index 97f3fc4fdd79..959a066b7bb0 100644
+--- a/fs/reiserfs/namei.c
++++ b/fs/reiserfs/namei.c
+@@ -377,10 +377,13 @@ static struct dentry *reiserfs_lookup(struct inode *dir, struct dentry *dentry,
+ 
+ 		/*
+ 		 * Propagate the private flag so we know we're
+-		 * in the priv tree
++		 * in the priv tree.  Also clear IOP_XATTR
++		 * since we don't have xattrs on xattr files.
+ 		 */
+-		if (IS_PRIVATE(dir))
++		if (IS_PRIVATE(dir)) {
+ 			inode->i_flags |= S_PRIVATE;
++			inode->i_opflags &= ~IOP_XATTR;
++		}
+ 	}
+ 	reiserfs_write_unlock(dir->i_sb);
+ 	if (retval == IO_ERROR) {
+diff --git a/fs/reiserfs/reiserfs.h b/fs/reiserfs/reiserfs.h
+index e5ca9ed79e54..726580114d55 100644
+--- a/fs/reiserfs/reiserfs.h
++++ b/fs/reiserfs/reiserfs.h
+@@ -1168,6 +1168,8 @@ static inline int bmap_would_wrap(unsigned bmap_nr)
+ 	return bmap_nr > ((1LL << 16) - 1);
+ }
+ 
++extern const struct xattr_handler *reiserfs_xattr_handlers[];
++
+ /*
+  * this says about version of key of all items (but stat data) the
+  * object consists of
+diff --git a/fs/reiserfs/super.c b/fs/reiserfs/super.c
+index d69b4ac0ae2f..3244037b1286 100644
+--- a/fs/reiserfs/super.c
++++ b/fs/reiserfs/super.c
+@@ -2049,6 +2049,8 @@ static int reiserfs_fill_super(struct super_block *s, void *data, int silent)
+ 	if (replay_only(s))
+ 		goto error_unlocked;
+ 
++	s->s_xattr = reiserfs_xattr_handlers;
++
+ 	if (bdev_read_only(s->s_bdev) && !sb_rdonly(s)) {
+ 		SWARN(silent, s, "clm-7000",
+ 		      "Detected readonly device, marking FS readonly");
+diff --git a/fs/reiserfs/xattr.c b/fs/reiserfs/xattr.c
+index c1b996e548af..06497965f0a0 100644
+--- a/fs/reiserfs/xattr.c
++++ b/fs/reiserfs/xattr.c
+@@ -122,13 +122,13 @@ static struct dentry *open_xa_root(struct super_block *sb, int flags)
+ 	struct dentry *xaroot;
+ 
+ 	if (d_really_is_negative(privroot))
+-		return ERR_PTR(-ENODATA);
++		return ERR_PTR(-EOPNOTSUPP);
+ 
+ 	inode_lock_nested(d_inode(privroot), I_MUTEX_XATTR);
+ 
+ 	xaroot = dget(REISERFS_SB(sb)->xattr_root);
+ 	if (!xaroot)
+-		xaroot = ERR_PTR(-ENODATA);
++		xaroot = ERR_PTR(-EOPNOTSUPP);
+ 	else if (d_really_is_negative(xaroot)) {
+ 		int err = -ENODATA;
+ 
+@@ -619,6 +619,10 @@ int reiserfs_xattr_set(struct inode *inode, const char *name,
+ 	int error, error2;
+ 	size_t jbegin_count = reiserfs_xattr_nblocks(inode, buffer_size);
+ 
++	/* Check before we start a transaction and then do nothing. */
++	if (!d_really_is_positive(REISERFS_SB(inode->i_sb)->priv_root))
++		return -EOPNOTSUPP;
++
+ 	if (!(flags & XATTR_REPLACE))
+ 		jbegin_count += reiserfs_xattr_jcreate_nblocks(inode);
+ 
+@@ -841,8 +845,7 @@ ssize_t reiserfs_listxattr(struct dentry * dentry, char *buffer, size_t size)
+ 	if (d_really_is_negative(dentry))
+ 		return -EINVAL;
+ 
+-	if (!dentry->d_sb->s_xattr ||
+-	    get_inode_sd_version(d_inode(dentry)) == STAT_DATA_V1)
++	if (get_inode_sd_version(d_inode(dentry)) == STAT_DATA_V1)
+ 		return -EOPNOTSUPP;
+ 
+ 	dir = open_xa_dir(d_inode(dentry), XATTR_REPLACE);
+@@ -882,6 +885,7 @@ static int create_privroot(struct dentry *dentry)
+ 	}
+ 
+ 	d_inode(dentry)->i_flags |= S_PRIVATE;
++	d_inode(dentry)->i_opflags &= ~IOP_XATTR;
+ 	reiserfs_info(dentry->d_sb, "Created %s - reserved for xattr "
+ 		      "storage.\n", PRIVROOT_NAME);
+ 
+@@ -893,7 +897,7 @@ static int create_privroot(struct dentry *dentry) { return 0; }
+ #endif
+ 
+ /* Actual operations that are exported to VFS-land */
+-static const struct xattr_handler *reiserfs_xattr_handlers[] = {
++const struct xattr_handler *reiserfs_xattr_handlers[] = {
+ #ifdef CONFIG_REISERFS_FS_XATTR
+ 	&reiserfs_xattr_user_handler,
+ 	&reiserfs_xattr_trusted_handler,
+@@ -964,8 +968,10 @@ int reiserfs_lookup_privroot(struct super_block *s)
+ 	if (!IS_ERR(dentry)) {
+ 		REISERFS_SB(s)->priv_root = dentry;
+ 		d_set_d_op(dentry, &xattr_lookup_poison_ops);
+-		if (d_really_is_positive(dentry))
++		if (d_really_is_positive(dentry)) {
+ 			d_inode(dentry)->i_flags |= S_PRIVATE;
++			d_inode(dentry)->i_opflags &= ~IOP_XATTR;
++		}
+ 	} else
+ 		err = PTR_ERR(dentry);
+ 	inode_unlock(d_inode(s->s_root));
+@@ -994,7 +1000,6 @@ int reiserfs_xattr_init(struct super_block *s, int mount_flags)
+ 	}
+ 
+ 	if (d_really_is_positive(privroot)) {
+-		s->s_xattr = reiserfs_xattr_handlers;
+ 		inode_lock(d_inode(privroot));
+ 		if (!REISERFS_SB(s)->xattr_root) {
+ 			struct dentry *dentry;
+diff --git a/fs/reiserfs/xattr_acl.c b/fs/reiserfs/xattr_acl.c
+index aa9380bac196..05f666794561 100644
+--- a/fs/reiserfs/xattr_acl.c
++++ b/fs/reiserfs/xattr_acl.c
+@@ -320,10 +320,8 @@ reiserfs_inherit_default_acl(struct reiserfs_transaction_handle *th,
+ 	 * would be useless since permissions are ignored, and a pain because
+ 	 * it introduces locking cycles
+ 	 */
+-	if (IS_PRIVATE(dir)) {
+-		inode->i_flags |= S_PRIVATE;
++	if (IS_PRIVATE(inode))
+ 		goto apply_umask;
+-	}
+ 
+ 	err = posix_acl_create(dir, &inode->i_mode, &default_acl, &acl);
+ 	if (err)
 -- 
-Jose R R
-http://metztli.it
----------------------------------------------------------------------------------------------
-Download Metztli Reiser4: Debian Buster w/ Linux 5.2.17 AMD64
----------------------------------------------------------------------------------------------
-feats ZSTD compression https://sf.net/projects/metztli-reiser4/
--------------------------------------------------------------------------------------------
-Official current Reiser4 resources: https://reiser4.wiki.kernel.org/
+2.16.4
 
---1024707763-1571757714=:21309
-Content-Type: application/octet-stream; name="metztli-libguestfs-1.40.2-for-reiser4.patch"
-Content-Disposition: attachment; filename="metztli-libguestfs-1.40.2-for-reiser4.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <20191022082154.21309.1@huitzilopochtli.metztli-it.com>
-
-RnJvbSA0ZWI5MzRmMWE0M2JhYTk2ODRhMzBlZjMzMGEyYmMzNzUwNGRmMTczIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBNZXR6dGxpIEluZm9ybWF0aW9uIFRlY2hub2xvZ3kgPGpvc2VA
-bWV0enRsaS5pdD4KRGF0ZTogU3VuLCAyMCBPY3QgMjAxOSAyMDozNjowNSAtMDcwMApTdWJqZWN0
-OiBbUEFUQ0hdIE9tZSAoc2Vjb25kKSBjb21taXQgbGliZ3Vlc3Rmcy0xLjQwLjIsIGluY2x1ZGlu
-ZwogZ251bGliL2xpYi9mdHMuYywgZW5hYmxpbmcgcmVpc2VyNAoKLS0tCiBhcHBsaWFuY2UvcGFj
-a2FnZWxpc3QuaW4gfCAxICsKIGRhZW1vbi9ta2ZzLmMgICAgICAgICAgICB8IDUgKysrLS0KIGdu
-dWxpYi9saWIvZnRzLmMgICAgICAgICB8IDQgKysrLQogMyBmaWxlcyBjaGFuZ2VkLCA3IGluc2Vy
-dGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvYXBwbGlhbmNlL3BhY2thZ2Vs
-aXN0LmluIGIvYXBwbGlhbmNlL3BhY2thZ2VsaXN0LmluCmluZGV4IDhkMmU5ZDQuLmJiM2E3YTIg
-MTAwNjQ0Ci0tLSBhL2FwcGxpYW5jZS9wYWNrYWdlbGlzdC5pbgorKysgYi9hcHBsaWFuY2UvcGFj
-a2FnZWxpc3QuaW4KQEAgLTk2LDYgKzk2LDcgQEAgZG5sIGlwcm91dGUgaGFzIGJlZW4gcmVuYW1l
-ZCB0byBpcHJvdXRlMgogICBudGZzLTNnCiAgIG9wZW5zc2gtY2xpZW50CiAgIHJlaXNlcmZzcHJv
-Z3MKKyAgcmVpc2VyNHByb2dzICAgICAgICAgICAgICBkbmwgSm9zZS9NZXR6dGxpIElUIGFkZGVk
-IHJlaXNlcjQgMTAtMjAtMjAxOQogICBzeXN2aW5pdCAgICAgICAgICAgICAgICAgIGRubCBmb3Ig
-L3NiaW4vcmVib290CiAgIHN5c3RlbWQgICAgICAgICAgICAgICAgICAgZG5sIGFsdGVybmF0aXZl
-IGZvciAvc2Jpbi9yZWJvb3QKICAgdWZzdXRpbHMKZGlmZiAtLWdpdCBhL2RhZW1vbi9ta2ZzLmMg
-Yi9kYWVtb24vbWtmcy5jCmluZGV4IGFhODMwZGQuLjAzMzVmMTcgMTAwNjQ0Ci0tLSBhL2RhZW1v
-bi9ta2ZzLmMKKysrIGIvZGFlbW9uL21rZnMuYwpAQCAtODAsOSArODAsMTAgQEAgZG9fbWtmcyAo
-Y29uc3QgY2hhciAqZnN0eXBlLCBjb25zdCBjaGFyICpkZXZpY2UsIGludCBibG9ja3NpemUsCiAg
-ICAqIG1rZnMuamZzIGlzIHRoZSBzYW1lCiAgICAqIG1rZnMueGZzIG11c3QgZm9yY2UgdG8gbWFr
-ZSB4ZnMgZmlsZXN5c3RlbSB3aGVuIHRoZSBkZXZpY2UgYWxyZWFkeQogICAgKiBoYXMgYSBmaWxl
-c3lzdGVtIG9uIGl0CisgICAqIEpvc2UvTWV0enRsaSBJVCBhZGRlZCByZWlzZXI0IDEwLTIwLTIw
-MTkKICAgICovCi0gIGlmIChTVFJFUSAoZnN0eXBlLCAicmVpc2VyZnMiKSB8fCBTVFJFUSAoZnN0
-eXBlLCAiamZzIikgfHwKLSAgICAgIFNUUkVRIChmc3R5cGUsICJ4ZnMiKSkKKyAgaWYgKFNUUkVR
-IChmc3R5cGUsICJyZWlzZXJmcyIpIHx8IFNUUkVRIChmc3R5cGUsICJyZWlzZXI0IikgfHwKKyAg
-ICAgIFNUUkVRIChmc3R5cGUsICJqZnMiKSB8fCBTVFJFUSAoZnN0eXBlLCAieGZzIikpCiAgICAg
-QUREX0FSRyAoYXJndiwgaSwgIi1mIik7CiAKICAgLyogRm9yIEdGUywgR0ZTMiwgYXNzdW1lIGEg
-c2luZ2xlIG5vZGUuICovCmRpZmYgLS1naXQgYS9nbnVsaWIvbGliL2Z0cy5jIGIvZ251bGliL2xp
-Yi9mdHMuYwppbmRleCA1ZThlODk1Li5kZjRjZTEzIDEwMDY0NAotLS0gYS9nbnVsaWIvbGliL2Z0
-cy5jCisrKyBiL2dudWxpYi9saWIvZnRzLmMKQEAgLTY1OCwxMiArNjU4LDEzIEBAIGVudW0gbGVh
-Zl9vcHRpbWl6YXRpb24KIAogIyBpbmNsdWRlIDxzeXMvdmZzLmg+CiAKLS8qIExpbnV4LXNwZWNp
-ZmljIGNvbnN0YW50cyBmcm9tIGNvcmV1dGlscycgc3JjL2ZzLmggKi8KKy8qIExpbnV4LXNwZWNp
-ZmljIGNvbnN0YW50cyBmcm9tIGNvcmV1dGlscycgc3JjL2ZzLmg7IE1ldHp0bGkgSVQgYWRkZWQg
-Y29uc3RhbnQgZm9yIHJlaXNlcjQgKi8KICMgZGVmaW5lIFNfTUFHSUNfQUZTIDB4NTM0NjQxNEYK
-ICMgZGVmaW5lIFNfTUFHSUNfQ0lGUyAweEZGNTM0RDQyCiAjIGRlZmluZSBTX01BR0lDX05GUyAw
-eDY5NjkKICMgZGVmaW5lIFNfTUFHSUNfUFJPQyAweDlGQTAKICMgZGVmaW5lIFNfTUFHSUNfUkVJ
-U0VSRlMgMHg1MjY1NDk3MworIyBkZWZpbmUgU19NQUdJQ19SRUlTRVI0IDB4NTIzNDUzNjIKICMg
-ZGVmaW5lIFNfTUFHSUNfVE1QRlMgMHgxMDIxOTk0CiAjIGRlZmluZSBTX01BR0lDX1hGUyAweDU4
-NDY1MzQyCiAKQEAgLTc5Niw2ICs3OTcsNyBAQCBsZWFmX29wdGltaXphdGlvbiAoRlRTRU5UIGNv
-bnN0ICpwLCBpbnQgZGlyX2ZkKQogICAgICAgLyogTGlzdCBoZXJlIHRoZSBmaWxlIHN5c3RlbSB0
-eXBlcyB0aGF0IG1heSBsYWNrIHVzYWJsZSBkaXJlbnQuZF90eXBlCiAgICAgICAgICBpbmZvLCB5
-ZXQgZm9yIHdoaWNoIHRoZSBvcHRpbWl6YXRpb24gZG9lcyBhcHBseS4gICovCiAgICAgY2FzZSBT
-X01BR0lDX1JFSVNFUkZTOgorICAgIGNhc2UgU19NQUdJQ19SRUlTRVI0OiAvKiBKb3NlL01ldHp0
-bGkgSVQgMTAtMjAtMjAxOSAqLwogICAgIGNhc2UgU19NQUdJQ19YRlM6IC8qIFhGUyBsYWNrZWQg
-aXQgdW50aWwgMjAxMy0wOC0yMiBjb21taXQuICAqLwogICAgICAgcmV0dXJuIE5PU1RBVF9MRUFG
-X09QVElNSVpBVElPTjsKIAotLSAKMi4yMC4xCgo=
---1024707763-1571757714=:21309
-Content-Type: application/octet-stream; name="metztli-libguestfs-1.40.2-reiser4-enabling-debian-packaging-for-libguestfs-1.40.2.patch"
-Content-Disposition: attachment; filename="metztli-libguestfs-1.40.2-reiser4-enabling-debian-packaging-for-libguestfs-1.40.2.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <20191022082154.21309.2@huitzilopochtli.metztli-it.com>
-
-RnJvbSBmNDA0Yjg2Nzk1NGY4NDRjMzc4NWMxMjQ3N2Y3ZTg4NjljNWFjZmE2IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBNZXR6dGxpIEluZm9ybWF0aW9uIFRlY2hub2xvZ3kgPGpvc2VA
-bWV0enRsaS5pdD4KRGF0ZTogU3VuLCAyMCBPY3QgMjAxOSAyMjowMTo0NSAtMDcwMApTdWJqZWN0
-OiBbUEFUQ0hdIE9tZSAoc2Vjb25kKSBjb21taXQgcmVpc2VyNCBlbmFibGluZyBkZWJpYW4gcGFj
-a2FnaW5nIGZvcgogbGliZ3Vlc3Rmcy0xLjQwLjIKCi0tLQogY29udHJvbCAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIHwgMTUgKysrKwogZ2VuLWFwcGxpYW5jZS1kZXBlbmRz
-LnNoICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIGxpYmd1ZXN0ZnMtcmVpc2VyNC5pbnN0
-YWxsICAgICAgICAgICAgICAgICAgICB8ICAxICsKIC4uLi9tZXR6dGxpL21ldHp0bGktcmVpc2Vy
-NC1lbmFibGluZy5wYXRjaCAgICB8IDcyICsrKysrKysrKysrKysrKysrKysKIHBhdGNoZXMvc2Vy
-aWVzICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsKIHNwbGl0LWFwcGxpYW5j
-ZS5zaCAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyICstCiA2IGZpbGVzIGNoYW5nZWQs
-IDkxIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCiBjcmVhdGUgbW9kZSAxMDA2NDQgbGli
-Z3Vlc3Rmcy1yZWlzZXI0Lmluc3RhbGwKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYXRjaGVzL21ldHp0
-bGkvbWV0enRsaS1yZWlzZXI0LWVuYWJsaW5nLnBhdGNoCgpkaWZmIC0tZ2l0IGEvY29udHJvbCBi
-L2NvbnRyb2wKaW5kZXggY2FjODFkMS4uNTVmMTdkNCAxMDA2NDQKLS0tIGEvY29udHJvbAorKysg
-Yi9jb250cm9sCkBAIC05NCw2ICs5NCw3IEBAIEJ1aWxkLURlcGVuZHM6IGRlYmhlbHBlciAoPj0g
-MTIpLAogICBwcm9jcHMsCiAgIHBzbWlzYywKICAgcmVpc2VyZnNwcm9ncywKKyAgcmVpc2VyNHBy
-b2dzLAogICByc3luYywKICAgc2NydWIsCiAgIHN0cmFjZSwKQEAgLTE3Myw2ICsxNzQsNyBAQCBE
-ZXBlbmRzOiAke3NobGliczpEZXBlbmRzfSwgJHttaXNjOkRlcGVuZHN9LAogICAke2FwcGxpYW5j
-ZTpEZXBlbmRzfSwKIFJlY29tbWVuZHM6IGxpYmd1ZXN0ZnMtaGZzcGx1cywKICBsaWJndWVzdGZz
-LXJlaXNlcmZzLAorIGxpYmd1ZXN0ZnMtcmVpc2VyNCwKICBsaWJndWVzdGZzLXhmcywKIFN1Z2dl
-c3RzOiBsaWJndWVzdGZzLWdmczIsCiAgbGliZ3Vlc3Rmcy1qZnMsCkBAIC0yNjYsNiArMjY4LDE5
-IEBAIERlc2NyaXB0aW9uOiBndWVzdCBkaXNrIGltYWdlIG1hbmFnZW1lbnQgc3lzdGVtIC0gUmVp
-c2VyRlMgc3VwcG9ydAogIC4KICBUaGlzIHBhY2thZ2UgY29udGFpbnMgYXBwbGlhbmNlIGZyYWdt
-ZW50cyBmb3IgUmVpc2VyRlMgc3VwcG9ydC4KIAorUGFja2FnZTogbGliZ3Vlc3Rmcy1yZWlzZXI0
-CitTZWN0aW9uOiBsaWJzCitBcmNoaXRlY3R1cmU6IGxpbnV4LWFueQorTXVsdGktQXJjaDogc2Ft
-ZQorUHJlLURlcGVuZHM6ICR7bWlzYzpQcmUtRGVwZW5kc30KK0RlcGVuZHM6IGxpYmd1ZXN0ZnMw
-ICg9ICR7YmluYXJ5OlZlcnNpb259KSwgJHtzaGxpYnM6RGVwZW5kc30sICR7bWlzYzpEZXBlbmRz
-fSwKKyAke2FwcGxpYW5jZTpEZXBlbmRzfSwKK0Rlc2NyaXB0aW9uOiBndWVzdCBkaXNrIGltYWdl
-IG1hbmFnZW1lbnQgc3lzdGVtIC0gUmVpc2VyNCBzdXBwb3J0CisgVGhlIGxpYmd1ZXN0ZnMgbGli
-cmFyeSBhbGxvd3MgYWNjZXNzaW5nIGFuZCBtb2RpZnlpbmcgZ3Vlc3QgZGlzaworIGltYWdlcy4K
-KyAuCisgVGhpcyBwYWNrYWdlIGNvbnRhaW5zIGFwcGxpYW5jZSBmcmFnbWVudHMgZm9yIFJlaXNl
-cjQgc3VwcG9ydC4KKwogUGFja2FnZTogbGliZ3Vlc3Rmcy1yZXNjdWUKIFNlY3Rpb246IGxpYnMK
-IEFyY2hpdGVjdHVyZTogbGludXgtYW55CmRpZmYgLS1naXQgYS9nZW4tYXBwbGlhbmNlLWRlcGVu
-ZHMuc2ggYi9nZW4tYXBwbGlhbmNlLWRlcGVuZHMuc2gKaW5kZXggZDc1MTQ5Ny4uMGY1ZjMzZSAx
-MDA3NTUKLS0tIGEvZ2VuLWFwcGxpYW5jZS1kZXBlbmRzLnNoCisrKyBiL2dlbi1hcHBsaWFuY2Ut
-ZGVwZW5kcy5zaApAQCAtMTUsNyArMTUsNyBAQCBwa2dsaXN0X3RvX2RlcHMoKSB7CiAgICAgZWNo
-bwogfQogCi1mb3IgcCBpbiBnZnMyIGhmc3BsdXMgamZzIG5pbGZzIHJlaXNlcmZzIHJlc2N1ZSBy
-c3luYyB4ZnMgemZzCitmb3IgcCBpbiBnZnMyIGhmc3BsdXMgamZzIG5pbGZzIHJlaXNlcmZzIHJl
-aXNlcjQgcmVzY3VlIHJzeW5jIHhmcyB6ZnMKIGRvCiAgICAgY2F0IGRlYmlhbi9saWJndWVzdGZz
-LSRwL3Vzci9saWIvKi0qL2d1ZXN0ZnMvc3VwZXJtaW4uZC9wYWNrYWdlcy0kcCBcCiAgICAgICAg
-IHwgIHBrZ2xpc3RfdG9fZGVwcyBcCmRpZmYgLS1naXQgYS9saWJndWVzdGZzLXJlaXNlcjQuaW5z
-dGFsbCBiL2xpYmd1ZXN0ZnMtcmVpc2VyNC5pbnN0YWxsCm5ldyBmaWxlIG1vZGUgMTAwNjQ0Cmlu
-ZGV4IDAwMDAwMDAuLmU1NWE2NTQKLS0tIC9kZXYvbnVsbAorKysgYi9saWJndWVzdGZzLXJlaXNl
-cjQuaW5zdGFsbApAQCAtMCwwICsxIEBACisvdXNyL2xpYi8qLSovZ3Vlc3Rmcy9zdXBlcm1pbi5k
-L3BhY2thZ2VzLXJlaXNlcjQKZGlmZiAtLWdpdCBhL3BhdGNoZXMvbWV0enRsaS9tZXR6dGxpLXJl
-aXNlcjQtZW5hYmxpbmcucGF0Y2ggYi9wYXRjaGVzL21ldHp0bGkvbWV0enRsaS1yZWlzZXI0LWVu
-YWJsaW5nLnBhdGNoCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAuLjgyM2ViODEK
-LS0tIC9kZXYvbnVsbAorKysgYi9wYXRjaGVzL21ldHp0bGkvbWV0enRsaS1yZWlzZXI0LWVuYWJs
-aW5nLnBhdGNoCkBAIC0wLDAgKzEsNzIgQEAKK0Zyb20gMWNkNTYzNDQ5NWFiOWRhM2Q3MWY0MmVi
-NGEyOTY5YTk4YjZkMWM1NSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKK0Zyb206IE1ldHp0bGkg
-SW5mb3JtYXRpb24gVGVjaG5vbG9neSA8am9zZUBtZXR6dGxpLml0PgorRGF0ZTogU3VuLCAyMCBP
-Y3QgMjAxOSAyMToyNTo1MyAtMDcwMAorU3ViamVjdDogW1BBVENIXSBPbWUgKHNlY29uZCkgY29t
-bWl0IGxpYmd1ZXN0ZnMtMS40MC4yLCBpbmMuIGdudWxpYi9saWIvZnRzLmMKKyBpbiAuZ2l0aWdu
-b3JlLCBlbmFibGluZyByZWlzZXI0IHRvIGNvbXBsZW1lbnQgZGViaWFuIHBhY2thZ2luZworIHBh
-dGNoZXMvMDAwOS1GaXgtc2Jpbi1yZWJvb3QtcmVxdWlyZW1lbnRzLnBhdGNoCisKKy0tLQorIGFw
-cGxpYW5jZS9wYWNrYWdlbGlzdC5pbiB8IDEgKworIGRhZW1vbi9ta2ZzLmMgICAgICAgICAgICB8
-IDUgKysrLS0KKyBnbnVsaWIvbGliL2Z0cy5jICAgICAgICAgfCA0ICsrKy0KKyAzIGZpbGVzIGNo
-YW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKKworZGlmZiAtLWdpdCBhL2Fw
-cGxpYW5jZS9wYWNrYWdlbGlzdC5pbiBiL2FwcGxpYW5jZS9wYWNrYWdlbGlzdC5pbgoraW5kZXgg
-ZDQ3ZTJkMi4uMzFkZjkzYyAxMDA2NDQKKy0tLSBhL2FwcGxpYW5jZS9wYWNrYWdlbGlzdC5pbgor
-KysrIGIvYXBwbGlhbmNlL3BhY2thZ2VsaXN0LmluCitAQCAtOTYsNiArOTYsNyBAQCBkbmwgaXBy
-b3V0ZSBoYXMgYmVlbiByZW5hbWVkIHRvIGlwcm91dGUyCisgICBudGZzLTNnCisgICBvcGVuc3No
-LWNsaWVudAorICAgcmVpc2VyZnNwcm9ncworKyAgcmVpc2VyNHByb2dzICAgICAgICAgICAgICBk
-bmwgSm9zZS9NZXR6dGxpIElUIGFkZGVkIHJlaXNlcjQgMTAtMjAtMjAxOQorICAgc3lzdmluaXQt
-Y29yZSAgICAgICAgICAgICBkbmwgZm9yIC9zYmluL3JlYm9vdAorICAgc3lzdGVtZC1zeXN2ICAg
-ICAgICAgICAgICBkbmwgYWx0ZXJuYXRpdmUgZm9yIC9zYmluL3JlYm9vdAorICAgdWZzdXRpbHMK
-K2RpZmYgLS1naXQgYS9kYWVtb24vbWtmcy5jIGIvZGFlbW9uL21rZnMuYworaW5kZXggYWE4MzBk
-ZC4uMDMzNWYxNyAxMDA2NDQKKy0tLSBhL2RhZW1vbi9ta2ZzLmMKKysrKyBiL2RhZW1vbi9ta2Zz
-LmMKK0BAIC04MCw5ICs4MCwxMCBAQCBkb19ta2ZzIChjb25zdCBjaGFyICpmc3R5cGUsIGNvbnN0
-IGNoYXIgKmRldmljZSwgaW50IGJsb2Nrc2l6ZSwKKyAgICAqIG1rZnMuamZzIGlzIHRoZSBzYW1l
-CisgICAgKiBta2ZzLnhmcyBtdXN0IGZvcmNlIHRvIG1ha2UgeGZzIGZpbGVzeXN0ZW0gd2hlbiB0
-aGUgZGV2aWNlIGFscmVhZHkKKyAgICAqIGhhcyBhIGZpbGVzeXN0ZW0gb24gaXQKKysgICAqIEpv
-c2UvTWV0enRsaSBJVCBhZGRlZCByZWlzZXI0IDEwLTIwLTIwMTkKKyAgICAqLworLSAgaWYgKFNU
-UkVRIChmc3R5cGUsICJyZWlzZXJmcyIpIHx8IFNUUkVRIChmc3R5cGUsICJqZnMiKSB8fAorLSAg
-ICAgIFNUUkVRIChmc3R5cGUsICJ4ZnMiKSkKKysgIGlmIChTVFJFUSAoZnN0eXBlLCAicmVpc2Vy
-ZnMiKSB8fCBTVFJFUSAoZnN0eXBlLCAicmVpc2VyNCIpIHx8CisrICAgICAgU1RSRVEgKGZzdHlw
-ZSwgImpmcyIpIHx8IFNUUkVRIChmc3R5cGUsICJ4ZnMiKSkKKyAgICAgQUREX0FSRyAoYXJndiwg
-aSwgIi1mIik7CisgCisgICAvKiBGb3IgR0ZTLCBHRlMyLCBhc3N1bWUgYSBzaW5nbGUgbm9kZS4g
-Ki8KK2RpZmYgLS1naXQgYS9nbnVsaWIvbGliL2Z0cy5jIGIvZ251bGliL2xpYi9mdHMuYworaW5k
-ZXggNWU4ZTg5NS4uZGY0Y2UxMyAxMDA2NDQKKy0tLSBhL2dudWxpYi9saWIvZnRzLmMKKysrKyBi
-L2dudWxpYi9saWIvZnRzLmMKK0BAIC02NTgsMTIgKzY1OCwxMyBAQCBlbnVtIGxlYWZfb3B0aW1p
-emF0aW9uCisgCisgIyBpbmNsdWRlIDxzeXMvdmZzLmg+CisgCistLyogTGludXgtc3BlY2lmaWMg
-Y29uc3RhbnRzIGZyb20gY29yZXV0aWxzJyBzcmMvZnMuaCAqLworKy8qIExpbnV4LXNwZWNpZmlj
-IGNvbnN0YW50cyBmcm9tIGNvcmV1dGlscycgc3JjL2ZzLmg7IE1ldHp0bGkgSVQgYWRkZWQgY29u
-c3RhbnQgZm9yIHJlaXNlcjQgKi8KKyAjIGRlZmluZSBTX01BR0lDX0FGUyAweDUzNDY0MTRGCisg
-IyBkZWZpbmUgU19NQUdJQ19DSUZTIDB4RkY1MzRENDIKKyAjIGRlZmluZSBTX01BR0lDX05GUyAw
-eDY5NjkKKyAjIGRlZmluZSBTX01BR0lDX1BST0MgMHg5RkEwCisgIyBkZWZpbmUgU19NQUdJQ19S
-RUlTRVJGUyAweDUyNjU0OTczCisrIyBkZWZpbmUgU19NQUdJQ19SRUlTRVI0IDB4NTIzNDUzNjIK
-KyAjIGRlZmluZSBTX01BR0lDX1RNUEZTIDB4MTAyMTk5NAorICMgZGVmaW5lIFNfTUFHSUNfWEZT
-IDB4NTg0NjUzNDIKKyAKK0BAIC03OTYsNiArNzk3LDcgQEAgbGVhZl9vcHRpbWl6YXRpb24gKEZU
-U0VOVCBjb25zdCAqcCwgaW50IGRpcl9mZCkKKyAgICAgICAvKiBMaXN0IGhlcmUgdGhlIGZpbGUg
-c3lzdGVtIHR5cGVzIHRoYXQgbWF5IGxhY2sgdXNhYmxlIGRpcmVudC5kX3R5cGUKKyAgICAgICAg
-ICBpbmZvLCB5ZXQgZm9yIHdoaWNoIHRoZSBvcHRpbWl6YXRpb24gZG9lcyBhcHBseS4gICovCisg
-ICAgIGNhc2UgU19NQUdJQ19SRUlTRVJGUzoKKysgICAgY2FzZSBTX01BR0lDX1JFSVNFUjQ6IC8q
-IEpvc2UvTWV0enRsaSBJVCAxMC0yMC0yMDE5ICovCisgICAgIGNhc2UgU19NQUdJQ19YRlM6IC8q
-IFhGUyBsYWNrZWQgaXQgdW50aWwgMjAxMy0wOC0yMiBjb21taXQuICAqLworICAgICAgIHJldHVy
-biBOT1NUQVRfTEVBRl9PUFRJTUlaQVRJT047CisgCistLSAKKzIuMjAuMQorCmRpZmYgLS1naXQg
-YS9wYXRjaGVzL3NlcmllcyBiL3BhdGNoZXMvc2VyaWVzCmluZGV4IDU5MWI2ZDIuLmRlYjYzODcg
-MTAwNjQ0Ci0tLSBhL3BhdGNoZXMvc2VyaWVzCisrKyBiL3BhdGNoZXMvc2VyaWVzCkBAIC0xMywz
-ICsxMyw0IEBACiAwMDEzLUZpeC11cC1wZXJsLXBhdGgtaW4taW5zdGFsbGVkLXNjcmlwdHMucGF0
-Y2gKIDAwMTQtRml4LS5kZXBlbmQtZ2VuZXJhdGlvbi1mb3Itb3V0LW9mLXRyZWUtYnVpbGQucGF0
-Y2gKIDAwMTUtQ2hhbmdlLWNyeXB0c2V0b3AtY3J5cHRzZXR1cC1iaW4taW4tYXBwbGlhbmNlLnBh
-dGNoCittZXR6dGxpL21ldHp0bGktcmVpc2VyNC1lbmFibGluZy5wYXRjaApkaWZmIC0tZ2l0IGEv
-c3BsaXQtYXBwbGlhbmNlLnNoIGIvc3BsaXQtYXBwbGlhbmNlLnNoCmluZGV4IDQyMTQ3NjMuLjcw
-MmQ2NDYgMTAwNzU1Ci0tLSBhL3NwbGl0LWFwcGxpYW5jZS5zaAorKysgYi9zcGxpdC1hcHBsaWFu
-Y2Uuc2gKQEAgLTUsNyArNSw3IEBAIHNldCAtZXgKIGNkIGRlYmlhbi90bXAvdXNyL2xpYi8qLSov
-Z3Vlc3Rmcy9zdXBlcm1pbi5kCiBjcCAtbiBwYWNrYWdlcyBwYWNrYWdlcy5vcmlnCiAKLWZvciBw
-IGluIGdmczIgaGZzcGx1cyBqZnMgbmlsZnMgcmVpc2VyZnMgcnN5bmMgeGZzIHpmczsgZG8KK2Zv
-ciBwIGluIGdmczIgaGZzcGx1cyBqZnMgbmlsZnMgcmVpc2VyZnMgcmVpc2VyNCByc3luYyB4ZnMg
-emZzOyBkbwogICAgIHNlZCAtaSAtZSAiLyRwL2QiIHBhY2thZ2VzCiAgICAgZ3JlcCAtRiAgIiRw
-IiA8IHBhY2thZ2VzLm9yaWcgPiBwYWNrYWdlcy0kcCB8fCB0cnVlCiBkb25lCi0tIAoyLjIwLjEK
-Cg==
---1024707763-1571757714=:21309--
