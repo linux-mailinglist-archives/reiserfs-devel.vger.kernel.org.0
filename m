@@ -2,244 +2,62 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04AB6E4783
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 25 Oct 2019 11:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 325B5E6554
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 27 Oct 2019 21:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436753AbfJYJjy (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 25 Oct 2019 05:39:54 -0400
-Received: from mx2.suse.de ([195.135.220.15]:49990 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2436710AbfJYJjy (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 25 Oct 2019 05:39:54 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 56D73B21D;
-        Fri, 25 Oct 2019 09:39:51 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id EF94C1E4852; Fri, 25 Oct 2019 11:39:50 +0200 (CEST)
-Date:   Fri, 25 Oct 2019 11:39:50 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     jeffm@suse.com
-Cc:     reiserfs-devel@vger.kernel.org, jack@suse.cz
-Subject: Re: [PATCH] reiserfs: fix extended attributes on the root directory
-Message-ID: <20191025093950.GA25406@quack2.suse.cz>
-References: <20191024143127.17509-1-jeffm@suse.com>
+        id S1727566AbfJ0UUn (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 27 Oct 2019 16:20:43 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:39054 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727121AbfJ0UUn (ORCPT
+        <rfc822;reiserfs-devel@vger.kernel.org>);
+        Sun, 27 Oct 2019 16:20:43 -0400
+Received: by mail-lj1-f195.google.com with SMTP id y3so9069847ljj.6
+        for <reiserfs-devel@vger.kernel.org>; Sun, 27 Oct 2019 13:20:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=3ZOdfed/Evg7Q4cJyCY3H8Ypp6XH0WSGuwBMeOcOnvk=;
+        b=q/qC+jC737eWmRAUbNzn9vvQzfx2UDfG0wr/ZMLI+8pGllFCJ9jbJhy4ml4WD3eF1k
+         466o+yctLG89eMkvaBZroGNwUMvXwSF18NdimofHLiUzWo0IWOIZloe9NGwhwlTxyQdf
+         vT+4SYqe5h7ii5uSknRawmOxhKzWG5drulOFh3Q6Z/Hi855rUp60nE+jEL6hhVt/k5aO
+         3j0yEswJ+emizuF78V4MkVdiDJ9JehJ27BHmnx5dthLd23R4uNalzKNymj2ZARyVtgVe
+         +4aOSbXh1tAwt4oxp90ADeuZ07UmHujKGvbTdWmGbt+jRlsQVWHEeQXseAkudbkhxK+a
+         4WBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=3ZOdfed/Evg7Q4cJyCY3H8Ypp6XH0WSGuwBMeOcOnvk=;
+        b=nA7gUlpGc7VkyHaTUS1mItLZOnpcHUjJIe3QKn4ykk4jJSzsgNPhq+cSkuaUtuxZh7
+         ufPcIdG84U7kAA3PTdL9Ly0BlJq5EjLFdVT9MFABtb57ueK1S+Rnoj6NAuoNd9NJeH2J
+         qKQG98LqGK5oheOiONexwxalycEhLSH4fb6KO0zcCrki2FWr9y5RStlClExF4tZ8E3/R
+         Ed+v0PWthZlzVxhhiJUgMdjluhIr/jHdKjJnBRAzNFsfuhSanQeujv5QeJ//Ccnz+lil
+         l9BgnQJkiurET9dmk6qVZOAxpCfcIsPgt/Sgl1cz4Ubn3VWb6VIAoAs+AuBGbAn6Ct+I
+         5VhQ==
+X-Gm-Message-State: APjAAAX9gxfMEjMkE155yupg9oF14j/F8ay7d5vL1rnnXfbDlJ0wZZXZ
+        7kepIjEeicXRJQtH3Z/H8rsEQr153+jH4b/PLhY=
+X-Google-Smtp-Source: APXvYqzwvJW0R8a9vRYmY8czWRyQMermu3iWe5ITJoCy6UxuffabTlqfLJnRVvkER5NoqMMyGJMHhgcyR/vTsv7CK/4=
+X-Received: by 2002:a2e:b17b:: with SMTP id a27mr9378254ljm.7.1572207641232;
+ Sun, 27 Oct 2019 13:20:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191024143127.17509-1-jeffm@suse.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Reply-To: akgazshak@gmail.com
+Received: by 2002:a2e:9c86:0:0:0:0:0 with HTTP; Sun, 27 Oct 2019 13:20:40
+ -0700 (PDT)
+From:   =?UTF-8?Q?=C4=B0shak_BURAKGAZI?= <akgazishak@gmail.com>
+Date:   Sun, 27 Oct 2019 13:20:40 -0700
+X-Google-Sender-Auth: mUznxgCTHnz29sy99SClCvkTPSY
+Message-ID: <CAPAdB7D52wTA52GjSiGO7gYh=XvatDdyR9zcWqf+gz5GcZUByw@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Thu 24-10-19 10:31:27, jeffm@suse.com wrote:
-> From: Jeff Mahoney <jeffm@suse.com>
-> 
-> Since commit d0a5b995a30 (vfs: Add IOP_XATTR inode operations flag)
-> extended attributes haven't worked on the root directory in reiserfs.
-> 
-> This is due to reiserfs conditionally setting the sb->s_xattrs handler
-> array depending on whether it located or create the internal privroot
-> directory.  It necessarily does this after the root inode is already
-> read in.  The IOP_XATTR flag is set during inode initialization, so
-> it never gets set on the root directory.
-> 
-> This commit unconditionally assigns sb->s_xattrs and clears IOP_XATTR on
-> internal inodes.  The old return values due to the conditional assignment
-> are handled via open_xa_root, which now returns EOPNOTSUPP as the VFS
-> would have done.
-> 
-> Signed-off-by: Jeff Mahoney <jeffm@suse.com>
+Good evening, I have been waiting for your response, kindly get back
+to me, I really need your responds as soon as possible, I look forward
+to hear from you soon. Thanks
 
-Thanks! I've added the patch to my tree and added also CC to stable and
-appropriate Fixes tag.
-
-								Honza
-
-> ---
->  fs/reiserfs/inode.c     | 12 ++++++++++--
->  fs/reiserfs/namei.c     |  7 +++++--
->  fs/reiserfs/reiserfs.h  |  2 ++
->  fs/reiserfs/super.c     |  2 ++
->  fs/reiserfs/xattr.c     | 19 ++++++++++++-------
->  fs/reiserfs/xattr_acl.c |  4 +---
->  6 files changed, 32 insertions(+), 14 deletions(-)
-> 
-> diff --git a/fs/reiserfs/inode.c b/fs/reiserfs/inode.c
-> index 132ec4406ed0..6419e6dacc39 100644
-> --- a/fs/reiserfs/inode.c
-> +++ b/fs/reiserfs/inode.c
-> @@ -2097,6 +2097,15 @@ int reiserfs_new_inode(struct reiserfs_transaction_handle *th,
->  		goto out_inserted_sd;
->  	}
->  
-> +	/*
-> +	 * Mark it private if we're creating the privroot
-> +	 * or something under it.
-> +	 */
-> +	if (IS_PRIVATE(dir) || dentry == REISERFS_SB(sb)->priv_root) {
-> +		inode->i_flags |= S_PRIVATE;
-> +		inode->i_opflags &= ~IOP_XATTR;
-> +	}
-> +
->  	if (reiserfs_posixacl(inode->i_sb)) {
->  		reiserfs_write_unlock(inode->i_sb);
->  		retval = reiserfs_inherit_default_acl(th, dir, dentry, inode);
-> @@ -2111,8 +2120,7 @@ int reiserfs_new_inode(struct reiserfs_transaction_handle *th,
->  		reiserfs_warning(inode->i_sb, "jdm-13090",
->  				 "ACLs aren't enabled in the fs, "
->  				 "but vfs thinks they are!");
-> -	} else if (IS_PRIVATE(dir))
-> -		inode->i_flags |= S_PRIVATE;
-> +	}
->  
->  	if (security->name) {
->  		reiserfs_write_unlock(inode->i_sb);
-> diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
-> index 97f3fc4fdd79..959a066b7bb0 100644
-> --- a/fs/reiserfs/namei.c
-> +++ b/fs/reiserfs/namei.c
-> @@ -377,10 +377,13 @@ static struct dentry *reiserfs_lookup(struct inode *dir, struct dentry *dentry,
->  
->  		/*
->  		 * Propagate the private flag so we know we're
-> -		 * in the priv tree
-> +		 * in the priv tree.  Also clear IOP_XATTR
-> +		 * since we don't have xattrs on xattr files.
->  		 */
-> -		if (IS_PRIVATE(dir))
-> +		if (IS_PRIVATE(dir)) {
->  			inode->i_flags |= S_PRIVATE;
-> +			inode->i_opflags &= ~IOP_XATTR;
-> +		}
->  	}
->  	reiserfs_write_unlock(dir->i_sb);
->  	if (retval == IO_ERROR) {
-> diff --git a/fs/reiserfs/reiserfs.h b/fs/reiserfs/reiserfs.h
-> index e5ca9ed79e54..726580114d55 100644
-> --- a/fs/reiserfs/reiserfs.h
-> +++ b/fs/reiserfs/reiserfs.h
-> @@ -1168,6 +1168,8 @@ static inline int bmap_would_wrap(unsigned bmap_nr)
->  	return bmap_nr > ((1LL << 16) - 1);
->  }
->  
-> +extern const struct xattr_handler *reiserfs_xattr_handlers[];
-> +
->  /*
->   * this says about version of key of all items (but stat data) the
->   * object consists of
-> diff --git a/fs/reiserfs/super.c b/fs/reiserfs/super.c
-> index d69b4ac0ae2f..3244037b1286 100644
-> --- a/fs/reiserfs/super.c
-> +++ b/fs/reiserfs/super.c
-> @@ -2049,6 +2049,8 @@ static int reiserfs_fill_super(struct super_block *s, void *data, int silent)
->  	if (replay_only(s))
->  		goto error_unlocked;
->  
-> +	s->s_xattr = reiserfs_xattr_handlers;
-> +
->  	if (bdev_read_only(s->s_bdev) && !sb_rdonly(s)) {
->  		SWARN(silent, s, "clm-7000",
->  		      "Detected readonly device, marking FS readonly");
-> diff --git a/fs/reiserfs/xattr.c b/fs/reiserfs/xattr.c
-> index c1b996e548af..06497965f0a0 100644
-> --- a/fs/reiserfs/xattr.c
-> +++ b/fs/reiserfs/xattr.c
-> @@ -122,13 +122,13 @@ static struct dentry *open_xa_root(struct super_block *sb, int flags)
->  	struct dentry *xaroot;
->  
->  	if (d_really_is_negative(privroot))
-> -		return ERR_PTR(-ENODATA);
-> +		return ERR_PTR(-EOPNOTSUPP);
->  
->  	inode_lock_nested(d_inode(privroot), I_MUTEX_XATTR);
->  
->  	xaroot = dget(REISERFS_SB(sb)->xattr_root);
->  	if (!xaroot)
-> -		xaroot = ERR_PTR(-ENODATA);
-> +		xaroot = ERR_PTR(-EOPNOTSUPP);
->  	else if (d_really_is_negative(xaroot)) {
->  		int err = -ENODATA;
->  
-> @@ -619,6 +619,10 @@ int reiserfs_xattr_set(struct inode *inode, const char *name,
->  	int error, error2;
->  	size_t jbegin_count = reiserfs_xattr_nblocks(inode, buffer_size);
->  
-> +	/* Check before we start a transaction and then do nothing. */
-> +	if (!d_really_is_positive(REISERFS_SB(inode->i_sb)->priv_root))
-> +		return -EOPNOTSUPP;
-> +
->  	if (!(flags & XATTR_REPLACE))
->  		jbegin_count += reiserfs_xattr_jcreate_nblocks(inode);
->  
-> @@ -841,8 +845,7 @@ ssize_t reiserfs_listxattr(struct dentry * dentry, char *buffer, size_t size)
->  	if (d_really_is_negative(dentry))
->  		return -EINVAL;
->  
-> -	if (!dentry->d_sb->s_xattr ||
-> -	    get_inode_sd_version(d_inode(dentry)) == STAT_DATA_V1)
-> +	if (get_inode_sd_version(d_inode(dentry)) == STAT_DATA_V1)
->  		return -EOPNOTSUPP;
->  
->  	dir = open_xa_dir(d_inode(dentry), XATTR_REPLACE);
-> @@ -882,6 +885,7 @@ static int create_privroot(struct dentry *dentry)
->  	}
->  
->  	d_inode(dentry)->i_flags |= S_PRIVATE;
-> +	d_inode(dentry)->i_opflags &= ~IOP_XATTR;
->  	reiserfs_info(dentry->d_sb, "Created %s - reserved for xattr "
->  		      "storage.\n", PRIVROOT_NAME);
->  
-> @@ -893,7 +897,7 @@ static int create_privroot(struct dentry *dentry) { return 0; }
->  #endif
->  
->  /* Actual operations that are exported to VFS-land */
-> -static const struct xattr_handler *reiserfs_xattr_handlers[] = {
-> +const struct xattr_handler *reiserfs_xattr_handlers[] = {
->  #ifdef CONFIG_REISERFS_FS_XATTR
->  	&reiserfs_xattr_user_handler,
->  	&reiserfs_xattr_trusted_handler,
-> @@ -964,8 +968,10 @@ int reiserfs_lookup_privroot(struct super_block *s)
->  	if (!IS_ERR(dentry)) {
->  		REISERFS_SB(s)->priv_root = dentry;
->  		d_set_d_op(dentry, &xattr_lookup_poison_ops);
-> -		if (d_really_is_positive(dentry))
-> +		if (d_really_is_positive(dentry)) {
->  			d_inode(dentry)->i_flags |= S_PRIVATE;
-> +			d_inode(dentry)->i_opflags &= ~IOP_XATTR;
-> +		}
->  	} else
->  		err = PTR_ERR(dentry);
->  	inode_unlock(d_inode(s->s_root));
-> @@ -994,7 +1000,6 @@ int reiserfs_xattr_init(struct super_block *s, int mount_flags)
->  	}
->  
->  	if (d_really_is_positive(privroot)) {
-> -		s->s_xattr = reiserfs_xattr_handlers;
->  		inode_lock(d_inode(privroot));
->  		if (!REISERFS_SB(s)->xattr_root) {
->  			struct dentry *dentry;
-> diff --git a/fs/reiserfs/xattr_acl.c b/fs/reiserfs/xattr_acl.c
-> index aa9380bac196..05f666794561 100644
-> --- a/fs/reiserfs/xattr_acl.c
-> +++ b/fs/reiserfs/xattr_acl.c
-> @@ -320,10 +320,8 @@ reiserfs_inherit_default_acl(struct reiserfs_transaction_handle *th,
->  	 * would be useless since permissions are ignored, and a pain because
->  	 * it introduces locking cycles
->  	 */
-> -	if (IS_PRIVATE(dir)) {
-> -		inode->i_flags |= S_PRIVATE;
-> +	if (IS_PRIVATE(inode))
->  		goto apply_umask;
-> -	}
->  
->  	err = posix_acl_create(dir, &inode->i_mode, &default_acl, &acl);
->  	if (err)
-> -- 
-> 2.16.4
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+ishak
