@@ -2,48 +2,73 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4CA2138789
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 12 Jan 2020 18:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 325B1138B8B
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 13 Jan 2020 07:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733090AbgALRcm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sun, 12 Jan 2020 12:32:42 -0500
-Received: from mail.a-hostel.com ([193.193.200.100]:33546 "EHLO
-        mail.a-hostel.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733104AbgALRcm (ORCPT
+        id S1726480AbgAMGAW (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 13 Jan 2020 01:00:22 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:42859 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726475AbgAMGAW (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sun, 12 Jan 2020 12:32:42 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.a-hostel.com (Postfix) with ESMTP id 535431B521EE;
-        Sun, 12 Jan 2020 18:07:10 +0200 (EET)
-Received: from mail.a-hostel.com ([127.0.0.1])
-        by localhost (mail.a-hostel.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id w_iKlbg2jZZ6; Sun, 12 Jan 2020 18:07:10 +0200 (EET)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.a-hostel.com (Postfix) with ESMTP id EB95A1B52D61;
-        Sun, 12 Jan 2020 18:07:09 +0200 (EET)
-X-Virus-Scanned: amavisd-new at a-hostel.com
-Received: from mail.a-hostel.com ([127.0.0.1])
-        by localhost (mail.a-hostel.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id tnK1dLIlmzkw; Sun, 12 Jan 2020 18:07:09 +0200 (EET)
-Received: from DESKTOP-RUPS5UG.. (102-182-120-157.ip.afrihost.co.za [102.182.120.157])
-        by mail.a-hostel.com (Postfix) with ESMTPSA id 898341B521A2;
-        Sun, 12 Jan 2020 18:07:05 +0200 (EET)
-Content-Type: text/plain; charset="iso-8859-1"
+        Mon, 13 Jan 2020 01:00:22 -0500
+Received: by mail-qk1-f196.google.com with SMTP id z14so7492412qkg.9
+        for <reiserfs-devel@vger.kernel.org>; Sun, 12 Jan 2020 22:00:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
+        b=MYwZ+kkvLBe5RylsJU+Vezcr1VDuqHFdC6YxntlnD48Wyj6qd+N+dP+4c3lQQq+vo7
+         4+FvgKWE1ANfc5F0RQNf27/sAY6yxVksjb408AQTyPdTSQOJddjLSlTuzTJbAA1JJ8Og
+         ZwFeeEIA3sQg5lk8BgLDEXZpj44nDqKz+cVfVGvYQgv90lhv3DX74nA6yC4KPDVJsmu1
+         MxSUvJ6RdjTNBICiwGfZFXdcSyARxV0ws2TA7FrC7aLUBA9XS8fxjrFJwi6iUtYdhQfx
+         /2aZ0mNcAgf00ufxvG0ooc45Z+xpfxsnU13hk46QYOUcHyYYwWtF0JOBF8IVQpkNSlHU
+         lIXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
+        b=bSGotx7JEzytdSete5+n7Y00wTrUbqFaqcC1vF2syXk42hLIy7K13EfBH+GA3UXmZQ
+         OowEzOy7OYMID7WXb5Q52YOna2Tqq0rygyOkppzRJr0NHxxKW/Jwsl9/oi6ndpSyC+X3
+         4rvxHsQfjJr10dsQ7IAsu9qxy/LHNOMfY4ppsTauG48n51XNVMGB4aHLWqimCTWjHk/N
+         ZR1v6IxNfdrenHVSwVTaBQ5mKMoSVupcITroisSV4XQzm4ItXRsW2iYhwcVKd0b1ery2
+         GZl6p2rzb/9O9dLtn3R+12VuHLdsUEEPb6QqqJKhRjCIT6s6gvW5TfreHrMXJozYvph5
+         352A==
+X-Gm-Message-State: APjAAAW2nXsMnGSt/Wq6UEjQH4Mw4vl1DJ0J6MvVAcxyemTOq8DLbjL4
+        k25CpxkmMWnS5W1FlEHbYAf32wvc3r6yEoMzRXQ=
+X-Google-Smtp-Source: APXvYqzcPwDI5dgNi4XqBYAFbY+IIJNSrItC6raJzaOC9I0pjHAGG+0CThsbaSf1kQHAlpQtzMOfiGGWYG+7UzZrhHQ=
+X-Received: by 2002:ae9:f719:: with SMTP id s25mr14619515qkg.209.1578895221430;
+ Sun, 12 Jan 2020 22:00:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: IMFC-FINANZIERUNG
-To:     Recipients <reservations@hotel-khreschatyk.kiev.ua>
-From:   =?utf-8?q?=22IMFC-Gew=C3=A4hren=22=3Creservations=40hotel-khreschatyk=2Ek?=@mail.a-hostel.com,
-        =?utf-8?q?iev=2Eua=3E?=@mail.a-hostel.com
-Date:   Sun, 12 Jan 2020 08:07:00 -0800
-Reply-To: imfcompensationfunding@gmail.com
-Message-Id: <20200112160705.898341B521A2@mail.a-hostel.com>
+Received: by 2002:a0c:f94e:0:0:0:0:0 with HTTP; Sun, 12 Jan 2020 22:00:21
+ -0800 (PST)
+Reply-To: rickschaech@gmail.com
+From:   Rick Schaech <cicija016@gmail.com>
+Date:   Mon, 13 Jan 2020 02:00:21 -0400
+Message-ID: <CAERxQtQUbCyqSvhMOYDjJ-nQghfa4e4wyngOtz6DGyjdsiejFA@mail.gmail.com>
+Subject: I wait for your swift response,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Sie haben sich für den IMFC-Zuschuss von 2.500.000,00 Euro qualifiziert (Frau Ronnie Mara Holbrook) Email: imfcompensationfunding@gmail.com 
-Weitere Informationen zum Einfordern Ihrer Gelder
+Dear, I'm Mr Rick Schaech, I am the General Account Auditor, Though i
+know we have not meet each other before but sometimes in life God have
+a reason of bringing two people from two different countries together
+as business partners or life partners.
+
+My dear friend, I have the sum of 15.7 Million USD i wish to put in
+your name due to the death of my late client who died several years
+ago as his next of kin column still remain blank. Though the internet
+medium is highly abuse these days but am assuring you that this
+transaction is legitimate and I am contacting you that we may have a
+deal, note for your cooperation and collaboration 40% of the sum will
+be for you while the other 60% will be for me as well. I wait for your
+swift response for more details. please forward your response to my
+personal E-mail: rickschaech@gmail.com
+
+Yours sincerely,
+Rick Schaech.
