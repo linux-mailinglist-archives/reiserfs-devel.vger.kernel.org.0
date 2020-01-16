@@ -2,143 +2,90 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C3013CB8D
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 15 Jan 2020 19:02:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B91FE13DF49
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 16 Jan 2020 16:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726574AbgAOSC0 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 15 Jan 2020 13:02:26 -0500
-Received: from mx2.suse.de ([195.135.220.15]:60610 "EHLO mx2.suse.de"
+        id S1726653AbgAPPxM (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 16 Jan 2020 10:53:12 -0500
+Received: from mx2.suse.de ([195.135.220.15]:40416 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728921AbgAOSC0 (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 15 Jan 2020 13:02:26 -0500
+        id S1726151AbgAPPxL (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Thu, 16 Jan 2020 10:53:11 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id E839EAEA7;
-        Wed, 15 Jan 2020 18:02:23 +0000 (UTC)
-Subject: Re: reiserfs broke between 4.9.205 and 4.9.208
-To:     Jan Kara <jack@suse.cz>, Randy Dunlap <rdunlap@infradead.org>
-Cc:     Michael Brunnbauer <brunni@netestate.de>,
-        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org
-References: <20200108193634.GA17390@netestate.de>
- <481c595b-46c9-0b4d-c618-a998ab6247c6@infradead.org>
- <20200109121216.GC22232@quack2.suse.cz>
-From:   Jeff Mahoney <jeffm@suse.com>
-Organization: SUSE Labs Data & Performance
-Message-ID: <96be232a-94c9-87ad-16c9-18eb32149e19@suse.com>
-Date:   Wed, 15 Jan 2020 13:02:21 -0500
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.4.1
+        by mx2.suse.de (Postfix) with ESMTP id 67F55B225F;
+        Thu, 16 Jan 2020 15:53:10 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id C7AEB1E06F1; Thu, 16 Jan 2020 16:53:09 +0100 (CET)
+Date:   Thu, 16 Jan 2020 16:53:09 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     jeffm@suse.com
+Cc:     reiserfs-devel@vger.kernel.org, jack@suse.cz, brunni@netestate.de
+Subject: Re: [PATCH] reiserfs: fix handling of -EOPNOTSUPP in
+ reiserfs_for_each_xattr
+Message-ID: <20200116155309.GA17141@quack2.suse.cz>
+References: <20200115180059.6935-1-jeffm@suse.com>
 MIME-Version: 1.0
-In-Reply-To: <20200109121216.GC22232@quack2.suse.cz>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="a4rZm46Z1dtwr0bxi6Nli88ZYKlg7rV21"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200115180059.6935-1-jeffm@suse.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---a4rZm46Z1dtwr0bxi6Nli88ZYKlg7rV21
-Content-Type: multipart/mixed; boundary="r6nCrV9Cg9A7JctM2W3kaaMeill81n14Q"
+On Wed 15-01-20 13:00:59, jeffm@suse.com wrote:
+> From: Jeff Mahoney <jeffm@suse.com>
+> 
+> Commit 60e4cf67a58 (reiserfs: fix extended attributes on the root
+> directory) introduced a regression open_xa_root started returning
+> -EOPNOTSUPP but it was not handled properly in reiserfs_for_each_xattr.
+> 
+> When the reiserfs module is built without CONFIG_REISERFS_FS_XATTR,
+> deleting an inode would result in a warning and chowning an inode
+> would also result in a warning and then fail to complete.
+> 
+> With CONFIG_REISERFS_FS_XATTR enabled, the xattr root would always be
+> present for read-write operations.
+> 
+> This commit handles -EOPNOSUPP in the same way -ENODATA is handled.
+> 
+> Fixes: 60e4cf67a58 (reiserfs: fix extended attributes on the root directory)
+> Reported-by: Michael Brunnbauer <brunni@netestate.de>
+> Signed-off-by: Jeff Mahoney <jeffm@suse.com>
 
---r6nCrV9Cg9A7JctM2W3kaaMeill81n14Q
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+Thanks Jeff! I've queued the patch to my tree and will push it to Linus
+next week.
 
-On 1/9/20 7:12 AM, Jan Kara wrote:
->=20
-> Hello,
->=20
-> On Wed 08-01-20 15:42:58, Randy Dunlap wrote:
->> On 1/8/20 11:36 AM, Michael Brunnbauer wrote:
->>> after upgrading from 4.9.205 to 4.9.208, I get errors on two differen=
-t
->>> reiserfs filesystems when doing cp -a (the chown part seems to fail) =
-and
->>> on other occasions:
->>>
->>>  kernel: REISERFS warning (device sda1): jdm-20004 reiserfs_delete_xa=
-ttrs: Couldn't delete all xattrs (-95)
->>>
->>>  kernel: REISERFS warning (device sdc1): jdm-20004 reiserfs_delete_xa=
-ttrs: Couldn't delete all xattrs (-95)
->>>
->>> This behaviour disappeared after a downgrade to 4.9.205.
->>>
->>> I understand there have been changes to the file system code but I'm =
-not
->>> sure they affect reiserfs, e.g.
->>>
->>>  https://bugzilla.kernel.org/show_bug.cgi?id=3D205433
->>>
->>> Any Idea?
->>>
->>> Regards,
->>>
->>> Michael Brunnbauer
->>>
->>
->> Looks to me like 4.9.207 contains reiserfs changes.
->>
->> Adding CC's.
->=20
-> Looks like a regression from commit 60e4cf67a582 "reiserfs: fix extende=
-d
-> attributes on the root directory". We are getting -EOPNOTSUPP from
-> reiserfs_for_each_xattr() likely originally from open_xa_root(). Previo=
-usly
-> we were returning -ENODATA from there which error reiserfs_for_each_xat=
-tr()
-> converted to 0. I don't understand reiserfs xattrs enough to quickly te=
-ll
-> what should actually be happening after the Jeff's change - naively I'd=
+								Honza
 
-> think we should just silence the bogus warning in case of EOPNOTSUPP. J=
-eff,
-> can you have a look?
->=20
-> Also Michael, I'd like to clarify: Does 'cp -a' return any error or is =
-it
-> just that the kernel is spewing these annoying warnings?  Because from =
-the
-> code reading I'd think that it is only the kernel spewing errors but
-> userspace should be fine...
-
-This error occurs when extended attributes are not enabled on the file
-system *and* the module is not built with extended attributes enabled.
-I've sent out the fix for it just now.
-
--Jeff
-
---=20
-Jeff Mahoney
-Director, SUSE Labs Data & Performance
-
-
---r6nCrV9Cg9A7JctM2W3kaaMeill81n14Q--
-
---a4rZm46Z1dtwr0bxi6Nli88ZYKlg7rV21
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEE8wzgbmZ74SnKPwtDHntLYyF55bIFAl4fU60ACgkQHntLYyF5
-5bJ9DxAArJ4JFl+V3VqJwcVGW1Dt49Tolal19rG8EgewbEsIxs1CJ4PDnSfZyp19
-/5WjnnffKXTdrYxrBMD1Q3O9vPnWaeYft3uES/3VNaQoosVFBw1B0JpFT1TW13cs
-Zr2m/PUHAA+BO+UC+hbNzQL5g/aGbDXhh3KAYTtF3N/tiE7Snngcagu7lNa+1WFR
-n7aXu5IGTIpFfC+ySdONoClwSOBHFgL+mBqdmr1qjXAh4nwW/waLl9w6XsqlCQ0Q
-Dx3/HSnGY3733JMd9fzcn4YOotJGUy0bBqAmCXahD9oTLQoxhcynQKgGmmpti5/N
-S9f91moRsIi3e7ubmalYtg7Xss5RH8/trYqUe2LpnbSwYA8g0U8Z+3DFtU4k9zD0
-lTKWJUB/I2Nvmty6+RAy4NlgiKV1dQY4n80yLr3zwUDA+p1khP2Hjbco6ax+Hc3S
-CKZSO8skO1/BBOD1meP45YcWyqCGUXAaOPX1tTVPXlB/LAoTlWfL5/O1ifAWZV2x
-sm8E8MhsUlv93p8ydjgDw/tHx+CqRVrThnxfnO4sUvrtPLrBZlgbvY9nQ30l5YOE
-C3OeQ3W6FZ2VR48ypZT83KcRoHgsAyJFsjaDrCT26xRpGjFUimLij9rUjozzzfE5
-W1Gts2Jz1xxXjEq6MGxeaay9DjuZsSVm+o46eZqcw8b5sO5CH5s=
-=1li/
------END PGP SIGNATURE-----
-
---a4rZm46Z1dtwr0bxi6Nli88ZYKlg7rV21--
+> ---
+>  fs/reiserfs/xattr.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/reiserfs/xattr.c b/fs/reiserfs/xattr.c
+> index 06497965f0a0..d843c4789ced 100644
+> --- a/fs/reiserfs/xattr.c
+> +++ b/fs/reiserfs/xattr.c
+> @@ -319,8 +319,12 @@ static int reiserfs_for_each_xattr(struct inode *inode,
+>  out_dir:
+>  	dput(dir);
+>  out:
+> -	/* -ENODATA isn't an error */
+> -	if (err == -ENODATA)
+> +	/*
+> +	 * -ENODATA: this object doesn't have any xattrs
+> +	 * -EOPNOTSUPP: this file system doesn't have xattrs enabled on disk.
+> +	 * Neither are errors
+> +	 */
+> +	if (err == -ENODATA || err == -EOPNOTSUPP)
+>  		err = 0;
+>  	return err;
+>  }
+> -- 
+> 2.16.4
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
