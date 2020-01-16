@@ -2,90 +2,62 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B91FE13DF49
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 16 Jan 2020 16:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5A613FAFB
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 16 Jan 2020 22:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726653AbgAPPxM (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 16 Jan 2020 10:53:12 -0500
-Received: from mx2.suse.de ([195.135.220.15]:40416 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726151AbgAPPxL (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 16 Jan 2020 10:53:11 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 67F55B225F;
-        Thu, 16 Jan 2020 15:53:10 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id C7AEB1E06F1; Thu, 16 Jan 2020 16:53:09 +0100 (CET)
-Date:   Thu, 16 Jan 2020 16:53:09 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     jeffm@suse.com
-Cc:     reiserfs-devel@vger.kernel.org, jack@suse.cz, brunni@netestate.de
-Subject: Re: [PATCH] reiserfs: fix handling of -EOPNOTSUPP in
- reiserfs_for_each_xattr
-Message-ID: <20200116155309.GA17141@quack2.suse.cz>
-References: <20200115180059.6935-1-jeffm@suse.com>
+        id S1729247AbgAPVE7 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 16 Jan 2020 16:04:59 -0500
+Received: from mail.conatel.gob.ve ([201.248.69.230]:38878 "EHLO
+        mail.conatel.gob.ve" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727040AbgAPVE7 (ORCPT
+        <rfc822;reiserfs-devel@vger.kernel.org>);
+        Thu, 16 Jan 2020 16:04:59 -0500
+X-Greylist: delayed 6456 seconds by postgrey-1.27 at vger.kernel.org; Thu, 16 Jan 2020 16:04:58 EST
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.conatel.gob.ve (Postfix) with ESMTP id 10AF31221426;
+        Thu, 16 Jan 2020 14:42:04 -0400 (-04)
+Received: from mail.conatel.gob.ve ([127.0.0.1])
+        by localhost (mail.conatel.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id SzFZvU2xanxf; Thu, 16 Jan 2020 14:41:59 -0400 (-04)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.conatel.gob.ve (Postfix) with ESMTP id 1F2BA1221492;
+        Thu, 16 Jan 2020 14:41:58 -0400 (-04)
+DKIM-Filter: OpenDKIM Filter v2.9.2 mail.conatel.gob.ve 1F2BA1221492
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=conatel.gob.ve;
+        s=5C18DDE8-FD64-11E3-A8EF-B68B774165DB; t=1579200118;
+        bh=ONiYfY8hL3XO0+q3v6QnQFSpO+07GWJt9BD1PSEvgfw=;
+        h=Date:From:Reply-To:Message-ID:Subject:MIME-Version:Content-Type:
+         Content-Transfer-Encoding;
+        b=islBOIsllFuL7y+AyDh9X862cPvFC1Vz0AmJcgbe6EzA6a/h9lH5C+tn8MIdk55HS
+         /qQWq1/jee9mRGSaVzKg5PqVx6zugP0JJ3xtCwl7uLDdV9JFa7Hd3BLH/KBjImz3Dv
+         hWbpQOg8i+J9Dgt6UDwUd6oUoHs0ofU8Ez31U9h0=
+X-Virus-Scanned: amavisd-new at conatel.gob.ve
+Received: from mail.conatel.gob.ve ([127.0.0.1])
+        by localhost (mail.conatel.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id W30Wi5DKgpht; Thu, 16 Jan 2020 14:41:57 -0400 (-04)
+Received: from mail.conatel.gob.ve (correo.conatel.int [10.1.1.21])
+        by mail.conatel.gob.ve (Postfix) with ESMTP id F056E1221448;
+        Thu, 16 Jan 2020 14:41:52 -0400 (-04)
+Date:   Thu, 16 Jan 2020 14:11:52 -0430 (VET)
+From:   manuel franco <hmorales@conatel.gob.ve>
+Reply-To: manuel franco <manuelfrancospende11@gmail.com>
+Message-ID: <880616071.444590.1579200112766.JavaMail.zimbra@conatel.gob.ve>
+Subject: Spende von 2 Millionen Euro.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200115180059.6935-1-jeffm@suse.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [105.0.3.30]
+X-Mailer: Zimbra 8.6.0_GA_1242 (zclient/8.6.0_GA_1242)
+Thread-Topic: Spende von 2 Millionen Euro.
+Thread-Index: t2/Oy8GJWxkJop42R5Ag4tqLE+oYFw==
+To:     unlisted-recipients:; (no To-header on input)
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Wed 15-01-20 13:00:59, jeffm@suse.com wrote:
-> From: Jeff Mahoney <jeffm@suse.com>
-> 
-> Commit 60e4cf67a58 (reiserfs: fix extended attributes on the root
-> directory) introduced a regression open_xa_root started returning
-> -EOPNOTSUPP but it was not handled properly in reiserfs_for_each_xattr.
-> 
-> When the reiserfs module is built without CONFIG_REISERFS_FS_XATTR,
-> deleting an inode would result in a warning and chowning an inode
-> would also result in a warning and then fail to complete.
-> 
-> With CONFIG_REISERFS_FS_XATTR enabled, the xattr root would always be
-> present for read-write operations.
-> 
-> This commit handles -EOPNOSUPP in the same way -ENODATA is handled.
-> 
-> Fixes: 60e4cf67a58 (reiserfs: fix extended attributes on the root directory)
-> Reported-by: Michael Brunnbauer <brunni@netestate.de>
-> Signed-off-by: Jeff Mahoney <jeffm@suse.com>
 
-Thanks Jeff! I've queued the patch to my tree and will push it to Linus
-next week.
 
-								Honza
 
-> ---
->  fs/reiserfs/xattr.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/reiserfs/xattr.c b/fs/reiserfs/xattr.c
-> index 06497965f0a0..d843c4789ced 100644
-> --- a/fs/reiserfs/xattr.c
-> +++ b/fs/reiserfs/xattr.c
-> @@ -319,8 +319,12 @@ static int reiserfs_for_each_xattr(struct inode *inode,
->  out_dir:
->  	dput(dir);
->  out:
-> -	/* -ENODATA isn't an error */
-> -	if (err == -ENODATA)
-> +	/*
-> +	 * -ENODATA: this object doesn't have any xattrs
-> +	 * -EOPNOTSUPP: this file system doesn't have xattrs enabled on disk.
-> +	 * Neither are errors
-> +	 */
-> +	if (err == -ENODATA || err == -EOPNOTSUPP)
->  		err = 0;
->  	return err;
->  }
-> -- 
-> 2.16.4
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Hallo
+Sie wurden ausgewaumlhlt, um die Summe von euro 2.000.000,00 (zwei Millionen Euro) in meinem laufenden Wohltaumltigkeitsprogramm zu erhalten. Fur  weitere Informationen senden Sie bitte ein Email: manuelfrancospende@gmail.com
