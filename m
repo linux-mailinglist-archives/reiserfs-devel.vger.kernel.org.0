@@ -2,114 +2,182 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BAF7144216
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 21 Jan 2020 17:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04301147148
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 23 Jan 2020 20:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729043AbgAUQXc (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 21 Jan 2020 11:23:32 -0500
-Received: from mx2.suse.de ([195.135.220.15]:56562 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728916AbgAUQXc (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 21 Jan 2020 11:23:32 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 6D21EAFE8;
-        Tue, 21 Jan 2020 16:23:30 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 1201F1E0A4E; Tue, 21 Jan 2020 17:23:29 +0100 (CET)
-Date:   Tue, 21 Jan 2020 17:23:29 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Alex Shi <alex.shi@linux.alibaba.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>,
-        Bharath Vedartham <linux.bhar@gmail.com>,
-        Hariprasad Kelam <hariprasad.kelam@gmail.com>,
-        Jason Yan <yanaijie@huawei.com>,
-        zhengbin <zhengbin13@huawei.com>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs/reiserfs: remove unused macros
-Message-ID: <20200121162329.GC5803@quack2.suse.cz>
-References: <1579602338-57079-1-git-send-email-alex.shi@linux.alibaba.com>
+        id S1729009AbgAWTAW (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 23 Jan 2020 14:00:22 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:48374 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727022AbgAWTAV (ORCPT
+        <rfc822;reiserfs-devel@vger.kernel.org>);
+        Thu, 23 Jan 2020 14:00:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=8HR2OlxtYSb8VdzQerDMMYUwatLK4APc/+QQpvP3lEg=; b=hl/QHk5iTlsDRKCfY+NHVGyfL
+        qgqj7dYv7pKzurBROUVNuwRXpgmtf5xN3yRceVvnxS/eNW6WGHi95QfEo03tR4rTgkcR9wKIpjOmb
+        81jLRVHYNsnKtfnjooWbbrFPxwX56OTZ63ybhx80bRhENoVrRLtGFmp5a9OL1jd8EGj42zKv99+eB
+        JwtSr7fZ7Cz//tDfqUVR3E5tPEXA9q0ngG2/f56cyWSgnmbgWjx3we2vtNWgdwVb329LgskVc333M
+        J503k7JhpQBbDcV/o75dUqL1juPCeAu+WcLSbMe1/lmAGA9E3WwrLYl6CMt5DUF3qozC89SWC/IFK
+        whdtZUgpw==;
+Received: from [2601:1c0:6280:3f0::ed68]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iuhiE-0003BI-Ui; Thu, 23 Jan 2020 19:00:19 +0000
+To:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Jan Kara <jack@suse.com>, Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        Paul Mackerras <paulus@samba.org>, linux-ppp@vger.kernel.org,
+        Jan Kara <jack@suse.com>, reiserfs-devel@vger.kernel.org,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        linux-xfs <linux-xfs@vger.kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] Documentation: changes.rst: update several outdated project
+ URLs
+Message-ID: <efb1f518-9e66-c472-d124-4b7d91e56639@infradead.org>
+Date:   Thu, 23 Jan 2020 11:00:12 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1579602338-57079-1-git-send-email-alex.shi@linux.alibaba.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Tue 21-01-20 18:25:38, Alex Shi wrote:
-> these macros are never used from introduced. better to
-> remove them.
-> 
-> Signed-off-by: Alex Shi <alex.shi@linux.alibaba.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org> 
-> Cc: Jan Kara <jack@suse.cz> 
-> Cc: Bharath Vedartham <linux.bhar@gmail.com> 
-> Cc: Hariprasad Kelam <hariprasad.kelam@gmail.com> 
-> Cc: Jason Yan <yanaijie@huawei.com> 
-> Cc: zhengbin <zhengbin13@huawei.com> 
-> Cc: Jia-Ju Bai <baijiaju1990@gmail.com> 
-> Cc: reiserfs-devel@vger.kernel.org 
-> Cc: linux-kernel@vger.kernel.org 
+From: Randy Dunlap <rdunlap@infradead.org>
 
-Thanks. I've added the patch to my tree.
+Update projects URLs in the changes.rst file.
 
-								Honza
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Cc: Jan Kara <jack@suse.com>
+Cc: "Theodore Ts'o" <tytso@mit.edu>
+Cc: Andreas Dilger <adilger.kernel@dilger.ca>
+Cc: linux-ext4@vger.kernel.org
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: Jozsef Kadlecsik <kadlec@netfilter.org>
+Cc: Florian Westphal <fw@strlen.de>
+Cc: netfilter-devel@vger.kernel.org
+Cc: coreteam@netfilter.org
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: linux-ppp@vger.kernel.org
+Cc: Jan Kara <jack@suse.com>
+Cc: reiserfs-devel@vger.kernel.org
+Cc: Darrick J. Wong <darrick.wong@oracle.com>
+Cc: linux-xfs@vger.kernel.org
+---
 
-> ---
->  fs/reiserfs/journal.c | 2 --
->  fs/reiserfs/procfs.c  | 1 -
->  fs/reiserfs/stree.c   | 6 ------
->  3 files changed, 9 deletions(-)
-> 
-> diff --git a/fs/reiserfs/journal.c b/fs/reiserfs/journal.c
-> index 4b3e3e73b512..072156c4f895 100644
-> --- a/fs/reiserfs/journal.c
-> +++ b/fs/reiserfs/journal.c
-> @@ -56,8 +56,6 @@
->  /* gets a struct reiserfs_journal_list * from a list head */
->  #define JOURNAL_LIST_ENTRY(h) (list_entry((h), struct reiserfs_journal_list, \
->                                 j_list))
-> -#define JOURNAL_WORK_ENTRY(h) (list_entry((h), struct reiserfs_journal_list, \
-> -                               j_working_list))
->  
->  /* must be correct to keep the desc and commit structs at 4k */
->  #define JOURNAL_TRANS_HALF 1018
-> diff --git a/fs/reiserfs/procfs.c b/fs/reiserfs/procfs.c
-> index f2cf3441fdfc..ff336513c254 100644
-> --- a/fs/reiserfs/procfs.c
-> +++ b/fs/reiserfs/procfs.c
-> @@ -63,7 +63,6 @@ static int show_version(struct seq_file *m, void *unused)
->  #define MAP( i ) D4C( objectid_map( sb, rs )[ i ] )
->  
->  #define DJF( x ) le32_to_cpu( rs -> x )
-> -#define DJV( x ) le32_to_cpu( s_v1 -> x )
->  #define DJP( x ) le32_to_cpu( jp -> x )
->  #define JF( x ) ( r -> s_journal -> x )
->  
-> diff --git a/fs/reiserfs/stree.c b/fs/reiserfs/stree.c
-> index da9ebe33882b..6051e7bbc221 100644
-> --- a/fs/reiserfs/stree.c
-> +++ b/fs/reiserfs/stree.c
-> @@ -918,12 +918,6 @@ int comp_items(const struct item_head *stored_ih, const struct treepath *path)
->  	return memcmp(stored_ih, ih, IH_SIZE);
->  }
->  
-> -/* unformatted nodes are not logged anymore, ever.  This is safe now */
-> -#define held_by_others(bh) (atomic_read(&(bh)->b_count) > 1)
-> -
-> -/* block can not be forgotten as it is in I/O or held by someone */
-> -#define block_in_use(bh) (buffer_locked(bh) || (held_by_others(bh)))
-> -
->  /* prepare for delete or cut of direct item */
->  static inline int prepare_for_direct_item(struct treepath *path,
->  					  struct item_head *le_ih,
-> -- 
-> 1.8.3.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+ Documentation/process/changes.rst                    |   12 ++++++----
+ Documentation/translations/it_IT/process/changes.rst |   12 ++++++----
+ 2 files changed, 16 insertions(+), 8 deletions(-)
+
+diff -Naurp linux-next-20200123/Documentation/translations/it_IT/process/changes.rst%WWW linux-next-20200123/Documentation/translations/it_IT/process/changes.rst
+--- linux-next-20200123/Documentation/translations/it_IT/process/changes.rst%WWW	2019-11-24 16:32:01.000000000 -0800
++++ linux-next-20200123/Documentation/translations/it_IT/process/changes.rst	2020-01-23 10:47:56.226457425 -0800
+@@ -391,6 +391,8 @@ E2fsprogs
+ ---------
+ 
+ - <http://prdownloads.sourceforge.net/e2fsprogs/e2fsprogs-1.29.tar.gz>
++- <https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/>
++- <https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git/>
+ 
+ JFSutils
+ --------
+@@ -400,12 +402,12 @@ JFSutils
+ Reiserfsprogs
+ -------------
+ 
+-- <http://www.kernel.org/pub/linux/utils/fs/reiserfs/>
++- <https://git.kernel.org/pub/scm/linux/kernel/git/jeffm/reiserfsprogs.git/>
+ 
+ Xfsprogs
+ --------
+ 
+-- <ftp://oss.sgi.com/projects/xfs/>
++- <https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git>
+ 
+ Pcmciautils
+ -----------
+@@ -444,7 +446,9 @@ Rete
+ PPP
+ ---
+ 
+-- <ftp://ftp.samba.org/pub/ppp/>
++- <https://download.samba.org/pub/ppp/>
++- <https://git.ozlabs.org/?p=ppp.git>
++- <https://github.com/paulusmack/ppp/>
+ 
+ 
+ NFS-utils
+@@ -455,7 +459,7 @@ NFS-utils
+ Iptables
+ --------
+ 
+-- <http://www.iptables.org/downloads.html>
++- <https://netfilter.org/projects/iptables/index.html>
+ 
+ Ip-route2
+ ---------
+diff -Naurp linux-next-20200123/Documentation/process/changes.rst%WWW linux-next-20200123/Documentation/process/changes.rst
+--- linux-next-20200123/Documentation/process/changes.rst%WWW	2019-11-24 16:32:01.000000000 -0800
++++ linux-next-20200123/Documentation/process/changes.rst	2020-01-23 10:47:56.226457425 -0800
+@@ -384,6 +384,8 @@ E2fsprogs
+ ---------
+ 
+ - <http://prdownloads.sourceforge.net/e2fsprogs/e2fsprogs-1.29.tar.gz>
++- <https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/>
++- <https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git/>
+ 
+ JFSutils
+ --------
+@@ -393,12 +395,12 @@ JFSutils
+ Reiserfsprogs
+ -------------
+ 
+-- <http://www.kernel.org/pub/linux/utils/fs/reiserfs/>
++- <https://git.kernel.org/pub/scm/linux/kernel/git/jeffm/reiserfsprogs.git/>
+ 
+ Xfsprogs
+ --------
+ 
+-- <ftp://oss.sgi.com/projects/xfs/>
++- <https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git>
+ 
+ Pcmciautils
+ -----------
+@@ -437,7 +439,9 @@ Networking
+ PPP
+ ---
+ 
+-- <ftp://ftp.samba.org/pub/ppp/>
++- <https://download.samba.org/pub/ppp/>
++- <https://git.ozlabs.org/?p=ppp.git>
++- <https://github.com/paulusmack/ppp/>
+ 
+ NFS-utils
+ ---------
+@@ -447,7 +451,7 @@ NFS-utils
+ Iptables
+ --------
+ 
+-- <http://www.iptables.org/downloads.html>
++- <https://netfilter.org/projects/iptables/index.html>
+ 
+ Ip-route2
+ ---------
+
+
