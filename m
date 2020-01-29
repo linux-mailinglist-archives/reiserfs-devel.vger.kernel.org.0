@@ -2,30 +2,34 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB401496C8
-	for <lists+reiserfs-devel@lfdr.de>; Sat, 25 Jan 2020 18:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0D914D368
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 30 Jan 2020 00:15:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726695AbgAYRJU (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sat, 25 Jan 2020 12:09:20 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:49927 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725843AbgAYRJT (ORCPT
+        id S1727084AbgA2XPT (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 29 Jan 2020 18:15:19 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:52452 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727024AbgA2XPT (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sat, 25 Jan 2020 12:09:19 -0500
-Received: from callcc.thunk.org (rrcs-67-53-201-206.west.biz.rr.com [67.53.201.206])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 00PH8d9t012751
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 25 Jan 2020 12:08:42 -0500
-Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id 193AD420324; Sat, 25 Jan 2020 12:08:39 -0500 (EST)
-Date:   Sat, 25 Jan 2020 12:08:39 -0500
-From:   "Theodore Y. Ts'o" <tytso@mit.edu>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Jan Kara <jack@suse.com>,
+        Wed, 29 Jan 2020 18:15:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=YE5ymmg/Qoh5EFK9pVvYeClJYE682bbCQnrC66d+TOc=; b=hxaoehU77S1fZAy677mOd1sm1
+        JjfnFRlZxbzaUUX53Ti75TXmkGdG7ltwdyqeib0jlXtiXKYLAqubtBIyQh9RF9pmtRUuvMoQhx4ON
+        lZDuGYZNIdASkaBwDckHywVVyTOkSmI6rgb4VCbHm8cusVXnFx5zmAQFMMhbyrKyCXsZRMmlyhio5
+        yXOc5zcqDiGjp3VZJHkF0/1i9A5i9i61s+4oayNZRySecQKFeNMUiPRvQHpg2TJ6Zl7ssEpLFrLgD
+        wu3x2p4pbdKNN4Zi6AQRLwS5/IuCzWi5nCDhRX/Jk5hX/7YkSgCEnm0noXgupWgg91QCoQWp/d5R3
+        qPFjnIM/A==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iwwYH-0007Ig-Te; Wed, 29 Jan 2020 23:15:18 +0000
+To:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Jan Kara <jack@suse.com>, Theodore Ts'o <tytso@mit.edu>,
         Andreas Dilger <adilger.kernel@dilger.ca>,
         linux-ext4@vger.kernel.org,
         Pablo Neira Ayuso <pablo@netfilter.org>,
@@ -36,37 +40,148 @@ Cc:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         reiserfs-devel@vger.kernel.org,
         "Darrick J . Wong" <darrick.wong@oracle.com>,
         linux-xfs <linux-xfs@vger.kernel.org>
-Subject: Re: [PATCH] Documentation: changes.rst: update several outdated
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH v2] Documentation: changes.rst: update several outdated
  project URLs
-Message-ID: <20200125170839.GM1108497@mit.edu>
-References: <efb1f518-9e66-c472-d124-4b7d91e56639@infradead.org>
- <20200125034622.GA1107489@mit.edu>
- <c91c1ae1-7eb6-e6fd-57e3-aa8e8f356d45@infradead.org>
+Message-ID: <a9c3c509-8f30-fcc4-d9e0-b53aeaa89e4f@infradead.org>
+Date:   Wed, 29 Jan 2020 15:15:15 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c91c1ae1-7eb6-e6fd-57e3-aa8e8f356d45@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Fri, Jan 24, 2020 at 08:03:03PM -0800, Randy Dunlap wrote:
-> 
-> So drop the git URL also?
+From: Randy Dunlap <rdunlap@infradead.org>
 
-Let's keep the git URL; sorry I wasn't precise in my previous message.
-I was referring to where the tarballs could be downloaded.
+Update projects URLs in the changes.rst file.
 
-      		   	     	      - Ted
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Cc: Jan Kara <jack@suse.com>
+Cc: "Theodore Ts'o" <tytso@mit.edu>
+Cc: Andreas Dilger <adilger.kernel@dilger.ca>
+Cc: linux-ext4@vger.kernel.org
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: Jozsef Kadlecsik <kadlec@netfilter.org>
+Cc: Florian Westphal <fw@strlen.de>
+Cc: netfilter-devel@vger.kernel.org
+Cc: coreteam@netfilter.org
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: linux-ppp@vger.kernel.org
+Cc: reiserfs-devel@vger.kernel.org
+Cc: Darrick J. Wong <darrick.wong@oracle.com>
+Cc: linux-xfs@vger.kernel.org
+Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
+Acked-by: Theodore Ts'o <tytso@mit.edu>
+---
+v2 changes:
+. add Ack and Review tags;
+. update as requested by Darrick and Ted;
 
-P.S. I guess I should mention that there is one reason why some folks
-might still want to download from sourceforge; if they want the
-tarball signed by me, that's the only place you can get it.  For
-$REASONS, the .gpg file on kernel.org is signed by the kernel.org
-automation, and of course the git tree has tags signed for me.  But
-for folks who want the tarball signed by me --- Debian and its
-derivatives want that, for example --- they need to go to sourceforge.
-I dunno if the RPM-based distributions still care about gpg signed
-tarballs.  I'm guessing though that the people who care know where to
-find it.
+ Documentation/process/changes.rst                    |   14 ++++++----
+ Documentation/translations/it_IT/process/changes.rst |   14 ++++++----
+ 2 files changed, 18 insertions(+), 10 deletions(-)
+
+--- linux-next-20200129.orig/Documentation/translations/it_IT/process/changes.rst
++++ linux-next-20200129/Documentation/translations/it_IT/process/changes.rst
+@@ -390,7 +390,8 @@ Mkinitrd
+ E2fsprogs
+ ---------
+ 
+-- <http://prdownloads.sourceforge.net/e2fsprogs/e2fsprogs-1.29.tar.gz>
++- <https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/>
++- <https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git/>
+ 
+ JFSutils
+ --------
+@@ -400,12 +401,13 @@ JFSutils
+ Reiserfsprogs
+ -------------
+ 
+-- <http://www.kernel.org/pub/linux/utils/fs/reiserfs/>
++- <https://git.kernel.org/pub/scm/linux/kernel/git/jeffm/reiserfsprogs.git/>
+ 
+ Xfsprogs
+ --------
+ 
+-- <ftp://oss.sgi.com/projects/xfs/>
++- <https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git>
++- <https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/>
+ 
+ Pcmciautils
+ -----------
+@@ -444,7 +446,9 @@ Rete
+ PPP
+ ---
+ 
+-- <ftp://ftp.samba.org/pub/ppp/>
++- <https://download.samba.org/pub/ppp/>
++- <https://git.ozlabs.org/?p=ppp.git>
++- <https://github.com/paulusmack/ppp/>
+ 
+ 
+ NFS-utils
+@@ -455,7 +459,7 @@ NFS-utils
+ Iptables
+ --------
+ 
+-- <http://www.iptables.org/downloads.html>
++- <https://netfilter.org/projects/iptables/index.html>
+ 
+ Ip-route2
+ ---------
+--- linux-next-20200129.orig/Documentation/process/changes.rst
++++ linux-next-20200129/Documentation/process/changes.rst
+@@ -383,7 +383,8 @@ Mkinitrd
+ E2fsprogs
+ ---------
+ 
+-- <http://prdownloads.sourceforge.net/e2fsprogs/e2fsprogs-1.29.tar.gz>
++- <https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/>
++- <https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git/>
+ 
+ JFSutils
+ --------
+@@ -393,12 +394,13 @@ JFSutils
+ Reiserfsprogs
+ -------------
+ 
+-- <http://www.kernel.org/pub/linux/utils/fs/reiserfs/>
++- <https://git.kernel.org/pub/scm/linux/kernel/git/jeffm/reiserfsprogs.git/>
+ 
+ Xfsprogs
+ --------
+ 
+-- <ftp://oss.sgi.com/projects/xfs/>
++- <https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git>
++- <https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/>
+ 
+ Pcmciautils
+ -----------
+@@ -437,7 +439,9 @@ Networking
+ PPP
+ ---
+ 
+-- <ftp://ftp.samba.org/pub/ppp/>
++- <https://download.samba.org/pub/ppp/>
++- <https://git.ozlabs.org/?p=ppp.git>
++- <https://github.com/paulusmack/ppp/>
+ 
+ NFS-utils
+ ---------
+@@ -447,7 +451,7 @@ NFS-utils
+ Iptables
+ --------
+ 
+-- <http://www.iptables.org/downloads.html>
++- <https://netfilter.org/projects/iptables/index.html>
+ 
+ Ip-route2
+ ---------
+
