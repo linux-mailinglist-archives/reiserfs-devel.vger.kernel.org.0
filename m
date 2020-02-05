@@ -2,148 +2,66 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 983D3152412
-	for <lists+reiserfs-devel@lfdr.de>; Wed,  5 Feb 2020 01:28:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 611D715277D
+	for <lists+reiserfs-devel@lfdr.de>; Wed,  5 Feb 2020 09:19:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727522AbgBEA2J (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 4 Feb 2020 19:28:09 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:55528 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727494AbgBEA2J (ORCPT
+        id S1727892AbgBEITA (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 5 Feb 2020 03:19:00 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:40022 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727459AbgBEITA (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 4 Feb 2020 19:28:09 -0500
-Received: by mail-wm1-f67.google.com with SMTP id q9so498085wmj.5
-        for <reiserfs-devel@vger.kernel.org>; Tue, 04 Feb 2020 16:28:08 -0800 (PST)
+        Wed, 5 Feb 2020 03:19:00 -0500
+Received: by mail-lj1-f195.google.com with SMTP id n18so1366419ljo.7
+        for <reiserfs-devel@vger.kernel.org>; Wed, 05 Feb 2020 00:18:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=to:from:subject:message-id:date:user-agent:mime-version
-         :content-language;
-        bh=Z1xYRpb1bVfuzQWiaKtil6nM5cdeU/NKJAbYLl6vRZs=;
-        b=S/CWflw75H0hdZkF92cotz9oJIIPVwXOywvc4hZqCo7o6iToEj63QEEtAajpfIYW1f
-         zmgNCGeXSWj8L2MVHhVtYxO5QtxNFJhKceYCUm8pGxI24ExtoQtPrXmpHX5U8ddhGX25
-         UCqsEONUGhKQ8B7NE+wxzPHFnHFbNHW8aGs4eY1mxd9JUcC69L+tbTOC20p8uCOnK9mM
-         TbY8Rcko2HOP9tWJ6a+PHh6JUykEGJqZ8ZOZtZr1ElBlCh/sYwYzgofpF/Mro/6vJQge
-         ccE7vbyLt0hC81QtU8bfrTupMs8Y+HTMQvmMj/uSp30N69kbLP865MO4h97/CeStHTkC
-         sBiw==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=n8jCEiEcTwElRnc98SiiA1c1rFw4mbyCB/o8s1If2IM=;
+        b=aKB7rL4ghNz5asPDGg49O3dWEYslvoSI6szUD7T5u/o+u01DqkdYjTXPQL8MZ49Sii
+         6qNDjLZny/3M5mf7rzOgdps4LuzhiXCorgYcWhC4D8PIDybwo6G83XzRB2KINiiIVKMb
+         gFVk4dln0+FNDsmMLMnBtHtmG1cJF5C0xIQ0+jseefIFE/BB4jIeVAoaoqzBPiG8IAw1
+         VLOqCUm0MoW4eD3fIczmW5O1kPD+7aoBxg/5wCInRUBLb+jlSLaEwhjRH4TNtZohpnRY
+         9PSrCmIBXP69ImxmIvzPJdfjjcaTQUrQDw4YV2Sp0IRnj0ZpesuEhZ04EuLMZT0mTKCW
+         M7GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
-         :mime-version:content-language;
-        bh=Z1xYRpb1bVfuzQWiaKtil6nM5cdeU/NKJAbYLl6vRZs=;
-        b=kyQ2EQNa9aM7FEPjrYjjeODtTu/AvWjsQN8B8Q01dyns2ecqM1KICx4gQiyGHrYwla
-         jAybBgdo34SyPMwSwS+TXXUE5rzx/CjJq4xgvkvuTGcvYyULE8tQy4F4rRAdDr4ZqExW
-         EKfAoNssplelFhQ8YP2z2oEamDNTMDZuQYfrqq9/nGB6kOF2y5LnhpNnugq1hnJojgzb
-         fDDBuTsBKtARm3Hn0miAnp4/MPOstKqdjw5VjDS4D7pBCKZNoc1oRgZ/QA+JIO8AmKKM
-         AwcqpB2ZJoI2dNpPWLJd0JnlbHPbFytqLErWQrApVVakE9bXJQCyIJis6gB3aI3faTnc
-         /TbQ==
-X-Gm-Message-State: APjAAAVhnSCnHMvY28ST2btsbylEupDlaLBzLbhiuwMuEbPRJmBIeRDa
-        O7t4zP9+q4O+LSiuOnn0EsnnxkO9APE=
-X-Google-Smtp-Source: APXvYqzc4EC5sih/SfvdwmEMlOe08q3hN4ohiN2o7jQ+RS2HfdqWvO5Zkh9SIAGa0J/qXyldFu37Pg==
-X-Received: by 2002:a05:600c:2c06:: with SMTP id q6mr1788956wmg.154.1580862487756;
-        Tue, 04 Feb 2020 16:28:07 -0800 (PST)
-Received: from [192.168.0.48] (HSI-KBW-46-223-1-130.hsi.kabel-badenwuerttemberg.de. [46.223.1.130])
-        by smtp.gmail.com with ESMTPSA id a13sm32829874wrp.93.2020.02.04.16.28.07
-        for <reiserfs-devel@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 04 Feb 2020 16:28:07 -0800 (PST)
-To:     ReiserFS development mailing list <reiserfs-devel@vger.kernel.org>
-From:   Edward Shishkin <edward.shishkin@gmail.com>
-Subject: [PATCH] reiser4: prevent system lockups
-Message-ID: <94861335-0ff3-a8cf-8d73-e0f521fa0ffa@gmail.com>
-Date:   Wed, 5 Feb 2020 01:28:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.5.2
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=n8jCEiEcTwElRnc98SiiA1c1rFw4mbyCB/o8s1If2IM=;
+        b=eXbC+6SqLjYItDrwpCt2KATt9FNFNyaHVjslBviNjDX/ksHq2asX/+ivatA4WlKZyn
+         M+X7ciL6HHVJuU+KKW0Rodd0yjjzJotHeQ/UZfBB8qQNLByYq/2hvdfbIWRxHRB4Imvl
+         xrrl8na0s2bL+oR/309JvVeHGdZ5nGzqVkA4jpeAYc4iRdalHJfwuAJEZ3kTACrcgfin
+         ufLIRPkndvFDGHjbd6vU1NOjikHWsfUW2BB/6rFdk15qL1KK3JsRa46hcbs/k5B15GIb
+         mijg4wKIKKvHBt6Z6TETF1QrqPKT4s/iQHncRwe5nUJIxVjvku35OGwGjc7mwiFBgj8F
+         mRDw==
+X-Gm-Message-State: APjAAAVeoIPpf2dyL/AJv3qPDiCDPcz1Yr+kOCm+HTzeBRiyTvwMwACy
+        Ea/kCp77an7mIDszCdAQZXTLCUEmhutuOdLlP9A=
+X-Google-Smtp-Source: APXvYqzsutw8JX1C1W9FG7sib+B+4OAGI3CvszoRI5N8OgqkDU2mlJRTrqoizOVVLdtBUxo1JPxju90yjeRD59F8EPk=
+X-Received: by 2002:a2e:b61a:: with SMTP id r26mr19618749ljn.72.1580890738629;
+ Wed, 05 Feb 2020 00:18:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------F3FF70D4737419259F49BAF5"
-Content-Language: en-US
+Received: by 2002:a2e:b4c8:0:0:0:0:0 with HTTP; Wed, 5 Feb 2020 00:18:58 -0800 (PST)
+Reply-To: huanjlaying08@hotmail.com
+From:   Frau Huan Jlaying <venteradriaan808@gmail.com>
+Date:   Wed, 5 Feb 2020 00:18:58 -0800
+Message-ID: <CACNOTre9qBbw=x7OD4Nf8iV62mqb-AQkRbVy8B6d5mVXVtmxKw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------F3FF70D4737419259F49BAF5
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+--=20
+Sch=C3=B6nen Tag,
 
-Hi all,
+     Ich bin Frau Huan Jlaying, eine Mitarbeiterin der Wing Hang Bank
+hier in Hongkong. Kann ich einer =C3=9Cberweisung von 13.991.674 USD
+vertrauen? Kontaktieren Sie mich per E-Mail: huanjlaying08@hotmail.com
 
-Starting from Linux-4.15, VFS introduces optimizations, which
-are incompatible with Reiser4 (as well as with any FS possessing
-an advanced transaction manager). Here is the problematic commit:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aa65c29ce1b6e1990cd2c7d8004bbea7ff3aff38
 
-The attached patch fixes the problem. This patch is against
-Linux-5.4+reiser4. Please, apply.
-
-Later I'll prepare backports for all the mentioned kernels and will
-put them on Sourceforge. If someone urgently needs a backport, then
-let me know.
-
-Thanks,
-Edward.
-
---------------F3FF70D4737419259F49BAF5
-Content-Type: text/x-patch;
- name="reiser4-fix-lockup.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="reiser4-fix-lockup.patch"
-
-diff -urN linux-5.4.6/fs/reiser4/page_cache.c linux-5.4.6.patched/fs/reiser4/page_cache.c
---- linux-5.4.6/fs/reiser4/page_cache.c	2020-02-05 00:08:07.121592727 +0100
-+++ linux-5.4.6.patched/fs/reiser4/page_cache.c	2020-02-05 00:09:44.508645047 +0100
-@@ -549,7 +549,8 @@
- 	 */
- 	.releasepage = reiser4_releasepage,
- 	.direct_IO = NULL,
--	.migratepage = reiser4_migratepage
-+	.migratepage = reiser4_migratepage,
-+	.batch_lock_tabu = 1
- };
- 
- /* called just before page is released (no longer used by reiser4). Callers:
-diff -urN linux-5.4.6/fs/reiser4/plugin/object.c linux-5.4.6.patched/fs/reiser4/plugin/object.c
---- linux-5.4.6/fs/reiser4/plugin/object.c	2020-02-05 00:08:07.129592814 +0100
-+++ linux-5.4.6.patched/fs/reiser4/plugin/object.c	2020-02-05 00:09:44.508645047 +0100
-@@ -150,7 +150,8 @@
- 	.bmap = reiser4_bmap_dispatch,
- 	.invalidatepage = reiser4_invalidatepage,
- 	.releasepage = reiser4_releasepage,
--	.migratepage = reiser4_migratepage
-+	.migratepage = reiser4_migratepage,
-+	.batch_lock_tabu = 1
- };
- 
- /* VFS methods for symlink files */
-diff -urN linux-5.4.6/include/linux/fs.h linux-5.4.6.patched/include/linux/fs.h
---- linux-5.4.6/include/linux/fs.h	2020-02-05 00:08:07.135592878 +0100
-+++ linux-5.4.6.patched/include/linux/fs.h	2020-02-05 00:09:21.339394689 +0100
-@@ -409,6 +409,7 @@
- 	int (*swap_activate)(struct swap_info_struct *sis, struct file *file,
- 				sector_t *span);
- 	void (*swap_deactivate)(struct file *file);
-+	int batch_lock_tabu;
- };
- 
- extern const struct address_space_operations empty_aops;
-diff -urN linux-5.4.6/mm/truncate.c linux-5.4.6.patched/mm/truncate.c
---- linux-5.4.6/mm/truncate.c	2019-12-21 11:05:23.000000000 +0100
-+++ linux-5.4.6.patched/mm/truncate.c	2020-02-05 00:09:21.339394689 +0100
-@@ -360,6 +360,13 @@
- 				continue;
- 			}
- 			pagevec_add(&locked_pvec, page);
-+			if (mapping->a_ops->batch_lock_tabu)
-+				/*
-+				 * the file system doesn't allow to hold
-+				 * many pages locked, while calling
-+				 * ->invalidatepage() for one of them
-+				 */
-+				break;
- 		}
- 		for (i = 0; i < pagevec_count(&locked_pvec); i++)
- 			truncate_cleanup_page(mapping, locked_pvec.pages[i]);
-
---------------F3FF70D4737419259F49BAF5--
+Gr=C3=BC=C3=9Fe
