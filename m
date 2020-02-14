@@ -2,37 +2,42 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9295215DEE4
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 14 Feb 2020 17:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4033E15E10F
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 14 Feb 2020 17:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390252AbgBNQFw (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 14 Feb 2020 11:05:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56026 "EHLO mail.kernel.org"
+        id S2392662AbgBNQQt (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 14 Feb 2020 11:16:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47832 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390251AbgBNQFw (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:05:52 -0500
+        id S2392659AbgBNQQt (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:16:49 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0C85A24688;
-        Fri, 14 Feb 2020 16:05:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 763D12469A;
+        Fri, 14 Feb 2020 16:16:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696351;
-        bh=+y4TUkxDaRyUqP3FAdHw8MSgA1dwvEyfRjGmLs+5+nQ=;
+        s=default; t=1581697008;
+        bh=n11QlKoKBxyutbZj/PQ2zDMnJllH2zULDMkm5Sg16Fs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wyfq+yVuEeGYvIAlKaZ68tBtr67Tj1Pf5tpy3CPdr0i5pw1+Vx6LOPwthiFe1hcRm
-         cr+bDGhXOmVaNe/f54+3LWnBeJhEDLG5/rhy4Dn0B2tCjbFeny39ZOLmzeTa2Wx6BI
-         mV+Wmliects7MMuZVutKqwJMVybbE/C6tzUTs7xI=
+        b=D/uSrGFHijNc0/k6tADPHVX2Aath5+EDq3X+fXFqjdO8L0rIAbnL4oKniAXNLhFuD
+         94EAW6EnglRp0h5KturR6yKn//Do89PloMVwxHiSYIcpa8xWiEe/8se7GDTNLXQ1lt
+         negEuUcc1V7UXLk/SUbfJ6UWRpap6XtiYN5dRprM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jan Kara <jack@suse.cz>, Sasha Levin <sashal@kernel.org>,
-        reiserfs-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 185/459] reiserfs: Fix spurious unlock in reiserfs_fill_super() error handling
-Date:   Fri, 14 Feb 2020 10:57:15 -0500
-Message-Id: <20200214160149.11681-185-sashal@kernel.org>
+Cc:     Yunfeng Ye <yeyunfeng@huawei.com>,
+        zhengbin <zhengbin13@huawei.com>,
+        Hu Shiyuan <hushiyuan@huawei.com>,
+        Feilong Lin <linfeilong@huawei.com>, Jan Kara <jack@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>, reiserfs-devel@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 239/252] reiserfs: prevent NULL pointer dereference in reiserfs_insert_item()
+Date:   Fri, 14 Feb 2020 11:11:34 -0500
+Message-Id: <20200214161147.15842-239-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
-References: <20200214160149.11681-1-sashal@kernel.org>
+In-Reply-To: <20200214161147.15842-1-sashal@kernel.org>
+References: <20200214161147.15842-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,34 +47,42 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Yunfeng Ye <yeyunfeng@huawei.com>
 
-[ Upstream commit 4d5c1adaf893b8aa52525d2b81995e949bcb3239 ]
+[ Upstream commit aacee5446a2a1aa35d0a49dab289552578657fb4 ]
 
-When we fail to allocate string for journal device name we jump to
-'error' label which tries to unlock reiserfs write lock which is not
-held. Jump to 'error_unlocked' instead.
+The variable inode may be NULL in reiserfs_insert_item(), but there is
+no check before accessing the member of inode.
 
-Fixes: f32485be8397 ("reiserfs: delay reiserfs lock until journal initialization")
-Signed-off-by: Jan Kara <jack@suse.cz>
+Fix this by adding NULL pointer check before calling reiserfs_debug().
+
+Link: http://lkml.kernel.org/r/79c5135d-ff25-1cc9-4e99-9f572b88cc00@huawei.com
+Signed-off-by: Yunfeng Ye <yeyunfeng@huawei.com>
+Cc: zhengbin <zhengbin13@huawei.com>
+Cc: Hu Shiyuan <hushiyuan@huawei.com>
+Cc: Feilong Lin <linfeilong@huawei.com>
+Cc: Jan Kara <jack@suse.cz>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/reiserfs/super.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/reiserfs/stree.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/fs/reiserfs/super.c b/fs/reiserfs/super.c
-index d127af64283e3..a6bce5b1fb1dc 100644
---- a/fs/reiserfs/super.c
-+++ b/fs/reiserfs/super.c
-@@ -1948,7 +1948,7 @@ static int reiserfs_fill_super(struct super_block *s, void *data, int silent)
- 		if (!sbi->s_jdev) {
- 			SWARN(silent, s, "", "Cannot allocate memory for "
- 				"journal device name");
--			goto error;
-+			goto error_unlocked;
- 		}
- 	}
- #ifdef CONFIG_QUOTA
+diff --git a/fs/reiserfs/stree.c b/fs/reiserfs/stree.c
+index 0037aea97d39a..2946713cb00d6 100644
+--- a/fs/reiserfs/stree.c
++++ b/fs/reiserfs/stree.c
+@@ -2250,7 +2250,8 @@ int reiserfs_insert_item(struct reiserfs_transaction_handle *th,
+ 	/* also releases the path */
+ 	unfix_nodes(&s_ins_balance);
+ #ifdef REISERQUOTA_DEBUG
+-	reiserfs_debug(th->t_super, REISERFS_DEBUG_CODE,
++	if (inode)
++		reiserfs_debug(th->t_super, REISERFS_DEBUG_CODE,
+ 		       "reiserquota insert_item(): freeing %u id=%u type=%c",
+ 		       quota_bytes, inode->i_uid, head2type(ih));
+ #endif
 -- 
 2.20.1
 
