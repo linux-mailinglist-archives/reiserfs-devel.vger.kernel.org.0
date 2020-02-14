@@ -2,39 +2,34 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCCF515EF7C
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 14 Feb 2020 18:48:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A4B15F36E
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 14 Feb 2020 19:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388997AbgBNP7s (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 14 Feb 2020 10:59:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44770 "EHLO mail.kernel.org"
+        id S2389103AbgBNSLc (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 14 Feb 2020 13:11:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60958 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388991AbgBNP7r (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 14 Feb 2020 10:59:47 -0500
+        id S1731259AbgBNPx3 (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Fri, 14 Feb 2020 10:53:29 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6DDB1206D7;
-        Fri, 14 Feb 2020 15:59:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 16F4C2468D;
+        Fri, 14 Feb 2020 15:53:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581695986;
-        bh=X+eG9iyexQDwe4U+7lu+mRy9Zg8j10lWrXnxXR+W9FU=;
+        s=default; t=1581695608;
+        bh=+y4TUkxDaRyUqP3FAdHw8MSgA1dwvEyfRjGmLs+5+nQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ozsG58Wk8lgPtlpf8NVSxmUh5UdLYM/Amk5NXM0ZI3/bx1eRlTwI8k1GvWr45DbxE
-         GPytSKKp+Q+CglC/UcCIlz14IvSsY22KMRp4bc0wT+mB6TI8ZJIq1FUDuYfC4340X7
-         tlkI1uCiEf2SipgAoPup3pCM/XYE8zIrA/O/Ilfs=
+        b=09cutlUelTHQWMuGHMjFxvlwP4HnTd+kfdDrrBAb4RGz4b49GToCwdo9vh1GODPGh
+         pfsxfZheg0gM8dm2oJXLCGoOQtjwaVwJVgtM10V7rQjKJy3kB98TeZD5Okxa4WOcAw
+         dI1AzSkN3wyWtVKb/hByacKtPTIMuWt00Uh7jiCc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yunfeng Ye <yeyunfeng@huawei.com>,
-        zhengbin <zhengbin13@huawei.com>,
-        Hu Shiyuan <hushiyuan@huawei.com>,
-        Feilong Lin <linfeilong@huawei.com>, Jan Kara <jack@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>, reiserfs-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 508/542] reiserfs: prevent NULL pointer dereference in reiserfs_insert_item()
-Date:   Fri, 14 Feb 2020 10:48:20 -0500
-Message-Id: <20200214154854.6746-508-sashal@kernel.org>
+Cc:     Jan Kara <jack@suse.cz>, Sasha Levin <sashal@kernel.org>,
+        reiserfs-devel@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.5 211/542] reiserfs: Fix spurious unlock in reiserfs_fill_super() error handling
+Date:   Fri, 14 Feb 2020 10:43:23 -0500
+Message-Id: <20200214154854.6746-211-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
 References: <20200214154854.6746-1-sashal@kernel.org>
@@ -47,42 +42,34 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-From: Yunfeng Ye <yeyunfeng@huawei.com>
+From: Jan Kara <jack@suse.cz>
 
-[ Upstream commit aacee5446a2a1aa35d0a49dab289552578657fb4 ]
+[ Upstream commit 4d5c1adaf893b8aa52525d2b81995e949bcb3239 ]
 
-The variable inode may be NULL in reiserfs_insert_item(), but there is
-no check before accessing the member of inode.
+When we fail to allocate string for journal device name we jump to
+'error' label which tries to unlock reiserfs write lock which is not
+held. Jump to 'error_unlocked' instead.
 
-Fix this by adding NULL pointer check before calling reiserfs_debug().
-
-Link: http://lkml.kernel.org/r/79c5135d-ff25-1cc9-4e99-9f572b88cc00@huawei.com
-Signed-off-by: Yunfeng Ye <yeyunfeng@huawei.com>
-Cc: zhengbin <zhengbin13@huawei.com>
-Cc: Hu Shiyuan <hushiyuan@huawei.com>
-Cc: Feilong Lin <linfeilong@huawei.com>
-Cc: Jan Kara <jack@suse.cz>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: f32485be8397 ("reiserfs: delay reiserfs lock until journal initialization")
+Signed-off-by: Jan Kara <jack@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/reiserfs/stree.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/reiserfs/super.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/reiserfs/stree.c b/fs/reiserfs/stree.c
-index da9ebe33882b7..bb4973aefbb18 100644
---- a/fs/reiserfs/stree.c
-+++ b/fs/reiserfs/stree.c
-@@ -2246,7 +2246,8 @@ int reiserfs_insert_item(struct reiserfs_transaction_handle *th,
- 	/* also releases the path */
- 	unfix_nodes(&s_ins_balance);
- #ifdef REISERQUOTA_DEBUG
--	reiserfs_debug(th->t_super, REISERFS_DEBUG_CODE,
-+	if (inode)
-+		reiserfs_debug(th->t_super, REISERFS_DEBUG_CODE,
- 		       "reiserquota insert_item(): freeing %u id=%u type=%c",
- 		       quota_bytes, inode->i_uid, head2type(ih));
- #endif
+diff --git a/fs/reiserfs/super.c b/fs/reiserfs/super.c
+index d127af64283e3..a6bce5b1fb1dc 100644
+--- a/fs/reiserfs/super.c
++++ b/fs/reiserfs/super.c
+@@ -1948,7 +1948,7 @@ static int reiserfs_fill_super(struct super_block *s, void *data, int silent)
+ 		if (!sbi->s_jdev) {
+ 			SWARN(silent, s, "", "Cannot allocate memory for "
+ 				"journal device name");
+-			goto error;
++			goto error_unlocked;
+ 		}
+ 	}
+ #ifdef CONFIG_QUOTA
 -- 
 2.20.1
 
