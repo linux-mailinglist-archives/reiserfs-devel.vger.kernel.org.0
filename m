@@ -2,74 +2,63 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A4B15F36E
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 14 Feb 2020 19:21:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6ADC164BD6
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 19 Feb 2020 18:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389103AbgBNSLc (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 14 Feb 2020 13:11:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60958 "EHLO mail.kernel.org"
+        id S1726593AbgBSRZC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 19 Feb 2020 12:25:02 -0500
+Received: from scm.imp.edu.mx ([132.247.16.103]:30631 "EHLO scm.imp.edu.mx"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731259AbgBNPx3 (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 14 Feb 2020 10:53:29 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 16F4C2468D;
-        Fri, 14 Feb 2020 15:53:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581695608;
-        bh=+y4TUkxDaRyUqP3FAdHw8MSgA1dwvEyfRjGmLs+5+nQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=09cutlUelTHQWMuGHMjFxvlwP4HnTd+kfdDrrBAb4RGz4b49GToCwdo9vh1GODPGh
-         pfsxfZheg0gM8dm2oJXLCGoOQtjwaVwJVgtM10V7rQjKJy3kB98TeZD5Okxa4WOcAw
-         dI1AzSkN3wyWtVKb/hByacKtPTIMuWt00Uh7jiCc=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jan Kara <jack@suse.cz>, Sasha Levin <sashal@kernel.org>,
-        reiserfs-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 211/542] reiserfs: Fix spurious unlock in reiserfs_fill_super() error handling
-Date:   Fri, 14 Feb 2020 10:43:23 -0500
-Message-Id: <20200214154854.6746-211-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
-References: <20200214154854.6746-1-sashal@kernel.org>
+        id S1726518AbgBSRZC (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Wed, 19 Feb 2020 12:25:02 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by scm.imp.edu.mx (Postfix) with ESMTP id 36494195C0B;
+        Wed, 19 Feb 2020 09:09:23 -0600 (CST)
+X-Virus-Scanned: by SpamTitan at imp.edu.mx
+Received: from scm.imp.edu.mx (localhost [127.0.0.1])
+        by scm.imp.edu.mx (Postfix) with ESMTP id 9DD3A19040E;
+        Wed, 19 Feb 2020 06:10:24 -0600 (CST)
+Authentication-Results: scm.imp.edu.mx; none
+Received: from imp.edu.mx (unknown [10.249.93.105])
+        by scm.imp.edu.mx (Postfix) with ESMTP id BE87E1904D8;
+        Wed, 19 Feb 2020 05:45:07 -0600 (CST)
+Received: from localhost (localhost [127.0.0.1])
+        by imp.edu.mx (Postfix) with ESMTP id A91B91806263F6;
+        Wed, 19 Feb 2020 05:45:08 -0600 (CST)
+Received: from imp.edu.mx ([127.0.0.1])
+        by localhost (imp.edu.mx [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id NlnuyyeecA9G; Wed, 19 Feb 2020 05:45:08 -0600 (CST)
+Received: from localhost (localhost [127.0.0.1])
+        by imp.edu.mx (Postfix) with ESMTP id 89F4618062F21B;
+        Wed, 19 Feb 2020 05:45:08 -0600 (CST)
+X-Virus-Scanned: amavisd-new at imp.edu.mx
+Received: from imp.edu.mx ([127.0.0.1])
+        by localhost (imp.edu.mx [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id yvoPJga7FxZQ; Wed, 19 Feb 2020 05:45:08 -0600 (CST)
+Received: from [45.147.4.119] (unknown [45.147.4.119])
+        by imp.edu.mx (Postfix) with ESMTPSA id CED161806263F6;
+        Wed, 19 Feb 2020 05:45:06 -0600 (CST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: 19-02-2020
+To:     Recipients <mucios@imp.edu.mx>
+From:   "urs portmann" <mucios@imp.edu.mx>
+Date:   Wed, 19 Feb 2020 22:45:05 +1100
+Reply-To: onube@qq.com
+Message-Id: <20200219114506.CED161806263F6@imp.edu.mx>
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+Guten Morgen,
+                                          19-02-2020
+Wir haben versucht, Sie zu erreichen und haben noch nichts von Ihnen gehört. Haben Sie unsere letzte E-Mail über Ihre S.p.e.n.d.e erhalten? Wenn nicht, melden Sie sich bitte bei uns, um weitere Informationen zu erhalten.
 
-[ Upstream commit 4d5c1adaf893b8aa52525d2b81995e949bcb3239 ]
+Wir warten darauf, von Ihnen zu hören, sobald Sie diese Nachricht erhalten, die Sie bei der weiteren Vorgehensweise unterstützt.
 
-When we fail to allocate string for journal device name we jump to
-'error' label which tries to unlock reiserfs write lock which is not
-held. Jump to 'error_unlocked' instead.
-
-Fixes: f32485be8397 ("reiserfs: delay reiserfs lock until journal initialization")
-Signed-off-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/reiserfs/super.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/reiserfs/super.c b/fs/reiserfs/super.c
-index d127af64283e3..a6bce5b1fb1dc 100644
---- a/fs/reiserfs/super.c
-+++ b/fs/reiserfs/super.c
-@@ -1948,7 +1948,7 @@ static int reiserfs_fill_super(struct super_block *s, void *data, int silent)
- 		if (!sbi->s_jdev) {
- 			SWARN(silent, s, "", "Cannot allocate memory for "
- 				"journal device name");
--			goto error;
-+			goto error_unlocked;
- 		}
- 	}
- #ifdef CONFIG_QUOTA
--- 
-2.20.1
-
+Mfg
+urs portmann
