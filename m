@@ -2,105 +2,129 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEB81691F9
-	for <lists+reiserfs-devel@lfdr.de>; Sat, 22 Feb 2020 22:57:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D720174F1C
+	for <lists+reiserfs-devel@lfdr.de>; Sun,  1 Mar 2020 20:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726832AbgBVV5r (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sat, 22 Feb 2020 16:57:47 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:35467 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726828AbgBVV5q (ORCPT
+        id S1726758AbgCATNS (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 1 Mar 2020 14:13:18 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:38691 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726465AbgCATNR (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sat, 22 Feb 2020 16:57:46 -0500
-Received: by mail-wm1-f67.google.com with SMTP id b17so5536911wmb.0
-        for <reiserfs-devel@vger.kernel.org>; Sat, 22 Feb 2020 13:57:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-transfer-encoding:content-language;
-        bh=fZIy+UG2ubKTI2ASXiVYeZiUBFSAAEqvhf/Qo/9NhdA=;
-        b=OEu0acpjbdtPY+l47C9KRBJhukiCiA10qvLYCEXD64k6QEwZTWJEdL9Ck+H1tUKt6G
-         qMekTwfLH9m0AfPmQhUo0tbUxQeWodU2WaAf8yTYI6ki+gkl49CsOvl39J+jjdea9XIF
-         xOqArYRJ0mj4+HWwcmyL9fvyHxGCLbDKld+MnXI0GdrzefmgHHIDu+PO1V0L1WrbKddo
-         RN/J0ICtoVhiyKmLHO6ENcPytGlGz4kvE0hKxd/NtUvlTy2r9TZgIlW41ohvclkekbQV
-         5AzZljKghlqgjLFZZfng6vzoCgBVyApTIvXya/qnCbrPdoscMkruvKMr9SjkVMOUACCw
-         5u8Q==
+        Sun, 1 Mar 2020 14:13:17 -0500
+Received: by mail-il1-f200.google.com with SMTP id i67so9151642ilf.5
+        for <reiserfs-devel@vger.kernel.org>; Sun, 01 Mar 2020 11:13:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=fZIy+UG2ubKTI2ASXiVYeZiUBFSAAEqvhf/Qo/9NhdA=;
-        b=JJUb1hTX4TLw1Tc+6eE+gKiMcM0wssir7ZUfzxp82ONtxc8w3eTvPB4sTUjLe1Xb9x
-         XGnk87XZxeEAMsNbiNgJ0BCYBVvieiO3f3/aQkBCxDXCahcQiXO6i7YzNCgQtiwUZknR
-         tv1VjNVG1LYsm01XmI2j6cdhovcbSiCv5Vb9PvUXQsgZHt+3ZVjTLY6B9Ueuq+hvC6e3
-         OyXDRjBi4Xwl3aSoouCUe5d9Hm443uhPhmOhVg+70fg8FG91dV7O2yBUl7ztyuXbjDM/
-         EU6021Y25tZGuKxHJ6g8gggbImmRkUs5kMkElJ65GbWdTRpFguURub2mYIGRwqZZzRpN
-         idWw==
-X-Gm-Message-State: APjAAAWtW1VhHM1zMB1e5KWvXJKd+dKL9BKfvUGb3ckqislIFrPSrUcg
-        zBNHr+HjJDxZtsh7LpM9UjFU1Tao
-X-Google-Smtp-Source: APXvYqxZ8iyGJkk6HufvjFn0S2Fn5/qfNs6OCB9RmbYQtkSBYGMg9m/ieVuyj8J1SGj/6/hFeiy+lQ==
-X-Received: by 2002:a1c:e388:: with SMTP id a130mr11802833wmh.176.1582408665101;
-        Sat, 22 Feb 2020 13:57:45 -0800 (PST)
-Received: from [192.168.0.48] (HSI-KBW-046-005-005-219.hsi8.kabel-badenwuerttemberg.de. [46.5.5.219])
-        by smtp.gmail.com with ESMTPSA id h71sm11324982wme.26.2020.02.22.13.57.43
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 22 Feb 2020 13:57:44 -0800 (PST)
-Subject: Re: reiser4 patch for 5.5.1 and fs/fs-writeback.c
-To:     Metztli Information Technology <jose.r.r@metztli.com>,
-        reiserfs-devel@vger.kernel.org
-References: <20200222193446.C495950BFAD7@huitzilopochtli.metztli-it.com>
-From:   Edward Shishkin <edward.shishkin@gmail.com>
-Message-ID: <fb777d18-bcb6-9bd1-0b30-8e12b5643c21@gmail.com>
-Date:   Sat, 22 Feb 2020 22:57:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.5.2
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=jjlTu0sM1FCv2/JYXo8vf5D7M9vwMhnurnNYuMi1Y40=;
+        b=l/43ldFtbcNzDwIDkxAhUY6k2b3olnRSTkDyuhCuD2vPWiQ2RQU6LqI8B8O9mfbCdW
+         c5RDSCvPhf1T3XeLZ5MstlDfVTU9y4hOKVGro5eWDnt/eR8lPGFo1zlwCsMGocDFxtQb
+         ZgH59b8/5AYzmjgdWmpR6ARqIABB6KUTr/IKgdwwhWnDDfZyapOokXJaHJydpOQkuoUP
+         O/husdHl0emcbNpJLdMk6vrBWFnM2vKMYC3VFwY8NVhD0DTJNdQa8OC2UG6PiQMRftTe
+         VeXTL9HCuPbueVFJqmrISmGZpcOJ0ni8/kprVH8c/m/JEe2VPztaCnVGRrbZ9o/JXTEa
+         d8oQ==
+X-Gm-Message-State: APjAAAXIByryw/wNO36h45pTwaaHo4fRDvJk2/aAzRmAYrD6sOFC4Kh3
+        Dsvw7MzsOZQrz3SBH8nTdb9It+ISu4UWk/10N0J86lZKaEVu
+X-Google-Smtp-Source: APXvYqyFjTc73AWOvtUb7cRh7w+U2e7isTS1N0zF91fwpsZL0rGSYF5dTB/f+iWZMEVL4u6pCjKFXZejrSfDmG2IVnP9ZKt8AN5c
 MIME-Version: 1.0
-In-Reply-To: <20200222193446.C495950BFAD7@huitzilopochtli.metztli-it.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+X-Received: by 2002:a6b:8b10:: with SMTP id n16mr7999724iod.227.1583089995662;
+ Sun, 01 Mar 2020 11:13:15 -0800 (PST)
+Date:   Sun, 01 Mar 2020 11:13:15 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d6ce19059fcfdcd4@google.com>
+Subject: memory leak in reiserfs_parse_options
+From:   syzbot <syzbot+c9e294bbe0333a6b7640@syzkaller.appspotmail.com>
+To:     darrick.wong@oracle.com, deepa.kernel@gmail.com, jack@suse.cz,
+        jeffm@suse.com, jlayton@kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
+Hello,
+
+syzbot found the following crash on:
+
+HEAD commit:    63623fd4 Merge tag 'for-linus' of git://git.kernel.org/pub..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=164d5d29e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6951e37c8d613538
+dashboard link: https://syzkaller.appspot.com/bug?extid=c9e294bbe0333a6b7640
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1308bbede00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15cd8e45e00000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+c9e294bbe0333a6b7640@syzkaller.appspotmail.com
+
+executing program
+BUG: memory leak
+unreferenced object 0xffff88811df75f40 (size 32):
+  comm "syz-executor611", pid 7103, jiffies 4294943290 (age 13.730s)
+  hex dump (first 32 bytes):
+    73 79 7a 00 00 00 00 00 00 00 00 00 00 00 00 00  syz.............
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000adefbfe2>] kmemleak_alloc_recursive include/linux/kmemleak.h:43 [inline]
+    [<00000000adefbfe2>] slab_post_alloc_hook mm/slab.h:586 [inline]
+    [<00000000adefbfe2>] slab_alloc mm/slab.c:3320 [inline]
+    [<00000000adefbfe2>] __do_kmalloc mm/slab.c:3654 [inline]
+    [<00000000adefbfe2>] __kmalloc_track_caller+0x165/0x300 mm/slab.c:3671
+    [<000000006e7fd3b2>] kstrdup+0x3a/0x70 mm/util.c:60
+    [<00000000f4f9470a>] reiserfs_parse_options+0x94c/0xe80 fs/reiserfs/super.c:1277
+    [<0000000080f3e2df>] reiserfs_fill_super+0x1a1/0x10e0 fs/reiserfs/super.c:1941
+    [<00000000f75361a0>] mount_bdev+0x1ce/0x210 fs/super.c:1417
+    [<00000000b8c200cc>] get_super_block+0x35/0x40 fs/reiserfs/super.c:2606
+    [<00000000f4439f43>] legacy_get_tree+0x27/0x80 fs/fs_context.c:622
+    [<000000008eb8d222>] vfs_get_tree+0x2d/0xe0 fs/super.c:1547
+    [<00000000367f5f92>] do_new_mount fs/namespace.c:2822 [inline]
+    [<00000000367f5f92>] do_mount+0x97c/0xc80 fs/namespace.c:3107
+    [<0000000000ddb42a>] __do_sys_mount fs/namespace.c:3316 [inline]
+    [<0000000000ddb42a>] __se_sys_mount fs/namespace.c:3293 [inline]
+    [<0000000000ddb42a>] __x64_sys_mount+0xc0/0x140 fs/namespace.c:3293
+    [<00000000a60abc01>] do_syscall_64+0x73/0x220 arch/x86/entry/common.c:294
+    [<000000001bd2aaac>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+BUG: memory leak
+unreferenced object 0xffff88811df755c0 (size 32):
+  comm "syz-executor611", pid 7103, jiffies 4294943290 (age 13.730s)
+  hex dump (first 32 bytes):
+    73 79 7a 00 00 00 00 00 00 00 00 00 00 00 00 00  syz.............
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000adefbfe2>] kmemleak_alloc_recursive include/linux/kmemleak.h:43 [inline]
+    [<00000000adefbfe2>] slab_post_alloc_hook mm/slab.h:586 [inline]
+    [<00000000adefbfe2>] slab_alloc mm/slab.c:3320 [inline]
+    [<00000000adefbfe2>] __do_kmalloc mm/slab.c:3654 [inline]
+    [<00000000adefbfe2>] __kmalloc_track_caller+0x165/0x300 mm/slab.c:3671
+    [<000000006e7fd3b2>] kstrdup+0x3a/0x70 mm/util.c:60
+    [<00000000f4f9470a>] reiserfs_parse_options+0x94c/0xe80 fs/reiserfs/super.c:1277
+    [<0000000080f3e2df>] reiserfs_fill_super+0x1a1/0x10e0 fs/reiserfs/super.c:1941
+    [<00000000f75361a0>] mount_bdev+0x1ce/0x210 fs/super.c:1417
+    [<00000000b8c200cc>] get_super_block+0x35/0x40 fs/reiserfs/super.c:2606
+    [<00000000f4439f43>] legacy_get_tree+0x27/0x80 fs/fs_context.c:622
+    [<000000008eb8d222>] vfs_get_tree+0x2d/0xe0 fs/super.c:1547
+    [<00000000367f5f92>] do_new_mount fs/namespace.c:2822 [inline]
+    [<00000000367f5f92>] do_mount+0x97c/0xc80 fs/namespace.c:3107
+    [<0000000000ddb42a>] __do_sys_mount fs/namespace.c:3316 [inline]
+    [<0000000000ddb42a>] __se_sys_mount fs/namespace.c:3293 [inline]
+    [<0000000000ddb42a>] __x64_sys_mount+0xc0/0x140 fs/namespace.c:3293
+    [<00000000a60abc01>] do_syscall_64+0x73/0x220 arch/x86/entry/common.c:294
+    [<000000001bd2aaac>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
 
-On 02/22/2020 08:34 PM, Metztli Information Technology wrote:
-> On Sat, Feb 22, 2020 at 3:56 AM Edward Shishkin <edward.shishkin@gmail.com> wrote:
->> On 02/22/2020 05:51 AM, Metztli Information Technology wrote:
->>> Niltze, Ed-
->>>
->>> Starting with kernel 5.4.19, linux/fs/fs-writeback.c , at line 2066, changes
->>> from
->>> set_worker_desc("flush-%s", dev_name(wb->bdi->dev));
->>>
->>> to
->>> set_worker_desc("flush-%s", bdi_dev_name(wb->bdi));
->>>
->>> I realized that when I was hacking 5.4.19 and, subsequently, my currently running kernel --as there was no RC3:
->>>
->>> uname -a
->>> Linux huitzilopochtli 5.4.0-4+reiser4.0.2-amd64 #1 SMP Debian 5.4.20-1+reiser4.0.2 (2020-02-14) x86_64 GNU/Linux
->>>
->>> < https://sourceforge.net/projects/metztli-reiser4/files/Reiser4-SFRN-4.0.2_Linux-5.4.20-1-RC2_for-Debian_Buster/ >
->>>
->>>
->>> I have just built 5.5.5-1 and realized, upon applying reiser4-for-5.5.1.patch.gz, that your patch should be modified
->>> Â  accordingly; else, the patch will fail and will necessitate manual intervention, i.e., similar to 5.4.18 vs 5.4.19:
->>>
->>> < https://metztli.it/readOnlyEphemeral/fs-writeback_c.png >
->> so, everything works fine after that "manual intervention"?
-> Indeed, Ed. No issues thus far. I upgraded my local dev environment to 5.4.20-1+reiser4 on February 15, 2020; in such environment I have built several PHP-7.3 iterations and I also built kernel 5.5.5-1+reiser4 yesterday. Additionally, replaced 5.4.20-1+reiser4 cloud flavour in a Google Compute Engine (GCE) customized Zstd transparent compression instance -- which hosts multiple PHP and Ruby applications and functions as a media / web server, as well -- without issues thus far.
 
-All the problems comes from upstream. Specifically from VFS and the 
-block layer. Not from Debian.
-I'll try to prepare instructions on how to find problematic commit by 
-bisecting.
-The bad news is that the changes coming from there are clearly destructive.
-Consider, for example, this "optimization":
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aa65c29ce1b6e1990cd2c7d8004bbea7ff3aff38
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-What an idiot one need to be in order to lock up a lot of pages at once 
-at the VFS level? :((( Sigh..
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
