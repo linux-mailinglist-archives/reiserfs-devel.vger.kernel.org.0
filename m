@@ -2,67 +2,67 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE85E1781CF
-	for <lists+reiserfs-devel@lfdr.de>; Tue,  3 Mar 2020 20:02:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A68E178DB6
+	for <lists+reiserfs-devel@lfdr.de>; Wed,  4 Mar 2020 10:46:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387540AbgCCSGv (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 3 Mar 2020 13:06:51 -0500
-Received: from mail-il1-f194.google.com ([209.85.166.194]:37100 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732568AbgCCSGv (ORCPT
+        id S1729356AbgCDJqp (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 4 Mar 2020 04:46:45 -0500
+Received: from correo.santafe.edu.ar ([200.12.192.40]:42646 "EHLO
+        correo.santafe.edu.ar" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729264AbgCDJqk (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 3 Mar 2020 13:06:51 -0500
-Received: by mail-il1-f194.google.com with SMTP id a6so3605182ilc.4
-        for <reiserfs-devel@vger.kernel.org>; Tue, 03 Mar 2020 10:06:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=42VRx4KA+cD1ZZnhz/34yl/kjJSKnU+ahvHX6e7S6BM=;
-        b=s5F7HbUzu8PML3bbwUb0UiWMLxdDV1JMTrGB1diF7j50Pe2i5JusS4dTXC0p3rExzp
-         cY/x7luWCmVb66f62SzrgdJvxs7/j3NJru6nHfIKzRtQAHP/QiUX+9Fxv+m1wN4gQzzY
-         +jjuig6xR7RAqw+MIiBX3i2uHmdSDp6lgW7BUEE4J0nx4ic16VVvifUjTqzWluXIO6SB
-         gFPHYOShXu+oflMZeXqfzV8qEViULYcSVf7VZhRL7y4I3L9jOLC3/ScDsHEDAOdf0Fe6
-         QdnRPBEgeUc2awJzoN0nmU5gJTV30lWVFbdeLw3Tofxea+Esu7kobg1kYpUATT/2ux5Y
-         OB+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=42VRx4KA+cD1ZZnhz/34yl/kjJSKnU+ahvHX6e7S6BM=;
-        b=n43JKohnQ14758LrjNXCApDj6ePaTLis8eE8b33JcIM+5wfrmTj46eFJYdq3dUctaz
-         58Ko399RtBaInJtE8nEnf5cmmEK9jE4RDT72sfHuvoZSyOPxz0BhcT82YMwdVdX727fE
-         n4pn7cvpI3pf37i1xNcxO33gG5JO59M3jjNG+LqalOkW5H+5MM2JJv6H5t1ksnD4zlgS
-         CMEH0+SnrNBdtNni5El1wTnuoh3Fx+QV8rGX38eFDekAXx8kf49xU2FaqNvMVI2HFIZc
-         hvn75IsGaXOQrREUcmwsRqTqSFy2+s+nIvaEUxon75XK0gAdvkGGfQ3Fq6s1xC5AwJEI
-         x8+A==
-X-Gm-Message-State: ANhLgQ1k01E2V9LdLNLtGROZ+KQjLZoP96NI+4CpSQndekWCHn9sPdej
-        FLcLPNTUvm+wrp4VSE7jl7abnDV/ZywaaWiXHTQ=
-X-Google-Smtp-Source: ADFU+vsVQVdjikFcraXDO/5V5Yhfad6CZUwvCLoUcdzG0PIo538vbAX5IzyZAELLyuwZfYgkmlgSjyYyK00O03z4A1Y=
-X-Received: by 2002:a92:b506:: with SMTP id f6mr6045351ile.103.1583258810372;
- Tue, 03 Mar 2020 10:06:50 -0800 (PST)
+        Wed, 4 Mar 2020 04:46:40 -0500
+Received: from correo.santafe.edu.ar (localhost [127.0.0.1])
+        by correo.santafe.edu.ar (Postfix) with ESMTP id 48XTY93PK5zkQx
+        for <reiserfs-devel@vger.kernel.org>; Wed,  4 Mar 2020 06:46:37 -0300 (-03)
+Authentication-Results: correo.santafe.edu.ar (amavisd-new);
+        dkim=pass (1024-bit key) reason="pass (just generated, assumed good)"
+        header.d=santafe.edu.ar
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=santafe.edu.ar;
+         h=content-transfer-encoding:organization:message-id:user-agent
+        :reply-to:to:from:from:date:date:content-type:content-type
+        :mime-version; s=dkim; t=1583315197; x=1585907198; bh=Ao7jDPwlEb
+        jT3U5mP1BDfOLLxz1hLgn4E8TYJSHmOYU=; b=d3UCnLy8SJsBHJIPbODumWKAjB
+        bqgeAhUPaDdTNA+UOg6lugazWHXcoaivjfgvUsri2ZPJtwWpWicmgp8OWWvHIgvG
+        80D7SRzSjuJHrQP54uPUV8EuaobB8RCZg9w7u8WCXhJNEnxkZlVQcbvVn/Ld3vie
+        gLB+uIc9ULXpW0TP0=
+X-Virus-Scanned: Debian amavisd-new at debian9-asiserver.santafe.gob.ar
+X-Spam-Flag: NO
+X-Spam-Score: 3.271
+X-Spam-Level: ***
+X-Spam-Status: No, score=3.271 tagged_above=2 required=6.2
+        tests=[ALL_TRUSTED=-1, FREEMAIL_FORGED_REPLYTO=2.503,
+        LOTS_OF_MONEY=0.001, MISSING_SUBJECT=1.767]
+        autolearn=no autolearn_force=no
+Received: from correo.santafe.edu.ar ([127.0.0.1])
+        by correo.santafe.edu.ar (correo.santafe.edu.ar [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id VU0OWpOUOgF0 for <reiserfs-devel@vger.kernel.org>;
+        Wed,  4 Mar 2020 06:46:37 -0300 (-03)
+Received: from localhost (localhost [127.0.0.1])
+        by correo.santafe.edu.ar (Postfix) with ESMTPSA id 48XTRj53W4zjN8;
+        Wed,  4 Mar 2020 06:41:53 -0300 (-03)
 MIME-Version: 1.0
-Received: by 2002:a02:9f04:0:0:0:0:0 with HTTP; Tue, 3 Mar 2020 10:06:49 -0800 (PST)
-Reply-To: dr.challynoah@gmail.com
-From:   DR CHALLY NOAH <mayorabrahamedge404@gmail.com>
-Date:   Tue, 3 Mar 2020 19:06:49 +0100
-Message-ID: <CALqVJWeC6HBrRgr4uBSZq1w12dBC_RHwpd8_CGoFdL1uY-mThg@mail.gmail.com>
-Subject: Hello Dear
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Date:   Wed, 04 Mar 2020 01:41:53 -0800
+From:   Julie Leach <msuperior33_armstrong@santafe.edu.ar>
 To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Reply-To: julieleeach@gmail.com
+User-Agent: Roundcube Webmail
+Message-ID: <b665d563143e6bd1040b82fec960c164@santafe.edu.ar>
+X-Sender: msuperior33_armstrong@santafe.edu.ar
+Organization: julieleeach@gmail.com
+Content-Transfer-Encoding: quoted-printable
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello Dear,
-What Have Kept You Waiting To Claim Your $600,000.00 USD Compensation Award?
-This said fund was issued out by the UNITED NATIONS To compensate
-you.Please If You Have Not Claim Your Fund (Award),Kindly contact me
-at   DR.CHALLYNOAH@GMAIL.COM   for further details on how to proceed your
-fund (award)release to you or better still reply back Immediately You
-Receive This Information For An Urgent Confirmation And Release Of Your
-Fund To You Without Delays, as your email was listed among those to be
-compensated this year.Congratulations..
-Best Regards,
-Dr Chally Noah.
-Minister Of Finance On Foreign Remittance:
+
+
+--=20
+Hallo Liebes, ich habe eine Spende von 3,000,000.00 Euro, die ich Ihnen=20
+als Wohlt=C3=A4tigkeitsorganisation zur Verf=C3=BCgung gestellt habe, um =
+den=20
+weniger Privilegierten und Waisen in Ihrer Gemeinde zu helfen. Bitte=20
+antworten Sie =C3=BCber: julieleeach@gmail.com
