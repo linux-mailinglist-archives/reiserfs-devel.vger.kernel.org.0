@@ -2,48 +2,48 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13EEC185A25
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 15 Mar 2020 06:12:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3540185AC9
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 15 Mar 2020 07:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726587AbgCOFMb (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sun, 15 Mar 2020 01:12:31 -0400
-Received: from correo.santafe.edu.ar ([200.12.192.40]:35910 "EHLO
+        id S1727035AbgCOGmW (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 15 Mar 2020 02:42:22 -0400
+Received: from correo.santafe.edu.ar ([200.12.192.40]:38582 "EHLO
         correo.santafe.edu.ar" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726214AbgCOFMb (ORCPT
+        with ESMTP id S1726963AbgCOGmW (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sun, 15 Mar 2020 01:12:31 -0400
+        Sun, 15 Mar 2020 02:42:22 -0400
 Received: from correo.santafe.edu.ar (localhost [127.0.0.1])
-        by correo.santafe.edu.ar (Postfix) with ESMTP id 48fvQQ0Wj3z9B9k
-        for <reiserfs-devel@vger.kernel.org>; Sat, 14 Mar 2020 17:33:02 -0300 (-03)
+        by correo.santafe.edu.ar (Postfix) with ESMTP id 48g8f65MNhzJxqL
+        for <reiserfs-devel@vger.kernel.org>; Sun, 15 Mar 2020 03:29:02 -0300 (-03)
 Authentication-Results: correo.santafe.edu.ar (amavisd-new);
         dkim=pass (1024-bit key) reason="pass (just generated, assumed good)"
         header.d=santafe.edu.ar
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=santafe.edu.ar;
          h=content-transfer-encoding:organization:message-id:user-agent
         :reply-to:subject:subject:to:from:from:date:date:content-type
-        :content-type:mime-version; s=dkim; t=1584217981; x=1586809982;
-         bh=Ch8MeA3o5Ps+sTgYQ/2xKYhD8wOfsokQchWDCmvcX0s=; b=RgUPXMsEjZYo
-        vPmiF1wBuov/IYuWghXbHEGA9sYafsXWFPNnfk5cN9zXYPToMFLgelNXo/XwECI3
-        5eATdIadaj1SgoxE9OUIuEENIa6UiJxBUuE3rE405AXYhD6PPDvshb0cIlEFqFRp
-        i6Hyg/NpbYGINWV59YFS+j84BAXlJM4=
+        :content-type:mime-version; s=dkim; t=1584253742; x=1586845743;
+         bh=Ch8MeA3o5Ps+sTgYQ/2xKYhD8wOfsokQchWDCmvcX0s=; b=pmEkegdc5s9S
+        8lrucJoW7sg1wPtgC1mZi2i23bKKmVwPm3YER+0eO5iKQQRW/b8SXrLrPpvqOhIx
+        a+ywHzzhpwvqbAL10vefU/0y81U7WH2IZt1M/mMP6lj+6aSFajakLXsUTlEXaapO
+        lNMsV6oGvdCCCNvGM5Eb0SLzMjMbyog=
 X-Virus-Scanned: Debian amavisd-new at debian9-asiserver.santafe.gob.ar
 Received: from correo.santafe.edu.ar ([127.0.0.1])
         by correo.santafe.edu.ar (correo.santafe.edu.ar [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 7edLwanTE7oF for <reiserfs-devel@vger.kernel.org>;
-        Sat, 14 Mar 2020 17:33:01 -0300 (-03)
+        with ESMTP id ean-NVIwiPhU for <reiserfs-devel@vger.kernel.org>;
+        Sun, 15 Mar 2020 03:29:02 -0300 (-03)
 Received: from localhost (localhost [127.0.0.1])
-        by correo.santafe.edu.ar (Postfix) with ESMTPSA id 48fvDv2KFpz4GY1;
-        Sat, 14 Mar 2020 17:24:47 -0300 (-03)
+        by correo.santafe.edu.ar (Postfix) with ESMTPSA id 48g8QT20rRzJyS0;
+        Sun, 15 Mar 2020 03:18:57 -0300 (-03)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8;
  format=flowed
-Date:   Sat, 14 Mar 2020 21:24:47 +0100
+Date:   Sun, 15 Mar 2020 07:18:57 +0100
 From:   Acaceres <acaceres@santafe.edu.ar>
 To:     undisclosed-recipients:;
 Subject: AW:
 Reply-To: niklaszennstromcare@gmail.com
 User-Agent: Roundcube Webmail
-Message-ID: <135a46db21255f5ff81adb384b2edc5f@santafe.edu.ar>
+Message-ID: <61aa31341c3d24af4ce9c1726173c9d6@santafe.edu.ar>
 X-Sender: acaceres@santafe.edu.ar
 Organization: niklaszennstromcare@gmail.com
 Content-Transfer-Encoding: quoted-printable
