@@ -2,62 +2,79 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C04188321
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 17 Mar 2020 13:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E3018CC8E
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 20 Mar 2020 12:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726949AbgCQMJx (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 17 Mar 2020 08:09:53 -0400
-Received: from sonic316-53.consmr.mail.ne1.yahoo.com ([66.163.187.179]:45511
-        "EHLO sonic316-53.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726272AbgCQMJx (ORCPT
+        id S1726726AbgCTLTr (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 20 Mar 2020 07:19:47 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:46933 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726805AbgCTLTr (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 17 Mar 2020 08:09:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1584446992; bh=kcevCRoll2+Bsa3FDERpIV72LVcB1A4YV1b5N2AWYBk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=R2hxu2RQ8hOyhS7sTKSo4jdv8WKwY6BR3khPfDSFYvuuuAfycY9D3AVw95K7tnHBux7FY/hdMiwfl5jLAj+Ktj/ZiHW7nTZFT6UErMO7c7e0KiE4kQRQc111ifcQnl/C56ASe/K2jhelpwQs0+PIbRd0clWII8pqRHHIOeZ0YpMiWIr4Ltr2zCsqzONK39bcZ0s0hAc3ll4QdDxc46ptRQ/Ti7W7pRVV4l3nKFY43httbQeO9QESXxEHmGGu6N66RUELyo6Zrt0h3knrgycG2gcmAhW16M0mshHoYVqeB+nstqnZ01ecbgjKhV/ldzX68I9rcShGbzAtSRxpBqn0Kw==
-X-YMail-OSG: qdCr2PsVM1nIwIx1AKy.e0FCS.rAd5ac4MxA9hTyV2WuoJ1XEsqzJcIb9i4xyJa
- JzIp.EWFG0G7AGEzQCj.2mq4TQWDNbguQgmjs7p9k6O5aFvfST.A.ssV88.k_2ER1CE08MXbWGq9
- cjSA_M19ZjX17gMVCIHzAhMg0XsT0nWMAju52QIT1uf6m8UOb75.tfWWPupeOMaXV2Fjfy3t6N9Y
- ABBVwXHy7Kpl0yEREGRbWZ2NUdvI_DO.cFlzQ7Xwfc2V0SGhHNjGjRqZLi5CekKLnnc1HOyRG7sI
- g7Zblgddn8N9zQgkTr6G2T3uu1aBQMXiGWCsw_z6zY7LfbPlxliLCk7skpP5BhJEwWSBnoy38u6S
- fBCCylvXr5Ou56L2cqtFEEVb6aSFfrzxZGkAZ6wxPu5ntI__tL8QYiLet6.I0ZWVgGJbuQqQ8zU9
- 9B7UH4zgBSdBexTtLk3Wn8QprmcYHgJ_Aplmr2.TokMfdTXynEnU2SiocvUnFDC9sZrVG_unO2gn
- YMOwlpa9d9WbmsswieS6PR6OEWjhGTZrj_6DP0iWnE5lq5gXt1Qu0ztD6H75TDjZY6ckR.3y3TcR
- 4mpdwDsehReD2BkyjQcYarsuNZNY92.2XQesOMmPaQGmR9lMp.z8PXHe8l02GeCcycyNfPISpwil
- QcM6PX0Fe8_4CDS3Cj7_zzcL3LnmvqTJLSntRRcKfzNuAGd4p.ri3Yk_usTs8ykC7bjtZLoCa1TB
- NwcYhq70JpJ5IRRuQLKsEpITWLCSYr5eDjCin8iUW4dCYntT1nwjl5p.bigHYbRR4W5sCE6rd9nz
- aMcqagDJHNc5waXavXbVsy27ncfi8giW9ZIwXFSiDDoiWvHNRR3H5ArSEOjFeX6modl2ks.JWeXv
- JxquImzCsr1WmJc8fOuu9yBsQVaPVfutUZjGLfZVRFVYCgXCgeBsoQdVq04sxTnzgsrZ5CXxLf8u
- RIjT5xqD9W88z6.MCDM7rcQUsmJwA8UKINsVHGA9K2fFetL1D0VODMZOqAx5IUc0rwsYaB3G13Yv
- X6G.hWRHbOiH546X7ZjP_Xli7EMoLYAGVJoC_a0U3F2mXOWhA1NyAGt0SpmG72VTDX6N.z1PkK.K
- ifEt0nunX8cHgTPVIlJ8G8owOLFlZuQTCGGmzi5etW9pZBNckyKcXi5VEi5dHd_7Vs0m4mPEVgfV
- RrrvmAJ.Sf_X23bhvIKllBqqkrYSslD5HB9LzuCEp_aZek9qb6ulxCwVi99neD.Ho2Au4Nk9E8FS
- K4SWvuaPKNb7.avL9W0mtC1ExSW4YKs5aCPbnmIWeSZVBynhRZQfulD9YFVngEP2J2plifXjqzVz
- LF0Cs3pMJQ7QIj9YuNX3M8pLxtOWKycpa
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Tue, 17 Mar 2020 12:09:52 +0000
-Date:   Tue, 17 Mar 2020 12:07:51 +0000 (UTC)
-From:   Stephen Li <stenn7@gabg.net>
-Reply-To: stephli947701@gmail.com
-Message-ID: <442828441.1833677.1584446871712@mail.yahoo.com>
-Subject: REF
+        Fri, 20 Mar 2020 07:19:47 -0400
+Received: by mail-ot1-f67.google.com with SMTP id 111so5527688oth.13
+        for <reiserfs-devel@vger.kernel.org>; Fri, 20 Mar 2020 04:19:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=6w+aFSJ+2vZ3lBtg9xVXLOFVqSNoMPd625E7FNYobb8=;
+        b=UHL0kgD4cug08zC0MRvxo3drDB+ChClVE0q9tOk1MQetUg0+I5ub9UN4JNt/5k0pVg
+         ZZ50Xz+WF+fxx2x99F4OWmh3u+pG45K30pNQtebp/cXYcAxKBr03CYvlgyXveQEcMsgN
+         zJOuwNf48+6p608XDXxI1lA9NfAoSTTueOW79vwsxr+KRjizLpfMwKlWc5RewUb2iwaK
+         c5jwJvwCVq/GGdHK9hCQNv+r1FAi97IjZTsdakc+FRfdqsg+7UlObWSNoCAPTzXoSo24
+         zLWDOlrfuxfb6T/mx8MXIOqQPfP7KLaHm804uTNFJaTnstb/OIVMuEmTcf6w/L5qHtYJ
+         rpag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=6w+aFSJ+2vZ3lBtg9xVXLOFVqSNoMPd625E7FNYobb8=;
+        b=Vp2SU7P963C0+0uJEwmBTNJ8WuZNviUh+74e1zAodON/OYGpXWNtxU8cPgKMhgsHja
+         ejbfWp2sMduVKOfj9HpsGJOMfMyUuAUnCVkdxuEjWqX1rxwk++8NnmTGz60dFHcvIkUO
+         jptz9GNP8q4ScCaGlfDBDNL7AHXG7oHkKcALd9eVU5pTl6TK1kQ1S0Ce6u5T/AywqAyM
+         +noCTok3IJrroHbeHgNAknwaV+s4BkcnI02rTI7/DUOjXkLe7buS7tOcCkvudeY6lqJ/
+         2//3tuqWOAejQ6ZUcY3FPRMn9r4zbGdJtezmC6IH2cwId3XNRPS1vwFLSniuOlQKDq9G
+         0k8w==
+X-Gm-Message-State: ANhLgQ2jfjr4NJyooyeeuHiky1hnR5eqsLRZNbw9BtWjzWWBByf1sxdk
+        HfA5sh010T79Za+87If5GONzpINNH5UCUgv75vw=
+X-Google-Smtp-Source: ADFU+vtLc0vveIosB8f2h8M1zIStVus3qPsLsVZrey+Z2SvyRwgJNUw37rE5mGiHXxgZeOm3zyfF+wkBbZ2eoIHJfds=
+X-Received: by 2002:a05:6830:3151:: with SMTP id c17mr6547906ots.310.1584703186754;
+ Fri, 20 Mar 2020 04:19:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <442828441.1833677.1584446871712.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15342 YMailNodin Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+Received: by 2002:a05:6838:40c6:0:0:0:0 with HTTP; Fri, 20 Mar 2020 04:19:46
+ -0700 (PDT)
+From:   ECOWAS COMMITEE <ecowasmonitoringcommitteeabj@gmail.com>
+Date:   Fri, 20 Mar 2020 11:19:46 +0000
+Message-ID: <CAHHubrZKtCjA328d83CfuxVt-kHkrCWqK9S=CcVit4JYuKoSVw@mail.gmail.com>
+Subject: HAPPY SURVIVAL OF CORONAVIRUS
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
+Dear Sir/Madam
 
+HAPPY SURVIVAL OF CORONAVIRUS
 
-Greetings,
-I was searching through a local business directory when I found your
-profile. I am Soliciting On-Behalf of my private client who is
-interested in having a serious business investment in your country. If
-you have a valid business, investment or project he can invest
-back to me for more details. Your swift response is highly needed.
-Sincerely
-Stephen Li
-Please response back to me with is my private email below for more details
-stephli947701@gmail.com
+We the West African Monitoring Committee of the West African Economic
+Community(ECOWAS)are contacting you for a business transaction which
+we feel will be of great interest to you.
+
+Our duty is to see to the coming in and out of funds into this sub
+region.There is a fund which we confiscated worth of $12.5 million
+dollars.We will like you to receive this fund on your name in your
+account and as well helping us in the investment.
+
+You are advised to contact us as soon as you get this message for
+details of the transaction if you find it interesting.
+
+Best Regards,
+
+Mr John Aka
+
+Chairman
+ECOWAS
+West African Monitoring Committee
+Tel 00225 6716 6756
+Abidjan Cote D'Ivoire
