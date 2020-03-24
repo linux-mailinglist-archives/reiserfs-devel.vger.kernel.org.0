@@ -2,36 +2,36 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB49319069E
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 24 Mar 2020 08:47:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B77D51906A2
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 24 Mar 2020 08:47:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727523AbgCXHro (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 24 Mar 2020 03:47:44 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:55224 "EHLO
+        id S1727532AbgCXHrr (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 24 Mar 2020 03:47:47 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:55244 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727380AbgCXHro (ORCPT
+        with ESMTP id S1727380AbgCXHrr (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 24 Mar 2020 03:47:44 -0400
+        Tue, 24 Mar 2020 03:47:47 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=Wz1KckdzQiBBsLPM0X/ib0LxYBGTqDZiRX8oa5i/3ek=; b=ngIKOd+lzQ36yblOx7fmVUE8b7
-        Nik8OR1gG0G+skxQ3oegFeQj4pPkm2NrwGKEwgu80SlCe+85BUR2ptswC3qk5i1OKnmkGyuRa0aLU
-        vAqoLw9kIomGjmVaaiza6tGKWvBRTZbMq66AoxxenNvDENb978dBpezYDUO2o0pQZ9/4dxz7VF2qz
-        xEzqc9o8qO87grVbpdCNRb2M/x+yfg4htG6uJjTB27xtDf61r9SO/ImLw37/13scSjv9V3223Xl43
-        xTAAtGhzX06wvHJTxAQPnPB9r7uXbSTW518lHLZeB2RRranAPffZiEAa321OPDMBhp4dXZH8rgeem
-        ZiA049og==;
+        bh=CwhMlmgOl8A5uIUM06YNpPhT9/ahPoKo8eaTFRx1HWc=; b=TGPBcimciroB8ho3bRUNA6X3nH
+        lzHoisrD0RiI6h9vR4vE0x2k+kvemgGVhkuLReTkTCB3QJq0aztApfwC0fRsOtFrEI2Jc0nYP56Nv
+        7/eMh0Rwvpj0weQFnFujDdkAnLn6Arf47JCSepPmvAuOleZR7PDX3QD1kai/Eqhb5ZdIZTuiFYh5W
+        ScDMxoHhsbeaTQouQP6rc04Y7CRY3HNhxFSkHEmMsuAX7v7F+O/aH18JVvZnD0IRNMoSnvqEOD2Sg
+        owrJJpSKsOv3+FII7Tc/Fztgk7yp4huQDECVJNKFbKCBtsVoTOLPUt0pKbXy5IzhuXw0TfMgWc0JD
+        gAQRmiXw==;
 Received: from [2001:4bb8:18c:2a9e:999c:283e:b14a:9189] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jGeHn-00018v-Rj; Tue, 24 Mar 2020 07:47:44 +0000
+        id 1jGeHq-000194-Lt; Tue, 24 Mar 2020 07:47:47 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     linux-block@vger.kernel.org, linux-raid@vger.kernel.org,
         linux-scsi@vger.kernel.org, reiserfs-devel@vger.kernel.org
-Subject: [PATCH 10/21] block: cleanup how md_autodetect_dev is called
-Date:   Tue, 24 Mar 2020 08:25:19 +0100
-Message-Id: <20200324072530.544483-11-hch@lst.de>
+Subject: [PATCH 11/21] block: remove warn_no_part
+Date:   Tue, 24 Mar 2020 08:25:20 +0100
+Message-Id: <20200324072530.544483-12-hch@lst.de>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200324072530.544483-1-hch@lst.de>
 References: <20200324072530.544483-1-hch@lst.de>
@@ -43,74 +43,80 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Add a new include/linux/raid/detect.h header to declare the
-md_autodetect_dev prototype which can be shared between md and
-the partition code.  Then use IS_BUILTIN to call it instead of the
-ifdef magic.
+The warn_no_part is initialized to 1 and never changed.  Remove
+it and execute the code keyed off from it unconditionally.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- block/partition-generic.c   | 11 ++++-------
- drivers/md/md.c             |  1 +
- include/linux/raid/detect.h |  3 +++
- 3 files changed, 8 insertions(+), 7 deletions(-)
- create mode 100644 include/linux/raid/detect.h
+ block/partitions/amiga.c | 10 ++++------
+ block/partitions/check.c |  7 ++-----
+ block/partitions/check.h |  3 ---
+ 3 files changed, 6 insertions(+), 14 deletions(-)
 
-diff --git a/block/partition-generic.c b/block/partition-generic.c
-index fef6bacb2bbb..4d771ae835ed 100644
---- a/block/partition-generic.c
-+++ b/block/partition-generic.c
-@@ -18,14 +18,11 @@
- #include <linux/ctype.h>
- #include <linux/genhd.h>
- #include <linux/blktrace_api.h>
-+#include <linux/raid/detect.h>
- #include "blk.h"
+diff --git a/block/partitions/amiga.c b/block/partitions/amiga.c
+index 560936617d9c..7fecc760b78f 100644
+--- a/block/partitions/amiga.c
++++ b/block/partitions/amiga.c
+@@ -42,9 +42,8 @@ int amiga_partition(struct parsed_partitions *state)
+ 			goto rdb_done;
+ 		data = read_part_sector(state, blk, &sect);
+ 		if (!data) {
+-			if (warn_no_part)
+-				pr_err("Dev %s: unable to read RDB block %d\n",
+-				       bdevname(state->bdev, b), blk);
++			pr_err("Dev %s: unable to read RDB block %d\n",
++			       bdevname(state->bdev, b), blk);
+ 			res = -1;
+ 			goto rdb_done;
+ 		}
+@@ -85,9 +84,8 @@ int amiga_partition(struct parsed_partitions *state)
+ 		blk *= blksize;	/* Read in terms partition table understands */
+ 		data = read_part_sector(state, blk, &sect);
+ 		if (!data) {
+-			if (warn_no_part)
+-				pr_err("Dev %s: unable to read partition block %d\n",
+-				       bdevname(state->bdev, b), blk);
++			pr_err("Dev %s: unable to read partition block %d\n",
++			       bdevname(state->bdev, b), blk);
+ 			res = -1;
+ 			goto rdb_done;
+ 		}
+diff --git a/block/partitions/check.c b/block/partitions/check.c
+index ffe408fead0c..8fe46881ef63 100644
+--- a/block/partitions/check.c
++++ b/block/partitions/check.c
+@@ -37,8 +37,6 @@
+ #include "sysv68.h"
+ #include "cmdline.h"
  
- #include "partitions/check.h"
- 
--#ifdef CONFIG_BLK_DEV_MD
--extern void md_autodetect_dev(dev_t dev);
--#endif
-- 
- static ssize_t part_partition_show(struct device *dev,
- 				   struct device_attribute *attr, char *buf)
- {
-@@ -407,10 +404,10 @@ static bool blk_add_partition(struct gendisk *disk, struct block_device *bdev,
- 		return true;
+-int warn_no_part = 1; /*This is ugly: should make genhd removable media aware*/
+-
+ static int (*check_part[])(struct parsed_partitions *) = {
+ 	/*
+ 	 * Probe partition formats with tables at disk address 0
+@@ -186,9 +184,8 @@ check_partition(struct gendisk *hd, struct block_device *bdev)
+ 	/* The partition is unrecognized. So report I/O errors if there were any */
+ 		res = err;
+ 	if (res) {
+-		if (warn_no_part)
+-			strlcat(state->pp_buf,
+-				" unable to read partition table\n", PAGE_SIZE);
++		strlcat(state->pp_buf,
++			" unable to read partition table\n", PAGE_SIZE);
+ 		printk(KERN_INFO "%s", state->pp_buf);
  	}
  
--#ifdef CONFIG_BLK_DEV_MD
--	if (state->parts[p].flags & ADDPART_FLAG_RAID)
-+	if (IS_BUILTIN(CONFIG_BLK_DEV_MD) &&
-+	    (state->parts[p].flags & ADDPART_FLAG_RAID))
- 		md_autodetect_dev(part_to_dev(part)->devt);
--#endif
-+
- 	return true;
+diff --git a/block/partitions/check.h b/block/partitions/check.h
+index 0fcf80117887..19852b494e93 100644
+--- a/block/partitions/check.h
++++ b/block/partitions/check.h
+@@ -50,6 +50,3 @@ put_partition(struct parsed_partitions *p, int n, sector_t from, sector_t size)
+ 		strlcat(p->pp_buf, tmp, PAGE_SIZE);
+ 	}
  }
- 
-diff --git a/drivers/md/md.c b/drivers/md/md.c
-index 8238fb64f87f..1c7193715f07 100644
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -58,6 +58,7 @@
- #include <linux/delay.h>
- #include <linux/raid/md_p.h>
- #include <linux/raid/md_u.h>
-+#include <linux/raid/detect.h>
- #include <linux/slab.h>
- #include <linux/percpu-refcount.h>
- 
-diff --git a/include/linux/raid/detect.h b/include/linux/raid/detect.h
-new file mode 100644
-index 000000000000..37dd3f40cd31
---- /dev/null
-+++ b/include/linux/raid/detect.h
-@@ -0,0 +1,3 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+void md_autodetect_dev(dev_t dev);
+-
+-extern int warn_no_part;
+-
 -- 
 2.25.1
 
