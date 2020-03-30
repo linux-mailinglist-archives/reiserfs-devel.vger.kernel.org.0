@@ -2,111 +2,58 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5D4192A68
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 25 Mar 2020 14:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 131E9197A89
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 30 Mar 2020 13:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727441AbgCYNuV (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 25 Mar 2020 09:50:21 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:55295 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727402AbgCYNuU (ORCPT
+        id S1729689AbgC3LRM (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 30 Mar 2020 07:17:12 -0400
+Received: from mail.11d01.mspz7.gob.ec ([190.152.145.91]:60488 "EHLO
+        mail.11d01.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729494AbgC3LRI (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 25 Mar 2020 09:50:20 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1jH6QE-0002pr-SY; Wed, 25 Mar 2020 13:50:18 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        reiserfs-devel@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] reiserfs: clean up several indentation issues
-Date:   Wed, 25 Mar 2020 13:50:18 +0000
-Message-Id: <20200325135018.113431-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 30 Mar 2020 07:17:08 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTP id 0C3EA2F644E1;
+        Mon, 30 Mar 2020 04:29:08 -0500 (-05)
+Received: from mail.11d01.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.11d01.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id RO93dmNJ0Rtm; Mon, 30 Mar 2020 04:29:07 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTP id 0DB582F6B8A2;
+        Mon, 30 Mar 2020 04:29:07 -0500 (-05)
+DKIM-Filter: OpenDKIM Filter v2.9.2 mail.11d01.mspz7.gob.ec 0DB582F6B8A2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=11d01.mspz7.gob.ec;
+        s=50CBC7E4-8BED-11E9-AF6C-F1A741A224D3; t=1585560547;
+        bh=cLQbOHa1aY+/FyDjaDQOZOnnnlZDxMu+rBX/cg5yps8=;
+        h=Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:
+         From:Date:Reply-To:Message-Id;
+        b=qFBjQbRfUd6rd/3QsQGdjoqTDHUltSXfHycCdNau0IcRg6f8Wr7ZbQutwsnF2Rsgd
+         vmm+lNEM6GwBaFWZ/RgLQ0REjQRGOgDoAiFkbR4Me7gdmTCZDC2wxFsIs4yVUByJOC
+         OG8TNqXLJhn5KpLUDekvVMYYunY1uMg1mdISi0yk=
+X-Virus-Scanned: amavisd-new at 11d01.mspz7.gob.ec
+Received: from mail.11d01.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.11d01.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id yLmfq7WA6R58; Mon, 30 Mar 2020 04:29:06 -0500 (-05)
+Received: from [10.121.152.251] (unknown [105.12.0.10])
+        by mail.11d01.mspz7.gob.ec (Postfix) with ESMTPSA id A02652F6BA90;
+        Mon, 30 Mar 2020 04:28:56 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: spende von 2.000.000,00 Euro
+To:     Recipients <luis.sanchez@11d01.mspz7.gob.ec>
+From:   "Manuel Franco" <luis.sanchez@11d01.mspz7.gob.ec>
+Date:   Mon, 30 Mar 2020 12:00:10 +0200
+Reply-To: manuelfrancospende11@gmail.com
+Message-Id: <20200330092856.A02652F6BA90@mail.11d01.mspz7.gob.ec>
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Ich bin Manuel Franco, ich spende Ihnen 2.000.000,00 Euro. Kontaktieren Sie=
+ mich jetzt, damit wir fortfahren k=F6nnen.
 
-There are several places where code is indented incorrectly. Fix these.
-
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- fs/reiserfs/do_balan.c |  2 +-
- fs/reiserfs/ioctl.c    | 11 ++++++-----
- fs/reiserfs/namei.c    | 10 +++++-----
- 3 files changed, 12 insertions(+), 11 deletions(-)
-
-diff --git a/fs/reiserfs/do_balan.c b/fs/reiserfs/do_balan.c
-index 4075e41408b4..5129efc6f2e6 100644
---- a/fs/reiserfs/do_balan.c
-+++ b/fs/reiserfs/do_balan.c
-@@ -842,7 +842,7 @@ static void balance_leaf_paste_right_whole(struct tree_balance *tb,
- 	struct item_head *pasted;
- 	struct buffer_info bi;
- 
--							buffer_info_init_right(tb, &bi);
-+	buffer_info_init_right(tb, &bi);
- 	leaf_shift_right(tb, tb->rnum[0], tb->rbytes);
- 
- 	/* append item in R[0] */
-diff --git a/fs/reiserfs/ioctl.c b/fs/reiserfs/ioctl.c
-index 45e1a5d11af3..adb21bea3d60 100644
---- a/fs/reiserfs/ioctl.c
-+++ b/fs/reiserfs/ioctl.c
-@@ -184,11 +184,12 @@ int reiserfs_unpack(struct inode *inode, struct file *filp)
- 	}
- 
- 	/* we need to make sure nobody is changing the file size beneath us */
--{
--	int depth = reiserfs_write_unlock_nested(inode->i_sb);
--	inode_lock(inode);
--	reiserfs_write_lock_nested(inode->i_sb, depth);
--}
-+	{
-+		int depth = reiserfs_write_unlock_nested(inode->i_sb);
-+
-+		inode_lock(inode);
-+		reiserfs_write_lock_nested(inode->i_sb, depth);
-+	}
- 
- 	reiserfs_write_lock(inode->i_sb);
- 
-diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
-index 959a066b7bb0..ed433721134e 100644
---- a/fs/reiserfs/namei.c
-+++ b/fs/reiserfs/namei.c
-@@ -838,10 +838,10 @@ static int reiserfs_mkdir(struct inode *dir, struct dentry *dentry, umode_t mode
- 	 */
- 	INC_DIR_INODE_NLINK(dir)
- 
--	    retval = reiserfs_new_inode(&th, dir, mode, NULL /*symlink */ ,
--					old_format_only(dir->i_sb) ?
--					EMPTY_DIR_SIZE_V1 : EMPTY_DIR_SIZE,
--					dentry, inode, &security);
-+	retval = reiserfs_new_inode(&th, dir, mode, NULL /*symlink */,
-+				    old_format_only(dir->i_sb) ?
-+				    EMPTY_DIR_SIZE_V1 : EMPTY_DIR_SIZE,
-+				    dentry, inode, &security);
- 	if (retval) {
- 		DEC_DIR_INODE_NLINK(dir)
- 		goto out_failed;
-@@ -967,7 +967,7 @@ static int reiserfs_rmdir(struct inode *dir, struct dentry *dentry)
- 	reiserfs_update_sd(&th, inode);
- 
- 	DEC_DIR_INODE_NLINK(dir)
--	    dir->i_size -= (DEH_SIZE + de.de_entrylen);
-+	dir->i_size -= (DEH_SIZE + de.de_entrylen);
- 	reiserfs_update_sd(&th, dir);
- 
- 	/* prevent empty directory from getting lost */
--- 
-2.25.1
-
+I am Manuel Franco, I donate to you 2,000,000.00 euros. Contact me now so w=
+e can proceed.
