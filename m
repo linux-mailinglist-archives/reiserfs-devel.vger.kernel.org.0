@@ -1,66 +1,59 @@
 Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E739519F016
-	for <lists+reiserfs-devel@lfdr.de>; Mon,  6 Apr 2020 07:24:14 +0200 (CEST)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED8D1AD375
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 17 Apr 2020 01:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726455AbgDFFYO (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 6 Apr 2020 01:24:14 -0400
-Received: from mail.cirebonkota.go.id ([103.105.142.227]:57932 "EHLO
-        mail.cirebonkota.go.id" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725768AbgDFFYO (ORCPT
-        <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 6 Apr 2020 01:24:14 -0400
-X-Greylist: delayed 8938 seconds by postgrey-1.27 at vger.kernel.org; Mon, 06 Apr 2020 01:24:13 EDT
+        id S1725877AbgDPXoS (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 16 Apr 2020 19:44:18 -0400
+Received: from mail.dsns.gov.ua ([194.0.148.99]:59144 "EHLO mail.dsns.gov.ua"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725833AbgDPXoS (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Thu, 16 Apr 2020 19:44:18 -0400
+X-Greylist: delayed 6228 seconds by postgrey-1.27 at vger.kernel.org; Thu, 16 Apr 2020 19:44:17 EDT
 Received: from localhost (localhost [127.0.0.1])
-        by mail.cirebonkota.go.id (Postfix) with ESMTP id 2CE826AC97FC;
-        Mon,  6 Apr 2020 09:11:16 +0700 (WIB)
-Received: from mail.cirebonkota.go.id ([127.0.0.1])
-        by localhost (mail.cirebonkota.go.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 2TqWcS04_uc4; Mon,  6 Apr 2020 09:11:15 +0700 (WIB)
+        by mail.dsns.gov.ua (Postfix) with ESMTP id 287E71D21A6C;
+        Thu, 16 Apr 2020 23:56:02 +0300 (EEST)
+Received: from mail.dsns.gov.ua ([127.0.0.1])
+        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id XmuzWxMR_jKt; Thu, 16 Apr 2020 23:56:01 +0300 (EEST)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.cirebonkota.go.id (Postfix) with ESMTP id 8BF296AC9E42;
-        Mon,  6 Apr 2020 09:11:13 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.cirebonkota.go.id 8BF296AC9E42
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirebonkota.go.id;
-        s=C98AC372-1D50-11E8-8F61-CC7AB5DE4986; t=1586139073;
-        bh=MJyAN6vrKWR3hHjM0uqzwrl8hy9NCAZqL95Q56Nn4J0=;
+        by mail.dsns.gov.ua (Postfix) with ESMTP id 0F36F1D21A73;
+        Thu, 16 Apr 2020 23:55:58 +0300 (EEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.dsns.gov.ua 0F36F1D21A73
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dsns.gov.ua;
+        s=1E60DAC0-2607-11E9-81E6-7A77C2B36653; t=1587070558;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
         h=Date:From:Message-ID:MIME-Version;
-        b=JUUHj5FuMC8zAwPGG5dAAagLauXzbx1gnUoUkHqc6sAU/HM/rzLVKbaU1bRWUMPGV
-         6tiZcD8Sj7agkTM/TP+z/pvvZLTm2zNpzPIXyheUiBowuGoJF9aJGJYnfiD+t/VfqS
-         v9JzbzG1E0A09T9EYPHAZtIxplvEIXdL+RLBjDzI=
-X-Virus-Scanned: amavisd-new at cirebonkota.go.id
-Received: from mail.cirebonkota.go.id ([127.0.0.1])
-        by localhost (mail.cirebonkota.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 6QTBB7xnpnPh; Mon,  6 Apr 2020 09:11:13 +0700 (WIB)
-Received: from mail.cirebonkota.go.id (mail.cirebonkota.go.id [103.105.142.227])
-        by mail.cirebonkota.go.id (Postfix) with ESMTP id 144836AC895C;
-        Mon,  6 Apr 2020 09:10:58 +0700 (WIB)
-Date:   Mon, 6 Apr 2020 09:10:57 +0700 (WIB)
-From:   "Tom Crist Spende." <helmybp@cirebonkota.go.id>
-Reply-To: "Tom Crist Spende." <tomcristdonation34@yahoo.com>
-Message-ID: <208078744.187768.1586139057825.JavaMail.zimbra@cirebonkota.go.id>
-Subject: =?utf-8?Q?Ich_habe_Spendengelder_im_Wert?=
- =?utf-8?Q?_von_4.800.000,00_Euro_f=C3=BCr_Sie.?=
+        b=Tt+wCKT28dIbcwCd9Q0IjxXv10HLCfE8CchwfZOWH1sZRDpyyAnWM1DCt2xGSQUpe
+         GXI3D4JxxcYmBXxj9QBuxEV5cS2h5NozeODLFjmaXx/wCciVo8w9Zet0kABvI2F2up
+         LhXZCDwlq48TOmGxAG8CLrzMHUARng1uSZcHwfVmLHJpATdHJNl7gfVWQmo6i/eQGV
+         WtOjRIzqc8tJKnbwO5wWq3BwctV62I6pQ6SvVJk9g8h6p+wsTyUfapZiGclcyUiTZB
+         +RTUPKWX7WWa729dqfKsKlX2oLrgrVduXxzVo7U7Z7Go6jmOyIiXpnkrGw7m4kxsKu
+         96B/X1CnCILQw==
+X-Virus-Scanned: amavisd-new at dsns.gov.ua
+Received: from mail.dsns.gov.ua ([127.0.0.1])
+        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id T0IHGlJrxeKP; Thu, 16 Apr 2020 23:55:57 +0300 (EEST)
+Received: from mail.dsns.gov.ua (localhost [127.0.0.1])
+        by mail.dsns.gov.ua (Postfix) with ESMTP id 3E7F41D21A40;
+        Thu, 16 Apr 2020 23:55:55 +0300 (EEST)
+Date:   Thu, 16 Apr 2020 23:55:55 +0300 (EEST)
+From:   Saleem Netanyahu <duchenko@dsns.gov.ua>
+Reply-To: Saleem Netanyahu <saleemnetu@gmail.com>
+Message-ID: <1644097889.723998.1587070555189.JavaMail.zimbra@dsns.gov.ua>
+Subject: Hey, how are u, can we talk?
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [103.105.142.227]
-X-Mailer: Zimbra 8.8.8_GA_3025 (zclient/8.8.8_GA_3025)
-Thread-Index: 8FDUGvBu1nyNDqatx0pIyWdjdGT3ow==
-Thread-Topic: Ich habe Spendengelder im Wert von 4.800.000,00 Euro =?utf-8?B?ZsO8cg==?= Sie.
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [45.82.223.36, 172.69.54.54]
+X-Mailer: Zimbra 8.8.15_GA_3918 (zclient/8.8.15_GA_3918)
+Thread-Index: usaCTc2+eFi0igzpTJiEKts6ghf1xA==
+Thread-Topic: Hey, how are u, can we talk?
 To:     unlisted-recipients:; (no To-header on input)
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-
-
-Hallo, ich habe eine Spende im Wert von 4.800.000,00 EURO f=C3=BCr Sie. Ich=
- habe die America-Lotterie im Wert von 40 Millionen USD gewonnen und spende=
- einen Teil davon an Wohlt=C3=A4tigkeitsorganisationen in Erinnerung an mei=
-ne verstorbene Frau, die an Krebs gestorben ist. Sie k=C3=B6nnen mich f=C3=
-=BCr weitere Informationen =C3=BCber (tomcristdonation34@yahoo.com) f=C3=BC=
-r weitere Informationen kontaktieren.
