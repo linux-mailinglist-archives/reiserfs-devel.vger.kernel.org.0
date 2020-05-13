@@ -2,66 +2,92 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 277301C278E
-	for <lists+reiserfs-devel@lfdr.de>; Sat,  2 May 2020 20:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6FA1D0582
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 13 May 2020 05:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728439AbgEBSZv (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sat, 2 May 2020 14:25:51 -0400
-Received: from mail.itb.pl ([195.187.73.224]:56497 "EHLO mail.itb.pl"
+        id S1726032AbgEMD2D convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 12 May 2020 23:28:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52066 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728263AbgEBSZu (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sat, 2 May 2020 14:25:50 -0400
-X-Greylist: delayed 5976 seconds by postgrey-1.27 at vger.kernel.org; Sat, 02 May 2020 14:25:50 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.itb.pl (Postfix) with ESMTP id 5DE97942E78;
-        Sat,  2 May 2020 18:12:09 +0200 (CEST)
-Received: from mail.itb.pl ([127.0.0.1])
-        by localhost (mail.itb.pl [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id dylC8ijZIsRC; Sat,  2 May 2020 18:12:09 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.itb.pl (Postfix) with ESMTP id 278D491A50A;
-        Sat,  2 May 2020 18:12:08 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.itb.pl 278D491A50A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=itb.pl;
-        s=F2EC57A2-1E7E-11E7-B289-CFC75DFE65C2; t=1588435928;
-        bh=xg+yaCflZXQj61odadouetjB4mkJeOewiCT4LQ3mb2k=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=j2yUIDI66B8yrTkMSvxC5p+flB+ReGLRJDNxh8HUoPgv2CmWrOvgZ/oAXL1auL6Pa
-         lJ6+6vWp/uWPBiXxf8tVdZunuw349BeUBIaVHZG5LAzAYI04TslWVbfGmOhh2wnFYX
-         6i5T6FGYUrVLUsaq6oYsgUmpdz9IAWBcBDxNL4kHuGBYhj3aD0NRa5BmppDjQgs1QW
-         Y6txEDBx+vu0yy+aErmzf19+su/ivLEeLvpvSL6mLv97w5EdEPBbAvdLJ1LxuShqsV
-         LGFkhqt2GuAZ7GIjMkJmTa12V0kC+suEUVvcFJ904HKAtHUZ2l1blpJnrwvsLCgdqH
-         kbL31rRA8rzMg==
-X-Virus-Scanned: amavisd-new at itb.pl
-Received: from mail.itb.pl ([127.0.0.1])
-        by localhost (mail.itb.pl [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id FPTqstTLvgVt; Sat,  2 May 2020 18:12:08 +0200 (CEST)
-Received: from DESKTOP-393ANUD.www.huaweimobilewifi.com (unknown [105.8.3.111])
-        by mail.itb.pl (Postfix) with ESMTPSA id 83A77942E5C;
-        Sat,  2 May 2020 18:12:01 +0200 (CEST)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1725898AbgEMD2D (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Tue, 12 May 2020 23:28:03 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     reiserfs-devel@vger.kernel.org
+Subject: [Bug 207717] New: reiserfs: data race on inode->i_size in
+ reiserfs_write_full_page()
+Date:   Wed, 13 May 2020 03:28:02 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: File System
+X-Bugzilla-Component: ReiserFS
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: baijiaju1990@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: reiserfs-devel@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-207717-695@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Kreditangebot
-To:     Recipients <m.kawulok@itb.pl>
-From:   "ELITE LOANS" <m.kawulok@itb.pl>
-Date:   Sat, 02 May 2020 18:11:53 +0200
-Reply-To: info@eliteloangroup.co.za
-X-Antivirus: Avast (VPS 200501-0, 05/01/2020), Outbound message
-X-Antivirus-Status: Clean
-Message-Id: <20200502161201.83A77942E5C@mail.itb.pl>
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Brauchen Sie einen Kredit? Wir sind ein zertifiziertes und akkreditiertes p=
-rivates Darlehensunternehmen. Elite-Darlehen bietet Gesch=E4ftsdarlehen, Wo=
-hnungsbaudarlehen, Schuldenkonsolidierung. 
-Kontakt f=FCr weitere Informationen.
+https://bugzilla.kernel.org/show_bug.cgi?id=207717
+
+            Bug ID: 207717
+           Summary: reiserfs: data race on inode->i_size in
+                    reiserfs_write_full_page()
+           Product: File System
+           Version: 2.5
+    Kernel Version: 5.4
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: ReiserFS
+          Assignee: reiserfs-devel@vger.kernel.org
+          Reporter: baijiaju1990@gmail.com
+        Regression: No
+
+The functions reiserfs_write_full_page() and reiserfs_write_end() are
+concurrently executed at runtime in the following call contexts:
+
+Thread 1:
+reiserfs_writepage()
+  reiserfs_write_full_page()
+
+Thread 2:
+reiserfs_write_end()
+
+In reiserfs_write_full_page():
+  unsigned long end_index = inode->i_size >> PAGE_SHIFT;
+
+In reiserfs_write_end():
+  inode->i_size = pos + copied;
+
+Thus, a data race on inode->i_size occurs.
+
+This data race was found and actually reproduced by our concurrency fuzzer.
+
+I am not sure whether this data race is harmful and how to fix this data race
+properly, so I want to listen to your opinions, thanks :)
 
 -- 
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
-
+You are receiving this mail because:
+You are the assignee for the bug.
