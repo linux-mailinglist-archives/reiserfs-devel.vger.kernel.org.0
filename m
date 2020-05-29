@@ -2,46 +2,71 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73EC21E6FF2
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 29 May 2020 01:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D9A1E71FA
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 29 May 2020 03:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437475AbgE1XFU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 28 May 2020 19:05:20 -0400
-Received: from mail.bnv.gob.ve ([201.249.200.115]:58744 "EHLO
-        correo.bnv.gob.ve" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2437461AbgE1XFT (ORCPT
-        <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 28 May 2020 19:05:19 -0400
-Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
-        by correo.bnv.gob.ve (Postfix) with ESMTP id A188138E15DF;
-        Thu, 28 May 2020 15:02:48 -0400 (-04)
-Received: from correo.bnv.gob.ve ([127.0.0.1])
-        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id OVdSl4WOAmp1; Thu, 28 May 2020 15:02:48 -0400 (-04)
-Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
-        by correo.bnv.gob.ve (Postfix) with ESMTP id 36CCF38E3938;
-        Thu, 28 May 2020 13:45:00 -0400 (-04)
-X-Virus-Scanned: amavisd-new at bnv.gob.ve
-Received: from correo.bnv.gob.ve ([127.0.0.1])
-        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id RfN-PQI39Q79; Thu, 28 May 2020 13:45:00 -0400 (-04)
-Received: from [10.19.23.127] (unknown [105.0.4.230])
-        by correo.bnv.gob.ve (Postfix) with ESMTPSA id E338838E2169;
-        Thu, 28 May 2020 12:40:36 -0400 (-04)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Spende von 2.000.000,00 Euro
-To:     Recipients <manuel@info.com>
-From:   "manuel franco" <manuel@info.com>
-Date:   Thu, 28 May 2020 18:40:25 +0200
-Reply-To: manuelfrancospende11@gmail.com
-Message-Id: <20200528164036.E338838E2169@correo.bnv.gob.ve>
+        id S1728679AbgE2BQH (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 28 May 2020 21:16:07 -0400
+Received: from mxhk.zte.com.cn ([63.217.80.70]:53008 "EHLO mxhk.zte.com.cn"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728340AbgE2BQG (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Thu, 28 May 2020 21:16:06 -0400
+X-Greylist: delayed 941 seconds by postgrey-1.27 at vger.kernel.org; Thu, 28 May 2020 21:16:05 EDT
+Received: from mse-fl2.zte.com.cn (unknown [10.30.14.239])
+        by Forcepoint Email with ESMTPS id 05FAB560F5E999B3359A;
+        Fri, 29 May 2020 09:00:21 +0800 (CST)
+Received: from notes_smtp.zte.com.cn (notessmtp.zte.com.cn [10.30.1.239])
+        by mse-fl2.zte.com.cn with ESMTP id 04T10JBx015586;
+        Fri, 29 May 2020 09:00:19 +0800 (GMT-8)
+        (envelope-from wang.yi59@zte.com.cn)
+Received: from fox-host8.localdomain ([10.74.120.8])
+          by szsmtp06.zte.com.cn (Lotus Domino Release 8.5.3FP6)
+          with ESMTP id 2020052909005386-3735750 ;
+          Fri, 29 May 2020 09:00:53 +0800 
+From:   Yi Wang <wang.yi59@zte.com.cn>
+To:     jeffm@suse.com
+Cc:     jack@suse.cz, reiserfs-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xue.zhihong@zte.com.cn,
+        wang.yi59@zte.com.cn, wang.liang82@zte.com.cn,
+        Liao Pingfang <liao.pingfang@zte.com.cn>
+Subject: [PATCH] reiserfs: Replace kmalloc with kcalloc in the comment
+Date:   Fri, 29 May 2020 09:02:30 +0800
+Message-Id: <1590714150-15895-1-git-send-email-wang.yi59@zte.com.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-MIMETrack: Itemize by SMTP Server on SZSMTP06/server/zte_ltd(Release 8.5.3FP6|November
+ 21, 2013) at 2020-05-29 09:00:54,
+        Serialize by Router on notes_smtp/zte_ltd(Release 9.0.1FP7|August  17, 2016) at
+ 2020-05-29 09:00:24,
+        Serialize complete at 2020-05-29 09:00:24
+X-MAIL: mse-fl2.zte.com.cn 04T10JBx015586
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Ich bin Manuel Franco, ich spende Ihnen 2.000.000,00 Euro. Nehmen Sie jetzt Kontakt mit mir auf, damit wir fortfahren können.
+From: Liao Pingfang <liao.pingfang@zte.com.cn>
+
+Use kcalloc instead of kmalloc in the comment according to
+the previous kcalloc() call.
+
+Signed-off-by: Liao Pingfang <liao.pingfang@zte.com.cn>
+---
+ fs/reiserfs/inode.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/reiserfs/inode.c b/fs/reiserfs/inode.c
+index 6419e6d..21ad762 100644
+--- a/fs/reiserfs/inode.c
++++ b/fs/reiserfs/inode.c
+@@ -1066,7 +1066,7 @@ int reiserfs_get_block(struct inode *inode, sector_t block,
+ 			} else {
+ 				/* paste hole to the indirect item */
+ 				/*
+-				 * If kmalloc failed, max_to_insert becomes
++				 * If kcalloc failed, max_to_insert becomes
+ 				 * zero and it means we only have space for
+ 				 * one block
+ 				 */
+-- 
+2.9.5
+
