@@ -2,72 +2,105 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D8D1EBCF7
-	for <lists+reiserfs-devel@lfdr.de>; Tue,  2 Jun 2020 15:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE5F1ED18D
+	for <lists+reiserfs-devel@lfdr.de>; Wed,  3 Jun 2020 15:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726937AbgFBNVC (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 2 Jun 2020 09:21:02 -0400
-Received: from mail7.static.mailgun.info ([104.130.122.7]:26701 "EHLO
-        mail7.static.mailgun.info" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726728AbgFBNVA (ORCPT
+        id S1725882AbgFCN5L (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 3 Jun 2020 09:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725833AbgFCN5K (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 2 Jun 2020 09:21:00 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mixtli.metztli.it; q=dns/txt;
- s=mx; t=1591104060; h=From: Date: Message-Id: Cc: To: Subject: Sender;
- bh=TAsRPfKbTy6wQKeY54GoiEPQoaLtaNTmbgeoV1jTBA0=; b=kxSqrW3bh6+yLbDb5es3dLBt/NXGZDOrmA154KUhYhPsGae1LfaCZazkt03n4m8FWkL6xZDm
- FwoYCg8cVqsEyvQdbWA1LtRKOJ5OnJuXTrD8QrUXnRQcA+XD3eazxUr3hy/9pNiBXHKxg257
- Gp563xNLpXksRMWDWWE/bGh9JDg=
-X-Mailgun-Sending-Ip: 104.130.122.7
-X-Mailgun-Sid: WyIxM2M2YSIsICJyZWlzZXJmcy1kZXZlbEB2Z2VyLmtlcm5lbC5vcmciLCAiMTdiNTQiXQ==
-Received: from huitzilopochtli.metztli-it.com
- (99-130-254-3.lightspeed.sntcca.sbcglobal.net [99.130.254.3]) by
- smtp-out-n10.prod.us-east-1.postgun.com with SMTP id
- 5ed652352c54998475a4667a (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
- Tue, 02 Jun 2020 13:20:53 GMT
-Received: by huitzilopochtli.metztli-it.com (Postfix, from userid 1000)
-        id A89BA6095180; Tue,  2 Jun 2020 06:20:51 -0700 (PDT)
-Subject: Re: [GIT PULL][PATCH v5 0/8] Add support for ZSTD-compressed kernel and initramfs
-To:     <nolange79@gmail.com>
-Cc:     <nickrterrell@gmail.com>, <akpm@linux-foundation.org>,
-        <Kernel-team@fb.com>, <clm@fb.com>, <gregkh@linuxfoundation.org>,
-        <keescook@chromium.org>, <kilobyte@angband.pl>,
-        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <mingo@kernel.org>, <oss@malat.biz>, <patrick@stwcx.xyz>,
-        <patrickw3@fb.com>, <rmikey@fb.com>, <sedat.dilek@gmail.com>,
-        <terrelln@fb.com>, <x86@kernel.org>,
-        <reiserfs-devel@vger.kernel.org>, <edward.shishkin@gmail.com>
-X-Mailer: mail (GNU Mailutils 3.9)
-Message-Id: <20200602132051.A89BA6095180@huitzilopochtli.metztli-it.com>
-Date:   Tue,  2 Jun 2020 06:20:51 -0700 (PDT)
-From:   Metztli Information Technology <jose.r.r@metztli.com>
+        Wed, 3 Jun 2020 09:57:10 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B821C08C5C0
+        for <reiserfs-devel@vger.kernel.org>; Wed,  3 Jun 2020 06:57:10 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id y11so1202933ljm.9
+        for <reiserfs-devel@vger.kernel.org>; Wed, 03 Jun 2020 06:57:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=lUn2sKBdrDI/gkA5yzAZwcv02QjxWHyFTmmBkj/Vf+4=;
+        b=tubfYaFw8dGNAZQ89vtI7EprpTbQIZpIyv9x+1b17di48hN6TRZr984HiwdnMijI7S
+         wZKTRTE7g1VDLHYrdBnM9BsjKHavRLz7SwnnX4WwRFkVirgBGv7IMui3nlU/NqFAo2lK
+         HDlzOzLd5kHSajSfzVtAgkLeTYStIWpwdN0zjlBJ6FZ44BUla3d8n5qBfev1CaKO5ysQ
+         z8bz3NL6F+axmljTjlU6kP5BTWGZEuLpcajbqfF7KMMsQMfPELsJBrk5jaDgDQGU/sHg
+         MFK2DuKqaS/XEPaYr+nIUwNesyO3UZCTHXWQXbVYndKq2lcwFh1rvu+DwvFnM/LEwNkN
+         6wzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=lUn2sKBdrDI/gkA5yzAZwcv02QjxWHyFTmmBkj/Vf+4=;
+        b=Tma4135l6awBqT6z9BgoF2NsvyHt1ymkaXwJUWhYEWnQZApFuBfpGm586rfi7W9ko1
+         J6e22lSb0PKjahnGOUW3wy8Eec2HGCHCv67qcHZzmKs6Wiczoi0Z5oTp2btInYsuqXEg
+         jV4z/GHyOGqtUSE+czM1Ahoi6K/eaDrpLd3VxqwGOCxRn6OQx4CIJVWPNwkIK8eTTo6W
+         E34xGyaY1rsVzB9kOLPeAZ4hT3ApRNYoP0UUk+Sq8ElitrSQ4hesqEEf8Vo5IHAnWd4S
+         XtHWhGP4lkNU70xkliON6lpp43GJEVwEcgIqEzK39u+xXYCzfmoM8njaFCOAo1beLiF2
+         O9mg==
+X-Gm-Message-State: AOAM532mI1ZnXsvMlDSPwCUYueKirjj7vssfvpFNsvnMyzhafMeIyzWT
+        K8NGEYEzwPSrx5H15noYVh8EVNpZqODQ2q3bbNw=
+X-Google-Smtp-Source: ABdhPJxXovTwscUAZzxJyHg+xUneDSxQLWUnWa5p4mErqki2GyESTtG1pFKTzCZK0WYHKgcheqcvZjCWwF5wh58ZCNU=
+X-Received: by 2002:a2e:6c12:: with SMTP id h18mr2294979ljc.62.1591192628942;
+ Wed, 03 Jun 2020 06:57:08 -0700 (PDT)
+MIME-Version: 1.0
+Reply-To: susanjones.wife@gmail.com
+Received: by 2002:a19:a405:0:0:0:0:0 with HTTP; Wed, 3 Jun 2020 06:57:08 -0700 (PDT)
+From:   "Mrs.Susan Jones" <joneswife.susan@gmail.com>
+Date:   Wed, 3 Jun 2020 14:57:08 +0100
+X-Google-Sender-Auth: 6BTU1dpwsNQi8p93z9HAdNk5lgk
+Message-ID: <CABGHEP8Z=5sOM+XSkzwLtXG366aHi0q55W+U2DqmQAMy9DXgsw@mail.gmail.com>
+Subject: HELLO: I AM MRS SUSAN JONES
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Mon, Jun 1, 2020 at 2:59 PM Norbert Lange <nolange79@gmail.com> wrote:
->
-> The series seems to be stuck in limbo, and I got the hint to bring
-> this to Andrew's attention [1].
-> Hope this will finally end in upstream, been using these patches for ~2 years.
->
-> Regards, Norbert
->
-> [1] - https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=955469
-
-Began using your patch for Debian Buster backport of 0.136 initramfs-tools, and Nick Terrel's kernel patch for 5.6 -- but modified for 5.5.17-19 in my reiser4 builds -- and set both defaults to zstd.
-
-Thus far, as long as there exists 'a priori' the Zstd package, the combination works in both local and my custom Google cloud instances installations.
-
-Best Professional Regards.
+-- 
 
 
 -- 
-Jose R R
-http://metztli.it
----------------------------------------------------------------------------------------------
-Download Metztli Reiser4: Debian Buster w/ Linux 5.5.19 AMD64
----------------------------------------------------------------------------------------------
-feats ZSTD compression https://sf.net/projects/metztli-reiser4/
--------------------------------------------------------------------------------------------
-Official current Reiser4 resources: https://reiser4.wiki.kernel.org/
+OUR GOLDEN OPPORTUNITY
+
+Hello Dear Friend,
+
+Complement of the day, i hope you are doing great today. However, I am
+Mrs.Susan Jones, an auditor with one of the new generation banks here
+in Burkina Faso.
+
+I am writing you this letter based on the latest development at my
+Department. i discovered some abandoned huge amount of money, Ten
+Million, Five hundred thousand  United States Dollars.($10.500.000).
+Now I am only contacting you as a foreigner because this money cannot
+be approved to a local bank account here, but can only be approved to
+any foreign account and foreign beneficiary because the money is in US
+dollars
+
+This will be  a legitimate transaction once you accept to build trust
+with me and follow simple instruction doing the transfer process,
+until the total sum transfer out of the bank here to your own bank
+account any where in the world, and I agreed to share the total money
+50/50 with you once you successful confirmed it in your bank account.
+But any expenses doing the transfer process will be deduct from the
+amount before sharing, If you are interested to work with me and
+provide a good receiving bank account, get back to me as soon as
+possible with the following details below.
+
+Your full name
+Your Profession
+Your direct mobile phone number
+Your Scanned International passport or any of your identity
+
+NOTE: PLEASE IT YOU ARE NOT INTERESTED DON'T BORDER TO RESPOND BACK TO
+AVOID TIME WASTED.
+
+As soon as I receive these data's, I will forward to you the
+application form which you will send to the bank for the claim and
+transfer of the fund into your bank account as the  new beneficial.
+
+I am waiting to hear from you soon
+
+Yours
+Mrs.Susan Jones
