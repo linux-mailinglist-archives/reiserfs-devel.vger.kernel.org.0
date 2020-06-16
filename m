@@ -2,58 +2,78 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C4F1F4905
-	for <lists+reiserfs-devel@lfdr.de>; Tue,  9 Jun 2020 23:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D3B1FBE44
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 16 Jun 2020 20:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728191AbgFIVoF (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 9 Jun 2020 17:44:05 -0400
-Received: from rrcs-72-43-215-122.nys.biz.rr.com ([72.43.215.122]:41874 "EHLO
-        localhost.localdomain" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728146AbgFIVoF (ORCPT
+        id S1729173AbgFPSjF (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 16 Jun 2020 14:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725911AbgFPSjE (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 9 Jun 2020 17:44:05 -0400
-Received: from Shop01 (localhost [127.0.0.1])
-        by localhost.localdomain (Postfix) with SMTP id D6BC7247DE3;
-        Tue,  9 Jun 2020 05:10:51 -0400 (EDT)
-Received: from [215.155.142.224] by Shop01 with ESMTP id 30322426; Tue, 09 Jun 2020 04:00:57 -0600
-Message-ID: <9$2-2$$784wn-3k3@wj84690.kvs>
-From:   "Mrs. Janet Olsen " <mrs.janetolse@gmail.com>
-Reply-To: "Mrs. Janet Olsen " <mrs.janetolse@gmail.com>
-To:     darkstar6262@gmail.com
-Subject: Your response 
-Date:   Tue, 09 Jun 20 04:00:57 GMT
-X-Mailer: Microsoft Outlook Express 5.00.2615.200
+        Tue, 16 Jun 2020 14:39:04 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E738C06174E
+        for <reiserfs-devel@vger.kernel.org>; Tue, 16 Jun 2020 11:39:04 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id h10so5872996pgq.10
+        for <reiserfs-devel@vger.kernel.org>; Tue, 16 Jun 2020 11:39:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8RJK2syfb1UPJfcE04G7USvWkMzpU9ggu2GVyOrhih8=;
+        b=mzlz8vzfLovPNfG+Ed5YF/HIguRWsjR3QNuf01Zt+vV/LN6FrwR9kRkYU4zOF2pH/K
+         zVimmlH2LI3ykQvPr7+k3xzXnVNo/jxThzz7hStN49Y8UFXZ5EW7t76l3wmrQYe24sXF
+         TGgQ8LRyLduDA4Jt1oAm5/gpCPEJ9z0DhTS+Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8RJK2syfb1UPJfcE04G7USvWkMzpU9ggu2GVyOrhih8=;
+        b=Pexzca+JB4XyFMb24chk/K3yIdgSFTnkprVNxOc8K5HVRCAKZ80KTGZi0KxIAOgqPV
+         youiiwailnKT3tYJjWLPCwl0n2QEaFT9SnqCLNmG4mmTLuoEPOiMwhLQ8yLVxKr8WpGO
+         PdT/OUoJJcINtwG6Tq212GMxJp/ICu2qkh3aCWH9YHgxnuhQx0/xp55n2ePcsjNoyMm0
+         2mfAfrsoFeE5+5GBz07iWF1xUnDMJrfyDpg1QvMC9rWCknierE9BR8IHX4e7qW3pSPYV
+         uJhcoL1KjS+wakKg4lpT3i9QB/MpBSfLJKZWizaWe5Udka0jQfr5DPpNf52Piwng/5Ut
+         tgJA==
+X-Gm-Message-State: AOAM530KLGK/sj5CUYbf4rfuI0ZNYRF5+uSg+MEREvf8gdgPX3SwTykB
+        FC1GpuVoKT5Ld56JNFJaZTebog==
+X-Google-Smtp-Source: ABdhPJzVzp7zqZA1PABD5+AMJmR2gC3GBlpl79fqxJ6mOA0ZmwS2QyqUlNxqXfXfGuMCMwwilwbhOQ==
+X-Received: by 2002:a63:371d:: with SMTP id e29mr3125826pga.153.1592332743713;
+        Tue, 16 Jun 2020 11:39:03 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u4sm3067312pjn.42.2020.06.16.11.39.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jun 2020 11:39:02 -0700 (PDT)
+Date:   Tue, 16 Jun 2020 11:39:02 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: Re: [PATCH][next] reiserfs: bitmap: Assign array_size() to a variable
+Message-ID: <202006161139.1F50D42FB@keescook>
+References: <20200616184118.GA1917@embeddedor>
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="C.9.8A.110."
-X-Priority: 5
-X-MSMail-Priority: Low
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200616184118.GA1917@embeddedor>
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
+On Tue, Jun 16, 2020 at 01:41:18PM -0500, Gustavo A. R. Silva wrote:
+> Assign array_size() to variable _size_ and use it in both vmalloc()
+> and memset(). These sorts of multiplication factors need to be wrapped
+> in array_size().
+> 
+> This issue was found with the help of Coccinelle and, audited and fixed
+> manually.
+> 
+> Addresses-KSPP-ID: https://github.com/KSPP/linux/issues/83
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
---C.9.8A.110.
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Hello, 
-
-Greetings from Mrs. Janet Olsen, from Norway.
- 
-Please i will like to establish some investments over there, such as Orpha=
-nage home and Hospital for Cancer patients but i don't have anyone, Who ca=
-n handle the contracts for me over there.
-
-So, I am contacting to ask you and to know if you will be able of handling=
- the contracts for me over there and you will be rewarded bountifully.
-
-Thanks and remain good, till i hear from you soon, for the full details.
-
-Regards, 
-
-Mrs. Janet Olsen.=20
-
---C.9.8A.110.--
-
+-- 
+Kees Cook
