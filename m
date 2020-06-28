@@ -2,89 +2,73 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 594AD20C499
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 28 Jun 2020 00:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA0820C696
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 28 Jun 2020 09:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726721AbgF0WGB (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sat, 27 Jun 2020 18:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726316AbgF0WGA (ORCPT
-        <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sat, 27 Jun 2020 18:06:00 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA62C061794
-        for <reiserfs-devel@vger.kernel.org>; Sat, 27 Jun 2020 15:06:00 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id l63so6571824pge.12
-        for <reiserfs-devel@vger.kernel.org>; Sat, 27 Jun 2020 15:06:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
-        b=N6kPulua2YSlM8imcShAj91mdG3FVs3SsXSz87fb1+u3nd7u7PFa6MKJ279dIRDWxh
-         0Ldfj86Lh7w+Xrc1R5Ac12lp/bi6BKorqLlDMWYld1qOBhdJB4N7Na0XiYaHB8nKtBEn
-         57C/Tzw6MUWAOIXcOnRxxN4MeNm7iQhU/hvtXzHXK0vqQBasxFJE8WhTf5ke+LZ6XEZm
-         /oWHd42QW3NLQJh3kf1TRlauenW2jL1Poq5HUYmLYngCGGUW3fX0WLGx3ldU3AhEukyR
-         HJCMoV5irc6uSRF+aDmFQnYTlSn+N9B5n6b9ltoSvd3dHTYHCaXSwIr77k6vqrwMxy85
-         lwfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
-        b=cTJs0S7bXb0u5F1uIoC/u6qNyG4MUdVkJH6T+mm1fehtr6J2+ZGrRZRHHHgiBMQuEl
-         u4oXR28tsUKWOVHLdhsHN1qjtoeitQvWO9MHMDrHVLLLiIQUiWzQ1lKAyF4mSM/qDjlo
-         IXhRr51SOLgmQAtWhCgcH+tI+3XdpgrUZLXUZrihnmOLxAHIP2BVvRoYW7AYdd/FsC1B
-         1u85fIoEoTo6a97EfXBml1M+nYm4oRZIWwIeAe78KqWkVrrogQDInqEa25G6dgnxOJ2k
-         PhG7kc51df4eTK2DqTY9EgXZKcJdDSpLiF2bTzO+FGqhtEExP32OXlesaNeP0BwIYu4T
-         FO4g==
-X-Gm-Message-State: AOAM531IkO5BULflPyGjyUh7Jb+iCBlhghCp3FxQ6SJ9UkzY5EKPyj45
-        D+KTEFvgYD8gm9V2rPiIwF9+gsGyykw31iDKNjpgaGuuivo=
-X-Google-Smtp-Source: ABdhPJwHv45zwmNuK/YSX2uBVAIqQ2zLOwtA+ngiZqoTP9Rs9Xn2gCCD3OWXiVcvkiJ+PU31Rp2ZvkRVy2hsrxlhX9g=
-X-Received: by 2002:a92:7749:: with SMTP id s70mr10069248ilc.259.1593295098567;
- Sat, 27 Jun 2020 14:58:18 -0700 (PDT)
+        id S1726038AbgF1HBa (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 28 Jun 2020 03:01:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51780 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725958AbgF1HB3 (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Sun, 28 Jun 2020 03:01:29 -0400
+Received: from sol.hsd1.ca.comcast.net (c-107-3-166-239.hsd1.ca.comcast.net [107.3.166.239])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 16F9F20702;
+        Sun, 28 Jun 2020 07:01:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593327689;
+        bh=LYiWGqhuibBKH+a+dZQwq8XA2JNHsSqHlHrxb93HHY4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fvwVcGIpBm5O34hr2mOI48xAS5F6/Szmr5TmIqrbtgZbos1qjw+aGdKhDX4uvphjB
+         4lkcyNX4TPYDR4pa5hxYSdUfWMuWgGK13HPKF+1M4iNWK6OYmqfyKX5+a1wSDWpkAg
+         2OqIdHy1Pj2+pfWwY5GsqZy7VDCrC2FsyR5FVM+M=
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     reiserfs-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        syzbot+187510916eb6a14598f7@syzkaller.appspotmail.com
+Subject: [PATCH] reiserfs: only call unlock_new_inode() if I_NEW
+Date:   Sun, 28 Jun 2020 00:00:57 -0700
+Message-Id: <20200628070057.820213-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Received: by 2002:a4f:4e46:0:0:0:0:0 with HTTP; Sat, 27 Jun 2020 14:58:17
- -0700 (PDT)
-From:   lookman joe <mrlookmanjoe@gmail.com>
-Date:   Sat, 27 Jun 2020 22:58:17 +0100
-Message-ID: <CAG9X5Hfvk-fmbqs9+RtHRqyUu35f9-A5+EbwjPrw9eVNH09ftg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-MONEY-GRAM TRANSFERRED PAYMENT INFO:
+From: Eric Biggers <ebiggers@google.com>
 
-Below is the sender=E2=80=99s information
+unlock_new_inode() is only meant to be called after a new inode has
+already been inserted into the hash table.  But reiserfs_new_inode() can
+call it even before it has inserted the inode, triggering the WARNING in
+unlock_new_inode().  Fix this by only calling unlock_new_inode() if the
+inode has the I_NEW flag set, indicating that it's in the table.
 
+This addresses the syzbot report "WARNING in unlock_new_inode"
+(https://syzkaller.appspot.com/bug?extid=187510916eb6a14598f7).
 
+Reported-by: syzbot+187510916eb6a14598f7@syzkaller.appspotmail.com
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+---
+ fs/reiserfs/inode.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-1. MG. REFERENCE NO#: 36360857
+diff --git a/fs/reiserfs/inode.c b/fs/reiserfs/inode.c
+index 1509775da040..e3af44c61524 100644
+--- a/fs/reiserfs/inode.c
++++ b/fs/reiserfs/inode.c
+@@ -2163,7 +2163,8 @@ int reiserfs_new_inode(struct reiserfs_transaction_handle *th,
+ out_inserted_sd:
+ 	clear_nlink(inode);
+ 	th->t_trans_id = 0;	/* so the caller can't use this handle later */
+-	unlock_new_inode(inode); /* OK to do even if we hadn't locked it */
++	if (inode->i_state & I_NEW)
++		unlock_new_inode(inode);
+ 	iput(inode);
+ 	return err;
+ }
+-- 
+2.27.0
 
-2. SENDER'S NAME: Johnson Williams
-
-3. AMOUNT TO PICKUP: US$10,000
-
-
-
-Go to any Money Gram office near you and pick up the payment Track the
-
-Reference Number by visiting and click the link below
-
-(https://secure.moneygram.com/embed/track) and enter the Reference
-
-Number: 36360857 and the Last Name: Williams, you will find the payment
-
-available for pickup instantly.
-
-Yours Sincerely,
-
-Mrs. Helen Marvis
-United Nations Liaison Office
-Directorate for International Payments
