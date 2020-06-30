@@ -2,73 +2,67 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D0420D8F8
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 29 Jun 2020 22:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F2020F527
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 30 Jun 2020 14:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387989AbgF2TnA (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 29 Jun 2020 15:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48516 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387994AbgF2Tmo (ORCPT
-        <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:42:44 -0400
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AFCC03140E
-        for <reiserfs-devel@vger.kernel.org>; Mon, 29 Jun 2020 10:15:33 -0700 (PDT)
-Received: by mail-ua1-x944.google.com with SMTP id i8so5557557uak.9
-        for <reiserfs-devel@vger.kernel.org>; Mon, 29 Jun 2020 10:15:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
-        b=XbtQf/yH8mWnOzu2Pb+HWyNny7U58BqpEJ1pGMFz5nYbfQpfv6C3htRH/u7NUFhxGI
-         A2B+Wz5dkcK12nli11v6Nr2aOmsaXX1Vge/AJXC3jD2HJs+ZM40ZzOIdZBlk0prs39fF
-         VSViQaPIlQxXsmc55/BRyPnP0uZHSHq2RfnmYhhGI8B/A90RMXRJjPJx7xbIM1KjIKpM
-         lCR2KffqiNS5X/Lbb5wyJMw+uI84fsfXuM1O9H+yGhnp4+1+LPA/6iPYySX1/7Jb0t34
-         ElhxJNvbtnxpnBdUCvzpn17HG+hKda+6L2PelfsaAJ6b3NtvoUK5YGiqjf0TuD2AK346
-         HoIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
-        b=t0nZCURe08ixNGfIMyowAic5G+dqGo4QhknETq37lqK0QYbOrYX58bC5PCZ+5q2VQ0
-         hjOG71RCnJ6RRiDEiOvmydhyJ0ImGtQDkr1A9J0HC6FYiPUaj829ULhHSSMxEUsIesfM
-         I24uqsMRsjn+ht/A93w7xlmhRfdTpzFSOrd35uhv0OC462Gea2GQ2K1hsbFYLM3l3D6n
-         tN3F3GxSEGfTeAHvQaokVdID0+E9iyc/843DzwNQbPwCWFO7S8qJuwZNeE92NcB6gcQ+
-         TqzvIR68UH2NMSHa/3gI8REuvlaGZLOPPiHkFzAMnm0Y2R/xGEgK0h//d14lvokw8Z+y
-         s3Ag==
-X-Gm-Message-State: AOAM531ovy+4eIgHjEeYwvqcCUDDLyE7J4xCB5obTycr1afbZ7r1STQe
-        46VnDnUKsHkyycRhwrd6XVyA5O9wcPTRXdUhg+g=
-X-Google-Smtp-Source: ABdhPJyvcE0WyquC8rzLHeMvFiQXqFVorXqJlxWLV2eY4Nluxj3Mn5pPmXQIVZlpmGKxGRHzhP9+fvmWi4Ronh28UEk=
-X-Received: by 2002:ab0:6e8a:: with SMTP id b10mr12745066uav.20.1593450932076;
- Mon, 29 Jun 2020 10:15:32 -0700 (PDT)
+        id S2387913AbgF3MyK (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 30 Jun 2020 08:54:10 -0400
+Received: from smtp3.sd73.bc.ca ([142.24.50.246]:34442 "EHLO smtp3.sd73.bc.ca"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387874AbgF3MyJ (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Tue, 30 Jun 2020 08:54:09 -0400
+Received: from smtp.sd73.bc.ca (smtp.sd73.bc.ca [10.10.10.14])
+        by smtp3.sd73.bc.ca (Postfix) with ESMTP id E108D66529;
+        Tue, 30 Jun 2020 01:22:09 -0700 (PDT)
+Received: from zimbra2.sd73.bc.ca (zimbra.sd73.bc.ca [10.10.10.7])
+        by smtp.sd73.bc.ca (Postfix) with ESMTP id 29441E0440;
+        Tue, 30 Jun 2020 01:22:16 -0700 (PDT)
+Received: from zimbra2.sd73.bc.ca (localhost [127.0.0.1])
+        by zimbra2.sd73.bc.ca (Postfix) with ESMTPS id 234AB5C0C1081C;
+        Tue, 30 Jun 2020 01:15:27 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.sd73.bc.ca (Postfix) with ESMTP id B22035C0C1082A;
+        Tue, 30 Jun 2020 01:15:26 -0700 (PDT)
+Received: from zimbra2.sd73.bc.ca ([127.0.0.1])
+        by localhost (zimbra2.sd73.bc.ca [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id hs5-uN3gXJS1; Tue, 30 Jun 2020 01:15:26 -0700 (PDT)
+Received: from zimbra2.sd73.bc.ca (zimbra3.sd73.bc.ca [10.10.10.7])
+        by zimbra2.sd73.bc.ca (Postfix) with ESMTP id 39EAD5C0C10818;
+        Tue, 30 Jun 2020 01:15:25 -0700 (PDT)
+Date:   Tue, 30 Jun 2020 01:15:24 -0700 (PDT)
+From:   charles jackson <lisa.petel@sd73.bc.ca>
+Reply-To: charles jackson <charlesjacksonjr001@gmail.com>
+Message-ID: <2057332562.67040796.1593504924810.JavaMail.zimbra@zimbra.sd73.bc.ca>
+Subject: =?UTF-8?Q?=5BPossible_Spam=5D_Covid?= =?UTF-8?Q?_19_Wohlt=C3=A4tigkeitsfon?= =?UTF-8?Q?ds?=
 MIME-Version: 1.0
-Received: by 2002:a67:fc59:0:0:0:0:0 with HTTP; Mon, 29 Jun 2020 10:15:31
- -0700 (PDT)
-Reply-To: mrs.victoria.alexander2@gmail.com
-From:   " Mrs. Victoria Alexander  " <katherinebetty17@gmail.com>
-Date:   Mon, 29 Jun 2020 10:15:31 -0700
-Message-ID: <CAFQOKa6Pkutggau6x8gzE07YLdM=pt78MNoeqQpOFH-DCFyhhA@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.10.10.90]
+X-Mailer: Zimbra 8.6.0_GA_1242 (zclient/8.6.0_GA_1242)
+Thread-Topic: Covid 19 =?utf-8?Q?Wohlt=C3=A4tigkeitsfonds?=
+Thread-Index: ids8kxMtFtEs487Jpm7dQ+IbhH9oxw==
+To:     unlisted-recipients:; (no To-header on input)
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Dear friend,
 
 
-I have a business container transaction what that some of( $13million dollars)
-
- I would like to discuss with you. If you are interested, please
-contact my email
-
-address (mrs.victoria.alexander2@gmail.com)
-
-My WhatsApp number but only message (+19293737780)
-
-Please do not reply if you are not ready
-Thanks
+-- 
+Hallo
+ 
+ Ich bin Charles W. Jackson aus North Carolina, Vereinigte Staaten von Amerika, und ich bin der Gewinner des Mega-Millionen-Jackpots von 344 Millionen US-Dollar. Ich spende die Summe von 2.000.000 Millionen Euro als Teil der Hilfsgelder f&uuml;r das Corona-Virus.
+ 
+ Dies ist Ihr Spendencode: [CJ530342019]
+ 
+ www.youtube.com/watch?v=BSr8myiLPMQ
+ 
+ Bitte antworten Sie auf diese E-Mail mit dem SPENDERCODE:
+ 
+ charlesjacksonjr001@gmail.com
+ 
+ Ich hoffe, dass Sie und Ihre Familie dies durchkommen
+ 
+ 
+ Herr Charles Jackson
