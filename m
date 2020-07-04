@@ -2,67 +2,81 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F2020F527
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 30 Jun 2020 14:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9F621485C
+	for <lists+reiserfs-devel@lfdr.de>; Sat,  4 Jul 2020 21:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387913AbgF3MyK (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 30 Jun 2020 08:54:10 -0400
-Received: from smtp3.sd73.bc.ca ([142.24.50.246]:34442 "EHLO smtp3.sd73.bc.ca"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387874AbgF3MyJ (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 30 Jun 2020 08:54:09 -0400
-Received: from smtp.sd73.bc.ca (smtp.sd73.bc.ca [10.10.10.14])
-        by smtp3.sd73.bc.ca (Postfix) with ESMTP id E108D66529;
-        Tue, 30 Jun 2020 01:22:09 -0700 (PDT)
-Received: from zimbra2.sd73.bc.ca (zimbra.sd73.bc.ca [10.10.10.7])
-        by smtp.sd73.bc.ca (Postfix) with ESMTP id 29441E0440;
-        Tue, 30 Jun 2020 01:22:16 -0700 (PDT)
-Received: from zimbra2.sd73.bc.ca (localhost [127.0.0.1])
-        by zimbra2.sd73.bc.ca (Postfix) with ESMTPS id 234AB5C0C1081C;
-        Tue, 30 Jun 2020 01:15:27 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.sd73.bc.ca (Postfix) with ESMTP id B22035C0C1082A;
-        Tue, 30 Jun 2020 01:15:26 -0700 (PDT)
-Received: from zimbra2.sd73.bc.ca ([127.0.0.1])
-        by localhost (zimbra2.sd73.bc.ca [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id hs5-uN3gXJS1; Tue, 30 Jun 2020 01:15:26 -0700 (PDT)
-Received: from zimbra2.sd73.bc.ca (zimbra3.sd73.bc.ca [10.10.10.7])
-        by zimbra2.sd73.bc.ca (Postfix) with ESMTP id 39EAD5C0C10818;
-        Tue, 30 Jun 2020 01:15:25 -0700 (PDT)
-Date:   Tue, 30 Jun 2020 01:15:24 -0700 (PDT)
-From:   charles jackson <lisa.petel@sd73.bc.ca>
-Reply-To: charles jackson <charlesjacksonjr001@gmail.com>
-Message-ID: <2057332562.67040796.1593504924810.JavaMail.zimbra@zimbra.sd73.bc.ca>
-Subject: =?UTF-8?Q?=5BPossible_Spam=5D_Covid?= =?UTF-8?Q?_19_Wohlt=C3=A4tigkeitsfon?= =?UTF-8?Q?ds?=
+        id S1726909AbgGDT0M (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sat, 4 Jul 2020 15:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726153AbgGDT0M (ORCPT
+        <rfc822;reiserfs-devel@vger.kernel.org>);
+        Sat, 4 Jul 2020 15:26:12 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF46C061794
+        for <reiserfs-devel@vger.kernel.org>; Sat,  4 Jul 2020 12:26:12 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id x62so26202213qtd.3
+        for <reiserfs-devel@vger.kernel.org>; Sat, 04 Jul 2020 12:26:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=tGw7y2+ozvfaI5O0ckPyJEES122wpdGaQULo47ym37A=;
+        b=Mi2H4Wq+cDE9yKbGijaimork5m5vJSY84QR/7ICcYWgQbRGRdZkwl53ZvFr+dAiyBa
+         PKPx31bS4Jai4k3WUc/5DJff7rM4yfpJ9jSKM09yduA8PmcGue3BoZL1uYRLLxOLGq/L
+         /VTqc9sIHrl0C1rWZRMiP3YQrZLtO0W/y58TUgT9LxbYs+I4jtWFSbvcyehEGSKnSn8L
+         f8XSvXwvmiPww2nIAFDRF2iuLZ5ICmqOp06Ph3/VWLu80ukatZUNHofVIs9PhL702A9S
+         I7QY9puzP4IXfal2pP7hjx9ze3jzCieNVkPkHAwKlTJQh8ahbY59UjdW0gbtGBA9MyQg
+         I8Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=tGw7y2+ozvfaI5O0ckPyJEES122wpdGaQULo47ym37A=;
+        b=TNbd6DNdHA8qPSGAPxasd0lkRnpnZS9hj7M92nggqer8BDeW4kQQ4BVDO9NVFkJmfR
+         q30Y1kvcKaqg4aJXCkJzdSJbqbfVD2C78EWZGWMNDoikeTBX5KGrAjjFX47KWLmnLtNI
+         1KTE8+YoRq4gZX9zxanhXRLXbwX6ODqxDkmohqvVKVliWA3/bYJUrf5RtVKVHDlls6zk
+         pG/9RfP9wJuEXconeOklfaXHt4VgzBAnXKqsXh74Pt/dPOg3Q3w88EATla824KZz+/4a
+         Sv2IpR8rQqgw1XShLEBbNYf7MpY72QipPpgRGQXuTJUZ74mIlmODqjOs3WvbXVpF/5Ye
+         qRZw==
+X-Gm-Message-State: AOAM531b8MxRIHHp2jnjkhOtGlAjBfa30gkv//tQVOUFQHvD/BCrrJN6
+        FhXUOH3GxbaxIpoHhnpAeGJhe9XeU7pb6mVBpdQ=
+X-Google-Smtp-Source: ABdhPJzgyFm6GvMqLdkezhYGkj3HbXK3ZTnK2MILPVTpIakpCL0KW8dDe8WVyOO9rwpnJnnrC8vfj3TX5lyqYbfy7Ko=
+X-Received: by 2002:ac8:de:: with SMTP id d30mr10421411qtg.382.1593890771719;
+ Sat, 04 Jul 2020 12:26:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.10.10.90]
-X-Mailer: Zimbra 8.6.0_GA_1242 (zclient/8.6.0_GA_1242)
-Thread-Topic: Covid 19 =?utf-8?Q?Wohlt=C3=A4tigkeitsfonds?=
-Thread-Index: ids8kxMtFtEs487Jpm7dQ+IbhH9oxw==
-To:     unlisted-recipients:; (no To-header on input)
+Received: by 2002:ac8:698b:0:0:0:0:0 with HTTP; Sat, 4 Jul 2020 12:26:11 -0700 (PDT)
+Reply-To: johndav37@aol.com
+From:   "Barrister Ms. Linda B. Bammann, UN-Attorney at Law Court-Benin" 
+        <westernunion.benin982@gmail.com>
+Date:   Sat, 4 Jul 2020 21:26:11 +0200
+Message-ID: <CAP=nHBKwUeTMmaMunU69PEzUwWofWgtvfadEVFSYDVoKuiYFMQ@mail.gmail.com>
+Subject: Contact Diplomatic Agent, Mr. JOHN DAV to receive your ATM Card
+ AMOUNT $12,850.000Million USD today.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-
-
--- 
-Hallo
- 
- Ich bin Charles W. Jackson aus North Carolina, Vereinigte Staaten von Amerika, und ich bin der Gewinner des Mega-Millionen-Jackpots von 344 Millionen US-Dollar. Ich spende die Summe von 2.000.000 Millionen Euro als Teil der Hilfsgelder f&uuml;r das Corona-Virus.
- 
- Dies ist Ihr Spendencode: [CJ530342019]
- 
- www.youtube.com/watch?v=BSr8myiLPMQ
- 
- Bitte antworten Sie auf diese E-Mail mit dem SPENDERCODE:
- 
- charlesjacksonjr001@gmail.com
- 
- Ich hoffe, dass Sie und Ihre Familie dies durchkommen
- 
- 
- Herr Charles Jackson
+Attn Dear,Atm Card Beneficiary.
+Contact Diplomatic Agent, Mr. JOHN DAV to receive your ATM Card AMOUNT
+$12,850.000Million USD today.
+His contact address:
+AGENT NAME: Mr. JOHN DAV
+Email: johndav37@aol.com
+We required you to re-confirm your mailing address to Him where the
+ATM Card will get posted to you, because the court has approved your
+delivery this morning.
+your mailing address is required as listed below.
+YOUR FULL-----------------------
+HOME ADDRESS--------------------------------
+COUNTRY------------------------------
+AGE-------------------------------
+SEX-------------------------
+OCCUPATION---------------------------
+COPY OF YOUR VAILID ID CARD---------------------
+Thanks for your full Understanding.
+Send your ATM Card delivery fee $15.00 only to Mr. JOHN DAV.
+Barrister Ms. Linda B. Bammann, UN-Attorney at Law Court-Benin
+Email ID lindabammann42@yahoo.com
