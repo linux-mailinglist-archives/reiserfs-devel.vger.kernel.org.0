@@ -2,59 +2,64 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6778B22F5D5
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 27 Jul 2020 18:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D6D230E6F
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 28 Jul 2020 17:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729430AbgG0QwR (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 27 Jul 2020 12:52:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41028 "EHLO mail.kernel.org"
+        id S1731115AbgG1PxW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 28 Jul 2020 11:53:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55060 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729413AbgG0QwR (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 27 Jul 2020 12:52:17 -0400
-Received: from sol.localdomain (c-107-3-166-239.hsd1.ca.comcast.net [107.3.166.239])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 138AF20719;
-        Mon, 27 Jul 2020 16:52:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595868737;
-        bh=Rd0yXJxM1FZV2AkKPP2w284CplJp2APSP/Ajct3yKQI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H6Ei18zs+qrut1A39M6wgC5rrS5mOrbqutkkGin1Snx5fZdNkwTDur3EaWxhm97jn
-         n0RtL8vd3MAwWfTuY0qCdOWljf9ED3bvuVB8/tLl5UZD8NOqbBInhlSQHd/ss2H5oq
-         jrvY7WxeP0D27Bo7cD2y6Q0TeTB12MvB2LilSQZM=
-Date:   Mon, 27 Jul 2020 09:52:15 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     reiserfs-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        syzbot+187510916eb6a14598f7@syzkaller.appspotmail.com
-Subject: Re: [PATCH] reiserfs: only call unlock_new_inode() if I_NEW
-Message-ID: <20200727165215.GI1138@sol.localdomain>
-References: <20200628070057.820213-1-ebiggers@kernel.org>
+        id S1731004AbgG1PxV (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Tue, 28 Jul 2020 11:53:21 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     reiserfs-devel@vger.kernel.org
+Subject: [Bug 208719] PROBLEM: IO lockup on reiserfs RAID50 array.
+Date:   Tue, 28 Jul 2020 15:53:20 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: File System
+X-Bugzilla-Component: ReiserFS
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: axboe@kernel.dk
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: reiserfs-devel@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: component assigned_to product
+Message-ID: <bug-208719-695-MKIFJeQlDL@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-208719-695@https.bugzilla.kernel.org/>
+References: <bug-208719-695@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200628070057.820213-1-ebiggers@kernel.org>
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Sun, Jun 28, 2020 at 12:00:57AM -0700, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> unlock_new_inode() is only meant to be called after a new inode has
-> already been inserted into the hash table.  But reiserfs_new_inode() can
-> call it even before it has inserted the inode, triggering the WARNING in
-> unlock_new_inode().  Fix this by only calling unlock_new_inode() if the
-> inode has the I_NEW flag set, indicating that it's in the table.
-> 
-> This addresses the syzbot report "WARNING in unlock_new_inode"
-> (https://syzkaller.appspot.com/bug?extid=187510916eb6a14598f7).
-> 
-> Reported-by: syzbot+187510916eb6a14598f7@syzkaller.appspotmail.com
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=208719
 
-Anyone interested in taking this patch?
+Jens Axboe (axboe@kernel.dk) changed:
 
-- Eric
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+          Component|Block Layer                 |ReiserFS
+           Assignee|axboe@kernel.dk             |reiserfs-devel@vger.kernel.
+                   |                            |org
+            Product|IO/Storage                  |File System
+
+--- Comment #2 from Jens Axboe (axboe@kernel.dk) ---
+Most likely a reiserfs issue, please re-assign the bug. I'd also strongly
+reconsider using a filesystem that is actively maintained...
+
+-- 
+You are receiving this mail because:
+You are the assignee for the bug.
