@@ -2,106 +2,93 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DF6244FAC
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 14 Aug 2020 23:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA112466E8
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 17 Aug 2020 15:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726541AbgHNVw4 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 14 Aug 2020 17:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
+        id S1728096AbgHQNEv (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 17 Aug 2020 09:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726320AbgHNVwz (ORCPT
+        with ESMTP id S1728022AbgHQNEt (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 14 Aug 2020 17:52:55 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2859C061385
-        for <reiserfs-devel@vger.kernel.org>; Fri, 14 Aug 2020 14:52:55 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id c4so8688412otf.12
-        for <reiserfs-devel@vger.kernel.org>; Fri, 14 Aug 2020 14:52:55 -0700 (PDT)
+        Mon, 17 Aug 2020 09:04:49 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4171C061389
+        for <reiserfs-devel@vger.kernel.org>; Mon, 17 Aug 2020 06:04:48 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id c15so14882636wrs.11
+        for <reiserfs-devel@vger.kernel.org>; Mon, 17 Aug 2020 06:04:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=lqyz283T/dIOw03L8mirawXjATrSpRlBUoTDYx+lgsQ=;
-        b=P0rnFko9NCK6AQwrrPGBafqrcPwYYQ2C6lY+bWZOm63+PjwcJ+AShV8bzDm/49s5+h
-         Qgh0WbqSeHBSLT8DTB6u/BA8eQkSW/30ZCkWc7eDOj8+UufzlYQ9RnFlsFTFEi79ntLz
-         bval1tiUPEUFS/hG9DSV0w7Gzs8x3TuQarZ7EGxvh4RZG1oELADs188UkYrdQqw7vpp4
-         b9/f6ERD7yKlHff1jx/iokh+KdtIhwjCNVjHeJXzkrCsHZI/OLVUfAaBqn03NgyVmMjo
-         d62C8KxT3L80eBOLj8eJ/44Ep4xp0oZgD0JRaNr3xGnSqpGQNEm+H+UQdjGrjddcBlHd
-         EB1Q==
+        h=from:subject:to:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=rylnFXFRMsFq/M07NKRObHgqYvpKLkSpKB6ByDu7GGU=;
+        b=GhL2BZcRUU40xKzdxzUyLqbwgFWRRbZAvr1JfzXZfmbOCV9QY0NFrWgU4dEvsD9xRb
+         diiOB/i//qdGvKlqATDd8v9QB0lBluJhUuKClpfvyn3r+4/CIzPQw5YUwbWQpS9z5b2Z
+         Xk9FRavlti/51U0gWjQ+t4Dw4tVgITQTGejDHa6nSk5VrB7vV/kUITezyHHPlbEkkRxg
+         VSf41ZWZZmYI3iNsMmAhbVgdq7oc4/CTjiHfrAtVBo3PPE6AT1s0kOh1zZB0vQhZI8NN
+         lcFETFX9OQXDWuC/u7jcRH3t22x2/I5L2ROffDmAxK6V0EIckNqeQiXhsPJ1myFxJb+V
+         FHlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=lqyz283T/dIOw03L8mirawXjATrSpRlBUoTDYx+lgsQ=;
-        b=n+yAtEF3JNO5y8KbKA520QOraJ9Bn15WGFYzQdC5h0wDsfLN011kbl6T9pnnjRa/Fc
-         sL0m3VL6pNmk40H7v+oqhi3X5uaGp31v/EiHp0bIcIsrUH9KKIHUoaqT3H4P5gRyWqms
-         lqglJwGx4qGU55eKwJ3bb9wVL00fnL/YLsRejErF+d6VIyceiT8tPdltJ7ayFgut89E5
-         7OoMSgvtdRNnK2yRxo5vigf5nXOCKaAlx76CuZHe6iYNiUI31ATfkVlQ7yizQZd8Mlus
-         LzULQhOZHGSPt6vyUguqX/Xfi4Pp21AylyPzTKXN4w9OAsHJ6TroFHAwTO/HRiuVDd2a
-         EYoA==
-X-Gm-Message-State: AOAM531JsXp7+PnMQopOFXEPVQojZTKw1TJCnfxCcLMRONIwA/9Ofx6d
-        enPmgcreVickeRnc/zkZvoyaBC1tA2l7YRr0pq4=
-X-Google-Smtp-Source: ABdhPJzroHP5PL/KGSYU3tEfSh1bIXJgpNsJkPj+l3U5CqXzmvT1LuDCD460Sg4l4yVLlW5WfPvPHOhMN7zEisNQHbg=
-X-Received: by 2002:a05:6830:1096:: with SMTP id y22mr3391497oto.180.1597441974745;
- Fri, 14 Aug 2020 14:52:54 -0700 (PDT)
+        h=x-gm-message-state:from:subject:to:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=rylnFXFRMsFq/M07NKRObHgqYvpKLkSpKB6ByDu7GGU=;
+        b=bs6UvwIw6fk2Brz7ETa/zz7XEORy6yG72ElCMFoaoS6LMhC+LP0gsLacifAH5L+HoH
+         xw7owCqfAiiHg7WsdPQSwdn0B4BJO4/MpwAd25AZ2PY5l/FLItHCVqJZgPeh5uxAsLur
+         OAWqIaQ57hc+/qFPy63Z7LWQXrYrkjjAcNIO1GPFsRkfcHQD9WZoZo/UXnf3cWkKC4op
+         gpF00G6yxpr2KMyWlhEqBmTVaF9lrod/3Bt+zlYEI58rxn2csc1vHjhiGn2wrJ+EMano
+         xg/Pw7/w7h5Fc9Isyuye9TSa9VSxpv/rLZJCx4KD8AwyTdXgW/lK6gCGFkkSZugJRnRw
+         YqMA==
+X-Gm-Message-State: AOAM530piVwnKdjmZeu9HYWdca3s4qsqmx+yCkdq4K9848iCZee3XLsS
+        xI8TEvZlOdDnfJtMhqWe3up/W7AvkfY=
+X-Google-Smtp-Source: ABdhPJwKWm6U8/Z4+pjXqiA+vt7Htoy6PKbCoR3YRhfaJGU7jcU0jTmbfBt9EiTz4OZ3fvFu71IXlg==
+X-Received: by 2002:adf:cd91:: with SMTP id q17mr15645723wrj.5.1597669486302;
+        Mon, 17 Aug 2020 06:04:46 -0700 (PDT)
+Received: from [192.168.0.48] (HSI-KBW-046-005-005-057.hsi8.kabel-badenwuerttemberg.de. [46.5.5.57])
+        by smtp.gmail.com with ESMTPSA id v16sm29288984wmj.14.2020.08.17.06.04.45
+        for <reiserfs-devel@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 17 Aug 2020 06:04:45 -0700 (PDT)
+From:   Edward Shishkin <edward.shishkin@gmail.com>
+Subject: Reiser4 updates
+To:     ReiserFS development mailing list <reiserfs-devel@vger.kernel.org>
+Message-ID: <179a498d-7ace-a9fc-6940-f5f8fbc94f73@gmail.com>
+Date:   Mon, 17 Aug 2020 15:04:39 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.5.2
 MIME-Version: 1.0
-Received: by 2002:a4a:3c58:0:0:0:0:0 with HTTP; Fri, 14 Aug 2020 14:52:54
- -0700 (PDT)
-Reply-To: info.usbanking1@gmail.com
-From:   "MR.ANDY CECERE" <worldbankinging@gmail.com>
-Date:   Fri, 14 Aug 2020 14:52:54 -0700
-Message-ID: <CABRaz+N7s=qOA0-N=6nN+bsccX9fr1S6a0nqqMUt6AUQ-eKDvg@mail.gmail.com>
-Subject: REF:- INSTRUCTION TO CREDIT YOUR ACCOUNT WITH THE SUM OF (US$5Million)
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
--- 
-Us Bank.1025 Connecticut Ave.
-NW, Ste. 510. Washington, DC 20036.
-Tell: (213) 537-2170
-E-mail: info.usbanking1@gmail.com
+4.0.2 (stable - simple volumes):
 
-REF:- INSTRUCTION TO CREDIT YOUR ACCOUNT WITH THE SUM OF (US$5Million)
+- Port for Linux-5.8
 
-This is the second time we are notifying you about this said fund. After
-due vetting and evaluation of your file that was sent to us by the Nigerian
-Government in conjunction with the Ministry of Finance and Central Bank of
-the Federal Republic of Nigeria.
+Download at 
+https://sourceforge.net/projects/reiser4/files/reiser4-for-linux-5.x/
 
-This bank has an instruction to see to the immediate release of the sum of
-(US $5Million) of your claim that has been holding since is transferred
-into your bank Account from their Domiciliary Account with this bank.
+5.1.3 (experimental - logical volumes):
 
-We were meant to understand from our findings that you have been going
-through hard ways by paying a lot of charges to see to the release of your
-fund (US$5Million), which has been the handwork of some miscreant elements
-from that Country.
+   Kernel:
 
-We advice that you stop further communication with any correspondence from
-any bank , or anywhere concerning your funds as you will receive your fund
-from this bank if you follow our instruction.
+   - Fixups in common volume balancing procedure
+   - Port for Linux-5.8
 
-We know your representatives in Nigeria or anywhere will advice you to
-still go ahead with them, which will be on your own risk. Your
-(US$5Million) will reflect in your designated bank account within five Bank
-working days.
+   Download at 
+https://sourceforge.net/projects/reiser4/files/v5-unstable/kernel/
 
-Do not go through anybody again but through this Bank if you really want
-your fund. Finally, you are advice to re-confirm these to us,
+   Userspace:
 
-Your Full Name,
-Contact address,
-Occupation
-Telephone and Fax Number for easy communication.
+   - Reiser4progs-2.0.3 release:
 
-We need your second email gmail or hotmail for security and private reasons.
+     . fixups in progs/volume/volume.c
+     . fixed documentation
+     . added manual page for volume.reiser4 utility
 
-Yours sincerely,
-MR.ANDY CECERE,
-Tel:.(213) 537-2170
-Assistance Secretary,
-U.S Bank.
-Email address ( info.usbanking1@gmail.com )
+   Download at 
+https://sourceforge.net/projects/reiser4/files/v5-unstable/progs/
