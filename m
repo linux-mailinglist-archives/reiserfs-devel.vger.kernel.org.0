@@ -2,70 +2,147 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7E22468E5
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 17 Aug 2020 16:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A315D25113E
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 25 Aug 2020 07:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729207AbgHQO4k (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 17 Aug 2020 10:56:40 -0400
-Received: from nl101-3.vfemail.net ([149.210.219.33]:36400 "EHLO
-        nl101-3.vfemail.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729093AbgHQO4j (ORCPT
+        id S1728528AbgHYFDB (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 25 Aug 2020 01:03:01 -0400
+Received: from smtprelay0191.hostedemail.com ([216.40.44.191]:45466 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728377AbgHYFDB (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 17 Aug 2020 10:56:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=vfemail.net; h=date:from
-        :to:cc:subject:message-id:in-reply-to:references:mime-version
-        :content-type:content-transfer-encoding; s=2018; bh=a7pGJOtdjqiT
-        eAUo+PzMV64egfyuDMt0Lj3hjt/ULrk=; b=XX+2rLlkg0ezGzOgr/lC0IdmvIex
-        n5ipL4MGUUsiI2e2xn9M94sMyj3A4SByw0UAnGzYuOMBw9NSz9w4pVmJYHgMk+c2
-        3LDX+uCWJ4/ExFr1dLXsa7OSaUY1B3tjyjL3oWNrU4BvkWGEw7PCpE+/4PgYmsG6
-        D7XFNEYCUlj2pNs=
-Received: (qmail 58305 invoked from network); 17 Aug 2020 14:56:38 -0000
-Received: by simscan 1.4.0 ppid: 58235, pid: 58295, t: 0.4555s
-         scanners:none
-Received: from unknown (HELO d3d3MTkyLnZmZW1haWwubmV0) (aGdudGt3aXNAdmZlbWFpbC5uZXQ=@MTkyLjE2OC4xLjE5Mg==)
-  by nl101.vfemail.net with ESMTPA; 17 Aug 2020 14:56:38 -0000
-Date:   Mon, 17 Aug 2020 10:56:04 -0400
-From:   David Niklas <Hgntkwis@vfemail.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        reiserfs-devel@vger.kernel.org
-Subject: Re: PROBLEM: IO lockup on reiserfs FS.
-Message-ID: <20200817105604.454981dd@Phenom-II-x6.niklas.com>
-In-Reply-To: <CAHk-=wiGsj_R7pspFegPgtT4on1iYk5MmBz8uZZ3338EH3HO+Q@mail.gmail.com>
-References: <20200728222041.5d88b2e1@Phenom-II-x6.niklas.com>
-        <20200728223440.0fd8681e@Phenom-II-x6.niklas.com>
-        <20200805125317.10bf1d34@Phenom-II-x6.niklas.com>
-        <CAHk-=wiGsj_R7pspFegPgtT4on1iYk5MmBz8uZZ3338EH3HO+Q@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+        Tue, 25 Aug 2020 01:03:01 -0400
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave01.hostedemail.com (Postfix) with ESMTP id AE13F18024CF4;
+        Tue, 25 Aug 2020 04:56:49 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay04.hostedemail.com (Postfix) with ESMTP id B846B180A9F54;
+        Tue, 25 Aug 2020 04:56:42 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:541:857:966:967:973:988:989:1260:1311:1314:1345:1437:1515:1535:1544:1711:1730:1747:1777:1792:1801:2196:2199:2393:2525:2560:2563:2682:2685:2859:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3354:3865:3867:3868:3870:3874:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4321:4384:4385:4395:4605:5007:6119:6261:6737:6742:7875:9025:10004:10848:11026:11473:11658:11914:12043:12048:12050:12297:12438:12555:12679:12895:12986:13161:13229:13894:14096:14181:14394:14721:21080:21433:21451:21627:21740:21773:30054:30056,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
+X-HE-Tag: chalk60_631385f27059
+X-Filterd-Recvd-Size: 5825
+Received: from joe-laptop.perches.com (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf08.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 25 Aug 2020 04:56:38 +0000 (UTC)
+From:   Joe Perches <joe@perches.com>
+To:     Jiri Kosina <trivial@kernel.org>, oprofile-list@lists.sf.net,
+        linux-ide@vger.kernel.org, drbd-dev@lists.linbit.com,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
+        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-bcache@vger.kernel.org, netdev@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-ia64@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-fbdev@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH 00/29] treewide: Convert comma separated statements
+Date:   Mon, 24 Aug 2020 21:55:57 -0700
+Message-Id: <cover.1598331148.git.joe@perches.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: reiserfs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Wed, 5 Aug 2020 12:51:41 -0700
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> On Wed, Aug 5, 2020 at 9:53 AM <Hgntkwis@vfemail.net> wrote:
-> >
-> > It's been over 1 week since I sent this into the reiserfs-devel
-> > mailing list. I'm escalating this as the kernel docs recommend.
-> > I'm still willing to help debug and test a fix for this problem.  
-> 
-> The thing is, you're using an ancient 4.14 kernel, and a filesystem
-> that isn't really maintained any more. You'll find very few people
-> interested in trying to debug that combination.
-> 
-> You *might* have more luck with a more modern kernel, but even then
-> ... reiserfs?
-> 
->               Linus
-> 
+There are many comma separated statements in the kernel.
+See:https://lore.kernel.org/lkml/alpine.DEB.2.22.394.2008201856110.2524@hadrien/
 
-This bug appears to have been fixed some where between 4.14.X and the
-5.17.X series. I don't know why the fix wasn't backported, but it doesn't
-really matter to me as I can run the newer kernel.
+Convert the comma separated statements that are in if/do/while blocks
+to use braces and semicolons.
 
-Thanks everyone for your help.
-David
+Many comma separated statements still exist but those are changes for
+another day.
+
+Joe Perches (29):
+  coding-style.rst: Avoid comma statements
+  alpha: Avoid comma separated statements
+  ia64: Avoid comma separated statements
+  sparc: Avoid comma separated statements
+  ata: Avoid comma separated statements
+  drbd: Avoid comma separated statements
+  lp: Avoid comma separated statements
+  dma-buf: Avoid comma separated statements
+  drm/gma500: Avoid comma separated statements
+  drm/i915: Avoid comma separated statements
+  hwmon: (scmi-hwmon): Avoid comma separated statements
+  Input: MT - Avoid comma separated statements
+  bcache: Avoid comma separated statements
+  media: Avoid comma separated statements
+  mtd: Avoid comma separated statements
+  8390: Avoid comma separated statements
+  fs_enet: Avoid comma separated statements
+  wan: sbni: Avoid comma separated statements
+  s390/tty3270: Avoid comma separated statements
+  scai/arm: Avoid comma separated statements
+  media: atomisp: Avoid comma separated statements
+  video: fbdev: Avoid comma separated statements
+  fuse: Avoid comma separated statements
+  reiserfs: Avoid comma separated statements
+  lib/zlib: Avoid comma separated statements
+  lib: zstd: Avoid comma separated statements
+  ipv6: fib6: Avoid comma separated statements
+  sunrpc: Avoid comma separated statements
+  tools: Avoid comma separated statements
+
+ Documentation/process/coding-style.rst        |  17 +
+ arch/alpha/kernel/pci_iommu.c                 |   8 +-
+ arch/alpha/oprofile/op_model_ev4.c            |  22 +-
+ arch/alpha/oprofile/op_model_ev5.c            |   8 +-
+ arch/ia64/kernel/smpboot.c                    |   7 +-
+ arch/sparc/kernel/smp_64.c                    |   7 +-
+ drivers/ata/pata_icside.c                     |  21 +-
+ drivers/block/drbd/drbd_receiver.c            |   6 +-
+ drivers/char/lp.c                             |   6 +-
+ drivers/dma-buf/st-dma-fence.c                |   7 +-
+ drivers/gpu/drm/gma500/mdfld_intel_display.c  |  44 ++-
+ drivers/gpu/drm/i915/gt/gen8_ppgtt.c          |   8 +-
+ drivers/gpu/drm/i915/gt/intel_gt_requests.c   |   6 +-
+ .../gpu/drm/i915/gt/selftest_workarounds.c    |   6 +-
+ drivers/gpu/drm/i915/intel_runtime_pm.c       |   6 +-
+ drivers/hwmon/scmi-hwmon.c                    |   6 +-
+ drivers/input/input-mt.c                      |  11 +-
+ drivers/md/bcache/bset.c                      |  12 +-
+ drivers/md/bcache/sysfs.c                     |   6 +-
+ drivers/media/i2c/msp3400-kthreads.c          |  12 +-
+ drivers/media/pci/bt8xx/bttv-cards.c          |   6 +-
+ drivers/media/pci/saa7134/saa7134-video.c     |   7 +-
+ drivers/mtd/devices/lart.c                    |  10 +-
+ drivers/net/ethernet/8390/axnet_cs.c          |  19 +-
+ drivers/net/ethernet/8390/lib8390.c           |  14 +-
+ drivers/net/ethernet/8390/pcnet_cs.c          |   6 +-
+ .../ethernet/freescale/fs_enet/fs_enet-main.c |  11 +-
+ drivers/net/wan/sbni.c                        | 101 +++---
+ drivers/s390/char/tty3270.c                   |   6 +-
+ drivers/scsi/arm/cumana_2.c                   |  19 +-
+ drivers/scsi/arm/eesox.c                      |   9 +-
+ drivers/scsi/arm/powertec.c                   |   9 +-
+ .../media/atomisp/pci/atomisp_subdev.c        |   6 +-
+ drivers/video/fbdev/tgafb.c                   |  12 +-
+ fs/fuse/dir.c                                 |  24 +-
+ fs/reiserfs/fix_node.c                        |  36 ++-
+ lib/zlib_deflate/deftree.c                    |  49 ++-
+ lib/zstd/compress.c                           | 120 ++++---
+ lib/zstd/fse_compress.c                       |  24 +-
+ lib/zstd/huf_compress.c                       |   6 +-
+ net/ipv6/ip6_fib.c                            |  12 +-
+ net/sunrpc/sysctl.c                           |   6 +-
+ tools/lib/subcmd/help.c                       |  10 +-
+ tools/power/cpupower/utils/cpufreq-set.c      |  14 +-
+ tools/testing/selftests/vm/gup_benchmark.c    |  18 +-
+ tools/testing/selftests/vm/userfaultfd.c      | 296 +++++++++++-------
+ 46 files changed, 694 insertions(+), 382 deletions(-)
+
+-- 
+2.26.0
+
