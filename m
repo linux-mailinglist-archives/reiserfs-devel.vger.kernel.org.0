@@ -2,70 +2,96 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 038A7299A6B
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 27 Oct 2020 00:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFA829A1F1
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 27 Oct 2020 01:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406111AbgJZX2Y (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 26 Oct 2020 19:28:24 -0400
-Received: from nl101-3.vfemail.net ([149.210.219.33]:40878 "EHLO
-        nl101-3.vfemail.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406106AbgJZX2Y (ORCPT
+        id S2439235AbgJ0Axf (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 26 Oct 2020 20:53:35 -0400
+Received: from mail-ej1-f67.google.com ([209.85.218.67]:43275 "EHLO
+        mail-ej1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2410206AbgJ0Axf (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 26 Oct 2020 19:28:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=vfemail.net; h=date:from
-        :to:cc:subject:message-id:in-reply-to:references:mime-version
-        :content-type:content-transfer-encoding; s=2018; bh=pBsEmg8XKnZN
-        gBFO/90Iwov+OO11Y9S6DxLksRJBfqw=; b=dsQs/Mph0v8hDGsMdYN/gm5kPSUX
-        M+/mn5SiQYvgsrrh+dtEx4k+Mmf1jF6zHA3mAHw+f5D1BVSh79u1lJKW8G8ibMj8
-        jnMZ7wQWyGE+msyo3juJPJtn6H0VGoghZIqqmQLqukhCxru+buuHgfjAQc5o5+22
-        nkdp1ZNioZaw6k8=
-Received: (qmail 27609 invoked from network); 26 Oct 2020 23:28:22 -0000
-Received: by simscan 1.4.0 ppid: 27590, pid: 27603, t: 0.3029s
-         scanners:none
-Received: from unknown (HELO d3d3MTkyLnZmZW1haWwubmV0) (aGdudGt3aXNAdmZlbWFpbC5uZXQ=@MTkyLjE2OC4xLjE5Mg==)
-  by nl101.vfemail.net with ESMTPA; 26 Oct 2020 23:28:21 -0000
-Date:   Mon, 26 Oct 2020 19:22:34 -0400
-From:   David Niklas <Hgntkwis@vfemail.net>
-To:     Metztli Information Technology <jose.r.r@metztli.com>
-Cc:     <reiserfs-devel@vger.kernel.org>
+        Mon, 26 Oct 2020 20:53:35 -0400
+Received: by mail-ej1-f67.google.com with SMTP id k3so16858204ejj.10;
+        Mon, 26 Oct 2020 17:53:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ruMA5nzaXoeFAnvA+h4f1K52oHp0phNfZLmBzayTOIk=;
+        b=JmthtUqp1yozHGA/fnwa9FuqdjTxxtkEpg3acmm0Il/MCXUebcZFpS9yE9absYSFcI
+         Ojo2ceuQQoFSUcNXYphdioA3WhEtSO04LW6P/KjdqkpyizpUYQLsFm/Cgm6nevNY/UPi
+         2QhtvSumIXJXZJuHeXApB5gFHC9PSe+Cnn+H6fuTYgng5Zd4pYh1HEDtsTEMfSa4qJwd
+         G96YZY7KFqE7rCadfbNGPVc4esXIVv5BeZbWIWwk+USFxOmUnJ/qd5tDpuMHeewMJBO9
+         aIcY8W1tsH5jYl2K8dQhx/rJ8KGC3TCRLzsgCpGklvMmxpP7h8226Yj6XHnuqOejhtJu
+         fhrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ruMA5nzaXoeFAnvA+h4f1K52oHp0phNfZLmBzayTOIk=;
+        b=dZdp1m3t7SquNSxhGmDcVCy33dbFxNpCU/5Hip1G4jEJo/ksQ4a+d5FpnjLhZFjxQh
+         ODbx8aL1aubx4A+2QPptnkc0fnJmvMEzO7PVLKvlr0WnZ47de+sEr5+jMcjFogAfYtis
+         pNcL04Lz9C5N1hNTY6YhFt9QTHUpcsoKj0dJjiRyGCKN65DVINMzbt6ebdwkS7o/swao
+         QV/LVG3UGqZyJjT19XSkANmkYhmLD1Q+SsCCBOtWjn4goTWc8DlWsTD6BT+u+de8Syeh
+         lgAWuYFLN1GLbn4X8afqDh2X95zS8ZHbqUe3S2to2QJNOqZVs5zzTrRbYBROlleUbJ8/
+         mZ8A==
+X-Gm-Message-State: AOAM532q6uYb1adBfzgRBpYKcjJtA3HXblQ0hRlX0SLA59nyDiSTN5yP
+        ljQ/ZohVUql2heBP7mTPlD85Pkm0ECk=
+X-Google-Smtp-Source: ABdhPJx06IO2Eu2wL0vb2Whkfk7Zz17Tq0S+jdUCxUlEYnjtnSrdrKzV0Jt390n7wGEIc+tESycn3w==
+X-Received: by 2002:a17:906:38d9:: with SMTP id r25mr18927925ejd.8.1603760013287;
+        Mon, 26 Oct 2020 17:53:33 -0700 (PDT)
+Received: from [192.168.0.48] (HSI-KBW-46-223-1-197.hsi.kabel-badenwuerttemberg.de. [46.223.1.197])
+        by smtp.gmail.com with ESMTPSA id 11sm6695921ejy.19.2020.10.26.17.53.32
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 26 Oct 2020 17:53:32 -0700 (PDT)
 Subject: Re: PROBLEM: Reiser4 hard lockup
-Message-ID: <20201026192234.640d0346@Phenom-II-x6.niklas.com>
-In-Reply-To: <20201026104213.199566FB9182@huitzilopochtli.metztli-it.com>
-References: <20201026104213.199566FB9182@huitzilopochtli.metztli-it.com>
-X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+To:     David Niklas <Hgntkwis@vfemail.net>
+Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20201025090422.D80F56FB40E1@huitzilopochtli.metztli-it.com>
+ <20201025210758.034aa947@Phenom-II-x6.niklas.com>
+From:   Edward Shishkin <edward.shishkin@gmail.com>
+Message-ID: <2e2f8dc4-a48e-f09c-3f41-5dfa7f9a6387@gmail.com>
+Date:   Tue, 27 Oct 2020 01:53:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.5.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20201025210758.034aa947@Phenom-II-x6.niklas.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Mon, 26 Oct 2020 03:42:12 -0700 (PDT)
-Metztli Information Technology <jose.r.r@metztli.com> wrote:
-> I suggest you use this list for further communication as pretending to
-> wear an 'invisibility cloak' under cryptic email name/domains elsewhere
-> is essentially pointless: 'Murica's Stasi...er, NSA, is being fed data
-> 24/7 from her fascist Five Eyes vassals, thus anyone's pretensions at
-> privacy are largely 'child's play' for them, eh Google? ;-)
+On 10/26/2020 02:07 AM, David Niklas wrote:
+> I'll reply to both of you in this email.
 > 
-> Best Professional Regards.
+> On Sun, 25 Oct 2020 02:04:22 -0700 (PDT)
+> Metztli Information Technology <jose.r.r@metztli.com> wrote:
+>> Niltze, David-
+>>
+>> A few observations are in order below:
+>>
+>> On Sat, Oct 24, 2020 at 1:39 PM David Niklas <Hgntkwis@vfemail.net>
+>> wrote:
+>>>
+>>> Hello,
+>>>
+> <snip>
+>> reiser4progs 1.1.x Software Framework Release Number (SFRN) 4.0.1 file
+>> system utilities should not be used to check/fix media formatted 'a
+>> priori' in SFRN 4.0.2 and vice-versa.
 > 
+> Honestly, this is the first time I've heard about a Linux FS having
+> versioning other than a major one
 
-I am using this list.
-In regards to my "cryptic" email name/domains. When I first signed up for
-the LKML, I didn't receive any emails. I sent one and was told that the
-domain I was on (mail.com) was a domain that spams people so I couldn't
-send messages to the LKML. Oddly, gmail messages seem to get through and
-they send more spam than any domain I've ever seen.
-So, I set out to find a domain that the LKML would accept. I needed to
-mass create email addresses across these domains as fast as possible and
-then to subscribe as fast as possible because it's a huge waste of time
-to blindly try to find a domain that the LKML likes. That's why I have a
-cryptic email address.
-This was the 3rd of the first 20 or so domains I signed up to their email
-service for. I ended up having to speak to the admin about getting the
-LKML unbanned for sending too much spam (how ironic), to his
-server.
 
-Sincerely,
-David
+This is because, unlike other Linux file systems, reiser4 is a
+framework.
+
+In vanilla kernel having a filesystem-as-framework is discouraged for
+ideological reasons. As they explained: "nobody's interested in
+plugins". A huge monolithic mess without any internal structure -
+welcome :)
