@@ -2,162 +2,135 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E452BC91C
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 22 Nov 2020 21:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E26662BC938
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 22 Nov 2020 21:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727307AbgKVUYh (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sun, 22 Nov 2020 15:24:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
+        id S1727816AbgKVUgL (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 22 Nov 2020 15:36:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727297AbgKVUYh (ORCPT
+        with ESMTP id S1727637AbgKVUgK (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sun, 22 Nov 2020 15:24:37 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51635C0613CF;
-        Sun, 22 Nov 2020 12:24:35 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id 1so15465099wme.3;
-        Sun, 22 Nov 2020 12:24:35 -0800 (PST)
+        Sun, 22 Nov 2020 15:36:10 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65ADFC0613CF;
+        Sun, 22 Nov 2020 12:36:10 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id g15so14049320ybq.6;
+        Sun, 22 Nov 2020 12:36:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:subject:to:cc:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=zgf/h76dlKVPgQTcqMTxlnGXFSKKSbDb08KBHH9xoBo=;
-        b=VzltfJvyuWhCH1eHJvXEWMGlmjh+zONHmAP0UvUoy+HBVLK9EXzuz9by9iryq8/xU9
-         2HW7T9fyAFiO54d8x8Xg5Kny48Sz4MesnFQ19mKrmm2gyVlqvm6CTsWNsWTxkcY6zU99
-         jmnuZ9S7ZJzADD6EYgrVQ+RK2FC6kCAzMpTYfHMrUdIOFSgAAk8IXf4X1LWNNMCQ7bVQ
-         XvMj05jFStMLRMe3D8tMiqh6NuCF6cO5t3Ws8Aq9Ox78WUy7T5FWaOziHKWM9/e1Qy+P
-         p2oYebV9IuP009FiGNqT92ws4rFrFiVeAATRRUjU37tpvQAlnB+kFBaLjHBXDPk8b+uG
-         R4RA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GG13N+h9bYKW0tA8PzZdEh0PqD5/qSPuWfMm4/MLZZE=;
+        b=tX7AFJY3IoP+sTWjLWjwUeA0EiMqyjgmEMGUK52Uheybmur4GieXYHjq/4452d4+Q2
+         I9IJc2W+KgP7eM5cLMrffBSaL1fq5VPLYq7a7Nqy7aqiJs+SWc7hYJy9lsWlIs20dLH2
+         W28Iwaw2K1E1/9bR59jMmk/7Gq8vv14a82SqbrX8Cr26/AWqo5ergIUL6PfX6EI1DxrF
+         H3tDAymEGdy6lnWgT39rAP3JOfP6UnfKa9FSSCeE7ggKiNT9+2hZ/9zdGiTOU+6HH+d5
+         TmFQQAuEaRP9Z2Bh9bU0txdUhaZCbT+Ezs+qExtvq1zOJlrZzRYF6kJpZnKXIPWyTN/2
+         bJqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=zgf/h76dlKVPgQTcqMTxlnGXFSKKSbDb08KBHH9xoBo=;
-        b=D29VYDQDW0/Jy9ZFVajM9lHylJDjX/ycNPvXgYIm6sEhunuk615pyPrBkuULfLCQB3
-         bDM7CcQQbExplse4TqTFxuGBrBTwh/vDV/rVCx4ZlGaiE4K7Q++MT1v9G/OHGY49BuUq
-         HS3Ci13ZkyQdwfKSY2bAk5rgyQXC/2RWHYH48mu9eO4GLLA6AZCNHEpcAJPT15NgLMAU
-         ejONLCw+hnQ39sQDa1g6wXB0NrYj/ka7FMDT4tnF3Nn5qqUYb/w/9OrNA23OkaLWEkyy
-         RcvR2DpLtVFgNnhzBU9argIfL3vE7+/rn82g+haEow9S+Z7iQgs+i8IH0B7rn5jpOuge
-         uuAA==
-X-Gm-Message-State: AOAM53190zlfVR0TaTN61qWKPn0OeMfYCi35nxj9rsA0nuCITmbWG+dp
-        j/PcfHDdJoH71pkXq4o9G70GhE1KG/E=
-X-Google-Smtp-Source: ABdhPJxxIzWPXTyWP7/Ecz4yr0bglQDdci+MeVNy7xvG6LJS1XESLEuvB5SvTv7c24GkdflY/8Mjvw==
-X-Received: by 2002:a1c:f20e:: with SMTP id s14mr19850209wmc.126.1606076672547;
-        Sun, 22 Nov 2020 12:24:32 -0800 (PST)
-Received: from [192.168.0.48] (HSI-KBW-046-005-005-111.hsi8.kabel-badenwuerttemberg.de. [46.5.5.111])
-        by smtp.gmail.com with ESMTPSA id k1sm14787310wrp.23.2020.11.22.12.24.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 22 Nov 2020 12:24:31 -0800 (PST)
-From:   Edward Shishkin <edward.shishkin@gmail.com>
-Subject: Reiser5 Logical Volume Management - Updates
-To:     ReiserFS development mailing list 
-        <reiserfs-devel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>
-Message-ID: <ccc9ded7-ab36-ca36-99a7-21138e1c7ceb@gmail.com>
-Date:   Sun, 22 Nov 2020 21:24:30 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.5.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GG13N+h9bYKW0tA8PzZdEh0PqD5/qSPuWfMm4/MLZZE=;
+        b=ObaZf8pj5VtvDEogGRFMCRClpQMF1vhpF/ASZBGDR2ZMFPBkdlpobUU8gm+iGheaSZ
+         ns2+N8dnF+TmQRtMPogwSxF7N8SLrKtcxLjXbvPj4DcS553z4OJ61Ogch9coMHmZ4Rsq
+         6CPbzxPdfeqRAoDAKy50+BfvqZjsz5eqh3aVSuR2gC7PDJvdZtJxQ2muEGXDCJ40rypk
+         jILpBRDgbW4Z/koTgoC7BhoWSJQOvC8dDrHiWqNZs5sB/BgDPEpDMyacvXBXAGQTzIfY
+         +1aSB0mfzr4Uq1cEv54VG0oDqFZLJAlVLXkYd/LevMeie0/HMexwI8sl1+WQ41CzXpGS
+         4iCA==
+X-Gm-Message-State: AOAM533NuDa+35dARUwFwORCkHM2dODSzVByVhRP4hgefPlm7KOc6ZFl
+        h4MWXQj7WPd+iOpmo5r9qeTUFHedV1cn1RmnU3A=
+X-Google-Smtp-Source: ABdhPJzCLkP7XKvI+ogPcqXNjFlbBz0ulixnxLa8L+LTJiC1sb757UHHSouM0vJ9LX/4+Ocy8hzM6Anb9s4lPpy7cZY=
+X-Received: by 2002:a25:6986:: with SMTP id e128mr4956056ybc.93.1606077369721;
+ Sun, 22 Nov 2020 12:36:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <cover.1605896059.git.gustavoars@kernel.org> <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
+In-Reply-To: <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sun, 22 Nov 2020 21:35:58 +0100
+Message-ID: <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com>
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
+        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
+        cluster-devel@redhat.com, coreteam@netfilter.org,
+        devel@driverdev.osuosl.org, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
+        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
+        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
+        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net,
+        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-cifs@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-decnet-user@lists.sourceforge.net,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org, linux-geode@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
+        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input <linux-input@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mmc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
+        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
+        selinux@vger.kernel.org, target-devel@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net,
+        usb-storage@lists.one-eyed-alien.net,
+        virtualization@lists.linux-foundation.org,
+        wcn36xx@lists.infradead.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-           Reiser5 Logical Volume Management - Updates
+On Sun, Nov 22, 2020 at 7:22 PM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+>
+> Well, it's a problem in an error leg, sure, but it's not a really
+> compelling reason for a 141 patch series, is it?  All that fixing this
+> error will do is get the driver to print "oh dear there's a problem"
+> under four more conditions than it previously did.
+>
+> We've been at this for three years now with nearly a thousand patches,
+> firstly marking all the fall throughs with /* fall through */ and later
+> changing it to fallthrough.  At some point we do have to ask if the
+> effort is commensurate with the protection afforded.  Please tell me
+> our reward for all this effort isn't a single missing error print.
 
+It isn't that much effort, isn't it? Plus we need to take into account
+the future mistakes that it might prevent, too. So even if there were
+zero problems found so far, it is still a positive change.
 
-I am happy to inform, that Logical Volumes stuff has become more
-stable. Also we introduce the following changes, which make logical
-volumes administration more flexible and simple:
+I would agree if these changes were high risk, though; but they are
+almost trivial.
 
-
-                  1. No balancing by default
-
-
-Now all volume operations except brick removal don't invoke balancing
-by default. Instead, they mark volume as "unbalanced". To complete any
-operation with balancing specify option -B (--with-balance), or run
-volume.reiser4(8) utility with the option -b (--balance) later.
-
-This allows to speed up more than one operations over logical volume
-being performed at once. For example, if you want to add more than one
-brick to your volume at once, first add all the bricks, then run
-balancing. There is no need to balance a volume between the addition
-operations.
-
-
-                    2. Removal completion
-
-
-Operation of brick removal always includes balancing procedure as its
-part. This procedure moves out all data block from the brick to be
-removed to remaining bricks of the volume. Thus, brick removal is
-usually a long operation, which may be interrupted for various reasons
-In such cases the volume is automatically marked with an "incomplete
-removal" flag.
-
-It is not allowed to perform essential volume operations on a volume
-marked as "with incomplete removal": first, user should complete
-removal by running volume.reiser4 utility with option
--R (--finish-removal). Otherwise, the operation will return error
-(-EBUSY).
-
-There is no other restrictions: you are allowed to add a brick to
-unbalanced volume, and even remove a brick from an unbalanced volume
-(assuming it is not incomplete removal).
-
-Comment. "--finish-removal" is a temporary option. In the future the
-file system will detect incomplete removal and automatically perform
-removal completion by itself.
-
-
-                3. Balancing is always defined
-
-
-Operation of volume balancing (regardless of its balanced status) is
-always defined, and can be launched at any moment. If the volume is
-balanced, then the balancing procedure just scans the volume without
-any useful work.
-
-It is allowed to run more than one balancing threads on the same
-volume, however currently it will be inefficient: other threads will
-be always going after the single leader without doing useful work.
-Efficient volume balancing by many threads (true parallelism) is not a
-trivial task. We estimate its complexity as 2/5.
-
-
-          4. Restore regular distribution on the volume
-
-
-Custom (defined by user) file migration can break fairness of data
-distribution among the bricks. To restore regular (fair) distribution
-on the volume, run volume.reiser4 utility with the option -S
-(--restore-regular). It launches a balancing procedure, which performs
-mandatory data migration of all files (including the ones marked as
-"immobile") in accordance with regular distribution policy on the
-volume. Moreover, when the balancing procedure encounters a file
-marked as "immobile", its "immobile" flag is cleared up.
-
-
-                         5. How to test
-
-
-The new functionality is available starting with the kernel patch
-reiser4-for-linux-5.10-rc3 and reiser4progs-2.0.4 (Software Framework
-Release number of both is 5.1.3).
-
-Links for download:
-
-https://sourceforge.net/projects/reiser4/files/v5-unstable/kernel/
-https://sourceforge.net/projects/reiser4/files/v5-unstable/progs/
-
-Find updated documentation on getting started with logical volumes:
-
-https://reiser4.wiki.kernel.org/index.php/Logical_Volumes_Administration
-https://reiser4.wiki.kernel.org/index.php/Proxy_Device_Administration
-https://reiser4.wiki.kernel.org/index.php/Transparent_File_Migration
-
-Also see manual pages for volume.reiser4(8) utility.
+Cheers,
+Miguel
