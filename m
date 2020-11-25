@@ -2,158 +2,166 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5542C360A
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 25 Nov 2020 02:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 617D82C36D6
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 25 Nov 2020 03:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728089AbgKYBGI (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 24 Nov 2020 20:06:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
+        id S1726392AbgKYCcd (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 24 Nov 2020 21:32:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727789AbgKYBGB (ORCPT
+        with ESMTP id S1726287AbgKYCcc (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 24 Nov 2020 20:06:01 -0500
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 402E8C0613D6;
-        Tue, 24 Nov 2020 17:06:01 -0800 (PST)
-Received: by mail-qk1-x742.google.com with SMTP id q5so1433321qkc.12;
-        Tue, 24 Nov 2020 17:06:01 -0800 (PST)
+        Tue, 24 Nov 2020 21:32:32 -0500
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FBEC0613D4;
+        Tue, 24 Nov 2020 18:32:32 -0800 (PST)
+Received: by mail-qk1-x741.google.com with SMTP id l2so1876413qkf.0;
+        Tue, 24 Nov 2020 18:32:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=44pFzPZOXy9WMyxuVZ4PJwmHwfPvC91GWhNSdpkVBXk=;
-        b=PLHqMkuVQ6uE1aGa3jPkk7oL0rd2+0aQGjbXwXCM1BqpOEf5R6gUmrb1tTrj75nDjD
-         aG6VHTDP2JdODJ/e29C1vfEMjWhTPlycM3mNfL2JW5BhFtstP0di/Kwb3XYGnsRoKRp5
-         7FVJzAE2cPEDrpLIYX3jwoIfPno8H9ArdOwpkc9HelZA+M7Eq52S4RmPBHauFrK9tfW3
-         8wrBLWN/Mq7Fl9GTodmgwwudDuqrVUSiSILvkeQCl7qFs3/IjbI7/AG3m5iLRdEEw+2H
-         RzsA5+EdKfz0DIt5iJKomdRqiV67cH8ZcnWPF2PnARf/ANxCrT7QZJCkY0VU2DrQ9d/L
-         oW2A==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=JEPiuMrPJZvgNKBeeTCRwyAYWsEFmPf+TK0tbHJS5mc=;
+        b=LpIxvNuUq244Agb5jF2Kbw6O6BipshY1kd31EcrgzUTDZuopG5Qmfw5YW9vgOmXlyv
+         /Fzbp3cZNd3o0GKVjLfTdgaSu55hjdmmaYbZvChF0pV9guEzT4eJGJez6l4Kxmz2c5c4
+         5qHXXnZpooSGfR8GjdxpKVxnTNYctXYjj+yxknF1YXlmTwtHFH2AdhgcWtznjjrcX7Id
+         k3edVwZYzU6cqt6232ybCJ4D06LDCRHHY5Kctn/1pMdmkNWzcGjMjWvvXs2ZcJD/b+pH
+         XgepNSANuLJxAEXFv18Y30JrmVmgrvgFSOfxLyIqh7H6xDm1po+vU+Xy4VbSGLdpzOIN
+         TQTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=44pFzPZOXy9WMyxuVZ4PJwmHwfPvC91GWhNSdpkVBXk=;
-        b=SP1p0mv6tcasA0zjctwklRPuqCucLzpbUEoeQuQCE403Vw1wJTOPenb/wB6UzHrH8V
-         CEbDrvJHOMLkjUXMv7x5f9d9EHCKeZkhnj/wqmh3M1e50j4BhlGw6c7I8JJPA0109e/d
-         vfnCZxaNcIXUjMdU/MMen6CpRA8fenGalTBDz4LguBNbZkiHJCemof4ebdpdoAek8wac
-         lj1DqcsebfpC1b5u7uV2IfcXIhm9qvUbNNRSTDX6SkbjRAZMWj9TDrYZWq+GNROX+xdb
-         vNBFoaqkps142vfQF8ENhHQJbj3IMSLO+BWQamS8FMFTWRfk1aG5nJzC5oXJ/NYESCd0
-         LWOg==
-X-Gm-Message-State: AOAM53315a5CQglNJi6muaFhDfWMEm+HjvKkK02zci4+0RKe4Cgw0n+l
-        lUmVUCbrWBL7dwzg9uJUS+Yz0m6xY+JSD8teb/Q=
-X-Google-Smtp-Source: ABdhPJxG2tW9FM1fAqThCcvqKAPI/OeE1R4V2//A8ePZuSketjr0yKUxoxj6t2hcKlYt9sKRSewQcSyhG/w+5cGdzqU=
-X-Received: by 2002:a25:aac5:: with SMTP id t63mr1046305ybi.22.1606266360499;
- Tue, 24 Nov 2020 17:06:00 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=JEPiuMrPJZvgNKBeeTCRwyAYWsEFmPf+TK0tbHJS5mc=;
+        b=nsR+XBY5WMbt01xIo5wBn6K8BP42rKuZLM/fYoWfZA1mFzGQh5BNtn2m06Y/hK6Osf
+         VDdp1xLhJvnvupaV39kBPtekD1kGiquPPqES2KRzVuHaACuE8IXqp/wsalOfsyR/ZfzN
+         wN0dR90HZ+FMEMl5yKf5E02YIvG1gWOJzGOuXh0fOG6XeTTPjSfbUIvFarBHH0yk9lnt
+         ALmHlFw5WTq2G1/4sJIJCvZpMe1q+5tPhWjKT1k6JXoZWuZSg2TxCOhFaGw/DL3fFjxm
+         UN/JIVrCsWNL8h0UZVTJRMMLXGzKfTsNiMnjDxtp3YsVbwOXKkc0bwpm867BZM4VF541
+         utuA==
+X-Gm-Message-State: AOAM5304MiOA465wUNjb+BfvpS7kQOKkZ0m126VxRQv49o6wvILqzV3D
+        iiDnY+kvfED9pY2VHKuwamiARYE+2Q9psK4gUWklqE0joARQlBqv
+X-Google-Smtp-Source: ABdhPJwrC+gTvIE+cHBs+bQWe1ZwkF1RRREjYyVcJ1UyoKit2TnCr9wy2NcDoO0IEDO65XIn8MFU1GsVUe7n0f8Y1E4=
+X-Received: by 2002:a25:2e0d:: with SMTP id u13mr1310032ybu.247.1606271551478;
+ Tue, 24 Nov 2020 18:32:31 -0800 (PST)
 MIME-Version: 1.0
-References: <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
- <ca071decb87cc7e905411423c05a48f9fd2f58d7.camel@perches.com>
- <0147972a72bc13f3629de8a32dee6f1f308994b5.camel@HansenPartnership.com>
- <d8d1e9add08cdd4158405e77762d4946037208f8.camel@perches.com>
- <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com>
- <20201123130348.GA3119@embeddedor> <8f5611bb015e044fa1c0a48147293923c2d904e4.camel@HansenPartnership.com>
- <202011241327.BB28F12F6@keescook> <alpine.LNX.2.23.453.2011250859290.15@nippy.intranet>
- <CANiq72nUt57u5DG9rH=DB0DzQH7U6-QbG-2Ou+PyCY=p=_Ggag@mail.gmail.com> <alpine.LNX.2.23.453.2011251022550.14@nippy.intranet>
-In-Reply-To: <alpine.LNX.2.23.453.2011251022550.14@nippy.intranet>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 25 Nov 2020 02:05:49 +0100
-Message-ID: <CANiq72m2kGxSy2E9jgYE4_xRV6h9rFqiJP25KXs_5ObYnH_nmA@mail.gmail.com>
-Subject: Re: [Intel-wired-lan] [PATCH 000/141] Fix fall-through warnings for Clang
-To:     Finn Thain <fthain@telegraphics.com.au>
-Cc:     Kees Cook <keescook@chromium.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Joe Perches <joe@perches.com>,
-        Jakub Kicinski <kuba@kernel.org>, alsa-devel@alsa-project.org,
-        linux-atm-general@lists.sourceforge.net,
-        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-ide@vger.kernel.org, dm-devel@redhat.com,
-        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
-        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
-        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
-        linux1394-devel@lists.sourceforge.net,
-        linux-afs@lists.infradead.org,
-        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
-        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
-        rds-devel@oss.oracle.com,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-scsi@vger.kernel.org, linux-rdma@vger.kernel.org,
-        oss-drivers@netronome.com, bridge@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
-        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
-        intel-wired-lan@lists.osuosl.org,
-        linux-input <linux-input@vger.kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        tipc-discussion@lists.sourceforge.net,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org, selinux@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        linux-geode@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-gpio@vger.kernel.org,
-        op-tee@lists.trustedfirmware.org,
-        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
-        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
-        ceph-devel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-nfs@vger.kernel.org, GR-Linux-NIC-Dev@marvell.com,
-        Linux-MM <linux-mm@kvack.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net, linux-mmc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-usb@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-integrity@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
+From:   =?UTF-8?B?5oWV5Yas5Lqu?= <mudongliangabcd@gmail.com>
+Date:   Wed, 25 Nov 2020 10:32:05 +0800
+Message-ID: <CAD-N9QVE_eYTrdp0c6q+c_kHUXk+i54BKhHR_0=qwr5xEu_k=w@mail.gmail.com>
+Subject: Re: general protection fault in reiserfs_security_init
+To:     baolin.wang7@gmail.com, gregkh@linuxfoundation.org,
+        linhua.xu@unisoc.com, linus.walleij@linaro.org,
+        linux-kernel <linux-kernel@vger.kernel.org>, rafael@kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Wed, Nov 25, 2020 at 12:53 AM Finn Thain <fthain@telegraphics.com.au> wrote:
+On Monday, September 21, 2020 at 5:32:22 PM UTC+8 syzbot wrote:
 >
-> I'm saying that supporting the official language spec makes more sense
-> than attempting to support a multitude of divergent interpretations of the
-> spec (i.e. gcc, clang, coverity etc.)
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit: 325d0eab Merge branch 'akpm' (patches from Andrew)
+> git tree: upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1671c0e3900000
+> kernel config: https://syzkaller.appspot.com/x/.config?x=b12e84189082991c
+> dashboard link: https://syzkaller.appspot.com/bug?extid=690cb1e51970435f9775
+> compiler: gcc (GCC) 10.1.0-syz 20200507
+> syz repro: https://syzkaller.appspot.com/x/repro.syz?x=15705a3d900000
+> C reproducer: https://syzkaller.appspot.com/x/repro.c?x=117b3281900000
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+690cb1...@syzkaller.appspotmail.com
+>
+> REISERFS (device loop0): journal params: device loop0, size 15748, journal first block 18, max trans len 256, max batch 225, max commit age 30, max trans age 30
+> REISERFS (device loop0): checking transaction log (loop0)
+> REISERFS (device loop0): Using tea hash to sort names
+> REISERFS (device loop0): using 3.5.x disk format
+> general protection fault, probably for non-canonical address 0xdffffc000000000d: 0000 [#1] PREEMPT SMP KASAN
+> KASAN: null-ptr-deref in range [0x0000000000000068-0x000000000000006f]
+> CPU: 0 PID: 6874 Comm: syz-executor834 Not tainted 5.9.0-rc5-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:d_really_is_negative include/linux/dcache.h:472 [inline]
+> RIP: 0010:reiserfs_xattr_jcreate_nblocks fs/reiserfs/xattr.h:78 [inline]
+> RIP: 0010:reiserfs_security_init+0x285/0x4d0 fs/reiserfs/xattr_security.c:70
+> Code: 48 c1 ea 03 80 3c 02 00 0f 85 2b 02 00 00 4d 8b ad a0 05 00 00 48 b8 00 00 00 00 00 fc ff df 49 8d 7d 68 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 23 02 00 00 49 83 7d 68 00 0f 84 62 01 00 00 48
+> RSP: 0018:ffffc90005827980 EFLAGS: 00010202
+> RAX: dffffc0000000000 RBX: 0000000000000036 RCX: 000000000000006c
+> RDX: 000000000000000d RSI: ffffffff82009dd3 RDI: 0000000000000068
+> RBP: ffff88807d8441d0 R08: ffffc90005827a10 R09: ffffc90005827a18
+> R10: 0000000000000000 R11: 0000000000000000 R12: 00000000000005fa
+> R13: 0000000000000000 R14: ffff888094e60000 R15: 0000000000000000
+> FS: 0000000001036880(0000) GS:ffff8880ae400000(0000) knlGS:0000000000000000
+> CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f5a6fb90ab4 CR3: 000000009a1ab000 CR4: 00000000001506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+> reiserfs_mkdir+0x2c9/0x980 fs/reiserfs/namei.c:821
+> create_privroot fs/reiserfs/xattr.c:882 [inline]
+> reiserfs_xattr_init+0x4de/0xb52 fs/reiserfs/xattr.c:1004
 
-Making the kernel strictly conforming is a ship that sailed long ago,
-for several reasons. Anyway, supporting several compilers and other
-tools, regardless of extensions, is valuable.
 
-> I'm also saying that the reason why we use -std=gnu89 is that existing
-> code was written in that language, not in ad hoc languages comprised of
-> collections of extensions that change with every release.
+int reiserfs_xattr_init(struct super_block *s, int mount_flags)
+{
+        int err = 0;
+        struct dentry *privroot = REISERFS_SB(s)->priv_root;
 
-No, we aren't particularly tied to `gnu89` or anything like that. We
-could actually go for `gnu11` already, since the minimum GCC and Clang
-support it. Even if a bit of code needs fixing, that shouldn't be a
-problem if someone puts the work.
+        err = xattr_mount_check(s);
+        if (err)
+                goto error;
 
-In other words, the kernel code is not frozen, nor are the features it
-uses from compilers. They do, in fact, change from time to time.
+        if (d_really_is_negative(privroot) && !(mount_flags & SB_RDONLY)) {
+                inode_lock(d_inode(s->s_root));
+                err = create_privroot(REISERFS_SB(s)->priv_root);
+                inode_unlock(d_inode(s->s_root));
+        }
 
-> Thank you for checking. I found a free version that's only 6 weeks old:
+        if (d_really_is_positive(privroot)) {
+                inode_lock(d_inode(privroot));
+                if (!REISERFS_SB(s)->xattr_root) {
+                        struct dentry *dentry;
 
-You're welcome! There are quite a few new attributes coming, mostly
-following C++ ones.
+                        dentry = lookup_one_len(XAROOT_NAME, privroot,
+                                                strlen(XAROOT_NAME));
+                        if (!IS_ERR(dentry)) {
+                                pr_alert("assign xattr_root with
+dentry = 0x%lx", dentry);
+                                REISERFS_SB(s)->xattr_root = dentry;
+                        }else
+                                err = PTR_ERR(dentry);
+                }
+                inode_unlock(d_inode(privroot));
+        }
+        ......
+}
+From the implementation of reiserfs_xattr_init, only when
+d_really_is_positive(privroot) is true, xattr_root could be assigned
+with a dentry obtained from lookup_one_len. In other words,
+create_privroot is executed with REISERFS_SB(s)->xattr_root as NULL
+pointer. With improper implementation of mkdir operation in reiserfs
+filesystem or accessing the xattr_root in reiserfs_mkdir , it can lead
+to NULL pointer dereference. If you remove the red code in
+reiserfs_xattr_jcreate_nblocks, the crash never occurs, but it may
+affect nblocks calculation in the reiserfs filesystem.
 
-> It will be interesting to see whether 6.7.11.5 changes once the various
-> implementations reach agreement.
+static inline size_t reiserfs_xattr_jcreate_nblocks(struct inode *inode)
+{
+        size_t nblocks = JOURNAL_BLOCKS_PER_OBJECT(inode->i_sb);
 
-Not sure what you mean. The standard does not evolve through
-implementations' agreement (although standardizing existing practice
-is one of the best arguments to back a change).
+        pr_alert("5: inode = 0x%lx", inode);
+        if ((REISERFS_I(inode)->i_flags & i_has_xattr_dir) == 0) {
+                nblocks += JOURNAL_BLOCKS_PER_OBJECT(inode->i_sb);
+                if (d_really_is_negative(REISERFS_SB(inode->i_sb)->xattr_root))
+                      nblocks += JOURNAL_BLOCKS_PER_OBJECT(inode->i_sb);
+        }
 
-Cheers,
-Miguel
+        return nblocks;
+}
+
+--
+My best regards to you.
+
+     No System Is Safe!
+     Dongliang Mu
