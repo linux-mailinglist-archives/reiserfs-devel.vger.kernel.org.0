@@ -2,166 +2,173 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 617D82C36D6
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 25 Nov 2020 03:52:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9761F2C39B4
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 25 Nov 2020 08:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726392AbgKYCcd (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 24 Nov 2020 21:32:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
+        id S1727840AbgKYHFq (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 25 Nov 2020 02:05:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726287AbgKYCcc (ORCPT
+        with ESMTP id S1726032AbgKYHFm (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 24 Nov 2020 21:32:32 -0500
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FBEC0613D4;
-        Tue, 24 Nov 2020 18:32:32 -0800 (PST)
-Received: by mail-qk1-x741.google.com with SMTP id l2so1876413qkf.0;
-        Tue, 24 Nov 2020 18:32:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=JEPiuMrPJZvgNKBeeTCRwyAYWsEFmPf+TK0tbHJS5mc=;
-        b=LpIxvNuUq244Agb5jF2Kbw6O6BipshY1kd31EcrgzUTDZuopG5Qmfw5YW9vgOmXlyv
-         /Fzbp3cZNd3o0GKVjLfTdgaSu55hjdmmaYbZvChF0pV9guEzT4eJGJez6l4Kxmz2c5c4
-         5qHXXnZpooSGfR8GjdxpKVxnTNYctXYjj+yxknF1YXlmTwtHFH2AdhgcWtznjjrcX7Id
-         k3edVwZYzU6cqt6232ybCJ4D06LDCRHHY5Kctn/1pMdmkNWzcGjMjWvvXs2ZcJD/b+pH
-         XgepNSANuLJxAEXFv18Y30JrmVmgrvgFSOfxLyIqh7H6xDm1po+vU+Xy4VbSGLdpzOIN
-         TQTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=JEPiuMrPJZvgNKBeeTCRwyAYWsEFmPf+TK0tbHJS5mc=;
-        b=nsR+XBY5WMbt01xIo5wBn6K8BP42rKuZLM/fYoWfZA1mFzGQh5BNtn2m06Y/hK6Osf
-         VDdp1xLhJvnvupaV39kBPtekD1kGiquPPqES2KRzVuHaACuE8IXqp/wsalOfsyR/ZfzN
-         wN0dR90HZ+FMEMl5yKf5E02YIvG1gWOJzGOuXh0fOG6XeTTPjSfbUIvFarBHH0yk9lnt
-         ALmHlFw5WTq2G1/4sJIJCvZpMe1q+5tPhWjKT1k6JXoZWuZSg2TxCOhFaGw/DL3fFjxm
-         UN/JIVrCsWNL8h0UZVTJRMMLXGzKfTsNiMnjDxtp3YsVbwOXKkc0bwpm867BZM4VF541
-         utuA==
-X-Gm-Message-State: AOAM5304MiOA465wUNjb+BfvpS7kQOKkZ0m126VxRQv49o6wvILqzV3D
-        iiDnY+kvfED9pY2VHKuwamiARYE+2Q9psK4gUWklqE0joARQlBqv
-X-Google-Smtp-Source: ABdhPJwrC+gTvIE+cHBs+bQWe1ZwkF1RRREjYyVcJ1UyoKit2TnCr9wy2NcDoO0IEDO65XIn8MFU1GsVUe7n0f8Y1E4=
-X-Received: by 2002:a25:2e0d:: with SMTP id u13mr1310032ybu.247.1606271551478;
- Tue, 24 Nov 2020 18:32:31 -0800 (PST)
-MIME-Version: 1.0
-From:   =?UTF-8?B?5oWV5Yas5Lqu?= <mudongliangabcd@gmail.com>
-Date:   Wed, 25 Nov 2020 10:32:05 +0800
-Message-ID: <CAD-N9QVE_eYTrdp0c6q+c_kHUXk+i54BKhHR_0=qwr5xEu_k=w@mail.gmail.com>
-Subject: Re: general protection fault in reiserfs_security_init
-To:     baolin.wang7@gmail.com, gregkh@linuxfoundation.org,
-        linhua.xu@unisoc.com, linus.walleij@linaro.org,
-        linux-kernel <linux-kernel@vger.kernel.org>, rafael@kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+        Wed, 25 Nov 2020 02:05:42 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571CDC0613D6;
+        Tue, 24 Nov 2020 23:05:42 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 2D9901280404;
+        Tue, 24 Nov 2020 23:05:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1606287940;
+        bh=PpyvloC8ztllb7q8ndtGKJRs78ChiB3jg6tteM0zYL0=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=DUjk2u5mMxkvusJZ7TUknDmT+9jEkjAK5Du54VYrLnX3ZVAsqbXKInJF3+bjbWxe1
+         sPTOm9Jo8O4FiM37EcbSbGJ09Z6i3toRLj70BanOqmx/doOouqQw1ofRfirJ315HKN
+         ACp6UaCD/rMf1rqLOvr/v7W+FqOYQZREI5LkhaoU=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 8h4rTuJEi-3j; Tue, 24 Nov 2020 23:05:40 -0800 (PST)
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id A873112803EC;
+        Tue, 24 Nov 2020 23:05:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1606287940;
+        bh=PpyvloC8ztllb7q8ndtGKJRs78ChiB3jg6tteM0zYL0=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=DUjk2u5mMxkvusJZ7TUknDmT+9jEkjAK5Du54VYrLnX3ZVAsqbXKInJF3+bjbWxe1
+         sPTOm9Jo8O4FiM37EcbSbGJ09Z6i3toRLj70BanOqmx/doOouqQw1ofRfirJ315HKN
+         ACp6UaCD/rMf1rqLOvr/v7W+FqOYQZREI5LkhaoU=
+Message-ID: <a841536fe65bb33f1c72ce2455a6eb47a0107565.camel@HansenPartnership.com>
+Subject: Re: [Intel-wired-lan] [PATCH 000/141] Fix fall-through warnings for
+ Clang
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Joe Perches <joe@perches.com>,
+        Jakub Kicinski <kuba@kernel.org>, alsa-devel@alsa-project.org,
+        linux-atm-general@lists.sourceforge.net,
+        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        linux-ide@vger.kernel.org, dm-devel@redhat.com,
+        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
+        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
+        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
+        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
+        rds-devel@oss.oracle.com,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-scsi@vger.kernel.org, linux-rdma@vger.kernel.org,
+        oss-drivers@netronome.com, bridge@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
+        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
+        intel-wired-lan@lists.osuosl.org, linux-input@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        tipc-discussion@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        selinux@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
+        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
+        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
+        ceph-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        x86@kernel.org, linux-nfs@vger.kernel.org,
+        GR-Linux-NIC-Dev@marvell.com, linux-mm@kvack.org,
+        netdev@vger.kernel.org, linux-decnet-user@lists.sourceforge.net,
+        linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-sctp@vger.kernel.org, linux-usb@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-integrity@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Date:   Tue, 24 Nov 2020 23:05:35 -0800
+In-Reply-To: <202011241327.BB28F12F6@keescook>
+References: <202011201129.B13FDB3C@keescook>
+         <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+         <202011220816.8B6591A@keescook>
+         <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
+         <ca071decb87cc7e905411423c05a48f9fd2f58d7.camel@perches.com>
+         <0147972a72bc13f3629de8a32dee6f1f308994b5.camel@HansenPartnership.com>
+         <d8d1e9add08cdd4158405e77762d4946037208f8.camel@perches.com>
+         <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com>
+         <20201123130348.GA3119@embeddedor>
+         <8f5611bb015e044fa1c0a48147293923c2d904e4.camel@HansenPartnership.com>
+         <202011241327.BB28F12F6@keescook>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Monday, September 21, 2020 at 5:32:22 PM UTC+8 syzbot wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit: 325d0eab Merge branch 'akpm' (patches from Andrew)
-> git tree: upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1671c0e3900000
-> kernel config: https://syzkaller.appspot.com/x/.config?x=b12e84189082991c
-> dashboard link: https://syzkaller.appspot.com/bug?extid=690cb1e51970435f9775
-> compiler: gcc (GCC) 10.1.0-syz 20200507
-> syz repro: https://syzkaller.appspot.com/x/repro.syz?x=15705a3d900000
-> C reproducer: https://syzkaller.appspot.com/x/repro.c?x=117b3281900000
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+690cb1...@syzkaller.appspotmail.com
->
-> REISERFS (device loop0): journal params: device loop0, size 15748, journal first block 18, max trans len 256, max batch 225, max commit age 30, max trans age 30
-> REISERFS (device loop0): checking transaction log (loop0)
-> REISERFS (device loop0): Using tea hash to sort names
-> REISERFS (device loop0): using 3.5.x disk format
-> general protection fault, probably for non-canonical address 0xdffffc000000000d: 0000 [#1] PREEMPT SMP KASAN
-> KASAN: null-ptr-deref in range [0x0000000000000068-0x000000000000006f]
-> CPU: 0 PID: 6874 Comm: syz-executor834 Not tainted 5.9.0-rc5-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> RIP: 0010:d_really_is_negative include/linux/dcache.h:472 [inline]
-> RIP: 0010:reiserfs_xattr_jcreate_nblocks fs/reiserfs/xattr.h:78 [inline]
-> RIP: 0010:reiserfs_security_init+0x285/0x4d0 fs/reiserfs/xattr_security.c:70
-> Code: 48 c1 ea 03 80 3c 02 00 0f 85 2b 02 00 00 4d 8b ad a0 05 00 00 48 b8 00 00 00 00 00 fc ff df 49 8d 7d 68 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 23 02 00 00 49 83 7d 68 00 0f 84 62 01 00 00 48
-> RSP: 0018:ffffc90005827980 EFLAGS: 00010202
-> RAX: dffffc0000000000 RBX: 0000000000000036 RCX: 000000000000006c
-> RDX: 000000000000000d RSI: ffffffff82009dd3 RDI: 0000000000000068
-> RBP: ffff88807d8441d0 R08: ffffc90005827a10 R09: ffffc90005827a18
-> R10: 0000000000000000 R11: 0000000000000000 R12: 00000000000005fa
-> R13: 0000000000000000 R14: ffff888094e60000 R15: 0000000000000000
-> FS: 0000000001036880(0000) GS:ffff8880ae400000(0000) knlGS:0000000000000000
-> CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f5a6fb90ab4 CR3: 000000009a1ab000 CR4: 00000000001506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
-> reiserfs_mkdir+0x2c9/0x980 fs/reiserfs/namei.c:821
-> create_privroot fs/reiserfs/xattr.c:882 [inline]
-> reiserfs_xattr_init+0x4de/0xb52 fs/reiserfs/xattr.c:1004
+On Tue, 2020-11-24 at 13:32 -0800, Kees Cook wrote:
+> On Mon, Nov 23, 2020 at 08:31:30AM -0800, James Bottomley wrote:
+> > Really, no ... something which produces no improvement has no value
+> > at all ... we really shouldn't be wasting maintainer time with it
+> > because it has a cost to merge.  I'm not sure we understand where
+> > the balance lies in value vs cost to merge but I am confident in
+> > the zero value case.
+> 
+> What? We can't measure how many future bugs aren't introduced because
+> the kernel requires explicit case flow-control statements for all new
+> code.
+
+No but we can measure how vulnerable our current coding habits are to
+the mistake this warning would potentially prevent.  I don't think it's
+wrong to extrapolate that if we had no instances at all of prior coding
+problems we likely wouldn't have any in future either making adopting
+the changes needed to enable the warning valueless ... that's the zero
+value case I was referring to above.
+
+Now, what we have seems to be about 6 cases (at least what's been shown
+in this thread) where a missing break would cause potentially user
+visible issues.  That means the value of this isn't zero, but it's not
+a no-brainer massive win either.  That's why I think asking what we've
+invested vs the return isn't a useless exercise.
+
+> We already enable -Wimplicit-fallthrough globally, so that's not the
+> discussion. The issue is that Clang is (correctly) even more strict
+> than GCC for this, so these are the remaining ones to fix for full
+> Clang coverage too.
+> 
+> People have spent more time debating this already than it would have
+> taken to apply the patches. :)
+
+You mean we've already spent 90% of the effort to come this far so we
+might as well go the remaining 10% because then at least we get some
+return? It's certainly a clinching argument in defence procurement ...
+
+> This is about robustness and language wrangling. It's a big code-
+> base, and this is the price of our managing technical debt for
+> permanent robustness improvements. (The numbers I ran from Gustavo's
+> earlier patches were that about 10% of the places adjusted were
+> identified as legitimate bugs being fixed. This final series may be
+> lower, but there are still bugs being found from it -- we need to
+> finish this and shut the door on it for good.)
+
+I got my six patches by analyzing the lwn.net report of the fixes that
+was cited which had 21 of which 50% didn't actually change the emitted
+code, and 25% didn't have a user visible effect.
+
+But the broader point I'm making is just because the compiler people
+come up with a shiny new warning doesn't necessarily mean the problem
+it's detecting is one that causes us actual problems in the code base. 
+I'd really be happier if we had a theory about what classes of CVE or
+bug we could eliminate before we embrace the next new warning.
+
+James
 
 
-int reiserfs_xattr_init(struct super_block *s, int mount_flags)
-{
-        int err = 0;
-        struct dentry *privroot = REISERFS_SB(s)->priv_root;
 
-        err = xattr_mount_check(s);
-        if (err)
-                goto error;
-
-        if (d_really_is_negative(privroot) && !(mount_flags & SB_RDONLY)) {
-                inode_lock(d_inode(s->s_root));
-                err = create_privroot(REISERFS_SB(s)->priv_root);
-                inode_unlock(d_inode(s->s_root));
-        }
-
-        if (d_really_is_positive(privroot)) {
-                inode_lock(d_inode(privroot));
-                if (!REISERFS_SB(s)->xattr_root) {
-                        struct dentry *dentry;
-
-                        dentry = lookup_one_len(XAROOT_NAME, privroot,
-                                                strlen(XAROOT_NAME));
-                        if (!IS_ERR(dentry)) {
-                                pr_alert("assign xattr_root with
-dentry = 0x%lx", dentry);
-                                REISERFS_SB(s)->xattr_root = dentry;
-                        }else
-                                err = PTR_ERR(dentry);
-                }
-                inode_unlock(d_inode(privroot));
-        }
-        ......
-}
-From the implementation of reiserfs_xattr_init, only when
-d_really_is_positive(privroot) is true, xattr_root could be assigned
-with a dentry obtained from lookup_one_len. In other words,
-create_privroot is executed with REISERFS_SB(s)->xattr_root as NULL
-pointer. With improper implementation of mkdir operation in reiserfs
-filesystem or accessing the xattr_root in reiserfs_mkdir , it can lead
-to NULL pointer dereference. If you remove the red code in
-reiserfs_xattr_jcreate_nblocks, the crash never occurs, but it may
-affect nblocks calculation in the reiserfs filesystem.
-
-static inline size_t reiserfs_xattr_jcreate_nblocks(struct inode *inode)
-{
-        size_t nblocks = JOURNAL_BLOCKS_PER_OBJECT(inode->i_sb);
-
-        pr_alert("5: inode = 0x%lx", inode);
-        if ((REISERFS_I(inode)->i_flags & i_has_xattr_dir) == 0) {
-                nblocks += JOURNAL_BLOCKS_PER_OBJECT(inode->i_sb);
-                if (d_really_is_negative(REISERFS_SB(inode->i_sb)->xattr_root))
-                      nblocks += JOURNAL_BLOCKS_PER_OBJECT(inode->i_sb);
-        }
-
-        return nblocks;
-}
-
---
-My best regards to you.
-
-     No System Is Safe!
-     Dongliang Mu
