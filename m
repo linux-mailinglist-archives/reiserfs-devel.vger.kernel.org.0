@@ -2,159 +2,112 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 276E22C5A33
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 26 Nov 2020 18:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A4E62C724B
+	for <lists+reiserfs-devel@lfdr.de>; Sat, 28 Nov 2020 23:06:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404336AbgKZRGE (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 26 Nov 2020 12:06:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
+        id S2387757AbgK1VuV (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sat, 28 Nov 2020 16:50:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391545AbgKZRF7 (ORCPT
+        with ESMTP id S1733310AbgK1SSS (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 26 Nov 2020 12:05:59 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC77C0617A7;
-        Thu, 26 Nov 2020 09:05:58 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id r127so2177763yba.10;
-        Thu, 26 Nov 2020 09:05:58 -0800 (PST)
+        Sat, 28 Nov 2020 13:18:18 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0532C02A186
+        for <reiserfs-devel@vger.kernel.org>; Sat, 28 Nov 2020 04:21:31 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id m16so8512300edr.3
+        for <reiserfs-devel@vger.kernel.org>; Sat, 28 Nov 2020 04:21:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O/jaIJrbif54isUECHds/J8Ujq0NdoNxUTCCwJWwQ80=;
-        b=YymqsvqKytU8xghgrWvO9q2MBm/qo/QfMLfSKpWw4/r/4uRHhZxuPq9ek+nW3ctzYi
-         vs3zi1yLEuFoGUDgrnF15wpJAK9RqJ1aO9sTXa0PjOzjLe+d4O/pTFiiO013Mx2qKoL4
-         SkUMUUIjag5bjqwHGLYc9f20TwOaOWbGTale/6i8ahvnaZymX26ArF3ReuQKFVdof495
-         iKDDkr6mQvIIbdynQAd2wxd2GUAuBku/vDm4jIdtOw4Ph7wkJ5rD2TxigEVm3yQ5C9tu
-         pJCfZKqtAfLebSyeKrm6VDCN2G4oKvj4TFU9uFOnavPNoLjuB5eIt+ODZ6yyvDDDthAD
-         GeSQ==
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=KVhhWQype0NBKYxoEjuYHRsU1J5QRlkGsbFrqhs2oTc=;
+        b=MtpWM3I1Ng38YqQ5ke7JQDGUGdBITPYMoj0vufmy0CYvLhRbTEuzEGKo93H1gGo06A
+         7hCgnSdJl3hv3KGmaen9Faq2EmuQY58BShG2AFi1ZLEPxXxD2GXMR1BrU/nevASF4rHp
+         8njHtOcb/zCEJsrHe+qYJb60zYTGaaXKeChxxX80Z/f0+2Z0Z+mRGjpsWjAIXWGKxUfw
+         Ls/B+cwUjmr49GxUeiUDf1uVgpfvKynWoWVIGb+mVzT0Ink9yltMGUoR+QhIFOAGiRQV
+         a/7oCBHjoxERiIBxh2PiPFSvHVeWK3m1IdGa39lRKFlP0WopYqHTP3wH8IIY6hZDgqqv
+         53hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O/jaIJrbif54isUECHds/J8Ujq0NdoNxUTCCwJWwQ80=;
-        b=aBKS9dP5F50l3Jly7k9SSc/LK5erhBpycSZOv4wk5BN5RL5nJRXG22JXb51uhHUZXT
-         KIo7NPNuDQAaoFptzyQLY5+V165LaaM4A3SDftsG6r8jUKFTe3kOZlTNhFO98Omgyp9Q
-         a9Nhl4BC3JSKnQNtrA5BlkEEIiNZTXLFXBewv/QXrjtqSWNsWQaFfWQufRE4KuzbXqKR
-         PzrYxYYizDdcU7tHSLlPDoetCmkwwegjts2/MTRKSxYZHry2gE2IZ3EABAxgsDNNKkjr
-         HczI/bTiV/H0UdQWLP6YbSuhnjf+4UX9HDOCvOW26oy0A/Bet4FJA2uZGgwPUNbj9RMn
-         pyQw==
-X-Gm-Message-State: AOAM532cLFujGBf04/OSYyfwCvyItoqdB5R+dfwsdw217khsKAQ0vy+N
-        l26UMdbWZCDXWtXxdN3IQjQv/nw3FiJxL8cvQg0=
-X-Google-Smtp-Source: ABdhPJxMy5ncXEZ6TSWkZ0cAXTnkQ7iw+jjdg+cNNUWTZPlZcmFMrQQcJd2JAoeBontKFrtwmzLazAacI3fdsjx9xvQ=
-X-Received: by 2002:a5b:40e:: with SMTP id m14mr4835621ybp.33.1606410357153;
- Thu, 26 Nov 2020 09:05:57 -0800 (PST)
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=KVhhWQype0NBKYxoEjuYHRsU1J5QRlkGsbFrqhs2oTc=;
+        b=EYX2zeqkgqPXeFzwmM7Maegi13r+mC2caIOp7giB1QF2sBZ5DHlO9sJpiRUZIDIp00
+         YELHY06MxMbZjeqvg3rYTbOebomqBh8BYMbqxNXa/ntZmmkYYo4d4n1Sv55Fi/WmPHVF
+         D+jvCymcx4jJQNeyg11bmAtEAYQA3l+v/0u2gLdogchqoSwgOEtBbniub9OrXhx78cmR
+         v2dS5EHVkkzKo8VRsUwSSrJ972lhhwishNT4ccjKYwMuVnmlKqQTFONoYPjSwkJhDGfu
+         ghRrSMOwoZsY7Pn43h+klJ5RAQGMvaWoofJSgr6mhKiNXOS2PZ4kToz4GpICnsDYmUOm
+         KFKA==
+X-Gm-Message-State: AOAM533Y93zuLeUkSlqmGCX2HZcXki9qVdpnlKC6LQqi4nR/14Jt9PrX
+        5bOjghc9lx+1rHmQINu1TM2cfh9UleM=
+X-Google-Smtp-Source: ABdhPJy8dgvO5fiMfU/m1+q2JsJyEZ0yTr9R2pjKPVPxMpHBUTvVtyD8R44rzizlObiikKTQvdnmsQ==
+X-Received: by 2002:a50:8f64:: with SMTP id 91mr12762965edy.310.1606566089744;
+        Sat, 28 Nov 2020 04:21:29 -0800 (PST)
+Received: from [192.168.0.48] (HSI-KBW-46-223-1-182.hsi.kabel-badenwuerttemberg.de. [46.223.1.182])
+        by smtp.gmail.com with ESMTPSA id i7sm699203edr.61.2020.11.28.04.21.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 28 Nov 2020 04:21:29 -0800 (PST)
+Subject: Re: reiser4progs 2.0.4 SFRN5 warnings during Debian Buster AMD64
+ builds
+To:     Metztli Information Technology <jose.r.r@metztli.com>,
+        reiserfs-devel@vger.kernel.org
+References: <20201128073904.28F7E71BAB5B@huitzilopochtli.metztli-it.com>
+From:   Edward Shishkin <edward.shishkin@gmail.com>
+Message-ID: <58236ce8-d824-4d59-6fdd-1d14a393dda5@gmail.com>
+Date:   Sat, 28 Nov 2020 13:21:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.5.2
 MIME-Version: 1.0
-References: <cover.1605896059.git.gustavoars@kernel.org> <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
- <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com>
- <1c7d7fde126bc0acf825766de64bf2f9b888f216.camel@HansenPartnership.com>
- <CANiq72m22Jb5_+62NnwX8xds2iUdWDMAqD8PZw9cuxdHd95W0A@mail.gmail.com>
- <fc45750b6d0277c401015b7aa11e16cd15f32ab2.camel@HansenPartnership.com>
- <CANiq72k5tpDoDPmJ0ZWc1DGqm+81Gi-uEENAtvEs9v3SZcx6_Q@mail.gmail.com>
- <4993259d01a0064f8bb22770503490f9252f3659.camel@HansenPartnership.com>
- <CANiq72kqO=bYMJnFS2uYRpgWATJ=uXxZuNUsTXT+3aLtrpnzvQ@mail.gmail.com>
- <44005bde-f6d4-5eaa-39b8-1a5efeedb2d3@gmail.com> <CANiq72nobq=ptWK-qWxU91JHqkKhMcRtJNnw2XJd5-vSJWZd8Q@mail.gmail.com>
- <CAMuHMdV5kOakvZJMWLxbpigFPS+Xuw6DVYsWCWZy7wGsv3idcw@mail.gmail.com>
-In-Reply-To: <CAMuHMdV5kOakvZJMWLxbpigFPS+Xuw6DVYsWCWZy7wGsv3idcw@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 26 Nov 2020 18:05:45 +0100
-Message-ID: <CANiq72=n4rVvmKt0RCb5aOfQydA8bgDxfntRLDieV8Q2efP8Zg@mail.gmail.com>
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Edward Cree <ecree.xilinx@gmail.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        linux-atm-general@lists.sourceforge.net,
-        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-ide@vger.kernel.org, dm-devel@redhat.com,
-        keyrings@vger.kernel.org,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
-        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
-        linux1394-devel@lists.sourceforge.net,
-        linux-afs@lists.infradead.org,
-        usb-storage@lists.one-eyed-alien.net,
-        Lars Ellenberg <drbd-dev@lists.linbit.com>,
-        driverdevel <devel@driverdev.osuosl.org>,
-        linux-cifs@vger.kernel.org, rds-devel@oss.oracle.com,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        scsi <linux-scsi@vger.kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        oss-drivers@netronome.com, bridge@lists.linux-foundation.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        coreteam@netfilter.org, intel-wired-lan@lists.osuosl.org,
-        linux-input <linux-input@vger.kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>, selinux@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        linux-geode@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-block@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        op-tee@lists.trustedfirmware.org,
-        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
-        Nouveau Dev <nouveau@lists.freedesktop.org>,
-        linux-hams@vger.kernel.org,
-        ceph-devel <ceph-devel@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
-        GR-Linux-NIC-Dev@marvell.com,
-        tipc-discussion@lists.sourceforge.net,
-        Linux-MM <linux-mm@kvack.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-sctp@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        NetFilter <netfilter-devel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        patches@opensource.cirrus.com, Joe Perches <joe@perches.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        target-devel <target-devel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201128073904.28F7E71BAB5B@huitzilopochtli.metztli-it.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Thu, Nov 26, 2020 at 4:28 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> The maintainer is not necessarily the owner/author of the code, and
-> thus may not know the intent of the code.
+On 11/28/2020 08:39 AM, Metztli Information Technology wrote:
+> Niltze [Hello] Ed-
 
-Agreed, I was not blaming maintainers -- just trying to point out that
-the problem is there :-)
+Hello.
 
-In those cases, it is still very useful: we add the `fallthrough` and
-a comment saying `FIXME: fallthrough intended? Figure this out...`.
-Thus a previous unknown unknown is now a known unknown. And no new
-unknown unknowns will be introduced since we enabled the warning
-globally.
+> 
+> This afternoon/evening I built reiser4progs 2.0.4 SFRN 5.1.3 DEB/UDEB packages for Debian Buster backports AMD64.
+> 
+> I was somewhat concerned about the copious warnings -- which can be located using grep on the log attached below.
 
-> BTW, you cannot mindlessly fix the latter, as you cannot know if
-> "(a == b)" or "((a = b))" was intended, without understanding the code
-> (and the (possibly unavailable) data sheet, and the hardware, ...).
+It's all cosmetic.
+Some fixups should be ported from the master branch.
 
-That's right, I was referring to the cases where the compiler saves
-someone time from a typo they just made.
+> 
+> And simply wanted to confirm with you those will not introduce unintended results in the utilities built:
+> 
+> mkfs.reiser4
+> fsck.reiser4
+> volume.reiser4
+> measurefs.reiser4
+> debugfs.reiser4 >
+> Best Professional Regards.
+> 
+> P.S. There is a typo in
+> 
+> 
+> ---
+>   doc/volume.reiser4.8 | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/doc/volume.reiser4.8 b/doc/volume.reiser4.8
+> index f2a3485..874b7c5 100644
+> --- a/doc/volume.reiser4.8
+> +++ b/doc/volume.reiser4.8
+> @@ -63,7 +63,7 @@ Print information about a brick of serial number N in the volume mounted at MNT.
+>   Run a balancing procedure on a volume mounted at MNT.
+>   .TP
+>   .B -z, --resize DEV
+> -Change data capacity of a brick accociated with device DEV in the
+> +Change data capacity of a brick associated with device DEV in the
 
-Cheers,
-Miguel
+Thanks,
+Edward.
