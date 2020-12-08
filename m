@@ -2,127 +2,133 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCA82D0D0F
-	for <lists+reiserfs-devel@lfdr.de>; Mon,  7 Dec 2020 10:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB36B2D2271
+	for <lists+reiserfs-devel@lfdr.de>; Tue,  8 Dec 2020 05:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725770AbgLGJdv (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 7 Dec 2020 04:33:51 -0500
-Received: from mail-il1-f200.google.com ([209.85.166.200]:37938 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725550AbgLGJdv (ORCPT
+        id S1727730AbgLHEyI (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 7 Dec 2020 23:54:08 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:58200 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727485AbgLHEyD (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 7 Dec 2020 04:33:51 -0500
-Received: by mail-il1-f200.google.com with SMTP id e10so12378596ils.5
-        for <reiserfs-devel@vger.kernel.org>; Mon, 07 Dec 2020 01:33:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=3l3sVcECEGrhm4ggZC50QK+EeJ6t6bebCjKEcTpMtNE=;
-        b=KREn/N8oACq/QQ+0+fiV3Hq2k/DCjGvlxfUMtfExexe8uE3GCuC8qsJarsqGfWb5CM
-         EBvy1m6kGVx01f4K1THdIOSwLu5nGap3lwvIgahpjD6piqb9nxvc9FxpR0QSweLXFJQf
-         m+2bg5JRi4fYEOGOKJ62LnkTm7r9Ai5o8QZfkSozEJxLVdw/eL7f2F95V3AlR/rsNUoC
-         o17fxQgDm14MBcZX4DE6a694pdL4vA/uh46izwFh2Nl4cOcCS3KxGGqhKDo5Xlduz/q7
-         LfzRGNAtHMoVxzVlYHoQkxYhZjGBTqxJ6GwGjeYtd+Ewg3LMtojZxBarjHISNTnaYMl7
-         Bb6g==
-X-Gm-Message-State: AOAM533yhLBa/Vi/eYLUvfNYPfM6VM39q/SfCFV21at7nHrV3R48f0qV
-        uWJxkNA4M/lTo/fpPzfnmMUebLQ6w1En32DB9bg+P07PZYDM
-X-Google-Smtp-Source: ABdhPJzXoTJU1PLEWLDt155glJ29aunV81xvDwYXANLLvY9ErJ2TGZCDTVoW0XJRdbNtQ4z+74vPGZhrfjrSEUuBDmZGba+YSnv4
+        Mon, 7 Dec 2020 23:54:03 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B84nPNV064006;
+        Tue, 8 Dec 2020 04:52:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=1e3cV7XKyt5cBPHNeWYhYMHu3W87CKppja6U1Jvw5F4=;
+ b=V+G180Fh0lHbcmydQJqS5i+cerb42SoRrRI9QCXlQMjyWKKfj0acXqExTQUiK+7OEtft
+ OuMy/8L57grCegXY4FPi2mfpdUD9NETOrjU6XyLEGnB6yCKU9e30d2WSgQTsYBxq/cMN
+ 5junVfgiRpfFB5rc1EfDtZHP43anCs3FIrUtz16u4yPsKG0NCInMT5yeMTaPCX1MMJeq
+ qZ1GHIcbwNatFRQ/tELhwJDJybfqjlIskC/pDoCLpTPJ2KTrod7PX9rst5aaRTC3xIQA
+ veh/+mbPHLjYXfePq5oiUCHv2+7Gowf8M2KKiHFzojpZKSSSQD2meZy2nTRpI8CVh6TQ Yg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 35825m0srq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 08 Dec 2020 04:52:35 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B84ocw5155469;
+        Tue, 8 Dec 2020 04:52:34 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3020.oracle.com with ESMTP id 358kys9m8s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 08 Dec 2020 04:52:34 +0000
+Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B84qX4M159553;
+        Tue, 8 Dec 2020 04:52:33 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 358kys9m7s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Dec 2020 04:52:33 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B84qDZf015901;
+        Tue, 8 Dec 2020 04:52:15 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 07 Dec 2020 20:52:13 -0800
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        coreteam@netfilter.org, selinux@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>,
+        linux-hardening@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, patches@opensource.cirrus.com,
+        linux-fbdev@vger.kernel.org, keyrings@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-geode@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-hams@vger.kernel.org, linux-ext4@vger.kernel.org,
+        wcn36xx@lists.infradead.org, GR-everest-linux-l2@marvell.com,
+        x86@kernel.org, linux-watchdog@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-usb@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-atm-general@lists.sourceforge.net,
+        linux-wireless@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-decnet-user@lists.sourceforge.net,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        netfilter-devel@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org,
+        Kees Cook <keescook@chromium.org>,
+        samba-technical@lists.samba.org, ceph-devel@vger.kernel.org,
+        drbd-dev@tron.linbit.com, intel-gfx@lists.freedesktop.org,
+        dm-devel@redhat.com, linux-acpi@vger.kernel.org,
+        linux-ide@vger.kernel.org, xen-devel@lists.xenproject.org,
+        op-tee@lists.trustedfirmware.org, linux-hwmon@vger.kernel.org,
+        linux-sctp@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-mtd@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-can@vger.kernel.org, rds-devel@oss.oracle.com,
+        oss-drivers@netronome.com, tipc-discussion@lists.sourceforge.net,
+        cluster-devel@redhat.com, linux-rdma@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net,
+        linux1394-devel@lists.sourceforge.net, alsa-devel@alsa-project.org,
+        linux-i3c@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-afs@lists.infradead.org, nouveau@lists.freedesktop.org,
+        GR-Linux-NIC-Dev@marvell.com, netdev@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, linux-mm@kvack.org,
+        intel-wired-lan@lists.osuosl.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: (subset) [PATCH 000/141] Fix fall-through warnings for Clang
+Date:   Mon,  7 Dec 2020 23:52:01 -0500
+Message-Id: <160740299787.710.4201881220590518200.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <cover.1605896059.git.gustavoars@kernel.org>
+References: <cover.1605896059.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:13c4:: with SMTP id v4mr12991966ilj.118.1607333590668;
- Mon, 07 Dec 2020 01:33:10 -0800 (PST)
-Date:   Mon, 07 Dec 2020 01:33:10 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b51b6b05b5dc833b@google.com>
-Subject: KASAN: use-after-free Read in reiserfs_fill_super
-From:   syzbot <syzbot+2b5c012223e37b7c2a88@syzkaller.appspotmail.com>
-To:     ebiggers@google.com, jack@suse.cz, jhubbard@nvidia.com,
-        junxiao.bi@oracle.com, liao.pingfang@zte.com.cn,
-        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, william.kucharski@oracle.com,
-        willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9828 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 bulkscore=0
+ phishscore=0 mlxlogscore=380 clxscore=1015 priorityscore=1501 mlxscore=0
+ spamscore=0 lowpriorityscore=0 malwarescore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012080029
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+On Fri, 20 Nov 2020 12:21:39 -0600, Gustavo A. R. Silva wrote:
 
-syzbot found the following issue on:
+> This series aims to fix almost all remaining fall-through warnings in
+> order to enable -Wimplicit-fallthrough for Clang.
+> 
+> In preparation to enable -Wimplicit-fallthrough for Clang, explicitly
+> add multiple break/goto/return/fallthrough statements instead of just
+> letting the code fall through to the next case.
+> 
+> [...]
 
-HEAD commit:    b3298500 Merge tag 'for-5.10/dm-fixes' of git://git.kernel..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11e64345500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e49433cfed49b7d9
-dashboard link: https://syzkaller.appspot.com/bug?extid=2b5c012223e37b7c2a88
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12ad719b500000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11193117500000
+Applied to 5.11/scsi-queue, thanks!
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2b5c012223e37b7c2a88@syzkaller.appspotmail.com
+[054/141] target: Fix fall-through warnings for Clang
+          https://git.kernel.org/mkp/scsi/c/492096ecfa39
 
-REISERFS (device loop0): journal params: device loop0, size 8192, journal first block 18, max trans len 1024, max batch 900, max commit age 30, max trans age 30
-REISERFS (device loop0): checking transaction log (loop0)
-==================================================================
-BUG: KASAN: use-after-free in init_inode fs/reiserfs/inode.c:1325 [inline]
-BUG: KASAN: use-after-free in reiserfs_read_locked_inode+0x1f2d/0x2230 fs/reiserfs/inode.c:1574
-Read of size 4 at addr ffff888035a26000 by task syz-executor059/8481
-
-CPU: 0 PID: 8481 Comm: syz-executor059 Not tainted 5.10.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x107/0x163 lib/dump_stack.c:118
- print_address_description.constprop.0.cold+0xae/0x4c8 mm/kasan/report.c:385
- __kasan_report mm/kasan/report.c:545 [inline]
- kasan_report.cold+0x1f/0x37 mm/kasan/report.c:562
- init_inode fs/reiserfs/inode.c:1325 [inline]
- reiserfs_read_locked_inode+0x1f2d/0x2230 fs/reiserfs/inode.c:1574
- reiserfs_fill_super+0x18eb/0x2e00 fs/reiserfs/super.c:2081
- mount_bdev+0x32e/0x3f0 fs/super.c:1419
- legacy_get_tree+0x105/0x220 fs/fs_context.c:592
- vfs_get_tree+0x89/0x2f0 fs/super.c:1549
- do_new_mount fs/namespace.c:2875 [inline]
- path_mount+0x13ad/0x20c0 fs/namespace.c:3205
- do_mount fs/namespace.c:3218 [inline]
- __do_sys_mount fs/namespace.c:3426 [inline]
- __se_sys_mount fs/namespace.c:3403 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3403
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x447d7a
-Code: b8 08 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 7d a3 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 0f 83 5a a3 fb ff c3 66 0f 1f 84 00 00 00 00 00
-RSP: 002b:00007ffcf7e76348 EFLAGS: 00000297 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007ffcf7e763a0 RCX: 0000000000447d7a
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffcf7e76360
-RBP: 00007ffcf7e76360 R08: 00007ffcf7e763a0 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000297 R12: 0000000000000006
-R13: 0000000000000004 R14: 0000000000000003 R15: 0000000000000003
-
-The buggy address belongs to the page:
-page:0000000050546bce refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x35a26
-flags: 0xfff00000000000()
-raw: 00fff00000000000 ffffea0000d689c8 ffff8880b9e39d48 0000000000000000
-raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff888035a25f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff888035a25f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff888035a26000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                   ^
- ffff888035a26080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff888035a26100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-- 
+Martin K. Petersen	Oracle Linux Engineering
