@@ -2,39 +2,39 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF6F2E791F
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 30 Dec 2020 14:08:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA442E7916
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 30 Dec 2020 14:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726963AbgL3NGq (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 30 Dec 2020 08:06:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53762 "EHLO mail.kernel.org"
+        id S1727712AbgL3NGQ (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 30 Dec 2020 08:06:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53866 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727463AbgL3NF3 (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 30 Dec 2020 08:05:29 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 42F9922262;
-        Wed, 30 Dec 2020 13:04:42 +0000 (UTC)
+        id S1727535AbgL3NFl (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Wed, 30 Dec 2020 08:05:41 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C579223E0;
+        Wed, 30 Dec 2020 13:04:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609333483;
-        bh=WO2KPEZbeyzTZKyjeEAJA2KKDxrJLItX5oNbYHF33j0=;
+        s=k20201202; t=1609333492;
+        bh=mWpODWX1cgBx2NaPWjd276b4h5GKAbd0ZaVdJyI/bII=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tAte072aKZZ73ZbhJus+L9T0+ro3mT/g8NE+V/7/QC8Ln9243RFlxkhklS1fUPHOl
-         9lW7nGQpPUhIkPmTMh3/L8DPhDLmyXu4xYFijUMMOmajhU/PhDFs2mgZU1tZve5fyj
-         DP09HAZDxLpt692RtjkvrqplMixZ0efeeRb+YZ3n1dfV+1amrxeFi3PR4bovUhBKft
-         yFauV75qDs3IqO9VuKERFKjdh10iMnpZ68UhDFa3wGp6mFzG2Vlq65JAj8kzRtO3jZ
-         ZVlAPa2jKTrlaIcixkCVrA1E8Cf9dowjzJqiCmvhLXh4KqtosRUtoEh0dDDRLVhYLJ
-         PJzf8AoB6m/rw==
+        b=ebsSkxUKiYEcrMxdOH35kUZIV1ZTf4C4ATomaN0W2555j42OES8V1naB06MtZKaOR
+         yu2w5ffw2R/6sJBMBxP451jXCPD0WC2rYgRT0anNWr/y1yku2R1khxx84QRMGSYhyT
+         15WCW7o00r/pkSyKLzBGeJ+XN7M9Jkca9fXNQj2z398Ey7QbwSXNP2JEJsLpDao3Xb
+         UEo3BrfgdnchoKTmM5H6UvDXvPNvZ2tizPxe11jOcp2i6LZPznJJOpR1e3MtWu+zyC
+         Xd22hZ2eGU7fpOyoMEnJAL4p5qeLpEhl4n+GYH7GNnyS896147aSbxKwDoTGqtzULD
+         52bM6/wq/fzNg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Rustam Kovhaev <rkovhaev@gmail.com>,
         syzbot+83b6f7cf9922cae5c4d7@syzkaller.appspotmail.com,
         Jan Kara <jack@suse.cz>, Sasha Levin <sashal@kernel.org>,
         reiserfs-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 5/8] reiserfs: add check for an invalid ih_entry_count
-Date:   Wed, 30 Dec 2020 08:04:33 -0500
-Message-Id: <20201230130436.3637579-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 4/5] reiserfs: add check for an invalid ih_entry_count
+Date:   Wed, 30 Dec 2020 08:04:46 -0500
+Message-Id: <20201230130447.3637694-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201230130436.3637579-1-sashal@kernel.org>
-References: <20201230130436.3637579-1-sashal@kernel.org>
+In-Reply-To: <20201230130447.3637694-1-sashal@kernel.org>
+References: <20201230130447.3637694-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -64,10 +64,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+)
 
 diff --git a/fs/reiserfs/stree.c b/fs/reiserfs/stree.c
-index 2946713cb00d6..5229038852ca1 100644
+index 5f5fff0688776..25b2aed9af0b3 100644
 --- a/fs/reiserfs/stree.c
 +++ b/fs/reiserfs/stree.c
-@@ -454,6 +454,12 @@ static int is_leaf(char *buf, int blocksize, struct buffer_head *bh)
+@@ -453,6 +453,12 @@ static int is_leaf(char *buf, int blocksize, struct buffer_head *bh)
  					 "(second one): %h", ih);
  			return 0;
  		}
