@@ -2,91 +2,68 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C9A2F10ED
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 11 Jan 2021 12:17:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3BF2F8B08
+	for <lists+reiserfs-devel@lfdr.de>; Sat, 16 Jan 2021 04:49:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729313AbhAKLQY (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 11 Jan 2021 06:16:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
+        id S1725923AbhAPDtI (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 15 Jan 2021 22:49:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728299AbhAKLQY (ORCPT
+        with ESMTP id S1725815AbhAPDtI (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 11 Jan 2021 06:16:24 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2AC6C0617A3
-        for <reiserfs-devel@vger.kernel.org>; Mon, 11 Jan 2021 03:15:43 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id p14so14214012qke.6
-        for <reiserfs-devel@vger.kernel.org>; Mon, 11 Jan 2021 03:15:43 -0800 (PST)
+        Fri, 15 Jan 2021 22:49:08 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AF2C0613D3
+        for <reiserfs-devel@vger.kernel.org>; Fri, 15 Jan 2021 19:48:27 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id g10so9243079wmh.2
+        for <reiserfs-devel@vger.kernel.org>; Fri, 15 Jan 2021 19:48:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=07jVVaRVyq5aozxWNXLFWFjmN6KjLrqrOzqL/0QRu9w=;
-        b=W+q+OmcQ/0EhY8lol5ozzXnDL4vttxLXTvCiOGZ0RVIXgIsKazQ9nb1lH7pg6A9Kys
-         cPbKquKsKFllOelUMfGU4wjWjlXfj30uqaR72Y8MXxNQ5cokRc9HBPhpV8TUXQh/wD3+
-         BqzFQPDhv0jcjaBngCg7gF9hR/snQp64NDE1XMoqrwgmZf/UudK3XZNFFb6csUAL+g+h
-         uaY6/mlwpItvCmpbaC6lBySHizGAzlBSUczX4rQ7wyL81V6zxxL0yo8fmqIKvkQR1o3x
-         s3O4vmgYChOGKxaMI/Mh1HcW1H7S/HdNJaO6qyw1sFoav8uOv2pVU+cau2IMAL/5X7Al
-         ln7w==
+        d=gmail.com; s=20161025;
+        h=message-id:sender:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=ox+6SXPMgEqz4oz2SA0bstlaBqQuOI9G89aQD18OlQE=;
+        b=jn6IXkSEK60mOBnKpt7Z9HfKT4PoEbZT6CyyM5seAE8RJIxV1KIfX120hgmAK9qPky
+         xwqoTdeJDaLSn2HxCtwF9qK0nBm57lQac3QKKDXHcB7OvOTlWpkPLw7fH1FcDtiP3qA2
+         yBqxntb10xhPnjlaJGODoCysF6uXCMr6GsEnyC/ZkQ+J191BukmSV5Vp8hUhiD5PTvDU
+         hEz69WsGWSUVqeGQGJoKExM03vxzH4zT7NlGytckeoJzlTxotCmGv9cFLZ1VDCX1QNPP
+         qZscREm7t1smebiDB6y5v2pHY0jSs2g1rDK5A9GOboP7iGGW56QfmaJC/Skb9FPPzPVp
+         kvhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=07jVVaRVyq5aozxWNXLFWFjmN6KjLrqrOzqL/0QRu9w=;
-        b=YrQAqNFWacPlLJXGMiyacXORjZJ/vs3lHK+L3wkMRj4h+Reh5+sHEVryJ+XwJqtVs9
-         Lij83P4TPYYm8dQk8/Rhak0E7IHXCZo6wdr+3tvLUKxVCbGBPM/INGe/Y46J59RxzxvO
-         DbSijz2JVl54ZMUXVGdvHVp3fsLMfSH/4j/J4VsQII++ql6WgwxubAY9t10ZgSihMZz0
-         P0ng+lFjc4PHuCjp/gDr3e+JxJd3cu+/Zijd6XVAvOf4sZmYiDKif1YFGzLDtzVehaKV
-         rUEvzjwty0cS36mzX8gbQrZAkPT5QAh1LMfZUw98W5VJmqMtCw9McNZ5cegRlzIhd2/x
-         EuAQ==
-X-Gm-Message-State: AOAM533xPhPYfZTUyI6Yz7pVAueoN8jTD1dyAk/95L2zPLElc9tbfIp4
-        g3pPSNIVQmUJHLCzHmrfgmQgHEppPQPrGRUrfoNg3Q==
-X-Google-Smtp-Source: ABdhPJzFH7Ffg54k/2Bp9Tqeq4wAtDMmwzROOvlcJmb4ErqZLcrCQxWkeWhUID9OcWMoXH7vKJw3x4b8eTtWu+JeJeY=
-X-Received: by 2002:a37:9a97:: with SMTP id c145mr15628129qke.350.1610363742672;
- Mon, 11 Jan 2021 03:15:42 -0800 (PST)
+        h=x-gm-message-state:message-id:sender:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=ox+6SXPMgEqz4oz2SA0bstlaBqQuOI9G89aQD18OlQE=;
+        b=iSpy/ube8+iA/sOzRn69x6dKV9sDUcV/hnS3qzLmV+8fXnYHOqMy/1btUqScz48pME
+         TT7h6cFMzuRCoNcE/z2LSBtdLkKcF7+iAyoj/6k8eTws58n123jl+w7hm0SrXv2mBUnS
+         SHVUN6BoVXSdcY/ozzjL4LTAugz7K7ZwiM9F2m70Dt4Jm92ea/jQIyQpJ/setKSKOtU7
+         uM/44zodsKe5fJfIVDXBTqKn+8kUgX2nAlC3+3uoPclP3F9ICbDJzSxAA61fi3vMjY/0
+         ttL3ogEfBNZyK4DRLVIu1ZBuLMoPB5SAa60erDhEckA9ggSQSAdHdFqw2vCaBJ1ffj7j
+         5O4Q==
+X-Gm-Message-State: AOAM532ixvwlpDrln2Q02iVMPr+85JPx3FHFnJn7tNJ67+xyKWpHYTGr
+        XXeti122NOUyXFgvhFKeCfA=
+X-Google-Smtp-Source: ABdhPJyL+9W4GYmUw3GnjJrfGEoMG2DwYdpOUzJlo+fCTjhM1dtMDNvMJ5Tf6tKU2ITIXQZZ8ixKAA==
+X-Received: by 2002:a1c:356:: with SMTP id 83mr11750542wmd.31.1610768906442;
+        Fri, 15 Jan 2021 19:48:26 -0800 (PST)
+Received: from [192.168.1.8] ([154.124.21.107])
+        by smtp.gmail.com with ESMTPSA id a184sm2461206wme.35.2021.01.15.19.48.23
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Fri, 15 Jan 2021 19:48:25 -0800 (PST)
+Message-ID: <60026209.1c69fb81.1c240.99c2@mx.google.com>
+Sender: Anderson skylar <seckt0223@gmail.com>
+From:   Skylar Anderson <sgtandersonskylar1@gmail.com>
+X-Google-Original-From: Skylar Anderson
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-References: <000000000000eba11705afd3d759@google.com> <000000000000ac50ae05b862040d@google.com>
-In-Reply-To: <000000000000ac50ae05b862040d@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 11 Jan 2021 12:15:31 +0100
-Message-ID: <CACT4Y+b0ZwjFXBe5woU+eNzkbuWNgE37i3vU2vFk0PGNjVHiZw@mail.gmail.com>
-Subject: Re: kernel BUG at fs/reiserfs/prints.c:LINE!
-To:     syzbot <syzbot+1541a3226994c0781b29@syzkaller.appspotmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>,
-        LKML <linux-kernel@vger.kernel.org>,
-        reiserfs-devel@vger.kernel.org, rkovhaev@gmail.com,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        zhengbin13@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: hello
+To:     Recipients <Skylar@vger.kernel.org>
+Date:   Sat, 16 Jan 2021 03:48:18 +0000
+Reply-To: sgt.skylaranderson876@gmail.com
+X-Mailer: cdcaafe51be8cdb99a1c85906066cad3d0e60e273541515a58395093a7c4e1f0eefb01d7fc4e6278706e9fb8c4dad093c3263345202970888b6b4d817f9e998c032e7d59
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Fri, Jan 8, 2021 at 12:40 PM syzbot
-<syzbot+1541a3226994c0781b29@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit d24396c5290ba8ab04ba505176874c4e04a2d53c
-> Author: Rustam Kovhaev <rkovhaev@gmail.com>
-> Date:   Sun Nov 1 14:09:58 2020 +0000
->
->     reiserfs: add check for an invalid ih_entry_count
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1731e8f7500000
-> start commit:   521b619a Merge tag 'linux-kselftest-kunit-fixes-5.10-rc3' ..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=4e93228e2f17fb12
-> dashboard link: https://syzkaller.appspot.com/bug?extid=1541a3226994c0781b29
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1446e7a8500000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c56f5c500000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: reiserfs: add check for an invalid ih_entry_count
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-
-Looks realistic
-
-#syz fix: reiserfs: add check for an invalid ih_entry_count
+I have important issue to tell.
