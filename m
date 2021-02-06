@@ -2,69 +2,70 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B459730DE56
-	for <lists+reiserfs-devel@lfdr.de>; Wed,  3 Feb 2021 16:37:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D1B311DFA
+	for <lists+reiserfs-devel@lfdr.de>; Sat,  6 Feb 2021 15:52:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234590AbhBCPhn (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 3 Feb 2021 10:37:43 -0500
-Received: from 198-20-226-115.unifiedlayer.com ([198.20.226.115]:56722 "EHLO
-        198-20-226-115.unifiedlayer.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234512AbhBCPgR (ORCPT
+        id S230126AbhBFOwM (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sat, 6 Feb 2021 09:52:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229539AbhBFOwJ (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 3 Feb 2021 10:36:17 -0500
-X-Greylist: delayed 29383 seconds by postgrey-1.27 at vger.kernel.org; Wed, 03 Feb 2021 10:35:24 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=carnivalassure.com.bd; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=miRpAdBSO5eDo01VDX+EK9bqGCmqMjXHS3kO16T6iWw=; b=BeRp52iTZNZnIj6Yk4q4qmVg1o
-        TGW3OyQQDqdIygbFzrOvnb1VFlTwDZeYzPg7x0gcAhNqpY+RPOU8XZPJCHVzHp7N6NMkd40+DlrAZ
-        BxMd0S46HbScvjeaenOH3+S94exP2AbS+FzziGjhE87mUv7G1Yf3DGvnuFRQOMF8rB7m0VxjRMPDd
-        55/dxUiSnVbBa0JImuQYYXUpRt83SOvMPmEy3tm7HhC6eVNF+f6Wxow3WBSbpKE+vZC1jXRKKl9C1
-        bK6OQxLWFq7P4uMl6BygkP9QC4QklVZQU7qWYFjfzBfV8UP2ROnwJjNJGJIyClrEEjRpgcDNFfVIx
-        4EKHpC7g==;
-Received: from [127.0.0.1] (port=46990 helo=dot.dotlines.com.sg)
-        by dot.dotlines.com.sg with esmtpa (Exim 4.93)
-        (envelope-from <noreply@carnivalassure.com.bd>)
-        id 1l7CVy-0005dS-7D; Wed, 03 Feb 2021 01:23:50 -0600
+        Sat, 6 Feb 2021 09:52:09 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3BDC0617A7
+        for <reiserfs-devel@vger.kernel.org>; Sat,  6 Feb 2021 06:51:12 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id l12so12928541edt.3
+        for <reiserfs-devel@vger.kernel.org>; Sat, 06 Feb 2021 06:51:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
+        b=WrtGTUT0AMDNaEpiMi3AfBgka/5v06W3cfoaRsnLtLYBJLZRhOLKU9JrG4fk7ClicM
+         HKD4gTKEhM8Zufj/2V9b/ScABk1fFAFmA3pqM2EQADSRAeil1W/Ac5hwNB/U1+2+ULh9
+         ZKP8hPsfcc8D33ql2VVT4T4A1I/GZ8fVEh8KiOHvZSMQpdwubdLk2CtuduMyiUWgcib4
+         kq87fCf0bOHPqY5WlrrdIfO965UjVZ8vQVSCaNDDdIxYV7OrBXREw333V4a2I2hleYCG
+         MddbUX+BmhLhLP010TkcJR23STW+g5gP7cRajKtYgRYYXGcAa3rJ4KU3/xxRu59sj9vL
+         x/eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
+        b=VWAb8gsQW6NbSXvICerdLkiHUKDwjG4KwB94JYXFhhH2RF3PtN6eeubxtfAkR1fBSI
+         x0HScKvs3c/Oda+UP8Vl1+YNy8SoYeZsjzD3brqoTIZHb7ZzE+YeWCQSrOlTDx6pyhnN
+         HRAUHgYv7dN9j/V8OW0NQWXmEnL7+ABYJPEPtP0MUun9hMhN6gjxnW9+WvR47xquDJL8
+         rfIVPCWRhft9ydZIkECGvPexMLSBhozDT8SQ3TMDODYua5RuS/4RY9C8EBI3tKrO4auy
+         vYCkXTEDQEM6gjuF8LSWKOS19irWEXf2wy+RoMBSCBmAIvNLMTmmnCJNtnmCZTqaAx0/
+         vgWw==
+X-Gm-Message-State: AOAM531gROaHwFSBXilz109wi1dR8/WIWg16YySWgKIafNEVnQTR+Lc/
+        MFbStopRZtYECzmh7TSrzutQHvYerBXAaQukDQI=
+X-Google-Smtp-Source: ABdhPJwCJU3xmGNfIdrdk4AuLRfQKDsVIFJookscTN8wqEBKij959yzOJwV8TNvAk+gLbIiWMW+aP6D0WqBV8ojtk50=
+X-Received: by 2002:a05:6402:149:: with SMTP id s9mr8649014edu.247.1612623071178;
+ Sat, 06 Feb 2021 06:51:11 -0800 (PST)
 MIME-Version: 1.0
-Date:   Wed, 03 Feb 2021 01:23:49 -0600
-From:   Francois Pinault <noreply@carnivalassure.com.bd>
+Received: by 2002:a17:906:25d0:0:0:0:0 with HTTP; Sat, 6 Feb 2021 06:51:10
+ -0800 (PST)
+Reply-To: lawyer.nba@gmail.com
+From:   Barrister Daven Bango <stephennbada9@gmail.com>
+Date:   Sat, 6 Feb 2021 15:51:10 +0100
+Message-ID: <CAGSHw-AO+Xa_koG5i0-JjSgLnhK_AGLnUpJ4Pmo9++psOxZVXw@mail.gmail.com>
+Subject: 
 To:     undisclosed-recipients:;
-Subject: Hello/Hallo
-Organization: Donation
-Reply-To: francoispinault1936@outlook.com
-Mail-Reply-To: francoispinault1936@outlook.com
-Message-ID: <6b70d71c493b5c027dd3ef878f38d028@carnivalassure.com.bd>
-X-Sender: noreply@carnivalassure.com.bd
-User-Agent: Roundcube Webmail/1.3.15
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - dot.dotlines.com.sg
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - carnivalassure.com.bd
-X-Get-Message-Sender-Via: dot.dotlines.com.sg: authenticated_id: noreply@carnivalassure.com.bd
-X-Authenticated-Sender: dot.dotlines.com.sg: noreply@carnivalassure.com.bd
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
+--=20
+Korisnik fonda =C4=8Destitanja, Va=C5=A1a sredstva za naknadu od 850.000,00
+ameri=C4=8Dkih dolara odobrila je Me=C4=91unarodna monetarna organizacija (=
+MMF)
+u suradnji s (FBI) nakon mnogo istraga. =C4=8Cekamo da se obratimo za
+dodatne informacije
 
-
--- 
-Hallo, ich bin Herr Francois Pinault, ich habe Ihnen gespendet. Sie 
-können mein Profil auf Wikipedia, Google oder Forbes überprüfen.
-
-Für Ihren Spendenanspruch und weitere Informationen kontaktieren Sie 
-mich umgehend unter francoispinault1936@outlook.com
-
-Mit freundlichen Grüßen,
-Herr Francois Pinault
+Advokat: Daven Bango
+Telefon: +22891667276
+(URED MMF-a LOME TOGO)
