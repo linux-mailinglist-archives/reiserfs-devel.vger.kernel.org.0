@@ -2,64 +2,67 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DD83120B5
-	for <lists+reiserfs-devel@lfdr.de>; Sun,  7 Feb 2021 02:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 873D3312E72
+	for <lists+reiserfs-devel@lfdr.de>; Mon,  8 Feb 2021 11:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbhBGBeC (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sat, 6 Feb 2021 20:34:02 -0500
-Received: from [20.39.40.203] ([20.39.40.203]:57828 "EHLO optinix.in"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S229506AbhBGBeC (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sat, 6 Feb 2021 20:34:02 -0500
-dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
-        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
-        b=Q4SDs0mPNUa9Bv8elfDrFzIlA+g0T+j6SKWv1J9AJR3Csl6lyChFt/EC80p8dMdqGztzkfLi60SzOlscld8TwjUoTMO+tW++slLXiVHJ9SW/6chqSEFWUsaCtVt+U+8dmlpSrthcQ+4guOTS1m3lw1U95TcwiGO2gu7RgAtKLM9pTSFxA91XrhOShywXqVkFFVhIcc7SDLQpCtMTTpx5AICTLwJ1dimhoVN245wXEVmJgmj9qSTJ4S8nyK
-        joLw11Th3/wwvadM5kfxHPGi+eDF/9DajGQBmiD1ON/0hyQ3eIiEXTTf6XIKZmw3T6br2vPwO7vO0IsnMB85Ag6vzqNQ==
-Received: from User (Unknown [52.231.31.5])
-        by optinix.in with ESMTP
-        ; Mon, 1 Feb 2021 18:23:01 +0000
-Message-ID: <2DD18F72-B447-4FA9-AC27-72408BD33B5B@optinix.in>
-Reply-To: <ms.reem@yandex.com>
-From:   "Ms. Reem" <support@digitalsol.in>
-Subject: Re:read
-Date:   Mon, 1 Feb 2021 18:22:59 -0000
+        id S232053AbhBHKBj (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 8 Feb 2021 05:01:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232043AbhBHJ51 (ORCPT
+        <rfc822;reiserfs-devel@vger.kernel.org>);
+        Mon, 8 Feb 2021 04:57:27 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2831C061797
+        for <reiserfs-devel@vger.kernel.org>; Mon,  8 Feb 2021 01:48:04 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id d2so8468646pjs.4
+        for <reiserfs-devel@vger.kernel.org>; Mon, 08 Feb 2021 01:48:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=z7Z/JdX0RhrlgqchmamXWMY47TIIKUp5Zm0+e0J1lMs=;
+        b=Fg4kJ7vO4B7g9y8SHKzb6I2bgZYv7ZUVKPsfXI6elohPSPqxskXD10CyvCIE1eU6Ru
+         f4vNS/LVM9982Tw59ur21SRvung5cn/UBmS1mS3hd6PuTR92Ha1AT9IdRRZkFBqzrdA9
+         JrpwtH0BDCsuiKDbfo+qC0K3dKnxbEsaaFl8SrggRGnVhgV49Rrnb2hFzRfOvWR2Zpks
+         1ZBl9FyzaAx3RJt7RGYoEJVNx03QTw4JfIyuFB3TVurpldKyPB2bgt99lzPCHKw8nU25
+         KA9SuRGjcdo1lVUFnnghsRuanZYMb66juapldPwhibX17YAwvMOyB9pjDz5DIidjG6GX
+         alog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=z7Z/JdX0RhrlgqchmamXWMY47TIIKUp5Zm0+e0J1lMs=;
+        b=TP6jPSTN+zw6ytyxckVsgDZDBpjpjVb80F0L2ZxDBu0ylADnRJs4BFw7HpoerbaPBy
+         1Ajlp3VR2c2dNnk5gg/upRYGWjD41owY8CrVaxvrOJImd1eENl701gXbyymUBZLPlwaw
+         At5euPO4m3OQ7ennhRbWs239w3hjE6UCw/yowd4+y2TUomLrtEKW9VhZiGsjgCrKLpfQ
+         dZtFRSD5D5dX/xwa4VE7aZbnUQxtlH/vh35eENaWKkAVg/G4BELb8k9BAorawjKsskxh
+         t1X+L9V21FE6GAxaqglLPgb5G284JteKJxpHpG/vmKEzttd1rGmycamnE7WgutmehQ/U
+         ZE3A==
+X-Gm-Message-State: AOAM531NxZU4aTxSZs7X29y5Q5CdBq3QUvXuucZuXA6lSbjke/0zjKbf
+        J7+V8jvH08JWLOktKsP1T6lHFCvR69oZBhjk604=
+X-Google-Smtp-Source: ABdhPJw1wVacD+N6+4iclyAf2cf/mAVNohymO5dCZBxIb7G4wZR/3YqNwTg0zLXl7VuvBYyuN3RnoLlnyQGiq4cQGCw=
+X-Received: by 2002:a17:90a:c20e:: with SMTP id e14mr7416048pjt.57.1612777684428;
+ Mon, 08 Feb 2021 01:48:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-To:     unlisted-recipients:; (no To-header on input)
+Received: by 2002:a17:90a:5d0a:0:0:0:0 with HTTP; Mon, 8 Feb 2021 01:48:04
+ -0800 (PST)
+Reply-To: richadtomm@qq.com
+From:   "Mr.Richard Thomas" <tommiirrrch@gmail.com>
+Date:   Mon, 8 Feb 2021 01:48:04 -0800
+Message-ID: <CAGbSTZNKJ=Y+54VT-Yu_fdrseJijw62UYxJTq7Cz3b-g9Zb2HQ@mail.gmail.com>
+Subject: Re Thanks.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+Dear Friend,
+I will be pleased if you can allow me to invest $104M Dollars in
+Estate Management,in your company or any area you best that will be
+of good profit to both of us
 
-My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
-and Petroleum" also "Minister of State for International Cooperation"
-in UAE. I write to you on behalf of my other "three (3) colleagues"
-who has approved me to solicit for your "partnership in claiming of
-{us$47=Million}" from a Financial Home in Cambodia on their behalf and
-for our "Mutual Benefits".
+Please do well to respond including your information for more details.
 
-The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
-deal with Cambodian/Vietnam Government within 2013/2014, however, we
-don't want our government to know about the fund. If this proposal
-interests you, let me know, by sending me an email and I will send to
-you detailed information on how this business would be successfully
-transacted. Be informed that nobody knows about the secret of this
-fund except us, and we know how to carry out the entire transaction.
-So I am compelled to ask, that you will stand on our behalf and
-receive this fund into any account that is solely controlled by you.
-
-We will compensate you with 15% of the total amount involved as
-gratification for being our partner in this transaction. Reply to:
-ms.reem@yandex.com
-
-Regards,
-Ms. Reem.
-
+Thanks.
+Mr.Richard Thomas
