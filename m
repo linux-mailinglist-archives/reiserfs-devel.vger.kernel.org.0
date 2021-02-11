@@ -2,66 +2,69 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 823553159CD
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 10 Feb 2021 00:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A403318ED9
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 11 Feb 2021 16:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233765AbhBIW66 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 9 Feb 2021 17:58:58 -0500
-Received: from smtp-18d.idc2.mandic.com.br ([177.70.124.135]:49833 "EHLO
-        smtp-18.idc2.mandic.com.br" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234506AbhBIWbR (ORCPT
+        id S231286AbhBKPgD (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 11 Feb 2021 10:36:03 -0500
+Received: from correo.diresacallao.gob.pe ([209.45.80.91]:59888 "EHLO
+        correo.diresacallao.gob.pe" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231178AbhBKPeB (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 9 Feb 2021 17:31:17 -0500
-Received: by smtp-18.smtp.mandic.prv (Postfix, from userid 491)
-        id 0AF5160768F0; Tue,  9 Feb 2021 19:21:48 -0300 (-03)
-Received: from smtp-18.idc2.mandic.com.br (ifsmtp2 [192.168.1.38])
-        by smtp-18.smtp.mandic.prv (Postfix) with ESMTPS id D23216065AB7;
-        Tue,  9 Feb 2021 19:21:41 -0300 (-03)
-Received: from User (unknown [52.235.38.23])
-        by smtp-18.smtp.mandic.prv (Postfix) with ESMTPA id 6FF2146AFBAF;
-        Tue,  9 Feb 2021 19:19:10 -0300 (-03)
-Reply-To: <ms.reem@yandex.com>
-From:   "Ms. Reem" <stefy@macrometrica.com.br>
-Subject: Re:reply
-Date:   Tue, 9 Feb 2021 22:21:38 -0000
+        Thu, 11 Feb 2021 10:34:01 -0500
+X-Greylist: delayed 7367 seconds by postgrey-1.27 at vger.kernel.org; Thu, 11 Feb 2021 10:34:00 EST
+Received: from correo.diresacallao.gob.pe (localhost [127.0.0.1])
+        by correo.diresacallao.gob.pe (Postfix) with ESMTPS id DB975104A52C;
+        Thu, 11 Feb 2021 09:06:29 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by correo.diresacallao.gob.pe (Postfix) with ESMTP id B12EE104A547;
+        Thu, 11 Feb 2021 08:20:09 -0500 (-05)
+DKIM-Filter: OpenDKIM Filter v2.10.3 correo.diresacallao.gob.pe B12EE104A547
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=diresacallao.gob.pe;
+        s=C17A4756-7C0A-11E9-A051-943D71509802; t=1613049609;
+        bh=EU/ykBBxlpljSbtcO1wDFtnwXnp3CdCnuCf3RbtnQtU=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=OJt+Sp7kzOssI0XVzIZ+1qRo3zlJiPGsBqsmkvDamneitWGXJ/Gz2axncZmZgQkSt
+         kc96VDAv7eSHWn6AnyQVOWwzPm1/yncgek2T2RqQM+E2l/dyB6ATAhbbt6QYGdwbJK
+         05+0SJ8b0Jkx12jae12TfV+xjtl3wZHOxp1iOK0+ml4OB55f48GMbbfusXxWdqQBGP
+         cTUuZjxWOv1HJ0hvudNyT0RSFDmMh4DUVwx936OTfNKv68jLULw2rFH8ux1meMn8dG
+         wdfil7gtDiQc5Xo5+wQW2hb5xYsGrxuBl8YRwaoImW0tgJbvfkUHGqkpJZLbVdeM5q
+         PNcvzIr+He87Q==
+Received: from correo.diresacallao.gob.pe ([127.0.0.1])
+        by localhost (correo.diresacallao.gob.pe [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id xmmQ7vC0h7n5; Thu, 11 Feb 2021 08:20:09 -0500 (-05)
+Received: from [192.168.8.101] (unknown [41.147.0.144])
+        by correo.diresacallao.gob.pe (Postfix) with ESMTPSA id 39D11104A505;
+        Thu, 11 Feb 2021 08:19:58 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-Mandic-Auth: DYB6x5JcyVot9snxiAasWC73cfc93V+pC3vUrorm87+eXbqAUeEHL0ZNPgpM50IYQeUbiYx0PkMIK2oavHcOOA==
-X-Mandic-Sender: stefy@macrometrica.com.br
-Message-Id: <20210209222141.D23216065AB7@smtp-18.smtp.mandic.prv>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Spende von 2.000.000,00. Euro
+To:     Recipients <rrodriguez@diresacallao.gob.pe>
+From:   "manuel franco" <rrodriguez@diresacallao.gob.pe>
+Date:   Thu, 11 Feb 2021 15:19:57 +0200
+Reply-To: manuelfrancospende00@gmail.com
+Message-Id: <20210211131959.39D11104A505@correo.diresacallao.gob.pe>
+X-DIRESACALLAO-MailScanner: Found to be clean, Found to be clean
+X-DIRESACALLAO-MailScanner-SpamCheck: no es spam (whitelisted),
+        SpamAssassin (almacenado, puntaje=-0.371, requerido 5,
+        ALL_TRUSTED -1.00, BAYES_00 -5.00, DCC_CHECK 4.00, FSL_BULK_SIG 0.00,
+        LOTS_OF_MONEY 0.00, MONEY_NOHTML 1.63), no es spam (whitelisted),
+        SpamAssassin (almacenado, puntaje=-0.371, requerido 5,
+        ALL_TRUSTED -1.00, BAYES_00 -5.00, DCC_CHECK 4.00, FSL_BULK_SIG 0.00,
+        LOTS_OF_MONEY 0.00, MONEY_NOHTML 1.63)
+X-Spam-Flag: NO, NO
+X-DIRESACALLAO-MailScanner-Information: Please contact the ISP for more information
+X-DIRESACALLAO-MailScanner-ID: B12EE104A547.A3D3F
+X-DIRESACALLAO-MailScanner-From: rrodriguez@diresacallao.gob.pe
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+Sie haben eine Spende von 2.000.000,00. Euro
 
-My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
-and Petroleum" also "Minister of State for International Cooperation"
-in UAE. I write to you on behalf of my other "three (3) colleagues"
-who has approved me to solicit for your "partnership in claiming of
-{us$47=Million}" from a Financial Home in Cambodia on their behalf and
-for our "Mutual Benefits".
-
-The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
-deal with Cambodian/Vietnam Government within 2013/2014, however, we
-don't want our government to know about the fund. If this proposal
-interests you, let me know, by sending me an email and I will send to
-you detailed information on how this business would be successfully
-transacted. Be informed that nobody knows about the secret of this
-fund except us, and we know how to carry out the entire transaction.
-So I am compelled to ask, that you will stand on our behalf and
-receive this fund into any account that is solely controlled by you.
-
-We will compensate you with 15% of the total amount involved as
-gratification for being our partner in this transaction. Reply to:
-ms.reem@yandex.com
-
-Regards,
-Ms. Reem.
+Mein Name ist Manuel Franco aus den USA. Ich habe die America-Lotterie im W=
+ert von 768 Millionen US-Dollar gewonnen und spende einen Teil davon an nur=
+ 5 gl=FCckliche Menschen und einige Waisenh=E4user als Wohlwollen f=FCr die=
+ Menschheit.
