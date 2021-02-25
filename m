@@ -2,87 +2,60 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91636320862
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 21 Feb 2021 06:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0A8325135
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 25 Feb 2021 15:07:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbhBUFMM (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sun, 21 Feb 2021 00:12:12 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:58955 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbhBUFLW (ORCPT
-        <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sun, 21 Feb 2021 00:11:22 -0500
-Received: from fsav104.sakura.ne.jp (fsav104.sakura.ne.jp [27.133.134.231])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 11L5A8s5025450;
-        Sun, 21 Feb 2021 14:10:08 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav104.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav104.sakura.ne.jp);
- Sun, 21 Feb 2021 14:10:08 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav104.sakura.ne.jp)
-Received: from localhost.localdomain (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 11L5A1Ol025332
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 21 Feb 2021 14:10:08 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     Jeff Mahoney <jeffm@suse.com>
-Cc:     reiserfs-devel@vger.kernel.org, mudongliangabcd@gmail.com,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        syzbot <syzbot+690cb1e51970435f9775@syzkaller.appspotmail.com>
-Subject: [PATCH] reiserfs: update reiserfs_xattrs_initialized() condition
-Date:   Sun, 21 Feb 2021 14:09:57 +0900
-Message-Id: <20210221050957.3601-1-penguin-kernel@I-love.SAKURA.ne.jp>
-X-Mailer: git-send-email 2.18.4
-In-Reply-To: <000000000000f5be7f05afcf862a@google.com>
-References: <000000000000f5be7f05afcf862a@google.com>
+        id S229613AbhBYOEc (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 25 Feb 2021 09:04:32 -0500
+Received: from mail.jvpinto.com ([65.49.11.60]:27760 "EHLO mail.JVPinto.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230165AbhBYOEc (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Thu, 25 Feb 2021 09:04:32 -0500
+Received: from RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) by
+ RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Thu, 25 Feb 2021 06:03:33 -0800
+Received: from User (52.231.198.195) by RW-EXC1.JVPinto.com (172.32.1.13) with
+ Microsoft SMTP Server id 15.0.1497.2 via Frontend Transport; Thu, 25 Feb 2021
+ 06:03:17 -0800
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <johnpinto@jvpinto.com>
+Subject: Hello okay
+Date:   Thu, 25 Feb 2021 14:03:32 +0000
+MIME-Version: 1.0
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <5afbb2626d444698adbfea849dd91fae@RW-EXC1.JVPinto.com>
+To:     Undisclosed recipients:;
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-syzbot is reporting NULL pointer dereference at reiserfs_security_init()
-[1], for commit ab17c4f02156c4f7 ("reiserfs: fixup xattr_root caching") is
-assuming that REISERFS_SB(s)->xattr_root != NULL in
-reiserfs_xattr_jcreate_nblocks() despite that commit made
-REISERFS_SB(sb)->priv_root != NULL && REISERFS_SB(s)->xattr_root == NULL
-case possible.
+Hello,
 
-I guess that commit 6cb4aff0a77cc0e6 ("reiserfs: fix oops while creating
-privroot with selinux enabled") wanted to check xattr_root != NULL before
-reiserfs_xattr_jcreate_nblocks(), for the changelog is talking about the
-xattr root.
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
- The issue is that while creating the privroot during mount
- reiserfs_security_init calls reiserfs_xattr_jcreate_nblocks which
- dereferences the xattr root.  The xattr root doesn't exist, so we get an
- oops.
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
-Therefore, update reiserfs_xattrs_initialized() to check both the privroot
-and the xattr root.
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
 
-[1] https://syzkaller.appspot.com/bug?id=8abaedbdeb32c861dc5340544284167dd0e46cde
-
-Reported-and-tested-by: syzbot <syzbot+690cb1e51970435f9775@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Fixes: 6cb4aff0a77cc0e6 ("reiserfs: fix oops while creating privroot with selinux enabled")
----
- fs/reiserfs/xattr.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/reiserfs/xattr.h b/fs/reiserfs/xattr.h
-index c764352447ba..81bec2c80b25 100644
---- a/fs/reiserfs/xattr.h
-+++ b/fs/reiserfs/xattr.h
-@@ -43,7 +43,7 @@ void reiserfs_security_free(struct reiserfs_security_handle *sec);
- 
- static inline int reiserfs_xattrs_initialized(struct super_block *sb)
- {
--	return REISERFS_SB(sb)->priv_root != NULL;
-+	return REISERFS_SB(sb)->priv_root && REISERFS_SB(sb)->xattr_root;
- }
- 
- #define xattr_size(size) ((size) + sizeof(struct reiserfs_xattr_header))
--- 
-2.18.4
-
+Regards,
+Ms. Reem.
