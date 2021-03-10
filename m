@@ -2,93 +2,69 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AEA32E241
-	for <lists+reiserfs-devel@lfdr.de>; Fri,  5 Mar 2021 07:31:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F39EC333FCC
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 10 Mar 2021 15:02:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbhCEGbh (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 5 Mar 2021 01:31:37 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:53466 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbhCEGbg (ORCPT
+        id S232752AbhCJOBi (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 10 Mar 2021 09:01:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231571AbhCJOBQ (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 5 Mar 2021 01:31:36 -0500
-Received: from fsav302.sakura.ne.jp (fsav302.sakura.ne.jp [153.120.85.133])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 1256VUkm050664;
-        Fri, 5 Mar 2021 15:31:30 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav302.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav302.sakura.ne.jp);
- Fri, 05 Mar 2021 15:31:30 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav302.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 1256VTVJ050660
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 5 Mar 2021 15:31:30 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: [PATCH (resend)] reiserfs: update reiserfs_xattrs_initialized()
- condition
-To:     Jan Kara <jack@suse.cz>
-Cc:     reiserfs-devel@vger.kernel.org
-References: <000000000000f5be7f05afcf862a@google.com>
- <20210221050957.3601-1-penguin-kernel@I-love.SAKURA.ne.jp>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <700fcc0a-0da7-6d70-620e-af0ed956cd85@i-love.sakura.ne.jp>
-Date:   Fri, 5 Mar 2021 15:31:26 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        Wed, 10 Mar 2021 09:01:16 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8518C061762
+        for <reiserfs-devel@vger.kernel.org>; Wed, 10 Mar 2021 06:01:15 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id p7so27512449eju.6
+        for <reiserfs-devel@vger.kernel.org>; Wed, 10 Mar 2021 06:01:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=5rh8dKjg0pKk0KNWl2xSO7nhxy+c296f7suB18dXI8U=;
+        b=NRys/JVgIifMs/VJcA3qxZwyt7VHc80TVQPtrFTbXgnYmg8X2NJt4edDx/oy8xJfnH
+         4kEmg4xqymUo4bKVUZW8evb4ZssZYn1ao9fRmO9Ck+QolrGB1zpVvCvr0duPidoqchwp
+         5FWub1ITyXlRu4HialhPIglQCOksUcjnUPeAoyujqqXO0Q6QGB6TQSyfy20nPZTjztiQ
+         FmRJPN3FkWLk5WgQ335YqhGCu2MsIivQcU3lNJinLxDDa0cSv/2C5ccHGH2/lL7Yw7pJ
+         gvMfL+h4VRj8so8S0SkRRWYiz6NWJ6piGdDnyePVglxIMevfIr8276fGtegf2ApQXI8q
+         OCmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=5rh8dKjg0pKk0KNWl2xSO7nhxy+c296f7suB18dXI8U=;
+        b=K6aE5/hAZeWgRPhv5Bhc9yRJosdhaKok+tJz2ZTFWaDmSPqR9zsxxr4mIFY2ufQlpK
+         +89q9E1QLwpidiLPRjQi/QDycIVCekc92+FUNL9eu135A7Yxu+PDIyYHM26QBxPphz9j
+         yYA8ZRjArRYpH9+HjzXzCjIy19UJIvO50Csw9voKnS26TfL7pDS6jCEL+HB/l2hN6lvh
+         yBcKim0TL/VclfG1XVwD2bvLxckPlVYYUhhQ0wYphC7R09jSEts2B9dxlMqqU2Rh3AZY
+         5DKZmpV51ed75TPqT1S1kzTMdjFWWSpSfCWviBO6Ks79FbIIRwaBkNw9TJ23VpbBa1Fh
+         4w3g==
+X-Gm-Message-State: AOAM531n7E8b7Vkjn01RcMjDqrUS7RKGUGScVYCP2pcJfZUo+4ZyC2AD
+        o6TCGH8rDaSlAxJxSLuYJvv9XlwRFhVbS5iKv40=
+X-Google-Smtp-Source: ABdhPJytB6NSUorcr8eD+98rcO1p2jWS4nnEquxcHuUcQVP4Yz7JOZD4wvG5FyttQxluaKz/5Hl+LY+4JZqDHnAyKfE=
+X-Received: by 2002:a17:906:959:: with SMTP id j25mr3813128ejd.553.1615384874534;
+ Wed, 10 Mar 2021 06:01:14 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210221050957.3601-1-penguin-kernel@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:ab4:92c3:0:0:0:0:0 with HTTP; Wed, 10 Mar 2021 06:01:13
+ -0800 (PST)
+From:   JOHN UMAH <pastorjohnumnewaposchurch@gmail.com>
+Date:   Wed, 10 Mar 2021 14:01:13 +0000
+Message-ID: <CANw=0K6gD7r=Jz8gnsZbVAu7YRVEpo9uYzpqYSAnfTz2LtBBFg@mail.gmail.com>
+Subject: Caleb Leo Foundation,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-syzbot is reporting NULL pointer dereference at reiserfs_security_init()
-[1], for commit ab17c4f02156c4f7 ("reiserfs: fixup xattr_root caching") is
-assuming that REISERFS_SB(s)->xattr_root != NULL in
-reiserfs_xattr_jcreate_nblocks() despite that commit made
-REISERFS_SB(sb)->priv_root != NULL && REISERFS_SB(s)->xattr_root == NULL
-case possible.
+Caleb Leo Foundation
+1501 K St NWWashington DC 20005
+United States of America
+You've received $ 1,300,000 from the Calab Leo Foundation course
+Humanitarian aid / poverty reduction program.
+In the case of claims for this gift, please fill in the following form;
 
-I guess that commit 6cb4aff0a77cc0e6 ("reiserfs: fix oops while creating
-privroot with selinux enabled") wanted to check xattr_root != NULL before
-reiserfs_xattr_jcreate_nblocks(), for the changelog is talking about the
-xattr root.
-
- The issue is that while creating the privroot during mount
- reiserfs_security_init calls reiserfs_xattr_jcreate_nblocks which
- dereferences the xattr root.  The xattr root doesn't exist, so we get an
- oops.
-
-Therefore, update reiserfs_xattrs_initialized() to check both the privroot
-and the xattr root.
-
-[1] https://syzkaller.appspot.com/bug?id=8abaedbdeb32c861dc5340544284167dd0e46cde
-
-Reported-and-tested-by: syzbot <syzbot+690cb1e51970435f9775@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Fixes: 6cb4aff0a77cc0e6 ("reiserfs: fix oops while creating privroot with selinux enabled")
----
- fs/reiserfs/xattr.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/reiserfs/xattr.h b/fs/reiserfs/xattr.h
-index c764352447ba..81bec2c80b25 100644
---- a/fs/reiserfs/xattr.h
-+++ b/fs/reiserfs/xattr.h
-@@ -43,7 +43,7 @@ void reiserfs_security_free(struct reiserfs_security_handle *sec);
- 
- static inline int reiserfs_xattrs_initialized(struct super_block *sb)
- {
--	return REISERFS_SB(sb)->priv_root != NULL;
-+	return REISERFS_SB(sb)->priv_root && REISERFS_SB(sb)->xattr_root;
- }
- 
- #define xattr_size(size) ((size) + sizeof(struct reiserfs_xattr_header))
--- 
-2.18.4
-
-
+Full name:
+Telephone number:
+State:
+Country:
+kindly respond for more details.
+in God We Trust.
