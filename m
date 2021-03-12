@@ -2,69 +2,93 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F39EC333FCC
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 10 Mar 2021 15:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D2B339777
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 12 Mar 2021 20:37:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232752AbhCJOBi (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 10 Mar 2021 09:01:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
+        id S234256AbhCLTg4 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 12 Mar 2021 14:36:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231571AbhCJOBQ (ORCPT
+        with ESMTP id S233407AbhCLTgY (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 10 Mar 2021 09:01:16 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8518C061762
-        for <reiserfs-devel@vger.kernel.org>; Wed, 10 Mar 2021 06:01:15 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id p7so27512449eju.6
-        for <reiserfs-devel@vger.kernel.org>; Wed, 10 Mar 2021 06:01:15 -0800 (PST)
+        Fri, 12 Mar 2021 14:36:24 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB510C061574
+        for <reiserfs-devel@vger.kernel.org>; Fri, 12 Mar 2021 11:36:23 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id c131so26514754ybf.7
+        for <reiserfs-devel@vger.kernel.org>; Fri, 12 Mar 2021 11:36:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=googlemail.com; s=20161025;
         h=mime-version:from:date:message-id:subject:to;
-        bh=5rh8dKjg0pKk0KNWl2xSO7nhxy+c296f7suB18dXI8U=;
-        b=NRys/JVgIifMs/VJcA3qxZwyt7VHc80TVQPtrFTbXgnYmg8X2NJt4edDx/oy8xJfnH
-         4kEmg4xqymUo4bKVUZW8evb4ZssZYn1ao9fRmO9Ck+QolrGB1zpVvCvr0duPidoqchwp
-         5FWub1ITyXlRu4HialhPIglQCOksUcjnUPeAoyujqqXO0Q6QGB6TQSyfy20nPZTjztiQ
-         FmRJPN3FkWLk5WgQ335YqhGCu2MsIivQcU3lNJinLxDDa0cSv/2C5ccHGH2/lL7Yw7pJ
-         gvMfL+h4VRj8so8S0SkRRWYiz6NWJ6piGdDnyePVglxIMevfIr8276fGtegf2ApQXI8q
-         OCmw==
+        bh=65E4h54/Ffn1yUoq5KkFEnpBoleESy6EUfah9Q4U0VM=;
+        b=JET/fQborEmcSTb2XYu3hZrB5n9oH0HaTBSUirLai0IMxwVN6ufjXUlUCh33RFC9na
+         NrlPHslGtnqI07ZA0zmw4LvSVTV+g8ZoqDu8w6kUbhgPi8c1Q10uwfUOTyWpLlxR4dkR
+         HgCxYZXZtdeXgfYmUVyTThBlDIWNBWi7nbQ/RdFzg4hwRelz3FgYH5TQ1Lldzyogsxug
+         FmCN2YygH/meOhLrBJjkgQLNYDrYNTF3rDttPbOfvW8ECn0ejQ1AcZ52a85y/ePIvqGQ
+         D61qYiITkUIR3gr7Jo6Ae4pX3M+lVz50prAY6jqEYo7Q2SogSrqIirYTN7Ge43Ow+coY
+         rW3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=5rh8dKjg0pKk0KNWl2xSO7nhxy+c296f7suB18dXI8U=;
-        b=K6aE5/hAZeWgRPhv5Bhc9yRJosdhaKok+tJz2ZTFWaDmSPqR9zsxxr4mIFY2ufQlpK
-         +89q9E1QLwpidiLPRjQi/QDycIVCekc92+FUNL9eu135A7Yxu+PDIyYHM26QBxPphz9j
-         yYA8ZRjArRYpH9+HjzXzCjIy19UJIvO50Csw9voKnS26TfL7pDS6jCEL+HB/l2hN6lvh
-         yBcKim0TL/VclfG1XVwD2bvLxckPlVYYUhhQ0wYphC7R09jSEts2B9dxlMqqU2Rh3AZY
-         5DKZmpV51ed75TPqT1S1kzTMdjFWWSpSfCWviBO6Ks79FbIIRwaBkNw9TJ23VpbBa1Fh
-         4w3g==
-X-Gm-Message-State: AOAM531n7E8b7Vkjn01RcMjDqrUS7RKGUGScVYCP2pcJfZUo+4ZyC2AD
-        o6TCGH8rDaSlAxJxSLuYJvv9XlwRFhVbS5iKv40=
-X-Google-Smtp-Source: ABdhPJytB6NSUorcr8eD+98rcO1p2jWS4nnEquxcHuUcQVP4Yz7JOZD4wvG5FyttQxluaKz/5Hl+LY+4JZqDHnAyKfE=
-X-Received: by 2002:a17:906:959:: with SMTP id j25mr3813128ejd.553.1615384874534;
- Wed, 10 Mar 2021 06:01:14 -0800 (PST)
+        bh=65E4h54/Ffn1yUoq5KkFEnpBoleESy6EUfah9Q4U0VM=;
+        b=gSoAbxI8ZR3HmA3SmmAcDjsrIzRDs5yMBNykxBdAcd5ruGOPhxSh9t7i4s92rXFOGu
+         Fg7FnsjsPHJpiOyiIQLT3IAZXToUwxTOYQgHdkWTCaiprzSWJIXF/v3Hb/Ez5nJgcNfr
+         osLpDk9hTBpYaugAs74rFHdh5gljbjbEKaCgnep3Xnkpr5IpYFwlI4L8e1nkJr5T69Cq
+         5WFLjEKaefO2TEtHzLQEwA1LZtVPOyionktPpoBc9DPs6MXbhFe2ygqk8sFKdvjT5m2T
+         ar4ihvjspvKOHPslHle7OhRfoEB172qX87grtiEi35y56vqHNIjaPDOFDlEvDdBnXpwS
+         uJZA==
+X-Gm-Message-State: AOAM533vvZpR/jG4YfMyEzsgn7F36/BuWpmPC0Scuz2e7ZKVsoZoZcF4
+        n0lA7OgBhasu85MhDJPTc7BfQxtkzSpf0FYgXELtoLdGj1PyIA==
+X-Google-Smtp-Source: ABdhPJxSQafQmyX92F+9oFuglltLhh8uYkyFumLc3/6lt0icx2PbUt5dY9tIrSAwzspAE21WW3rZJMyzwiK6ml5rFr4=
+X-Received: by 2002:a25:7613:: with SMTP id r19mr21223109ybc.212.1615577782901;
+ Fri, 12 Mar 2021 11:36:22 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:ab4:92c3:0:0:0:0:0 with HTTP; Wed, 10 Mar 2021 06:01:13
- -0800 (PST)
-From:   JOHN UMAH <pastorjohnumnewaposchurch@gmail.com>
-Date:   Wed, 10 Mar 2021 14:01:13 +0000
-Message-ID: <CANw=0K6gD7r=Jz8gnsZbVAu7YRVEpo9uYzpqYSAnfTz2LtBBFg@mail.gmail.com>
-Subject: Caleb Leo Foundation,
-To:     undisclosed-recipients:;
+From:   Mike Fleetwood <mike.fleetwood@googlemail.com>
+Date:   Fri, 12 Mar 2021 19:36:10 +0000
+Message-ID: <CAMU1PDjpaE0g=S5iVQFY1oC8=c1ru114wwrGMUqEDu5=9N9_ZA@mail.gmail.com>
+Subject: Occasionally mkfs.reiser4 creates a file system without a UUID
+To:     reiserfs-devel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Caleb Leo Foundation
-1501 K St NWWashington DC 20005
-United States of America
-You've received $ 1,300,000 from the Calab Leo Foundation course
-Humanitarian aid / poverty reduction program.
-In the case of claims for this gift, please fill in the following form;
+Hi,
 
-Full name:
-Telephone number:
-State:
-Country:
-kindly respond for more details.
-in God We Trust.
+Occasionally mkfs.reiser4 creates a file system without a UUID,
+debugfs.reiser4 reports UUID as '<none>'.  This is being detected in
+GParted's file system interface CI tests [1] which exercises the resier4
+commands.
+
+In a Ubuntu 20.04 LTS VM with both resier4progs-1.2.1-1 package and
+current code from GIT, the fault can easily be replicated like this:
+
+truncate -s 256M test.img
+i=1
+while :
+do
+  mkfs.reiser4 --force --yes --label '' test.img
+  line=`debugfs.reiser4 test.img 2> /dev/null | egrep '^uuid:'`
+  echo "[$i] $line"
+  ((i++))
+  echo "$line" | grep -q '<none>' && break
+done
+
+Output fragment:
+[1] uuid:        17073919-e41d-4892-9b22-4294d1544c4a
+[2] uuid:        af2821de-ea85-4f20-9621-4fbd128b3fb8
+[3] uuid:        c0fb805b-e224-4695-a504-d87460d158ae
+...
+[35] uuid:        d604794d-097f-4810-bbb3-01a1518f3ef1
+[36] uuid:        9634100c-1f98-42b3-a684-c9df77ab54e2
+[37] uuid:        <none>
+
+Performing the same test with resierfs and ext4 runs for many hours
+doing 100,000s of iterations without issue.
+
+Thanks,
+Mike
+
+[1] Sporadic failure of test case
+My/SupportedFileSystemsTest.CreateAndReadUUID/reiser4
+    https://gitlab.gnome.org/GNOME/gparted/-/issues/145
