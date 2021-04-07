@@ -2,102 +2,82 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD5FE352B8A
-	for <lists+reiserfs-devel@lfdr.de>; Fri,  2 Apr 2021 16:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1829357686
+	for <lists+reiserfs-devel@lfdr.de>; Wed,  7 Apr 2021 23:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235626AbhDBOlF (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 2 Apr 2021 10:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
+        id S231925AbhDGVQK (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 7 Apr 2021 17:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235584AbhDBOlF (ORCPT
+        with ESMTP id S229469AbhDGVQK (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 2 Apr 2021 10:41:05 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC3FC061788
-        for <reiserfs-devel@vger.kernel.org>; Fri,  2 Apr 2021 07:41:04 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id j3so533800qvs.1
-        for <reiserfs-devel@vger.kernel.org>; Fri, 02 Apr 2021 07:41:04 -0700 (PDT)
+        Wed, 7 Apr 2021 17:16:10 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988BCC061760
+        for <reiserfs-devel@vger.kernel.org>; Wed,  7 Apr 2021 14:16:00 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a25so6956857ejk.0
+        for <reiserfs-devel@vger.kernel.org>; Wed, 07 Apr 2021 14:16:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metztli-com.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=+vgejU4/JZadtPYENjNbyRGMVCzwVSPUxWwXTslt1q4=;
-        b=XqzBy8GABaaVCHwtvbceZdyfltyfLjwIlZXmZ/QUkubphwR6CWfRdX/a1C39I4Zkfo
-         XGajLD4Fk968nQubxVGmz89TpfR6vyc7Y4+PHLMkvkowHGbMwbSuTK9K8iAbe/WqgkAU
-         GWlUWu045uerbz43w+ZUdr/QrTi+QR86kCcbIpP39UIMXvdw1ZcWdLMEZr2Q8EhfTjPF
-         WooT9wm0dXegr5gcyBcAyOZ1RbJmvEMCRPMcVOvU7puc5j9GMRQNhTdW0qtA6gd5vCfb
-         zGXoauqwnhzLvZnGKRIS00fx/1WaIGX3MynWv81gx01mc4NeouVHfWmtF1OI81+7lOLL
-         YbNg==
+        d=gmail.com; s=20161025;
+        h=from:subject:to:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=tx47fhbhPlWUeE59U3Ur/v3UUGiiFnso4iDnaPxAMm0=;
+        b=CC2CWx3YmR4W9Bzs1AhlV5ZRJnb2iCY0EVltkmBZRu797rf7qOTZsLxU6a/pXKMPvo
+         hY4/M6lFpSG1DkYRf9zSSQD+8VOGb2Y7BuVvXeXi/1iK5ycKVu7e92u8kI4KzkGLW8DW
+         c6E4wowhI4FIiPwVlpmTANZBbPt7CeLHVBREu4/bDWef0Ck0kWH2AZtWCUezG7LTbqgE
+         LVkMPzX3rW7Lh7YmAtUJoRan+Uu35KMAgevke+2XANaG5TObWul38MoNA6iM/4b5cskw
+         vy05hCB2jOsUvys8JgaO066u3w1H5AbNg6NEIPynUd0J6UEy/pqb9Ne8QIbWCH5NmQ7o
+         YmTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=+vgejU4/JZadtPYENjNbyRGMVCzwVSPUxWwXTslt1q4=;
-        b=rpa0pIshm9+lTEtp43e/yrZWFmyvnhw97+RcQYlmugMBH6zqX6rNAMGnVDq1WfjmHK
-         e5Ze3hU/0XdWIMNHLtqB4LxMeZ5HTKpQ2GvVNpLkyMRZgBp8g+1nqEKTDAkqnoGS+sft
-         n10hMskpmJoa2mpyV5Ei0+0lLDTgvU9T9eJjaSbuAGjPSk4f3oDVH7+VPyhw09HA2ppo
-         51SeMMgih7ceCJAMoGM15TSpVPiuslFm1n6+ubSOENy1ssCbx2w4O70HxWl2KK5gMmtZ
-         uh+TNORtJme/sf6VWYXmXcC4WrXt3O/BjhoBEcPTKMcH+2RMUWHzuEaQ1CMIAEoKcC2y
-         7f+A==
-X-Gm-Message-State: AOAM532A9e098/9xXXNWAFj6MpMJowXYaKeoiZzyPQy9bBDYoI11lFge
-        QUQVZI6FH80iMOiXw3PqY8/zbIuwaGJldOzP
-X-Google-Smtp-Source: ABdhPJz4LErsUa6QJPvMHVW6+CLbNgfBrYTxFNjWtRJgCw1sc+1RbCj19wOKKQux/hPr712XfR/oIA==
-X-Received: by 2002:a0c:a425:: with SMTP id w34mr13007510qvw.2.1617374463466;
-        Fri, 02 Apr 2021 07:41:03 -0700 (PDT)
-Received: from ?IPv6:2600:1700:6470:27a0:4e80:93ff:fe00:3ff7? ([2600:1700:6470:27a0:4e80:93ff:fe00:3ff7])
-        by smtp.gmail.com with ESMTPSA id 18sm7663196qkr.90.2021.04.02.07.41.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Apr 2021 07:41:02 -0700 (PDT)
-Message-ID: <76f176ce14bb469293e15172e6522081a3539126.camel@metztli.com>
-Subject: Reiser4 -enabled Linux 5.10.26
-From:   Metztli Information Technology <jose.r.r@metztli.com>
-To:     ReiserFS Development List <reiserfs-devel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Cc:     Edward Shishkin <edward.shishkin@gmail.com>
-Date:   Fri, 02 Apr 2021 07:41:01 -0700
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        h=x-gm-message-state:from:subject:to:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=tx47fhbhPlWUeE59U3Ur/v3UUGiiFnso4iDnaPxAMm0=;
+        b=C9FS+JrPzYxkZaY3IpNsh4enuhAxhAlAJdOl87iUnxuBMo5nVDJYGRUUVomzBOsRvX
+         RNuMg0edetw1KXW+jUmARqnlPJUcR7QOnGN8N6Z9A1z5RyAzSdXyN6Lvs4Tm2w6xeSE/
+         y0QN7Y4T4TXwnfJoKl4BRfGlVyMr8KTI37HfL0qsvN4YJ4ShIJQOJQkSYFhdDNR+K7al
+         3/QI2I+uH2mT5KHsuvLiv3tjZLcZu+ifEvc+Kqxy9159KG7mx39IEEt38IJDusr4BVD7
+         /FUn5IPbx+iBvscfI1V7y8ELgedtkxzZQcKX6ZE0EW4qOHsGT2ypypTBXIqRIDThnsBM
+         klCw==
+X-Gm-Message-State: AOAM533hMUrF0Uv/B+YzqyF8JZ8SzjPtxfzQOu0bSUMla1IJevXcaikx
+        yhREgcWhj6aw83f9n2NSnYqZ7p1BrSY=
+X-Google-Smtp-Source: ABdhPJz0NoXPzXnbIlELhDb7c0Xm0sNM4tky5XetxCKw1jyhtTZBBVMyYEdBYGt221rg1jAnOiFtsw==
+X-Received: by 2002:a17:906:c9d8:: with SMTP id hk24mr6147326ejb.480.1617830159246;
+        Wed, 07 Apr 2021 14:15:59 -0700 (PDT)
+Received: from [192.168.0.48] (HSI-KBW-46-223-1-191.hsi.kabel-badenwuerttemberg.de. [46.223.1.191])
+        by smtp.gmail.com with ESMTPSA id c16sm2450677ejx.81.2021.04.07.14.15.58
+        for <reiserfs-devel@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 07 Apr 2021 14:15:58 -0700 (PDT)
+From:   Edward Shishkin <edward.shishkin@gmail.com>
+Subject: Reiser4 for Linux-5.12
+To:     ReiserFS development mailing list <reiserfs-devel@vger.kernel.org>
+Message-ID: <e3a3910f-6ae4-833f-e6c5-f560597cb2e1@gmail.com>
+Date:   Wed, 7 Apr 2021 23:15:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.5.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Niltze [Hello], all-
+5.11 -> 5.12:
 
-We have just released a preliminary reiser4 -enabled Debian 11,
-codenamed Bullseye, minimal USB/ISO AMD64 image with Debianized kernel
-5.10.26-2. It has been tested lightly -- as Debian gives the finishing
-touches to their upcoming operating system distribution.
+. Implement ->read_iter(), get rid of deprecated ->read() file operation
+. Port for Linux-5.12
+   . Macro BIO_MAX_PAGES has gone;
+   . The following methods got a new argument struct user_namespace *:
+     . reiser4_setattr_common
+     . reiser4_getattr_common
+     . reiser4_create_common
+     . reiser4_symlink_common
+     . reiser4_mkdir_common
+     . reiser4_mknod_common
+     . reiser4_permission_common
+     . reiser4_rename2_common
 
-If anyone wants to give it a spin, here are the download link(s):
-https://metztli.it/bullseye/netboot/metztli-reiser4.iso
-https://metztli.it/bullseye/netboot/metztli-reiser4.iso.SHA256SUM
-
-If using USB device /dev/sdb,
-dd if=metztli-reiser4.iso of=/dev/sdb bs=4M; sync
-
-https://metztli.it/bullseye
-*No warranties whatsoever*
-
-
-Best Professional Regards.
-
--- 
--- 
-Jose R R
-http://metztli.it
------------------------------------------------------------------------
-----------------------
-Download Metztli Reiser4: Debian Buster w/ Linux 5.10.20 AMD64
------------------------------------------------------------------------
-----------------------
-feats ZSTD compression https://sf.net/projects/metztli-reiser4/
------------------------------------------------------------------------
-----------------------
-or SFRN 5.1.3, Metztli Reiser5 https://sf.net/projects/debian-reiser4/
------------------------------------------------------------------------
---------------------
-Official current Reiser4 resources: https://reiser4.wiki.kernel.org/
-
-
+Find at
+https://sourceforge.net/projects/reiser4/files/reiser4-for-linux-5.x/
