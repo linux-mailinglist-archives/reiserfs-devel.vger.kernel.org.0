@@ -2,82 +2,72 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1829357686
-	for <lists+reiserfs-devel@lfdr.de>; Wed,  7 Apr 2021 23:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96E335D4EA
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 13 Apr 2021 03:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231925AbhDGVQK (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 7 Apr 2021 17:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbhDGVQK (ORCPT
+        id S239144AbhDMBnV (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 12 Apr 2021 21:43:21 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:16451 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239038AbhDMBnU (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 7 Apr 2021 17:16:10 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988BCC061760
-        for <reiserfs-devel@vger.kernel.org>; Wed,  7 Apr 2021 14:16:00 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a25so6956857ejk.0
-        for <reiserfs-devel@vger.kernel.org>; Wed, 07 Apr 2021 14:16:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:subject:to:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=tx47fhbhPlWUeE59U3Ur/v3UUGiiFnso4iDnaPxAMm0=;
-        b=CC2CWx3YmR4W9Bzs1AhlV5ZRJnb2iCY0EVltkmBZRu797rf7qOTZsLxU6a/pXKMPvo
-         hY4/M6lFpSG1DkYRf9zSSQD+8VOGb2Y7BuVvXeXi/1iK5ycKVu7e92u8kI4KzkGLW8DW
-         c6E4wowhI4FIiPwVlpmTANZBbPt7CeLHVBREu4/bDWef0Ck0kWH2AZtWCUezG7LTbqgE
-         LVkMPzX3rW7Lh7YmAtUJoRan+Uu35KMAgevke+2XANaG5TObWul38MoNA6iM/4b5cskw
-         vy05hCB2jOsUvys8JgaO066u3w1H5AbNg6NEIPynUd0J6UEy/pqb9Ne8QIbWCH5NmQ7o
-         YmTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=tx47fhbhPlWUeE59U3Ur/v3UUGiiFnso4iDnaPxAMm0=;
-        b=C9FS+JrPzYxkZaY3IpNsh4enuhAxhAlAJdOl87iUnxuBMo5nVDJYGRUUVomzBOsRvX
-         RNuMg0edetw1KXW+jUmARqnlPJUcR7QOnGN8N6Z9A1z5RyAzSdXyN6Lvs4Tm2w6xeSE/
-         y0QN7Y4T4TXwnfJoKl4BRfGlVyMr8KTI37HfL0qsvN4YJ4ShIJQOJQkSYFhdDNR+K7al
-         3/QI2I+uH2mT5KHsuvLiv3tjZLcZu+ifEvc+Kqxy9159KG7mx39IEEt38IJDusr4BVD7
-         /FUn5IPbx+iBvscfI1V7y8ELgedtkxzZQcKX6ZE0EW4qOHsGT2ypypTBXIqRIDThnsBM
-         klCw==
-X-Gm-Message-State: AOAM533hMUrF0Uv/B+YzqyF8JZ8SzjPtxfzQOu0bSUMla1IJevXcaikx
-        yhREgcWhj6aw83f9n2NSnYqZ7p1BrSY=
-X-Google-Smtp-Source: ABdhPJz0NoXPzXnbIlELhDb7c0Xm0sNM4tky5XetxCKw1jyhtTZBBVMyYEdBYGt221rg1jAnOiFtsw==
-X-Received: by 2002:a17:906:c9d8:: with SMTP id hk24mr6147326ejb.480.1617830159246;
-        Wed, 07 Apr 2021 14:15:59 -0700 (PDT)
-Received: from [192.168.0.48] (HSI-KBW-46-223-1-191.hsi.kabel-badenwuerttemberg.de. [46.223.1.191])
-        by smtp.gmail.com with ESMTPSA id c16sm2450677ejx.81.2021.04.07.14.15.58
-        for <reiserfs-devel@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 07 Apr 2021 14:15:58 -0700 (PDT)
-From:   Edward Shishkin <edward.shishkin@gmail.com>
-Subject: Reiser4 for Linux-5.12
-To:     ReiserFS development mailing list <reiserfs-devel@vger.kernel.org>
-Message-ID: <e3a3910f-6ae4-833f-e6c5-f560597cb2e1@gmail.com>
-Date:   Wed, 7 Apr 2021 23:15:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.5.2
+        Mon, 12 Apr 2021 21:43:20 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FK7bd0Fj2ztVfV;
+        Tue, 13 Apr 2021 09:40:45 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
+ 14.3.498.0; Tue, 13 Apr 2021 09:42:54 +0800
+From:   Tian Tao <tiantao6@hisilicon.com>
+To:     <jack@suse.cz>, <rdunlap@infradead.org>
+CC:     <reiserfs-devel@vger.kernel.org>, Tian Tao <tiantao6@hisilicon.com>
+Subject: [PATCH] fs/reiserfs/journal.c: delete useless variables
+Date:   Tue, 13 Apr 2021 09:43:16 +0800
+Message-ID: <1618278196-17749-1-git-send-email-tiantao6@hisilicon.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-5.11 -> 5.12:
+The value of 'cn' is not used, so just delete it.
 
-. Implement ->read_iter(), get rid of deprecated ->read() file operation
-. Port for Linux-5.12
-   . Macro BIO_MAX_PAGES has gone;
-   . The following methods got a new argument struct user_namespace *:
-     . reiser4_setattr_common
-     . reiser4_getattr_common
-     . reiser4_create_common
-     . reiser4_symlink_common
-     . reiser4_mkdir_common
-     . reiser4_mknod_common
-     . reiser4_permission_common
-     . reiser4_rename2_common
+Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
+---
+ fs/reiserfs/journal.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Find at
-https://sourceforge.net/projects/reiser4/files/reiser4-for-linux-5.x/
+diff --git a/fs/reiserfs/journal.c b/fs/reiserfs/journal.c
+index e98f993..9edc8e2 100644
+--- a/fs/reiserfs/journal.c
++++ b/fs/reiserfs/journal.c
+@@ -461,7 +461,6 @@ int reiserfs_in_journal(struct super_block *sb,
+ 			b_blocknr_t * next_zero_bit)
+ {
+ 	struct reiserfs_journal *journal = SB_JOURNAL(sb);
+-	struct reiserfs_journal_cnode *cn;
+ 	struct reiserfs_list_bitmap *jb;
+ 	int i;
+ 	unsigned long bl;
+@@ -497,13 +496,12 @@ int reiserfs_in_journal(struct super_block *sb,
+ 	bl = bmap_nr * (sb->s_blocksize << 3) + bit_nr;
+ 	/* is it in any old transactions? */
+ 	if (search_all
+-	    && (cn =
+-		get_journal_hash_dev(sb, journal->j_list_hash_table, bl))) {
++	    && (get_journal_hash_dev(sb, journal->j_list_hash_table, bl))) {
+ 		return 1;
+ 	}
+ 
+ 	/* is it in the current transaction.  This should never happen */
+-	if ((cn = get_journal_hash_dev(sb, journal->j_hash_table, bl))) {
++	if ((get_journal_hash_dev(sb, journal->j_hash_table, bl))) {
+ 		BUG();
+ 		return 1;
+ 	}
+-- 
+2.7.4
+
