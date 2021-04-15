@@ -2,62 +2,76 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9A736081E
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 15 Apr 2021 13:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3665236095B
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 15 Apr 2021 14:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232520AbhDOLVE (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 15 Apr 2021 07:21:04 -0400
-Received: from www262.sakura.ne.jp ([202.181.97.72]:56853 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbhDOLVD (ORCPT
+        id S233001AbhDOM0T (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 15 Apr 2021 08:26:19 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:2867 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232975AbhDOM0Q (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 15 Apr 2021 07:21:03 -0400
-Received: from fsav402.sakura.ne.jp (fsav402.sakura.ne.jp [133.242.250.101])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 13FBKFtS085702;
-        Thu, 15 Apr 2021 20:20:15 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav402.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav402.sakura.ne.jp);
- Thu, 15 Apr 2021 20:20:15 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav402.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 13FBKET4085693
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 15 Apr 2021 20:20:15 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [PATCH 1/5] xattr: Complete constify ->name member of "struct
- xattr"
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Thu, 15 Apr 2021 08:26:16 -0400
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FLdbb1Rksz68BPR;
+        Thu, 15 Apr 2021 20:15:55 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Thu, 15 Apr 2021 14:25:50 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2106.013;
+ Thu, 15 Apr 2021 14:25:50 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
         Jeff Mahoney <jeffm@suse.com>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, selinux@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, stable@vger.kernel.org,
-        zohar@linux.ibm.com, jmorris@namei.org, paul@paul-moore.com,
-        casey@schaufler-ca.com
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
+        "reiserfs-devel@vger.kernel.org" <reiserfs-devel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "casey@schaufler-ca.com" <casey@schaufler-ca.com>
+Subject: RE: [PATCH 1/5] xattr: Complete constify ->name member of "struct
+ xattr"
+Thread-Topic: [PATCH 1/5] xattr: Complete constify ->name member of "struct
+ xattr"
+Thread-Index: AQHXMd7FDBbRfOc0Vkms8LxU+cs6Xqq1TVmAgAAzkSA=
+Date:   Thu, 15 Apr 2021 12:25:49 +0000
+Message-ID: <eedc6f82d59b4084b529788efd43e10b@huawei.com>
 References: <20210415100435.18619-1-roberto.sassu@huawei.com>
  <20210415100435.18619-2-roberto.sassu@huawei.com>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <164b0933-0917-457e-4dad-245ea13cbe52@i-love.sakura.ne.jp>
-Date:   Thu, 15 Apr 2021 20:20:15 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
-MIME-Version: 1.0
-In-Reply-To: <20210415100435.18619-2-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset=utf-8
+ <164b0933-0917-457e-4dad-245ea13cbe52@i-love.sakura.ne.jp>
+In-Reply-To: <164b0933-0917-457e-4dad-245ea13cbe52@i-love.sakura.ne.jp>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.48.215.118]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On 2021/04/15 19:04, Roberto Sassu wrote:
-> This patch completes commit 9548906b2bb7 ('xattr: Constify ->name member of
-> "struct xattr"'). It fixes the documentation of the inode_init_security
-> hook, by removing the xattr name from the objects that are expected to be
-> allocated by LSMs (only the value is allocated). Also, it removes the
-> kfree() of name and setting it to NULL in the reiserfs code.
-
-Good catch, but well, grep does not find any reiserfs_security_free() callers.
-Is reiserfs_security_free() a dead code?
+PiBGcm9tOiBUZXRzdW8gSGFuZGEgW21haWx0bzpwZW5ndWluLWtlcm5lbEBpLWxvdmUuc2FrdXJh
+Lm5lLmpwXQ0KPiBTZW50OiBUaHVyc2RheSwgQXByaWwgMTUsIDIwMjEgMToyMCBQTQ0KPiBPbiAy
+MDIxLzA0LzE1IDE5OjA0LCBSb2JlcnRvIFNhc3N1IHdyb3RlOg0KPiA+IFRoaXMgcGF0Y2ggY29t
+cGxldGVzIGNvbW1pdCA5NTQ4OTA2YjJiYjcgKCd4YXR0cjogQ29uc3RpZnkgLT5uYW1lDQo+IG1l
+bWJlciBvZg0KPiA+ICJzdHJ1Y3QgeGF0dHIiJykuIEl0IGZpeGVzIHRoZSBkb2N1bWVudGF0aW9u
+IG9mIHRoZSBpbm9kZV9pbml0X3NlY3VyaXR5DQo+ID4gaG9vaywgYnkgcmVtb3ZpbmcgdGhlIHhh
+dHRyIG5hbWUgZnJvbSB0aGUgb2JqZWN0cyB0aGF0IGFyZSBleHBlY3RlZCB0bw0KPiBiZQ0KPiA+
+IGFsbG9jYXRlZCBieSBMU01zIChvbmx5IHRoZSB2YWx1ZSBpcyBhbGxvY2F0ZWQpLiBBbHNvLCBp
+dCByZW1vdmVzIHRoZQ0KPiA+IGtmcmVlKCkgb2YgbmFtZSBhbmQgc2V0dGluZyBpdCB0byBOVUxM
+IGluIHRoZSByZWlzZXJmcyBjb2RlLg0KPiANCj4gR29vZCBjYXRjaCwgYnV0IHdlbGwsIGdyZXAg
+ZG9lcyBub3QgZmluZCBhbnkgcmVpc2VyZnNfc2VjdXJpdHlfZnJlZSgpIGNhbGxlcnMuDQo+IElz
+IHJlaXNlcmZzX3NlY3VyaXR5X2ZyZWUoKSBhIGRlYWQgY29kZT8NCg0KVWhtLCBJIGFsc28gZG9u
+J3Qgc2VlIGl0Lg0KDQpUaGFua3MNCg0KUm9iZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9HSUVTIER1
+ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBlbmcsIExp
+IEppYW4sIFNoaSBZYW5saQ0K
