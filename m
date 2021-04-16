@@ -2,198 +2,333 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A153625BE
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 16 Apr 2021 18:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33BD4362A43
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 16 Apr 2021 23:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235001AbhDPQhi (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 16 Apr 2021 12:37:38 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2876 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233976AbhDPQhi (ORCPT
+        id S1344380AbhDPVZo (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 16 Apr 2021 17:25:44 -0400
+Received: from sonic309-27.consmr.mail.ne1.yahoo.com ([66.163.184.153]:45981
+        "EHLO sonic309-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344349AbhDPVZn (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 16 Apr 2021 12:37:38 -0400
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FMMDQ3XSpz68BvF;
-        Sat, 17 Apr 2021 00:31:50 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Fri, 16 Apr 2021 18:37:10 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2106.013;
- Fri, 16 Apr 2021 18:37:10 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Fri, 16 Apr 2021 17:25:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1618608318; bh=PPLdm2iavpSoX4yP6O9bp5lB/lkadgMP3fsSb8Y4PF4=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject:Reply-To; b=ShOqKtE42hhm6Ory455zZqHgSaqHwaNqOmCFK8W1CvSTJcomHkbnig3jKPMgf+B8zarSwa79KHLS4I2895werj1IaPMEj1hp+yrn6GbsdwdCJnP8BDHZtPgQwHJayMTFOFM771pQfJju/K6HhlzxTW8UE39fsDwb4M1t/Ai7Aj3ytOKjB7eKtEftJgxvII9kiyqgbmrrRjcY0cBofS1YZrt/+WZqFZfYh73hxUQymgommOOprhPwX36XYrdvfTJnSJF4ljnGZi8uVV2+L1bpaieJOmYNXPVFy/zvvW4yTOXU46nekC6wS/J3JgBALVlOpl/5z2HZRP74fUGk7VyDAg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1618608318; bh=TJZATh59Yidg9ILM8W0eX3kjT2YUpd9RT06KyqK0tVK=; h=X-Sonic-MF:Subject:To:From:Date:From:Subject; b=lTzahCtRjcHBg8mmp1eYVegktknTz0JmzIHK0hqD1U8JoJEtAXPopJgUxhSYbxxZpQVhSIca8MaRi6XoJ45PxZCevwiEQZIlaQ3sySAng6YNCmegQFqaNqwwId67QajXpEiKFe5egFP5h3EAp4kcrsMNjAXYXXpO9fT0oiN82Sib5NVW6yEGpOpVtQSO7W8VEhQgJL0uuhyMGHPPEyHkFsAZu/BhA4zS292XnMBXR048pnnx7KJoBIFWCJlU0dci04UZOkByiLefj13TRy98Nbe7R579b7KR9IcyZUSg7pSe1XVJyrSliia3dYe+GZIPACZS3uAP3ZP5om8rvhYmtQ==
+X-YMail-OSG: WBFBVgUVM1kW.XKyp.l4q7e3n2667nlp3Az4ioESy7ZPrPcsbSPqh5rwN9REEjv
+ sjChxsADg_EezrfGtjdE8T.No..B4K7cZ7l8dvcd0jEv9gZhgBc_cSLrHNYsu1R4i9Doe27Grqml
+ Yi6QC1IQ4W9mg0R0tgD2hXFUyKv6umRLNhb5fsdzpXSvV.pjoV_EtlLhgCUJ8.cZxbj0XXWNEmE5
+ Ahh4jU_uEqeQZXVYYeHGKvjlKI6ZPjmwrxITINUkgTYFhf4685sh6fwxD3CPdBRzn2FGeCFW8CBy
+ K3jONBrlrVmiixjmIGW.cBTCZPIKcgfmBGSKzgLKhhns2FbJ6W40Z0SmFep1gCh3pyVrXgK7QjFp
+ EvkkkSHRW0WQpW7N59fS02wI4xiwBqtifmvpgqBymA3kxPGW5VZ8mkioNgyVH_ZaqPmPWywn3u9J
+ atP3fkeautGoRBjO973MR1TmcfWECqvLyG.Vqjpjj2Wj6IjP6SAYC2cibWruI5TLbnSPuIm4quPB
+ 7pMpn1d7FvvQB.IoElrBW6YTCXUN4pKJ5d3N7gwFCeW_ypGf0HCAc918RB5st0lpCJIK3r9jBPD0
+ UwFukZ2gjpv6Hgo32Kmhl36wIK2Ch4yw.AqiW9YKVq_N3c81dRpSX4Am95pd6Eyz0VkU_bGhfUfA
+ YxRv7tEncXYfSKrP72DXxgkdZSVC5ZadnfK1D9mpW6PwKyv0qPw8G90VGKZFqrscwwJbFfSxxkWi
+ ovsw2Gtu15t7SePC11Mj7r_VYuEA8c_MPZ4X114dZmyjmO5t_pB0BLYSycVRH1LlYSz9ns3MhLgJ
+ tX27mP5526rIdIB3qGGEs2F6.UkR24ylOjVDJzgK5Z.QdVIHnSMsZfdCh4k89fDkRmsbvwhzv8of
+ 6irZUCiWLOHt3dTczPaKVX9wF93M5uC92dz2g8jiylhAfcK1jVQBBEPeZnKlr4TMMYSqtU9i8Dnn
+ vfWkIZbRZwt8iSbiy.7IBjlqZ1I_QTaceTqtJmcMQJ31YuGXPoY8XtegdprHrXnb9M8PG9cTbc.G
+ G8IF4SOWcrFhqCzFNy_XKQ5PwikoLEtfG41LKpFbRgS4g4D9X9y.aEhR94ggIcsoFbWDg_yeF4Wo
+ dkwPipzjCq1lTt0Pya3Bk3w7UCf5VBc4NdqEd9y0iOhJR0cAywI_tgVKpGkVrhMYYC3iVFaiFi.t
+ nLFT.8WPE6o.LCDxGZsMNrzAfSo3J5l0fBzgnAou.Axa4MGo4deTL2xrAs.pgDKRAuMfTh8czQvt
+ m9HlIUCKgOUKQ6bANwCrBVRD4ZHw5pt4AS3d9joti68LH.M8dUIEz4v2t3A9ZlGCpeyBSIWLCIUN
+ SmwvBNmCDe1OE0ER_b6rrQjyeTbOrS4TVElnUyRUmbm0sAHi1hjwYTBbIAo.Z468X_CN3g8w0YT6
+ L8Wh_.uDKRHdxK.yno1.weIugsutJ1HxzsBsu5VzyX_HI497mdGPBWCb6qQ0wKUBQQGyl8GkyJJj
+ TWiIvyZHjx7fDEzHxOY2ZHlynCegmUpb.3JxXVlJk_nGLKKTlyaft27zYNj6N1UlrDNIJDvZ6yrq
+ 1KErKV0FQCnHiIn4UP7ivhH7urgB_9gVCC.Bp_BRwGx0sq.M4qC0xv8LFBvBVgbI5ng5y6KPqstG
+ Cj27_my6FJKbdWmUVU7YVuU_NoM5dl8lGS.ONcDnn6ShTcGv3SC3HDlRTdCxR.1Jf8TDuxiECCwT
+ .KkdHDfPLqHkWDcv8m8n1eGBl5.ccc3ic.p24nHgEMbZp78ygWUvrabCsm3mzRf1oAZ.MLc8hbmG
+ N9eO8s7Y.dIU9KshLwwvSA6OwYhGE7zTAGdamprwUDE4oEi1fnggxpP3tfF_UI2J1zDoZ1zhK3C.
+ EVnz3wcCSbWkUenV9k0z32COwpQBA69X70A7NMF3QorfX7V5YCYAGxCHNe26tWsIIkr7pglLrP44
+ DU3RO_uzSqHpuvYqEQgLpEasdzgAHQmE26Vw.xce9efAgnfR..9b_R8pHjoHF0SfcxxOpFj2V_1p
+ nhZiom1RySWyXksGbg96LQb90TePX90DUZjrENwMLvIHkwU09zdKEZ64u4lUduxpzz7vVe4oyw3m
+ o_uxNUrvn99V7uByfsinzEFPfSMmWeprESfiABoDLrRrDYseh5FjGwBpEyvVg0mBBOjv5GRVxdln
+ vG4PWOcyoZstS52zYE3VqvDPtbAVFkH6OG5H03.2BJ_l9tyZ1cIuFDfHiFgjOsK7VRcfSi0R6otl
+ 2w5et6mqrRriwriMyocX7dYeFDs.LFNmQ3jxwVaUb6fo9xe6_pCtoYfQervHM5RyaqrN0EffUcpn
+ m10fzfjRWCi2lDIhON4xT_XrYt3pj4yEyfAUJXrh22NxpKywLfnliZZI2aldaeCst2KaLUqt7Zos
+ t_1wRbiqI0Ff3CuqAgZvP6SiS3HDDx8bggQlxmMIOi6HVwH1WSRTm1t2enKCTRxUi5sUPZlFojBp
+ LbNh2V7xZueii6WoOyaAxD34ZEt8yEJMLOdFjlAQozR7MpKDZ805HQJBAF_pw_2RIHreasxJNBXl
+ wzsYZoywjMKfxIteXVfuZDzVGXSVIXYl49Lj9sejGrxqQ9K_OsvHAKQk3wsMLjc98sqOFmeIBnWc
+ 9kPVH9zP9U.MBJ8ZQXqKS4nyVTDVap424b5z9z5B1qCyXQ6t6aWUH4zMZBsRuI1zVjtWbslBSJRn
+ QoqAA8FRGEUvihDH4GUwxyE9pVrvyfjZMpztCArL2NFTkAtG4RV.JHCaOM84ckpaGTtw129qksTn
+ xZYmSRv.4nJYtwQxgoD5M0uaITrZ_ZCwaZR_WyRV2vTYuK1XAaiKWgGhNkxN6KJsGRMTbuXP96.x
+ eRYGSh1PKWWC6rh_tAGw1.1IaftNMpwK5f8vMwv2zELsI5F4aRJiRasC.k5mPDUpQx4tBaQZ6O6J
+ Td9U2sRWXDD7XEx9LyAu_tsgHhHS_WrdGg8QMdlPONXdmgsmgx0q2eabq68kvozYf_0gCSg8Pd5u
+ KKk5CE1RGWDWnWXntpAVW5yzTCAxaJNG4Xw5lOMA5oJ7ZWJuA15NYfmjvZQvYcBfyw1EdsLOjm83
+ 6V3WeIKXBbbRrCBXzVbx3zbsVNFmaMzDuAKBt.AcTuv628_XD0sRrz6SsACq0KWJoHPdq9dIexsO
+ Xj1oy.coLRU2jQNHPe7GPF4HXxbGEXNlZI9o8QksXpzcfz_h.yQC6evOkX3NcdDgJLscG2U9KVzt
+ b2wWXKhrQq69T1Hz794S.XRaiclBIaoSHBPuEzyBmQs1qLFIctUhHNIbeQBGfMqLT1T0YJ3X98zX
+ xHl4QbzWhsA--
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Fri, 16 Apr 2021 21:25:18 +0000
+Received: by kubenode520.mail-prod1.omega.ne1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID d51b9e078109949b27131e96f91e4eb0;
+          Fri, 16 Apr 2021 21:25:14 +0000 (UTC)
+Subject: Re: [PATCH 0/5] evm: Prepare for moving to the LSM infrastructure
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
         "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
         "jmorris@namei.org" <jmorris@namei.org>,
         "paul@paul-moore.com" <paul@paul-moore.com>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        "reiserfs-devel@vger.kernel.org" <reiserfs-devel@vger.kernel.org>
-Subject: RE: [PATCH 0/5] evm: Prepare for moving to the LSM infrastructure
-Thread-Topic: [PATCH 0/5] evm: Prepare for moving to the LSM infrastructure
-Thread-Index: AQHXMd7FgQB7iowx5ESkxCON7TnufKq16sKAgAFjQMA=
-Date:   Fri, 16 Apr 2021 16:37:10 +0000
-Message-ID: <2c944d6ddeed4519bdbf3733d7318a3d@huawei.com>
+        "reiserfs-devel@vger.kernel.org" <reiserfs-devel@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>
 References: <20210415100435.18619-1-roberto.sassu@huawei.com>
  <7659b8cf-71cc-33b5-dbf1-3eb1ff159fe6@schaufler-ca.com>
-In-Reply-To: <7659b8cf-71cc-33b5-dbf1-3eb1ff159fe6@schaufler-ca.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.62.207]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <2c944d6ddeed4519bdbf3733d7318a3d@huawei.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+Message-ID: <db1bc545-9389-7b86-1582-7de1a8a1435e@schaufler-ca.com>
+Date:   Fri, 16 Apr 2021 14:25:10 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+In-Reply-To: <2c944d6ddeed4519bdbf3733d7318a3d@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Mailer: WebService/1.1.18121 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo Apache-HttpAsyncClient/4.1.4 (Java/16)
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-PiBGcm9tOiBDYXNleSBTY2hhdWZsZXIgW21haWx0bzpjYXNleUBzY2hhdWZsZXItY2EuY29tXQ0K
-PiBTZW50OiBUaHVyc2RheSwgQXByaWwgMTUsIDIwMjEgMTA6NDQgUE0NCj4gT24gNC8xNS8yMDIx
-IDM6MDQgQU0sIFJvYmVydG8gU2Fzc3Ugd3JvdGU6DQo+ID4gVGhpcyBwYXRjaCBzZXQgZGVwZW5k
-cyBvbjoNCj4gPg0KPiA+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LWludGVncml0eS8y
-MDIxMDQwOTExNDMxMy40MDczLTEtDQo+IHJvYmVydG8uc2Fzc3VAaHVhd2VpLmNvbS8NCj4gPiBo
-dHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1pbnRlZ3JpdHkvMjAyMTA0MDcxMDUyNTIuMzA3
-MjEtMS0NCj4gcm9iZXJ0by5zYXNzdUBodWF3ZWkuY29tLw0KPiA+DQo+ID4gT25lIG9mIHRoZSBj
-aGFsbGVuZ2VzIHRoYXQgbXVzdCBiZSB0YWNrbGVkIHRvIG1vdmUgSU1BIGFuZCBFVk0gdG8gdGhl
-IExTTQ0KPiA+IGluZnJhc3RydWN0dXJlIGlzIHRvIGVuc3VyZSB0aGF0IEVWTSBpcyBjYXBhYmxl
-IHRvIGNvcnJlY3RseSBoYW5kbGUNCj4gPiBtdWx0aXBsZSBzdGFja2VkIExTTXMgcHJvdmlkaW5n
-IGFuIHhhdHRyIGF0IGZpbGUgY3JlYXRpb24uIEF0IHRoZSBtb21lbnQsDQo+ID4gdGhlcmUgYXJl
-IGZldyBpc3N1ZXMgdGhhdCB3b3VsZCBwcmV2ZW50IGEgY29ycmVjdCBpbnRlZ3JhdGlvbi4gVGhp
-cyBwYXRjaA0KPiA+IHNldCBhaW1zIGF0IHNvbHZpbmcgdGhlbS4NCj4gPg0KPiA+IEZyb20gdGhl
-IExTTSBpbmZyYXN0cnVjdHVyZSBzaWRlLCB0aGUgTFNNIHN0YWNraW5nIGZlYXR1cmUgYWRkZWQg
-dGhlDQo+ID4gcG9zc2liaWxpdHkgb2YgcmVnaXN0ZXJpbmcgbXVsdGlwbGUgaW1wbGVtZW50YXRp
-b25zIG9mIHRoZSBzZWN1cml0eSBob29rcywNCj4gPiB0aGF0IGFyZSBjYWxsZWQgc2VxdWVudGlh
-bGx5IHdoZW5ldmVyIHNvbWVvbmUgY2FsbHMgdGhlIGNvcnJlc3BvbmRpbmcNCj4gPiBzZWN1cml0
-eSBob29rLiBIb3dldmVyLCBzZWN1cml0eV9pbm9kZV9pbml0X3NlY3VyaXR5KCkgYW5kDQo+ID4g
-c2VjdXJpdHlfb2xkX2lub2RlX2luaXRfc2VjdXJpdHkoKSBhcmUgY3VycmVudGx5IGxpbWl0ZWQg
-dG8gc3VwcG9ydCBvbmUNCj4gPiB4YXR0ciBwcm92aWRlZCBieSBMU00gYW5kIG9uZSBieSBFVk0u
-DQo+IA0KPiBUaGF0IGlzIGNvcnJlY3QuIEF0IHByZXNlbnQgdGhlIG9ubHkgdHdvIG1vZHVsZXMg
-dGhhdCBwcm92aWRlIGV4dGVuZGVkDQo+IGF0dHJpYnV0ZXMgYXJlIFNFTGludXggYW5kIFNtYWNr
-LiBUaGUgTFNNIGluZnJhc3RydWN0dXJlIHJlcXVpcmVzIG1vcmUNCj4gY2hhbmdlLCBpbmNsdWRp
-bmcgY2hhbmdlIHRvIHNlY3VyaXR5X2lub2RlX2luaXRfc2VjdXJpdHkoKSwgYmVmb3JlIHRob3Nl
-DQo+IG1vZHVsZXMgY2FuIGJlIHVzZWQgdG9nZXRoZXIuDQoNCk9uZSBvZiB0aGUgZ29hbHMgb2Yg
-dGhpcyBwYXRjaCBzZXQgaXMgdG8gc29sdmUgdGhlIHNwZWNpZmljIHByb2JsZW0NCm9mIHNlY3Vy
-aXR5X2lub2RlX2luaXRfc2VjdXJpdHkoKSwgd2hlbiBhcmJpdHJhcnkgTFNNcyBhcmUgYWRkZWQN
-CnRvIHRoZSBMU00gaW5mcmFzdHJ1Y3R1cmUuIEdpdmVuIHRoYXQgc29tZSBwcm9ibGVtcyBoYXZl
-DQpiZWVuIGFscmVhZHkgaWRlbnRpZmllZCwgYW5kIHdpbGwgYXJpc2Ugd2hlbiBhIG5ldyBMU00N
-CnByb3ZpZGluZyBhbiBpbXBsZW1lbnRhdGlvbiBmb3IgdGhlIGlub2RlX2luaXRfc2VjdXJpdHkg
-aG9vaw0Kd2lsbCBiZSBhZGRlZCB0byB0aGUgTFNNIGluZnJhc3RydWN0dXJlLCBpdCBzZWVtcyBh
-IGdvb2QgaWRlYQ0KZml4aW5nIHRoZW0uIFdlIGNvdWxkIGRpc2N1c3MgYWJvdXQgdGhlIHNvbHV0
-aW9uLCBpZiB0aGVyZSBpcw0KYSBiZXR0ZXIgYXBwcm9hY2guDQoNCj4gPiBJbiBhZGRpdGlvbiwg
-dXNpbmcgdGhlIGNhbGxfaW50X2hvb2soKSBtYWNybyBjYXVzZXMgc29tZSBpc3N1ZXMuIEFjY29y
-ZGluZw0KPiA+IHRvIHRoZSBkb2N1bWVudGF0aW9uIGluIGluY2x1ZGUvbGludXgvbHNtX2hvb2tz
-LmgsIGl0IGlzIGEgbGVnaXRpbWF0ZSBjYXNlDQo+ID4gdGhhdCBhbiBMU00gcmV0dXJucyAtRU9Q
-Tk9UU1VQUCB3aGVuIGl0IGRvZXMgbm90IHdhbnQgdG8gcHJvdmlkZSBhbiB4YXR0ci4NCj4gPiBI
-b3dldmVyLCB0aGUgbG9vcCBkZWZpbmVkIGluIHRoZSBtYWNybyB3b3VsZCBzdG9wIGNhbGxpbmcg
-c3Vic2VxdWVudCBMU01zDQo+ID4gaWYgdGhhdCBoYXBwZW5zLiBJbiB0aGUgY2FzZSBvZiBzZWN1
-cml0eV9vbGRfaW5vZGVfaW5pdF9zZWN1cml0eSgpLCB1c2luZw0KPiA+IHRoZSBtYWNybyB3b3Vs
-ZCBhbHNvIGNhdXNlIGEgbWVtb3J5IGxlYWsgZHVlIHRvIHJlcGxhY2luZyB0aGUgKnZhbHVlDQo+
-ID4gcG9pbnRlciwgaWYgbXVsdGlwbGUgTFNNcyBwcm92aWRlIGFuIHhhdHRyLg0KPiANCj4gQXMg
-dGhlcmUgaXMgbm8gY2FzZSB3aGVyZSB0aGVyZSB3aWxsIGJlIG11bHRpcGxlIHByb3ZpZGVycyBv
-ZiBob29rcyBmb3INCj4gaW5vZGVfaW5pdF9zZWN1cml0eSB0aGlzIGlzbid0IGFuIGlzc3VlLg0K
-DQpJIGNvdWxkIHNraXAgdGhlIHBhdGNoZXMgdGhhdCBhcmUgbm90IHJlcXVpcmVkIHRvIHN1cHBv
-cnQNCm11bHRpcGxlIExTTXMgcmVnaXN0ZXJpbmcgdG8gdGhlIGlub2RlX2luaXRfc2VjdXJpdHkg
-aG9vaw0KYW5kIGp1c3QgZG8gdGhlIEVWTSBjaGFuZ2VzIChzZWUgYmVsb3cgZm9yIHRoZSBtb3Rp
-dmF0aW9uKS4NCg0KPiA+IEZyb20gRVZNIHNpZGUsIHRoZSBmaXJzdCBvcGVyYXRpb24gdG8gYmUg
-ZG9uZSBpcyB0byBjaGFuZ2UgdGhlIGRlZmluaXRpb24NCj4gPiBvZiBldm1faW5vZGVfaW5pdF9z
-ZWN1cml0eSgpIHRvIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgc2VjdXJpdHkgaG9vaw0KPiA+IGRl
-ZmluaXRpb24uIFVuZm9ydHVuYXRlbHksIHRoZSBjdXJyZW50IGRlZmluaXRpb24gZG9lcyBub3Qg
-cHJvdmlkZSBlbm91Z2gNCj4gPiBpbmZvcm1hdGlvbiBmb3IgRVZNLCBhcyBpdCBtdXN0IGhhdmUg
-dmlzaWJpbGl0eSBvZiBhbGwgeGF0dHJzIHByb3ZpZGVkIGJ5DQo+ID4gTFNNcyB0byBjb3JyZWN0
-bHkgY2FsY3VsYXRlIHRoZSBITUFDLiBUaGlzIHBhdGNoIHNldCBjaGFuZ2VzIHRoZSBzZWN1cml0
-eQ0KPiA+IGhvb2sgZGVmaW5pdGlvbiBieSBhZGRpbmcgdGhlIGZ1bGwgYXJyYXkgb2YgeGF0dHIg
-YXMgYSBwYXJhbWV0ZXIuDQo+IA0KPiBXaHkgZG8geW91IHdhbnQgdG8gY2FsbCBldm1faW5vZGVf
-aW5pdF9zZWN1cml0eSgpIGFzIGEgcmVndWxhciBMU00gaG9vaz8NCj4gRXhjZXB0IGZvciB0aGUg
-bmFtZXMgZXZtX2lub2RlX2luaXRfc2VjdXJpdHkoKSBhbmQNCj4gc2VsaW51eF9pbm9kZV9pbml0
-X3NlY3VyaXR5KCkNCj4gaGF2ZSBub3RoaW5nIGluIGNvbW1vbi4gVGhleSBkbyB2ZXJ5IGRpZmZl
-cmVudCB0aGluZ3MgYW5kIHJlcXVpcmUgZGlmZmVyZW50DQo+IGRhdGEsIGFzIGNvbWVzIG91dCBp
-biB0aGUgcGF0Y2hlcy4NCg0KSSB0aG91Z2h0IHRoYXQgaXQgd291bGQgYmUgbW9yZSBjbGVhbiBp
-ZiBhbGwgaG9va3MgYXJlIHJlZ2lzdGVyZWQNCnRvIHRoZSBMU00gaW5mcmFzdHJ1Y3R1cmUuIE90
-aGVyd2lzZSwgaXQgY291bGQgaGFwcGVuIHRoYXQgc29tZQ0KaG9va3MgYXJlIHN0aWxsIGV4ZWN1
-dGVkIGV2ZW4gaWYgdGhlIExTTSBpcyBub3QgYWN0aXZlLCBmcm9tIHRoZQ0KcGVyc3BlY3RpdmUg
-b2YgdGhlIExTTSBpbmZyYXN0cnVjdHVyZS4NCg0KZXZtX2lub2RlX2luaXRfc2VjdXJpdHkoKSBp
-cyBzdGlsbCBhIHByb3ZpZGVyIG9mIHhhdHRycywgbGlrZSB0aGUNCm90aGVyIExTTXMsIGp1c3Qg
-aXQgcmVxdWlyZXMgYW4gZXh0cmEgcGFyYW1ldGVyIHRvIGNhbGN1bGF0ZQ0KdGhlIEhNQUMuDQoN
-Cj4gVGhlcmUgYXJlIGV2bSBmdW5jdGlvbnMgdGhhdCBjb3VsZCBiZSBpbXBsZW1lbnRlZCBhcyBM
-U00gaG9va3MuIEkgZG9uJ3QgdGhpbmsNCj4gdGhpcyBpcyBvbmUgb2YgdGhlbS4gVGhlcmUncyBu
-byBwb2ludCBpbiBnb2luZyBvdmVyYm9hcmQuDQoNCklNQSBhbmQgRVZNIGJvdGggdXNlIGEgY2Fj
-aGUgdG8gc3RvcmUgdGhlIGludGVncml0eSB2ZXJpZmljYXRpb24sDQp3aGljaCBpcyBjdXJyZW50
-bHkgbm90IG1hbmFnZWQgYnkgdGhlIExTTSBpbmZyYXN0cnVjdHVyZSBidXQNCmJ5IGFuIGFkLWhv
-YyBtZWNoYW5pc20gaW1wbGVtZW50ZWQgd2l0aCBhbiByYnRyZWUuDQoNCk9uZSBvZiB0aGUgYmVu
-ZWZpdHMgb2YgZGVmaW5pbmcgYm90aCBJTUEgYW5kIEVWTSBhcyBhbiBMU00NCmlzIHRoYXQgd2Ug
-Y2FuIHN3aXRjaCBmcm9tIHRoaXMgYWQtaG9jIG1lY2hhbmlzbSB0byB0aGUgb25lDQppbXBsZW1l
-bnRlZCBmb3IgdGhlIExTTSBpbmZyYXN0cnVjdHVyZSwgd2l0aCBhIHNlYXJjaCBpbg0KY29uc3Rh
-bnQgdGltZS4gR2l2ZW4gdGhhdCBldm1faW5vZGVfaW5pdF9zZWN1cml0eSgpIHdvdWxkDQp1cGRh
-dGUgdGhlIGludGVncml0eSBzdGF0dXMgKHhhdHRycyBhcmUgZ29vZCBhdCBpbm9kZSBjcmVhdGlv
-bg0KdGltZSksIEkgd291bGQgYWRkIGl0IGFzIHdlbGwgdG8gdGhlIExTTSBpbmZyYXN0cnVjdHVy
-ZS4NCg0KT25lIGFkZGl0aW9uYWwgbW90aXZhdGlvbiBmb3IgZGVmaW5pbmcgRVZNIGFzIGFuIExT
-TSBpcyB0aGF0DQppdCB3b3VsZCBzb2x2ZSBvbmUgb2YgdGhlIEVWTSBsaW1pdGF0aW9ucyB0aGF0
-IGFmZmVjdHMgaXRzDQp1c2FiaWxpdHk6IHBhcnRpYWwgY29weSBvZiB4YXR0cnMgKGUuZy4gYnkg
-Y3AgYW5kIHRhcikgd291bGQgbm90DQp3b3JrIHdoZW4gYW4gSE1BQyBrZXkgaXMgbG9hZGVkIGJl
-Y2F1c2UsIHNpbmNlIEVWTSBpbg0KdGhlIHBvc3Qgc2V0L3JlbW92ZXhhdHRyIGhvb2sgZG9lcyBu
-b3Qga25vdyB0aGUgc3RhdHVzDQpvZiB0aGUgbGFzdCBpbnRlZ3JpdHkgdmVyaWZpY2F0aW9uLCBp
-dCBoYXMgdG8gZGVueSB0aGUgcGVybWlzc2lvbg0KdG8gcGVyZm9ybSB0aGUgeGF0dHIgb3BlcmF0
-aW9uLCB0byBhdm9pZCB0aGF0IHRoZSBITUFDIGlzDQpjYWxjdWxhdGVkIG9uIGNvcnJ1cHRlZCB4
-YXR0cnMuIEhhdmluZyB0aGUgc3RhdHVzIGluIHRoZQ0KcGVyLWlub2RlIGJsb2Igd291bGQgc29s
-dmUgdGhpcyBpc3N1ZSBtb3JlIGVmZmljaWVudGx5IHRoYW4NCmFkZGluZyBhIGNhY2hlIGZvciBl
-YWNoIHZlcmlmaWVkIGlub2RlIGluIHRoZSByYnRyZWUuDQoNCldvdWxkIHlvdSBzZWUgdGhpcyBh
-cyBhbiB1c2VmdWwgbW9kaWZpY2F0aW9uPw0KDQpUaGFua3MNCg0KUm9iZXJ0bw0KDQpIVUFXRUkg
-VEVDSE5PTE9HSUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0
-b3I6IExpIFBlbmcsIExpIEppYW4sIFNoaSBZYW5saQ0KDQo+ID4gU2Vjb25kbHksIEVWTSBtdXN0
-IGtub3cgaG93IG1hbnkgZWxlbWVudHMgYXJlIGluIHRoZSB4YXR0ciBhcnJheS4gSXQNCj4gc2Vl
-bXMNCj4gPiB0aGF0IGl0IGlzIG5vdCBuZWNlc3NhcnkgdG8gYWRkIGFub3RoZXIgcGFyYW1ldGVy
-LCBhcyBhbGwgZmlsZXN5c3RlbXMgdGhhdA0KPiA+IGRlZmluZSBhbiBpbml0eGF0dHIgZnVuY3Rp
-b24sIGV4cGVjdCB0aGF0IHRoZSBsYXN0IGVsZW1lbnQgb2YgdGhlIGFycmF5DQo+IGlzDQo+ID4g
-b25lIHdpdGggdGhlIG5hbWUgZmllbGQgc2V0IHRvIE5VTEwuIEVWTSByZXVzZXMgdGhlIHNhbWUg
-YXNzdW1wdGlvbi4NCj4gPg0KPiA+IFRoaXMgcGF0Y2ggc2V0IGhhcyBiZWVuIHRlc3RlZCBieSBp
-bnRyb2R1Y2luZyBzZXZlcmFsIGluc3RhbmNlcyBvZiBhDQo+ID4gVGVzdExTTSAoc29tZSBwcm92
-aWRpbmcgYW4geGF0dHIsIHNvbWUgbm90LCBvbmUgd2l0aCBhIHdyb25nDQo+IGltcGxlbWVudGF0
-aW9uDQo+ID4gdG8gc2VlIGhvdyB0aGUgTFNNIGluZnJhc3RydWN0dXJlIGhhbmRsZXMgaXQpLiBU
-aGUgcGF0Y2ggaXMgbm90IGluY2x1ZGVkDQo+ID4gaW4gdGhpcyBzZXQgYnV0IGl0IGlzIGF2YWls
-YWJsZSBoZXJlOg0KPiA+DQo+ID4NCj4gaHR0cHM6Ly9naXRodWIuY29tL3JvYmVydG9zYXNzdS9s
-aW51eC9jb21taXQvMDM3MGZmMGZiYzE2ZTVkNjM0ODk4MzZhOTUNCj4gOGU2NWQ2OTdmOTU2ZGIN
-Cj4gPg0KPiA+IFRoZSB0ZXN0LCBhZGRlZCB0byBpbWEtZXZtLXV0aWxzLCBpcyBhdmFpbGFibGUg
-aGVyZToNCj4gPg0KPiA+IGh0dHBzOi8vZ2l0aHViLmNvbS9yb2JlcnRvc2Fzc3UvaW1hLWV2bS11
-dGlscy9ibG9iL2V2bS1tdWx0aXBsZS1sc21zLXYxLQ0KPiBkZXZlbC12MS90ZXN0cy9ldm1fbXVs
-dGlwbGVfbHNtcy50ZXN0DQo+ID4NCj4gPiBUaGUgdGVzdCB0YWtlcyBhIFVNTCBrZXJuZWwgYnVp
-bHQgYnkgVHJhdmlzIGFuZCBsYXVuY2hlcyBpdCBzZXZlcmFsIHRpbWVzLA0KPiA+IGVhY2ggdGlt
-ZSB3aXRoIGEgZGlmZmVyZW50IGNvbWJpbmF0aW9uIG9mIExTTXMuIEFmdGVyIGJvb3QsIGl0IGZp
-cnN0IGNoZWNrcw0KPiA+IHRoYXQgdGhlcmUgaXMgYW4geGF0dHIgZm9yIGVhY2ggTFNNIHByb3Zp
-ZGluZyBpdCwgYW5kIHRoZW4gY2FsY3VsYXRlcyB0aGUNCj4gPiBITUFDIGluIHVzZXIgc3BhY2Ug
-YW5kIGNvbXBhcmVzIGl0IHdpdGggdGhlIEhNQUMgY2FsY3VsYXRlZCBieSBFVk0gaW4NCj4gPiBr
-ZXJuZWwgc3BhY2UuDQo+ID4NCj4gPiBBIHRlc3QgcmVwb3J0IGNhbiBiZSBvYnRhaW5lZCBoZXJl
-Og0KPiA+DQo+ID4gaHR0cHM6Ly93d3cudHJhdmlzLWNpLmNvbS9naXRodWIvcm9iZXJ0b3Nhc3N1
-L2ltYS1ldm0tDQo+IHV0aWxzL2pvYnMvNDk4Njk5NTQwDQo+ID4NCj4gPiBMYXN0bHksIHJ1bm5p
-bmcgdGhlIHRlc3Qgb24gcmVpc2VyZnMgdG8gY2hlY2sNCj4gPiBzZWN1cml0eV9vbGRfaW5vZGVf
-aW5pdF9zZWN1cml0eSgpLCBzb21lIGlzc3VlcyBoYXZlIGJlZW4gZGlzY292ZXJlZDogYQ0KPiA+
-IGZyZWUgb2YgeGF0dHItPm5hbWUgd2hpY2ggaXMgbm90IGNvcnJlY3QgYWZ0ZXIgY29tbWl0IDk1
-NDg5MDZiMmJiNyAoJ3hhdHRyOg0KPiA+IENvbnN0aWZ5IC0+bmFtZSBtZW1iZXIgb2YgInN0cnVj
-dCB4YXR0ciInKSwgYW5kIGEgbWlzYWxpZ25tZW50IHdpdGgNCj4gPiBzZWN1cml0eV9pbm9kZV9p
-bml0X3NlY3VyaXR5KCkgKHRoZSBvbGQgdmVyc2lvbiBleHBlY3RzIHRoZSBmdWxsIHhhdHRyIG5h
-bWUNCj4gPiB3aXRoIHRoZSBzZWN1cml0eS4gcHJlZml4LCB0aGUgbmV3IHZlcnNpb24ganVzdCB0
-aGUgc3VmZml4KS4gVGhlIGxhc3QgaXNzdWUNCj4gPiBoYXMgbm90IGJlZW4gZml4ZWQgeWV0Lg0K
-PiA+DQo+ID4gUm9iZXJ0byBTYXNzdSAoNSk6DQo+ID4gICB4YXR0cjogQ29tcGxldGUgY29uc3Rp
-ZnkgLT5uYW1lIG1lbWJlciBvZiAic3RydWN0IHhhdHRyIg0KPiA+ICAgc2VjdXJpdHk6IFN1cHBv
-cnQgbXVsdGlwbGUgTFNNcyBpbXBsZW1lbnRpbmcgdGhlIGlub2RlX2luaXRfc2VjdXJpdHkNCj4g
-PiAgICAgaG9vaw0KPiA+ICAgc2VjdXJpdHk6IFBhc3MgeGF0dHJzIGFsbG9jYXRlZCBieSBMU01z
-IHRvIHRoZSBpbm9kZV9pbml0X3NlY3VyaXR5DQo+ID4gICAgIGhvb2sNCj4gPiAgIGV2bTogQWxp
-Z24gZXZtX2lub2RlX2luaXRfc2VjdXJpdHkoKSBkZWZpbml0aW9uIHdpdGggTFNNDQo+ID4gICAg
-IGluZnJhc3RydWN0dXJlDQo+ID4gICBldm06IFN1cHBvcnQgbXVsdGlwbGUgTFNNcyBwcm92aWRp
-bmcgYW4geGF0dHINCj4gPg0KPiA+ICBmcy9yZWlzZXJmcy94YXR0cl9zZWN1cml0eS5jICAgICAg
-ICB8ICAyIC0NCj4gPiAgaW5jbHVkZS9saW51eC9ldm0uaCAgICAgICAgICAgICAgICAgfCAyMSAr
-KysrLS0tDQo+ID4gIGluY2x1ZGUvbGludXgvbHNtX2hvb2tfZGVmcy5oICAgICAgIHwgIDIgKy0N
-Cj4gPiAgaW5jbHVkZS9saW51eC9sc21faG9va3MuaCAgICAgICAgICAgfCAgNSArLQ0KPiA+ICBz
-ZWN1cml0eS9pbnRlZ3JpdHkvZXZtL2V2bS5oICAgICAgICB8ICAyICsNCj4gPiAgc2VjdXJpdHkv
-aW50ZWdyaXR5L2V2bS9ldm1fY3J5cHRvLmMgfCAgOSArKy0NCj4gPiAgc2VjdXJpdHkvaW50ZWdy
-aXR5L2V2bS9ldm1fbWFpbi5jICAgfCAzNSArKysrKysrLS0tLQ0KPiA+ICBzZWN1cml0eS9zZWN1
-cml0eS5jICAgICAgICAgICAgICAgICB8IDk1ICsrKysrKysrKysrKysrKysrKysrKysrLS0tLS0t
-DQo+ID4gIHNlY3VyaXR5L3NlbGludXgvaG9va3MuYyAgICAgICAgICAgIHwgIDMgKy0NCj4gPiAg
-c2VjdXJpdHkvc21hY2svc21hY2tfbHNtLmMgICAgICAgICAgfCAgNCArLQ0KPiA+ICAxMCBmaWxl
-cyBjaGFuZ2VkLCAxMzUgaW5zZXJ0aW9ucygrKSwgNDMgZGVsZXRpb25zKC0pDQo+ID4NCg0K
+On 4/16/2021 9:37 AM, Roberto Sassu wrote:
+>> From: Casey Schaufler [mailto:casey@schaufler-ca.com]
+>> Sent: Thursday, April 15, 2021 10:44 PM
+>> On 4/15/2021 3:04 AM, Roberto Sassu wrote:
+>>> This patch set depends on:
+>>>
+>>> https://lore.kernel.org/linux-integrity/20210409114313.4073-1-
+>> roberto.sassu@huawei.com/
+>>> https://lore.kernel.org/linux-integrity/20210407105252.30721-1-
+>> roberto.sassu@huawei.com/
+>>> One of the challenges that must be tackled to move IMA and EVM to the=20
+LSM
+>>> infrastructure is to ensure that EVM is capable to correctly handle
+>>> multiple stacked LSMs providing an xattr at file creation. At the mom=
+ent,
+>>> there are few issues that would prevent a correct integration. This p=
+atch
+>>> set aims at solving them.
+>>>
+>>> From the LSM infrastructure side, the LSM stacking feature added the
+>>> possibility of registering multiple implementations of the security h=
+ooks,
+>>> that are called sequentially whenever someone calls the corresponding=
+
+>>> security hook. However, security_inode_init_security() and
+>>> security_old_inode_init_security() are currently limited to support o=
+ne
+>>> xattr provided by LSM and one by EVM.
+>> That is correct. At present the only two modules that provide extended=
+
+>> attributes are SELinux and Smack. The LSM infrastructure requires more=
+
+>> change, including change to security_inode_init_security(), before tho=
+se
+>> modules can be used together.
+> One of the goals of this patch set is to solve the specific problem
+> of security_inode_init_security(), when arbitrary LSMs are added
+> to the LSM infrastructure. Given that some problems have
+> been already identified, and will arise when a new LSM
+> providing an implementation for the inode_init_security hook
+> will be added to the LSM infrastructure, it seems a good idea
+> fixing them. We could discuss about the solution, if there is
+> a better approach.
+>
+>>> In addition, using the call_int_hook() macro causes some issues. Acco=
+rding
+>>> to the documentation in include/linux/lsm_hooks.h, it is a legitimate=20
+case
+>>> that an LSM returns -EOPNOTSUPP when it does not want to provide an x=
+attr.
+>>> However, the loop defined in the macro would stop calling subsequent =
+LSMs
+>>> if that happens. In the case of security_old_inode_init_security(), u=
+sing
+>>> the macro would also cause a memory leak due to replacing the *value
+>>> pointer, if multiple LSMs provide an xattr.
+>> As there is no case where there will be multiple providers of hooks fo=
+r
+>> inode_init_security this isn't an issue.
+> I could skip the patches that are not required to support
+> multiple LSMs registering to the inode_init_security hook
+> and just do the EVM changes (see below for the motivation).
+>
+>>> From EVM side, the first operation to be done is to change the defini=
+tion
+>>> of evm_inode_init_security() to be compatible with the security hook
+>>> definition. Unfortunately, the current definition does not provide en=
+ough
+>>> information for EVM, as it must have visibility of all xattrs provide=
+d by
+>>> LSMs to correctly calculate the HMAC. This patch set changes the secu=
+rity
+>>> hook definition by adding the full array of xattr as a parameter.
+>> Why do you want to call evm_inode_init_security() as a regular LSM hoo=
+k?
+>> Except for the names evm_inode_init_security() and
+>> selinux_inode_init_security()
+>> have nothing in common. They do very different things and require diff=
+erent
+>> data, as comes out in the patches.
+> I thought that it would be more clean if all hooks are registered
+> to the LSM infrastructure. Otherwise, it could happen that some
+> hooks are still executed even if the LSM is not active, from the
+> perspective of the LSM infrastructure.
+>
+> evm_inode_init_security() is still a provider of xattrs, like the
+> other LSMs, just it requires an extra parameter to calculate
+> the HMAC.
+>
+>> There are evm functions that could be implemented as LSM hooks. I don'=
+t think
+>> this is one of them. There's no point in going overboard.
+> IMA and EVM both use a cache to store the integrity verification,
+> which is currently not managed by the LSM infrastructure but
+> by an ad-hoc mechanism implemented with an rbtree.
+>
+> One of the benefits of defining both IMA and EVM as an LSM
+> is that we can switch from this ad-hoc mechanism to the one
+> implemented for the LSM infrastructure, with a search in
+> constant time. Given that evm_inode_init_security() would
+> update the integrity status (xattrs are good at inode creation
+> time), I would add it as well to the LSM infrastructure.
+>
+> One additional motivation for defining EVM as an LSM is that
+> it would solve one of the EVM limitations that affects its
+> usability: partial copy of xattrs (e.g. by cp and tar) would not
+> work when an HMAC key is loaded because, since EVM in
+> the post set/removexattr hook does not know the status
+> of the last integrity verification, it has to deny the permission
+> to perform the xattr operation, to avoid that the HMAC is
+> calculated on corrupted xattrs. Having the status in the
+> per-inode blob would solve this issue more efficiently than
+> adding a cache for each verified inode in the rbtree.
+>
+> Would you see this as an useful modification?
+
+Yes, I think that would be worthwhile.
+
+My biggest objection is to adding a parameter to the hook calls.
+The security_inode_init_security() - security_old_inode_init_security()
+organization looks wrong to me as written.
+
+There are really three cases here:
+	Neither EVM nor initxattrs - taken care of by the "old" variant.
+	EVM, but no initxattrs - which doesn't gather the EVM data.
+	EVM and initxattrs - which gathers and uses the EVM data.
+
+The code we have now is cleanest for the least common "old" variant,
+which is used in only two places, reiserfs and ocfs2. I would suggest
+a slightly different approach to getting you what you're after.
+
+Let's change the hook definition for inode_init_security to take a
+struct xattr * and the fs_data rather than the name/value/length triple.
+It will require a temporary struct xattr in security_old_init_inode_secur=
+ity,
+but that's a corner case anyway. The security module specific code would =
+be
+easy to adapt. In the current environment, where there can only be one
+module providing a hook, SELinux or Smack will fill in the xattr and retu=
+rn.
+In the future the modules will have to find an empty slot for their data.=
+
+
+If your evm_init_inode_security() is registered last you will get
+the desired behavior.=20
+
+The MAX_LSM_EVM_XATTR value can be easily computed at compile time:
+
+#define MAX_LSM_EVM_XATTR ( 1 + \
+	( IS_ENABLED(CONFIG_SECURITY_SELINUX) ? 1 : 0 ) + \
+	( IS_ENABLED(CONFIG_SECURITY_SMACK) ? 1 : 0) )
+Yes, you'll waste stack if only one of the modules is active.
+On the other hand, if you only compile in one the value will be
+perfect and you'll avoid allocation and associated headaches.
+
+>
+> Thanks
+>
+> Roberto
+>
+> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+> Managing Director: Li Peng, Li Jian, Shi Yanli
+>
+>>> Secondly, EVM must know how many elements are in the xattr array. It
+>> seems
+>>> that it is not necessary to add another parameter, as all filesystems=20
+that
+>>> define an initxattr function, expect that the last element of the arr=
+ay
+>> is
+>>> one with the name field set to NULL. EVM reuses the same assumption.
+>>>
+>>> This patch set has been tested by introducing several instances of a
+>>> TestLSM (some providing an xattr, some not, one with a wrong
+>> implementation
+>>> to see how the LSM infrastructure handles it). The patch is not inclu=
+ded
+>>> in this set but it is available here:
+>>>
+>>>
+>> https://github.com/robertosassu/linux/commit/0370ff0fbc16e5d63489836a9=
+5
+>> 8e65d697f956db
+>>> The test, added to ima-evm-utils, is available here:
+>>>
+>>> https://github.com/robertosassu/ima-evm-utils/blob/evm-multiple-lsms-=
+v1-
+>> devel-v1/tests/evm_multiple_lsms.test
+>>> The test takes a UML kernel built by Travis and launches it several t=
+imes,
+>>> each time with a different combination of LSMs. After boot, it first =
+checks
+>>> that there is an xattr for each LSM providing it, and then calculates=20
+the
+>>> HMAC in user space and compares it with the HMAC calculated by EVM in=
+
+>>> kernel space.
+>>>
+>>> A test report can be obtained here:
+>>>
+>>> https://www.travis-ci.com/github/robertosassu/ima-evm-
+>> utils/jobs/498699540
+>>> Lastly, running the test on reiserfs to check
+>>> security_old_inode_init_security(), some issues have been discovered:=20
+a
+>>> free of xattr->name which is not correct after commit 9548906b2bb7 ('=
+xattr:
+>>> Constify ->name member of "struct xattr"'), and a misalignment with
+>>> security_inode_init_security() (the old version expects the full xatt=
+r name
+>>> with the security. prefix, the new version just the suffix). The last=20
+issue
+>>> has not been fixed yet.
+>>>
+>>> Roberto Sassu (5):
+>>>   xattr: Complete constify ->name member of "struct xattr"
+>>>   security: Support multiple LSMs implementing the inode_init_securit=
+y
+>>>     hook
+>>>   security: Pass xattrs allocated by LSMs to the inode_init_security
+>>>     hook
+>>>   evm: Align evm_inode_init_security() definition with LSM
+>>>     infrastructure
+>>>   evm: Support multiple LSMs providing an xattr
+>>>
+>>>  fs/reiserfs/xattr_security.c        |  2 -
+>>>  include/linux/evm.h                 | 21 ++++---
+>>>  include/linux/lsm_hook_defs.h       |  2 +-
+>>>  include/linux/lsm_hooks.h           |  5 +-
+>>>  security/integrity/evm/evm.h        |  2 +
+>>>  security/integrity/evm/evm_crypto.c |  9 ++-
+>>>  security/integrity/evm/evm_main.c   | 35 +++++++----
+>>>  security/security.c                 | 95 +++++++++++++++++++++++----=
+--
+>>>  security/selinux/hooks.c            |  3 +-
+>>>  security/smack/smack_lsm.c          |  4 +-
+>>>  10 files changed, 135 insertions(+), 43 deletions(-)
+>>>
+
