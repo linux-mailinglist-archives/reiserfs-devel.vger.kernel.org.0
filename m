@@ -2,65 +2,65 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 111A9367545
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 22 Apr 2021 00:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE00367591
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 22 Apr 2021 01:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235579AbhDUWoc (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 21 Apr 2021 18:44:32 -0400
-Received: from sonic311-30.consmr.mail.ne1.yahoo.com ([66.163.188.211]:38348
-        "EHLO sonic311-30.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232022AbhDUWo3 (ORCPT
+        id S1343649AbhDUXK2 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 21 Apr 2021 19:10:28 -0400
+Received: from sonic309-27.consmr.mail.ne1.yahoo.com ([66.163.184.153]:46411
+        "EHLO sonic309-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1343660AbhDUXK1 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 21 Apr 2021 18:44:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1619045035; bh=MB9zO7McvPmioxzhN+e5Vh39AUmsx8/cXEwQ1feTM0s=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject:Reply-To; b=DmWXKFnjz2d6JUBIVczNc/zjMfKTXbm21VW1dfa04ONIPY/snL8uluYvp4jhdUFbhYqzLMjOIcl+d/2/Z4LwOaQGug4Z4bsBS2ia9MbexNzsp9M6ILAmUepHbk5gizG8gz9vFB/dbajGuCXHBWXyFpbGPm1SbY1ObVSTlRdQDN/DPGFIbaVgTemQXlMqOhfLdflpaWELfFm2+TeqPSq2ntY6GNQIawXiXA0NfA6eRQF7B72QrhHQZZd/JEo+7XXr7N3ZBkSk6q6zqfhWMbsMYSjfGcVix2tCOFEKMSUrXms88Kp0WWkhx1Bb6W8iNIcivZ9U3SN5PTNyLrJOCpqRnw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1619045035; bh=ieU2/qrLV3IRmLoQ5YVtfxGudHH/5aHFGm4V7Cjzbn/=; h=X-Sonic-MF:Subject:To:From:Date:From:Subject; b=m0VEMvyJmp5V4/4vWO/oZNTF6YsEEOVXru4LJTSxzIL3agH6vo3FPyV4QqWDU2/LKPOS/RbnatmjFe3qcGQMo5n8dunCsKTgCSVwIi3YuXo6Kn2zzVynmEt3pbae457O6iFVsQdSKrG30U6qrMf2c+c+cBLGPmUsB86tvhTivDPy/nPkQcs/GX3VdX9nCZbGnPL10viUpT1gXIGpsz+9DTEGpLHn31dqbjhplbxPxgyF0R8O8AKaNtcebKidWrYkX8MAenoWuDDRght7U4KeZCs/hIh91QnDJeglqRsHtm6iWdj0OtG7DsPVPtKh3+WpBUlAQ52jg1Vt9RpbabfvgA==
-X-YMail-OSG: w4_T9IsVM1lo0vQsGUg7FNdeFw5ptn1Qeu6cH7ya3W8UEYwEOoKNJahzvoMGyB0
- 8lWOcyitwXfVtWxxUJ.iVVFseVkDPr5C3ylbJOt22qoiq51vVRuZ.VBkPJ825jX2tKLbeKrpwr4w
- OEXHitYaDjDbw8ojfyKU7tMdLCyRJttKnUIzHg._UUxf4rEmMBw7VMU12ULENjxjwk9bWU2NxwMZ
- iHAf.2q1ACgNUyt21jHhKSoG2TtMzVtwu787nhqCimwn7ahVV3cgoEkMX2YsYBcjF_B4rCQypS5b
- _.TcTtxZsOe_aIpXj0bwKUDEL_DWCqYoH8qq9yvpUHfG0NlVsb_oGJavmld4ZKr9WEyIwEmLysUC
- ba3B5BlQ0IJoEezLHKUF__w2OZPceAY_3Qt_YxdcbPG2T.N1ELHQc7BjLIXfUP486Wo0qs3YKeJJ
- Wcdq1PjpG2Or7r7BjWt9qV5bNNA3zuc22VBI4GamHca4w4xYC5Is2GaKozF4DtR.vZ.TIeyAONZS
- ANPBZ1em9frMAPKsc_VZPSrt2moMo1nSmuIvHyY4tx6DV_BvGM48SgZlBlTKtqPqRtQlCDpgHU0i
- dVSOnrwbfsWSVsEAlo78IN.kFf6R0zUb4AJV0rdKUEAsx_YJ0EAD_guveRQRXt3GNOKfJazH9Xvj
- MxcLlULwxnyMNFGLB9c2ng0TFdlSjXPQMvSlWFu0QkJAk0LDo_lGk.T8YDlDgcND2CzjAMi_veic
- kI7v..i16mlZRSUUXtvirjG0WWfYGi4YOgau8_JVgn4190MvMPZsuizj.5Rzt8nF5Gz3RankfhLw
- CFRt2OfhWV_hPin_i61e2I2sqT_XV0ccXdrILiSXsHtrRFJDUxgzl4yYMQQ5M_tY_4XoNEUMqwGL
- .smJwblb0jS8_roHfpGKHoEaknKGbC5bTEOdPARxtiYXkOD2Y5VJ6ZxGRn2ZUSq04jYRIHgeokm2
- N9sVxcA3mxYikjM9abMFjhIzhgDbAyWRGm.qUJf1bAI77j7jfBq0_KmLDYRhSTigeXnmMMVyVRLJ
- PJDgCpncfZAqZPXuF4mcstrOqreSRrF5m9PMVV8nWKBNfxvzXLpfoJFNAnXdTYg7cnTgxEjwsA_n
- xejld8ew6uPeMuvCXfwWDJOjxPAeMdEalfJ7S1Ap517il0IOlKFWrecBoYQN5DFeW_RN8bAp2P1u
- pI6v1JXHI9k06ENIoacHJaYNIdzJ1LiFX_B0StR5J9IQwBBePSA4xe5dmDp2.Yd4mW9Ee05QaVOM
- 73e4LMP1WFU0q7necIA6McW.yNHHDthFLOqwTxGY5NefiZ8Sw.sUJp52afK1ag3jf.Q8z2pBeNcz
- 5g5xWSDuMUXTmWJN.trN7ye.qH.3UGWkAqpC.Of1osKsahw1DllVic5hQU6_U53Ed9U8mKBGzaG_
- VCyOasdlUS8waacSg7xRk4rtTPcyqcZZ1MEu9mjZ_r64a52PQQ1aalDZ6J8a.J4kCi01qBgTc38D
- .qIaXJM9WktiNlnw__D9cUdKTa5H_jcn1KPv8Ub_YD917rQpps7yHEJvQBMfaEoMRARkZ7NG6E8k
- 6fgYoImQS3VGT8iWgASOkphfWp81mBRys62GwOslWkyDaTxbI3cUPUyHModP7V6jpKrdUA9er5Su
- Aqnt8S6hGwryGMNEQMtElPOsjog.1sHtlmPi3vrMa.2NyhB20gDPwjTxCKqhNUQx9ZTmDTuffnFt
- XGuegsoOq3Al77K33IYNJRXQs0g3wLSIhRffeARRAW0iOob2wo1hkDlC4ORlUW2cApXcGSDjfkDp
- 77f6ApVOvn_q0olMcKEGzw2lP0X0yv00Vf.nU45o1qJgyU9kvh510VqUxom03Ps_s.bT_Pr3LCgF
- uaPPYyJfLXHRJ9owl54T765tmnH1EmG35wJrAqn.Bp.gtsL_n.kp6uAwmJQY4Y6NP6Qoq5yjSNJY
- uN102BT4F2X707qSSydOlnct3lfvb4JlprFTwBfag6heAWPX2eMfTCxinYqRjUPNrN2TJX8DjazZ
- GIQ33l1wt.SeEOo.GEB1R3lcfv212bfyx.f_6PItk_PYKqSkeSCcCDgq8bHrd0vcyOd0h5DYZLNP
- u0DrGg28CG5HVTdtOOlQ3PwXNFzKf92ioV7KYywf3w0KFlLyQ_KpUjfprO63_soQi3RnI7SvCCHq
- 8g6MB9jKsnSY8ea4p5gLkhjUDOdACMDRrJQt1UjfAU03P79VOB58H.h1itnIMSCXIGSUtf6L4efL
- eSkpgQR_YkfchtaSbAzsvFz3_6E8tlk9kms3k5xlicR73onbOEBHgRSr0aDqakKq6V0Ilvw3fxTG
- BZC.d1s5vd5pHoxlOQfQoYxBo282EeeytlzgD37siWYry.IgGdCjqlk4a2Nb6O6CSK06d7KG1pOj
- xNKWIvmk1Gh3ICNEkT6F8o0BTz1m0UHqX9R03_jVQWxA5mM8P4SySye6z9tP4lH2M6KYOeg2Huyj
- 5fE1v_UnNE9ncTpEVK8_XttWxinoTQAk703aZcHCYTYjcQNc40mHILrqBe0O38nt58Wtfj.W2N1I
- gOh1lTm62P3MafcsZwhc2qQANTfew1d78rxI.12lvGWUjSawzsGHTC9UL4bUSGzf_yZNXlLuh0Z0
- NjfRNINbJCQFaP5m9rxtP9IsD0jYgmQzWDbO9QS1oqPiV6dxX_vh7R3a3cBAJ6ucMvA.BGSpAHiC
- LozmVd1noItGTAax8HHXjOoEBVpIfi_6L3jUZe7gp0o0ycM9O4L7LiuyYePPLKIYu5wXq82bBQe0
- UoxgVXK2wxQa_mYvIPKifSZWwoQJfAlQXHRyn2geJ0jeabI59l93vMHdNcH17PrBzREqxbLFM_bf
- _wH_ifcfiYsR2.rdXW5ftwRZLmk574KwkTKWcecthxiOyXIpYMrTy9wmvB69OOAdvICxyBZzPIfY
- DiKgdY3wnNnrh.zCH6a18zi0jBSmjPszZfjCUlXpKpeWMzOCTUTuX3LzdsAWH65gFGMp1wUEIv63
- 4SWd4eEHVkLTou1reciNJGTs9WKGuNvwG44FzRjptJTYwj_aoYroUKeutjpf3zow8tnoRb6N7bt8
- 8fAOcJG7ulzv5tfsDVrizfg_hBYyOnS1kYKyZS19cPFepFSPEgS.3vvpB
+        Wed, 21 Apr 2021 19:10:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1619046594; bh=J26x1w023ecUL/6MxhVFKfp+hf3nFHwJodfkAA19G0w=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject:Reply-To; b=YTJ9PAE/K0UMwdsKfarpJNRp2LIrpfxSra5knvIk0Y6uUvjmJToV55tQOERp5C1fUEw5Qa4nK4IR0U2JFwqFMRwhgJrr+gWMaD2P1jM82tItJiz5BoaS2Cj+8MkMX1zLiQibgXenOa+4j9/YU/Cl8wNMpiXsxqLrrP+2AScjvNXgzu/H3nMVmP6X1oWkIqD67rHQXsLIrZSUQ+6RXQv8zSlFmqUXiNLLkJSEL/R+CTtTZwPRPpQauP2Ix6REBkm4nrzF8/X7aTgJHJBc32XL6EZ7f0/u0kksASm2fb9YC906qFS43Tt6CiLlP65F/yCSAk17sGaPGENnZ1ZU9pVQKg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1619046594; bh=dy4g19nJy8tRXIFC1dOJdAPjB4HnQ3cd1ymhu/c4h3N=; h=X-Sonic-MF:Subject:To:From:Date:From:Subject; b=aU6aW73BO7HKSa50BO34Hz5vAbtR3QMqDVdHnqw0xq20aku2wyJ07gwLIRYfq0s8FsKOM+QT96G8s0fN08kucpma5FEk0+Yqd3/b1hRgh58oZwK1VAt3SlNVenL5q82xrh8ZTs36bgjIBzTP9dGxEJeT+BZr0geS8bTkIY9JkRXSIoMopoX2HhmFTpuF7vhVIhzdKXJPW0ywmUkvVu6ixXn8egI3sk30/hsxt0fQQ9epjNEX67IwpjQOulKyfzpNgLrRxX93oD0GUZf0dbxzxuXK1sE8NhcJaKI8hb0cu5thaGheZvCrwf+tLPav8DaHZrnFIWhkwLDs7fOYGRYDPg==
+X-YMail-OSG: p3RZ69cVM1n88lcPqyFCaYMHahk2R4YbMbx4kxTKY8IqYnupybXy86jWAJ4YZfS
+ Z1JiYLave0Txk14KBCWcsfis_S5J8U0.oymh.VC9DzySxn4xs2ZMZgafnUVgH6SxrkzFM7HsUCdv
+ UDeB1uzMz28aTgrmh4zdZp0kkPME1gjPG.y9RW258no4TLKGaSrw13dRXUzajoSCjw0wP4gWrs_C
+ QDKuWv9BzZS3V_5R1EmwD4ghCdHn0T4n7EvGnj5i7LlhLZGw3NnjgzZjK5.fH6jBHnKSG7bVzNJP
+ aT.qGusRJCGbOm8rgySx36l3NCGGsws2su1nQxFkqToba0jEqVzoDh3u9u.q5M3NAnY9c.SIH8sk
+ 7AgwIQRd0K21HS6doJQAmgiEJx0q5rgUtcyF5K0.XkCsY74oesvow7VbXmle7wlHKNNcfUZh7onS
+ 9TObajLQ2DIkdJrq5to_08pxX4s978JgjORJmxwsqKgDE7CRvEtzaqKZkIlYjHzSydW8MORsd8rK
+ LH0aAv6cutQnCykHIy1vLIcArcsnutA6Rzgld5JiqjgrQfqLJXyoPS8.lHnKDiTNovpKaNBLXPvX
+ mV2A_Rtu8sFXVEgjNewnYm5WeyRa8bIKglI4k2wA2qQgHhEA5keGydnSI9gIHaekalBshxmRJwCn
+ b6m8pjmb9DNjw_wDgt4W3YdL0NKEsa44wRZBYbqf_7QaF7n1Nezg9W4Ybslk7nlQqr._0Ib4Iz.z
+ pF.WFNUFiwFM8WjS1Xr4e0kyLkR_WThRibvrDSlxUbqgEuvhKlFGllmxexwG9WuCZ.IDBDKSYvEf
+ TKn_4KpKrvG4c.atN3JoGPBZHmHDFxcO0S3SdXWq1ck1CeIrYM1cqw1z01EOl_sKjgQvgH2cjB5o
+ x_3xdGkxvNKi4yDwEK2ZxmrWkUaPj07y4qzz0..LgcqWonvbuOJvRb_aAFbljkj.ESQtX5bYn6kb
+ F528q4nBi9.RHTqo2GdR6BxPGmFe0pvRhehiTbMt1.zP0sUhYdfjlPw5wrPQcBX_ZUWbZeqzMsjG
+ pVjHLf0ej_V3xoR0yV21xUXeEJm0IIrt8kuZUc32s849xxew7pU4kcOLNTmlv8FTRL4Qx33rEjBi
+ vxefl_B70b4TDPYyoHI8OaJ3zWTdbm88iuG2hwI8RA9WTe3RNmvXWQRrjNi.XywmRuTPEypEYyN7
+ s7dw8P6berUTdlqOvVb.70xLRXxyNe_xWI7h.O3ARy1XZRvSW5kSLD.u1lrNgUqfAXW.hh8ikpkm
+ dY.YU.Y2ccEhf3dZxb2d0MaRGgoVF9YYQDLi.HRQhOWV5ju1_VkUgCuLvUTWw380ZV_6qNcnYcTM
+ 9bIaPMrXtyuDhUVsJ0xkwbn9ab_4U3o7tG_xmZcCS5q_wlPtNM7VRIj4lPnyKHQd1Tsp8LlhddAz
+ QK2c4VBLfMmnAT9Xf0DHnfUA9rGdPObJZ2U5KOX7u7pHIMGFguqfs2wYillDAq0z70qKDzvE6Zf3
+ 2.75xV9WFsY75xM3t0vIMO9O8TrgAzfgN_vUzj0FH7gj80iCwkdta4ZM28bUOhPGiGc9kFOEBI7e
+ 4VGpMlGhimiktVhPjVC8b5Y4RR8AiSPlwEzbRScTrR_taDrkqb7D1.nJbFyRyZp2LHCsfrfoO0xf
+ N3nLp_PBBSlsXjIyYeqKCfIS_JioRodskz6uo9CVTxTMz7Fg5AW4OoAliQD4DHN1NwJPeW.I_F.s
+ mfHLZi3ir8SfqDRrpqFSk4ZnmkaUPhq4VV22OFPRuXvd0jNMqeSmVBJ7FhMReMdqj.cblygheq8o
+ CqU_RLWBPc3OlMbtPeUIiaJq8PC38aOLNAx6AtYRmCJpG6yZCEAvfsMIjaXU_XmTjlOaCsk5HvLl
+ L89_9blE1QV8KVq6YqvOSuF797emDliaYNtW_IbAPu.JxCzibZ6htCyccJLtqMNE1sDljaaFcw9R
+ 0VFUoSML0arFrKT6gl8JPBwtkAQpUfW4HZf5jrAa4tNyXeDoxMz2RGmiefaV8teu04sNjSaGEISB
+ CSC_oIxfy4AO3nqxUaY67yQsNioJ9La3Aj9qVcNt9ZAT4opZABEKmeoFf9G9aLzYCa9uR_bUCzgj
+ 2YrusVVbjvLU07kijHXhqTse4URNw9O2iC9wa0oUYKpvhiujSqqjh8RN0ZRfnSqVvpku8YbApE0G
+ sF2Eb_RehTLLxWo_VCUJDBINvG69YZMTaVCm.uxx.yF6_OFm6NuaBQECGfI7zEnG6Vp9cI1aauG8
+ R.dxR4_J6fNSE28VmJh5EwsZnRyMuJNMvRFdlkzBmcwAXVNhNo4xfoISOpsewbNp8VWUP4r1b5iU
+ mTG8pytkIbATS8cW6s17TfbgE23mSd1li7afDG_0nE1qbrBlnUhQceuPpioGs0VLZ0fQeKsmChJg
+ koVe3pgdl1.DtPCp.PgZFSDt4nzqYIY0JrH0nN1q_B.XMwd7pnC5WEcfzYW.Njk2ryaSXP9USRVq
+ ggEJs15aL_7WpAugwyZRWtN075VtotUO57dVXJtMPQlikm1VHD5jbCKQ8roa3HIylLqWlM6iGV05
+ rWVsMFs50Fg5S1zhv4MEEGEPDT4etM4YmefbUBU7ARHQvCK5z0qQ3yUGeSriSQ9R9tLDrQNmAKDs
+ aQQoIk2Yrs0nCmU8tPYoPoTeQ.RH4GBE0QL5LsFUE1xtl7XwaSQZcVrH4msuE9KY0nDPGQ7pJrRz
+ OhOBVqYGoKIqcPdBGegmWX_yx45Z_uupsLgDFwMr0jhOG0Xj.rlRfhh8UB.mGYrelyj8AM.bx00l
+ amogdA5r4ut.e77_ZwEYur_8BN1zIOxzMuWQjTQiydaz5G6BPwdD5gBIjDA.gRl9HQVUfgJ0lbiR
+ n45yHUERgeCufhUmhoOc1cjzdQfVOBpX5p5fxAuRXZbzQ6BFDvbVsIhpiM4sG0frDST1pOfZ9Fkq
+ j1JVAK_Pqax3XXwXI5KFgxTYMxMOMqPfWiGF8MrGbhS426kJVY93EfEpZf4tfqtX.fRGCSk0Q7PA
+ zigUFFfgiYH5h7WoYILBBPukA_8YBv4RsF0TBpECBUgiY9Hq0lVYr7_Y_QP_UfwftDJmVpKKWQAy
+ d6TXPPJIcRQo5ZyvAulkon.gIe1OdzKcHak.W7PkqNyKOSpKhSA_BIF9o_ElcvGwFXmmRH1Q-
 X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 21 Apr 2021 22:43:55 +0000
-Received: by kubenode512.mail-prod1.omega.ne1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 8d5fac0008ab4c1e871a17521cafc02e;
-          Wed, 21 Apr 2021 22:43:49 +0000 (UTC)
-Subject: Re: [PATCH v2 3/6] security: Pass xattrs allocated by LSMs to the
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Wed, 21 Apr 2021 23:09:54 +0000
+Received: by kubenode542.mail-prod1.omega.ne1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID b3571271959590a36da338570ed6e49f;
+          Wed, 21 Apr 2021 23:09:51 +0000 (UTC)
+Subject: Re: [PATCH v2 4/6] security: Support multiple LSMs implementing the
  inode_init_security hook
 To:     Roberto Sassu <roberto.sassu@huawei.com>, zohar@linux.ibm.com,
         jmorris@namei.org, paul@paul-moore.com
@@ -70,14 +70,14 @@ Cc:     linux-integrity@vger.kernel.org,
         reiserfs-devel@vger.kernel.org,
         Casey Schaufler <casey@schaufler-ca.com>
 References: <20210421161925.968825-1-roberto.sassu@huawei.com>
- <20210421161925.968825-4-roberto.sassu@huawei.com>
+ <20210421161925.968825-5-roberto.sassu@huawei.com>
 From:   Casey Schaufler <casey@schaufler-ca.com>
-Message-ID: <0caf1e58-1e2d-c781-3f71-18aaf55cada2@schaufler-ca.com>
-Date:   Wed, 21 Apr 2021 15:43:49 -0700
+Message-ID: <e888aa66-25d3-f72c-1aa9-cd5bc6df3789@schaufler-ca.com>
+Date:   Wed, 21 Apr 2021 16:09:51 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.9.1
 MIME-Version: 1.0
-In-Reply-To: <20210421161925.968825-4-roberto.sassu@huawei.com>
+In-Reply-To: <20210421161925.968825-5-roberto.sassu@huawei.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Content-Language: en-US
@@ -87,254 +87,198 @@ List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
 On 4/21/2021 9:19 AM, Roberto Sassu wrote:
-> In preparation for moving EVM to the LSM infrastructure, this patch
-> replaces the name, value, len triple with the xattr array pointer provi=
-ded
-> by security_inode_init_security(). LSMs are expected to call the new
-> function lsm_find_xattr_slot() to find the first unused slot of the arr=
-ay
-> where the xattr should be written.
+> The current implementation of security_inode_init_security() is capable=20
+of
+> handling only one LSM providing an xattr to be set at inode creation. T=
+hat
+> xattr is then passed to EVM to calculate the HMAC.
 >
-> This patch modifies also SELinux and Smack to search for an unused slot=
-, to
-> have a consistent behavior across LSMs (the unmodified version would
-> overwrite the xattr set by the first LSM in the chain). It is also
-> desirable to have the modification in those LSMs, as they are likely us=
-ed
-> as a reference for the development of new LSMs.
+> To support multiple LSMs, each providing an xattr, this patch makes the=
 
-This looks better than V1. One safety comment below.
+> following modifications:
+>
+> security_inode_init_security():
+> - dynamically allocates new_xattrs, based on the number of
+>   inode_init_security hooks registered by LSMs;
+> - replaces the call_int_hook() macro with its definition, to correctly
+>   handle the case of an LSM returning -EOPNOTSUPP (the loop should not =
+be
+>   stopped).
+>
+> security_old_inode_init_security():
+> - replaces the call_int_hook() macro with its definition, to stop the l=
+oop
+>   at the first LSM providing an xattr, to avoid a memory leak (due to
+>   overwriting the *value pointer).
+>
+> The modifications necessary for EVM to calculate the HMAC on all xattrs=
 
+> will be done in a separate patch.
 >
 > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > ---
->  include/linux/lsm_hook_defs.h |  4 ++--
->  include/linux/lsm_hooks.h     | 18 +++++++++++++++---
->  security/security.c           | 13 +++++++------
->  security/selinux/hooks.c      | 13 ++++++-------
->  security/smack/smack_lsm.c    | 20 +++++++++-----------
->  5 files changed, 39 insertions(+), 29 deletions(-)
+>  security/security.c | 93 +++++++++++++++++++++++++++++++++++++++------=
+
+>  1 file changed, 82 insertions(+), 11 deletions(-)
 >
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_def=
-s.h
-> index 477a597db013..afb9dd122f60 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -111,8 +111,8 @@ LSM_HOOK(int, 0, path_notify, const struct path *pa=
-th, u64 mask,
->  LSM_HOOK(int, 0, inode_alloc_security, struct inode *inode)
->  LSM_HOOK(void, LSM_RET_VOID, inode_free_security, struct inode *inode)=
-
->  LSM_HOOK(int, 0, inode_init_security, struct inode *inode,
-> -	 struct inode *dir, const struct qstr *qstr, const char **name,
-> -	 void **value, size_t *len)
-> +	 struct inode *dir, const struct qstr *qstr, struct xattr *xattrs,
-> +	 void *fs_data)
->  LSM_HOOK(int, 0, inode_init_security_anon, struct inode *inode,
->  	 const struct qstr *name, const struct inode *context_inode)
->  LSM_HOOK(int, 0, inode_create, struct inode *dir, struct dentry *dentr=
-y,
-> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> index c5498f5174ce..e8c9bac29b9d 100644
-> --- a/include/linux/lsm_hooks.h
-> +++ b/include/linux/lsm_hooks.h
-> @@ -27,6 +27,7 @@
-> =20
->  #include <linux/security.h>
->  #include <linux/init.h>
-> +#include <linux/xattr.h>
->  #include <linux/rculist.h>
-> =20
->  /**
-> @@ -227,9 +228,11 @@
->   *	@inode contains the inode structure of the newly created inode.
->   *	@dir contains the inode structure of the parent directory.
->   *	@qstr contains the last path component of the new object
-> - *	@name will be set to the allocated name suffix (e.g. selinux).
-> - *	@value will be set to the allocated attribute value.
-> - *	@len will be set to the length of the value.
-> + *	@xattrs contains the full array of xattrs allocated by LSMs where
-> + *	->name will be set to the allocated name suffix (e.g. selinux).
-> + *	->value will be set to the allocated attribute value.
-> + *	->len will be set to the length of the value.
-> + *	@fs_data contains filesystem-specific data.
->   *	Returns 0 if @name and @value have been successfully set,
->   *	-EOPNOTSUPP if no security attribute is needed, or
->   *	-ENOMEM on memory allocation failure.
-> @@ -1661,4 +1664,13 @@ static inline void security_delete_hooks(struct =
-security_hook_list *hooks,
-> =20
->  extern int lsm_inode_alloc(struct inode *inode);
-> =20
-
-Some "security researcher" with a fuzz tester is going to manage to dump =
-junk
-into the slots and ruin your week. I suggest a simple change to make boun=
-ds checking
-possible. It should never happen, but if that was sufficient people would=20
-love C
-string processing better.
-
-> +static inline struct xattr *lsm_find_xattr_slot(struct xattr *xattrs)
-
-+static inline struct xattr *lsm_find_xattr_slot(struct xattr *xattrs, in=
-t available)
-
-> +{
-> +	struct xattr *slot;
-> +
-> +	for (slot =3D xattrs; slot && slot->name !=3D NULL; slot++)
-
-+	for (slot =3D xattrs; slot && slot->name !=3D NULL; slot++)
- 		if (WARN_ON(slot > xattrs[available]))
-			return NULL;=20
-
-> +		;
-> +
-> +	return slot;
-> +}
->  #endif /* ! __LINUX_LSM_HOOKS_H */
 > diff --git a/security/security.c b/security/security.c
-> index 7f14e59c4f8e..2c1fe1496069 100644
+> index 2c1fe1496069..2ab67fa4422e 100644
 > --- a/security/security.c
 > +++ b/security/security.c
-> @@ -1037,18 +1037,16 @@ int security_inode_init_security(struct inode *=
-inode, struct inode *dir,
+> @@ -30,8 +30,6 @@
+>  #include <linux/msg.h>
+>  #include <net/flow.h>
 > =20
+> -#define MAX_LSM_EVM_XATTR	2
+> -
+>  /* How many LSMs were built into the kernel? */
+>  #define LSM_COUNT (__end_lsm_info - __start_lsm_info)
+> =20
+> @@ -1028,9 +1026,10 @@ int security_inode_init_security(struct inode *i=
+node, struct inode *dir,
+>  				 const struct qstr *qstr,
+>  				 const initxattrs initxattrs, void *fs_data)
+>  {
+> -	struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
+> +	struct xattr *new_xattrs;
+>  	struct xattr *lsm_xattr, *evm_xattr, *xattr;
+> -	int ret;
+> +	struct security_hook_list *P;
+> +	int ret, max_new_xattrs =3D 0;
+> =20
+>  	if (unlikely(IS_PRIVATE(inode)))
+>  		return 0;
+> @@ -1038,14 +1037,52 @@ int security_inode_init_security(struct inode *=
+inode, struct inode *dir,
 >  	if (!initxattrs)
 >  		return call_int_hook(inode_init_security, -EOPNOTSUPP, inode,
-> -				     dir, qstr, NULL, NULL, NULL);
-> +				     dir, qstr, NULL, fs_data);
->  	memset(new_xattrs, 0, sizeof(new_xattrs));
->  	lsm_xattr =3D new_xattrs;
->  	ret =3D call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir, q=
-str,
-> -						&lsm_xattr->name,
-> -						&lsm_xattr->value,
-> -						&lsm_xattr->value_len);
-> +			    lsm_xattr, fs_data);
->  	if (ret)
->  		goto out;
-> =20
->  	evm_xattr =3D lsm_xattr + 1;
-> -	ret =3D evm_inode_init_security(inode, lsm_xattr, evm_xattr);
-> +	ret =3D evm_inode_init_security(inode, new_xattrs, evm_xattr);
->  	if (ret)
->  		goto out;
->  	ret =3D initxattrs(inode, new_xattrs, fs_data);
-> @@ -1071,10 +1069,13 @@ int security_old_inode_init_security(struct ino=
-de *inode, struct inode *dir,
->  				     const struct qstr *qstr, const char **name,
->  				     void **value, size_t *len)
->  {
-> +	struct xattr xattr =3D { .name =3D NULL, .value =3D NULL, .value_len =
-=3D 0 };
-> +	struct xattr *lsm_xattr =3D (name && value && len) ? &xattr : NULL;
+>  				     dir, qstr, NULL, fs_data);
+> -	memset(new_xattrs, 0, sizeof(new_xattrs));
 > +
+> +	/* Determine at run-time the max number of xattr structs to allocate.=20
+*/
+> +	hlist_for_each_entry(P, &security_hook_heads.inode_init_security, lis=
+t)
+> +		max_new_xattrs++;
+
+Don't do this here! You can count the number of modules providing inode_i=
+nit_security
+hooks when the modules register and save the value for use here. It's not=20
+going to
+change.
+
+> +
+> +	if (!max_new_xattrs)
+> +		return 0;
+> +
+> +	/* Allocate +1 for EVM and +1 as terminator. */
+> +	new_xattrs =3D kcalloc(max_new_xattrs + 2, sizeof(*new_xattrs), GFP_N=
+OFS);
+> +	if (!new_xattrs)
+> +		return -ENOMEM;
+> +
+>  	lsm_xattr =3D new_xattrs;
+> -	ret =3D call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir, q=
+str,
+> -			    lsm_xattr, fs_data);
+> -	if (ret)
+> +	hlist_for_each_entry(P, &security_hook_heads.inode_init_security,
+> +			     list) {
+> +		ret =3D P->hook.inode_init_security(inode, dir, qstr, new_xattrs,
+> +						  fs_data);
+> +		if (ret) {
+> +			if (ret !=3D -EOPNOTSUPP)
+> +				goto out;
+> +
+> +			continue;
+> +		}
+> +
+> +		/* LSM implementation error. */
+> +		if (lsm_xattr->name =3D=3D NULL || lsm_xattr->value =3D=3D NULL) {
+> +			WARN_ONCE(
+> +				"LSM %s: ret =3D 0 but xattr name/value =3D NULL\n",
+> +				P->lsm);
+> +			ret =3D -ENOENT;
+> +			goto out;
+> +		}
+> +
+> +		lsm_xattr++;
+> +
+> +		if (!--max_new_xattrs)
+> +			break;
+> +	}
+> +
+> +	if (!new_xattrs->name) {
+> +		ret =3D -EOPNOTSUPP;
+>  		goto out;
+> +	}
+> =20
+> -	evm_xattr =3D lsm_xattr + 1;
+> +	evm_xattr =3D lsm_xattr;
+>  	ret =3D evm_inode_init_security(inode, new_xattrs, evm_xattr);
+
+ +	ret =3D evm_inode_init_security(inode, new_xattrs, lsm_xattr);
+
+then you don't need evm_xattr at all.
+
+>  	if (ret)
+>  		goto out;
+> @@ -1053,6 +1090,7 @@ int security_inode_init_security(struct inode *in=
+ode, struct inode *dir,
+>  out:
+>  	for (xattr =3D new_xattrs; xattr->value !=3D NULL; xattr++)
+>  		kfree(xattr->value);
+> +	kfree(new_xattrs);
+>  	return (ret =3D=3D -EOPNOTSUPP) ? 0 : ret;
+>  }
+>  EXPORT_SYMBOL(security_inode_init_security);
+> @@ -1071,11 +1109,44 @@ int security_old_inode_init_security(struct ino=
+de *inode, struct inode *dir,
+>  {
+>  	struct xattr xattr =3D { .name =3D NULL, .value =3D NULL, .value_len =
+=3D 0 };
+>  	struct xattr *lsm_xattr =3D (name && value && len) ? &xattr : NULL;
+> +	struct security_hook_list *P;
+> +	int ret;
+> =20
 >  	if (unlikely(IS_PRIVATE(inode)))
 >  		return -EOPNOTSUPP;
->  	return call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir,
-> -			     qstr, name, value, len);
-> +			     qstr, lsm_xattr, NULL);
+> -	return call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir,
+> -			     qstr, lsm_xattr, NULL);
+> +
+> +	hlist_for_each_entry(P, &security_hook_heads.inode_init_security,
+> +			     list) {
+> +		ret =3D P->hook.inode_init_security(inode, dir, qstr, lsm_xattr,
+> +						  NULL);
+> +		if (ret) {
+> +			if (ret !=3D -EOPNOTSUPP)
+> +				return ret;
+> +
+> +			continue;
+> +		}
+> +
+> +		if (!lsm_xattr)
+> +			continue;
+> +
+> +		/* LSM implementation error. */
+> +		if (lsm_xattr->name =3D=3D NULL || lsm_xattr->value =3D=3D NULL) {
+> +			WARN_ONCE(
+> +				"LSM %s: ret =3D 0 but xattr name/value =3D NULL\n",
+> +				P->lsm);
+> +
+> +			/* Callers should do the cleanup. */
+> +			return -ENOENT;
+> +		}
+> +
+> +		*name =3D lsm_xattr->name;
+> +		*value =3D lsm_xattr->value;
+> +		*len =3D lsm_xattr->value_len;
+> +
+> +		return ret;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
 >  }
 >  EXPORT_SYMBOL(security_old_inode_init_security);
 > =20
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index ddd097790d47..806827eb132a 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -2916,11 +2916,11 @@ static int selinux_dentry_create_files_as(struc=
-t dentry *dentry, int mode,
-> =20
->  static int selinux_inode_init_security(struct inode *inode, struct ino=
-de *dir,
->  				       const struct qstr *qstr,
-> -				       const char **name,
-> -				       void **value, size_t *len)
-> +				       struct xattr *xattrs, void *fs_data)
->  {
->  	const struct task_security_struct *tsec =3D selinux_cred(current_cred=
-());
->  	struct superblock_security_struct *sbsec;
-> +	struct xattr *xattr =3D lsm_find_xattr_slot(xattrs);
->  	u32 newsid, clen;
->  	int rc;
->  	char *context;
-> @@ -2947,16 +2947,15 @@ static int selinux_inode_init_security(struct i=
-node *inode, struct inode *dir,
->  	    !(sbsec->flags & SBLABEL_MNT))
->  		return -EOPNOTSUPP;
-> =20
-> -	if (name)
-> -		*name =3D XATTR_SELINUX_SUFFIX;
-> +	if (xattr) {
-> +		xattr->name =3D XATTR_SELINUX_SUFFIX;
-> =20
-> -	if (value && len) {
->  		rc =3D security_sid_to_context_force(&selinux_state, newsid,
->  						   &context, &clen);
->  		if (rc)
->  			return rc;
-> -		*value =3D context;
-> -		*len =3D clen;
-> +		xattr->value =3D context;
-> +		xattr->value_len =3D clen;
->  	}
-> =20
->  	return 0;
-> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-> index 12a45e61c1a5..af7eee0fee52 100644
-> --- a/security/smack/smack_lsm.c
-> +++ b/security/smack/smack_lsm.c
-> @@ -962,26 +962,24 @@ static int smack_inode_alloc_security(struct inod=
-e *inode)
->   * @inode: the newly created inode
->   * @dir: containing directory object
->   * @qstr: unused
-> - * @name: where to put the attribute name
-> - * @value: where to put the attribute value
-> - * @len: where to put the length of the attribute
-> + * @xattrs: where to put the attribute
->   *
->   * Returns 0 if it all works out, -ENOMEM if there's no memory
->   */
->  static int smack_inode_init_security(struct inode *inode, struct inode=20
-*dir,
-> -				     const struct qstr *qstr, const char **name,
-> -				     void **value, size_t *len)
-> +				     const struct qstr *qstr,
-> +				     struct xattr *xattrs, void *fs_data)
->  {
->  	struct inode_smack *issp =3D smack_inode(inode);
->  	struct smack_known *skp =3D smk_of_current();
->  	struct smack_known *isp =3D smk_of_inode(inode);
->  	struct smack_known *dsp =3D smk_of_inode(dir);
-> +	struct xattr *xattr =3D lsm_find_xattr_slot(xattrs);
->  	int may;
-> =20
-> -	if (name)
-> -		*name =3D XATTR_SMACK_SUFFIX;
-> +	if (xattr) {
-> +		xattr->name =3D XATTR_SMACK_SUFFIX;
-> =20
-> -	if (value && len) {
->  		rcu_read_lock();
->  		may =3D smk_access_entry(skp->smk_known, dsp->smk_known,
->  				       &skp->smk_rules);
-> @@ -999,11 +997,11 @@ static int smack_inode_init_security(struct inode=20
-*inode, struct inode *dir,
->  			issp->smk_flags |=3D SMK_INODE_CHANGED;
->  		}
-> =20
-> -		*value =3D kstrdup(isp->smk_known, GFP_NOFS);
-> -		if (*value =3D=3D NULL)
-> +		xattr->value =3D kstrdup(isp->smk_known, GFP_NOFS);
-> +		if (xattr->value =3D=3D NULL)
->  			return -ENOMEM;
-> =20
-> -		*len =3D strlen(isp->smk_known);
-> +		xattr->value_len =3D strlen(isp->smk_known);
->  	}
-> =20
->  	return 0;
 
