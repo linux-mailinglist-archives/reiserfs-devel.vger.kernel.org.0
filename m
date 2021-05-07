@@ -2,143 +2,82 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 744AA36C564
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 27 Apr 2021 13:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4045376B76
+	for <lists+reiserfs-devel@lfdr.de>; Fri,  7 May 2021 23:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237876AbhD0Lju (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 27 Apr 2021 07:39:50 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:2931 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235982AbhD0Ljs (ORCPT
+        id S230265AbhEGVIh (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 7 May 2021 17:08:37 -0400
+Received: from bosmailout07.eigbox.net ([66.96.187.7]:51615 "EHLO
+        bosmailout07.eigbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230093AbhEGVIg (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 27 Apr 2021 07:39:48 -0400
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4FTzzM0BFqz77b7N;
-        Tue, 27 Apr 2021 19:28:31 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.62.217) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 27 Apr 2021 13:39:02 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>, <jmorris@namei.org>, <paul@paul-moore.com>,
-        <casey@schaufler-ca.com>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <reiserfs-devel@vger.kernel.org>, <selinux@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v3 6/6] evm: Support multiple LSMs providing an xattr
-Date:   Tue, 27 Apr 2021 13:37:32 +0200
-Message-ID: <20210427113732.471066-7-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210427113732.471066-1-roberto.sassu@huawei.com>
-References: <20210427113732.471066-1-roberto.sassu@huawei.com>
+        Fri, 7 May 2021 17:08:36 -0400
+X-Greylist: delayed 1993 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 May 2021 17:08:34 EDT
+Received: from bosmailscan09.eigbox.net ([10.20.15.9])
+        by bosmailout07.eigbox.net with esmtp (Exim)
+        id 1lf7Av-0006tO-7P; Fri, 07 May 2021 16:34:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=godsofu4.com; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:
+        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=aM9bUFGSTpfnep8zAVAJMnojqhcwpuHDFPgQnPqW4M4=; b=L/dzd5zNAEgsj4wIrKa+NtSPJw
+        eQ6m0GeIJ6FqTTz2wiDrKQSrTcort882vfn/+WrQRiS6dPQyUMnRoYzBdTC3E+FPhQC0J5kKK/D0H
+        LM0KWgEROPL9XGkkPtDbKcgO4+OMnZdyobiKxOhkfe91ky2DNAXxyoYHdAO9zpzXG+7mrT96w/C0D
+        cSd8H7hg5/xg61MAGwsjzNLbBqB/Um6CNHq79BiaCrU/VOU9jFfq+aQrz3oTlTvSP7fReohDtc0So
+        ompsD7yaXBZ9hvgSYsYha8MroiFNOSv4R+xYZEYz8YP739+DdmhMwQWEH6X2KZGYjJyQTGC+0Ty8F
+        p4i+Ml+Q==;
+Received: from [10.115.3.33] (helo=bosimpout13)
+        by bosmailscan09.eigbox.net with esmtp (Exim)
+        id 1lf7Ap-0008KG-EB; Fri, 07 May 2021 16:34:11 -0400
+Received: from boswebmail06.eigbox.net ([10.20.16.6])
+        by bosimpout13 with 
+        id 1wa22500Q07qujN01wa7Wz; Fri, 07 May 2021 16:34:11 -0400
+X-EN-SP-DIR: OUT
+X-EN-SP-SQ: 1
+Received: from [127.0.0.1] (helo=homestead)
+        by boswebmail06.eigbox.net with esmtp (Exim)
+        id 1lf79s-0005SY-TS; Fri, 07 May 2021 16:33:12 -0400
+Received: from [197.239.81.229]
+ by emailmg.homestead.com
+ with HTTP (HTTP/1.1 POST); Fri, 07 May 2021 16:33:12 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.62.217]
-X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
+Date:   Fri, 07 May 2021 20:33:12 +0000
+From:   Mrs Suzara Maling Wan <fast65@godsofu4.com>
+To:     undisclosed-recipients:;
+Subject: URGENT REPLY NEEDED
+Reply-To: suzara2017malingwan@gmail.com
+Mail-Reply-To: suzara2017malingwan@gmail.com
+Message-ID: <631345976938ca35031d7e185b0c5f57@godsofu4.com>
+X-Sender: fast65@godsofu4.com
+User-Agent: Roundcube Webmail/1.3.14
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-EN-AuthUser: fast65@godsofu4.com
+Sender:  Mrs Suzara Maling Wan <fast65@godsofu4.com>
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Currently, evm_inode_init_security() processes a single LSM xattr from
-the array passed by security_inode_init_security(), and calculates the
-HMAC on it and other inode metadata.
 
-Given that initxattrs(), called by security_inode_init_security(), expects
-that this array is terminated when the xattr name is set to NULL, this
-patch reuses the same assumption for to scan all xattrs and to calculate
-the HMAC on all of them.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/evm/evm.h        |  2 ++
- security/integrity/evm/evm_crypto.c |  9 ++++++++-
- security/integrity/evm/evm_main.c   | 15 +++++++++++----
- 3 files changed, 21 insertions(+), 5 deletions(-)
+My names are Mrs Suzara Maling Wan, I am a Nationality of the Republic
+of the Philippine presently base in West Africa B/F, dealing with
+exportation of Gold, I was diagnose of blood Causal decease, and my
+doctor have announce to me that I have few days to leave due to the
+condition of my sickness.
 
-diff --git a/security/integrity/evm/evm.h b/security/integrity/evm/evm.h
-index ae590f71ce7d..24eac42b9f32 100644
---- a/security/integrity/evm/evm.h
-+++ b/security/integrity/evm/evm.h
-@@ -49,6 +49,8 @@ struct evm_digest {
- 	char digest[IMA_MAX_DIGEST_SIZE];
- } __packed;
- 
-+int evm_protected_xattr(const char *req_xattr_name);
-+
- int evm_init_key(void);
- int __init evm_init_crypto(void);
- int evm_update_evmxattr(struct dentry *dentry,
-diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-index b66264b53d5d..35c5eec0517d 100644
---- a/security/integrity/evm/evm_crypto.c
-+++ b/security/integrity/evm/evm_crypto.c
-@@ -358,6 +358,7 @@ int evm_init_hmac(struct inode *inode, const struct xattr *lsm_xattr,
- 		  char *hmac_val)
- {
- 	struct shash_desc *desc;
-+	const struct xattr *xattr;
- 
- 	desc = init_desc(EVM_XATTR_HMAC, evm_hash_algo);
- 	if (IS_ERR(desc)) {
-@@ -365,7 +366,13 @@ int evm_init_hmac(struct inode *inode, const struct xattr *lsm_xattr,
- 		return PTR_ERR(desc);
- 	}
- 
--	crypto_shash_update(desc, lsm_xattr->value, lsm_xattr->value_len);
-+	for (xattr = lsm_xattr; xattr->name != NULL; xattr++) {
-+		if (!evm_protected_xattr(xattr->name))
-+			continue;
-+
-+		crypto_shash_update(desc, xattr->value, xattr->value_len);
-+	}
-+
- 	hmac_add_misc(desc, inode, EVM_XATTR_HMAC, hmac_val);
- 	kfree(desc);
- 	return 0;
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index d647bfd0adcd..cd2f46770646 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -261,7 +261,7 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
- 	return evm_status;
- }
- 
--static int evm_protected_xattr(const char *req_xattr_name)
-+int evm_protected_xattr(const char *req_xattr_name)
- {
- 	int namelen;
- 	int found = 0;
-@@ -713,15 +713,22 @@ int evm_inode_init_security(struct inode *inode, struct inode *dir,
- 			    void *fs_data)
- {
- 	struct evm_xattr *xattr_data;
-+	struct xattr *xattr;
- 	struct xattr *evm_xattr = lsm_find_xattr_slot(xattrs, base_slot,
- 						      *base_slot + 1);
--	int rc;
-+	int rc, evm_protected_xattrs = 0;
- 
- 	if (!xattrs || !xattrs->name)
- 		return 0;
- 
--	if (!(evm_initialized & EVM_INIT_HMAC) ||
--	    !evm_protected_xattr(xattrs->name))
-+	if (!(evm_initialized & EVM_INIT_HMAC))
-+		return -EOPNOTSUPP;
-+
-+	for (xattr = xattrs; xattr->name != NULL && xattr < evm_xattr; xattr++)
-+		if (evm_protected_xattr(xattr->name))
-+			evm_protected_xattrs++;
-+
-+	if (!evm_protected_xattrs)
- 		return -EOPNOTSUPP;
- 
- 	xattr_data = kzalloc(sizeof(*xattr_data), GFP_NOFS);
--- 
-2.25.1
+I have a desire to build an orphanage home in your country of which i
+cannot execute the project myself due to my present health condition,
+I am willing to hand over the project under your care for you to help
+me fulfill my dreams and desire of building an orphanage home in your
+country.
 
+Reply in you are will to help so that I can direct you to my bank for
+the urgent transfer of the fund/money require for the project to your
+account as I have already made the fund/money available.
+
+With kind regards
+Mrs Suzara Maling Wan
