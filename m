@@ -2,84 +2,104 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF62B3A2937
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 10 Jun 2021 12:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DCD3ADEB2
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 20 Jun 2021 15:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbhFJKVR (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 10 Jun 2021 06:21:17 -0400
-Received: from mail.chalver.com.ec ([186.3.12.10]:23352 "EHLO
-        mail.chalver.com.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbhFJKVR (ORCPT
+        id S229600AbhFTNiJ (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 20 Jun 2021 09:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229669AbhFTNiD (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 10 Jun 2021 06:21:17 -0400
-Received: from mail.chalver.com.ec (localhost.localdomain [127.0.0.1])
-        by mail.chalver.com.ec (Postfix) with ESMTPS id 65DE81F26C4C;
-        Thu, 10 Jun 2021 03:58:28 -0500 (ECT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.chalver.com.ec (Postfix) with ESMTP id 0D0831F25904;
-        Thu, 10 Jun 2021 02:56:46 -0500 (ECT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.chalver.com.ec 0D0831F25904
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=chalver.com.ec;
-        s=E2A417BC-DDA7-11E6-85F6-38495636B764; t=1623311806;
-        bh=PxMh0SAMbBGlctefOH2OhvTlJNlHw25bONEEE7Ldp0I=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=tiuA9XWJTswwbcwOWlBKsUqvyUl6vkKXYidxqZBtJQNdpml10TGjiCoEu/9ldolZX
-         E63tXu/I4ogTVa6FSA+1MRv2Vd85waOv6FXEjcj5BGrnEw2Rag0moQHtRXdLVwyeTB
-         QAhDv65WLCQPdux5KjNq1ylIfeVRj9Gt2nOxc6vn77YP7SZX2hDjnq8jFmyLR4Slct
-         r1QqSR64BhqflgN4btMBzCtybZ94l0fI4C3txk/SiA3ExEs8aNevyG1ODnwu451V5M
-         XlDvG44G9oRNk9z49J2Vwh08mgjpL6lQiHOXEuLBmYUHuiV78+jJmdqMLX5wHMKCCN
-         BvhnIpMxgAG5g==
-X-Virus-Scanned: amavisd-new at chalver.com.ec
-Received: from mail.chalver.com.ec ([127.0.0.1])
-        by localhost (mail.chalver.com.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id v6fJ2wFMXP4W; Thu, 10 Jun 2021 02:56:45 -0500 (ECT)
-Received: from cris-PC.wifi (unknown [105.9.120.116])
-        by mail.chalver.com.ec (Postfix) with ESMTPSA id 99E2E1F25931;
-        Thu, 10 Jun 2021 02:56:32 -0500 (ECT)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 20 Jun 2021 09:38:03 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D40C0617A8
+        for <reiserfs-devel@vger.kernel.org>; Sun, 20 Jun 2021 06:35:46 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id s19so6092767ioc.3
+        for <reiserfs-devel@vger.kernel.org>; Sun, 20 Jun 2021 06:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=sec9fLKaTeyUvI3U/9cH5uXh5khwaRmiJ3Slq1YZSCexwKlBLvi58L8DBu55CdJDji
+         U+HuEZd9onOgJ+OTF2rj1+rkaNRkmc9mUKozs32zG54utaQ749Tn8dwDfGRCa86Y13h3
+         aTPzQqGcbZM/EAbe2+YYkP8IzEtm7OFmKWqXTdVfNhb2VSah4cfQXUGVQ0X59BkXxqUT
+         4pZGErCa13JdLdCIRor4r89BUHwblkmYb4cwi8/7Nzr0zyCOHjauEmAl4PRZ8S1C6dv6
+         acCJLW1ZaLruky9plyyHKip4E8d31xV8uUpmSHsk2ZsjBfcQBVTL2OilqasULeboqC8n
+         0h/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=ABbbx/iCrzbku4cR0HT7ZWjp3zWmKfs1NFHkk/KPta2Sf/6LMUSkxvVD2DsNGHJjgX
+         ScdzrZmV6tRMo59HSuA094gQA13G1rxjvfT1uGPQx8B6BLvo0zWS7+kOFnjFsojWsKsN
+         tWJcZ4q+zFoNGWeRJOybtxMyxR74JDFqVE9ZQFbS/Iviuorv9AFV8uArpoDHA6GhNmA5
+         GiuXc7VKgz05w+B1CD3uAZpLESQ7rf9rNaHhbFhFV0rlIZLLEMdyHe7+Bd6qGv3Bg8PC
+         xyAl5j33JVHTJfYTc4cHeQ1JA7zBDB642HSkM7FxHrtUOREimpT1ZZYaWlh9DMwVK01I
+         KanA==
+X-Gm-Message-State: AOAM532WIvEUl2LBf2/rIwVitpLs2td0oRQnRipI1jOEjzMnzTHRcZre
+        0l3cNQyJkKN0z54MLqqIqZ6Hv/aKtjOKGEzTgrg=
+X-Google-Smtp-Source: ABdhPJwO76FoleXtHusTIesxM2cuIvE9VdIlMyNt5WPTfvQkSUUR8O1MTtP/waIv/m9vsUoacT9Q2gT5SJ41poXCB/Q=
+X-Received: by 2002:a05:6602:1810:: with SMTP id t16mr15654363ioh.48.1624196145888;
+ Sun, 20 Jun 2021 06:35:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
-To:     Recipients <mpaucar@chalver.com.ec>
-From:   ''Tayeb souami'' <mpaucar@chalver.com.ec>
-Date:   Thu, 10 Jun 2021 10:03:43 +0200
-Reply-To: Tayebsouam.spende@gmail.com
-Message-Id: <20210610075632.99E2E1F25931@mail.chalver.com.ec>
-X-Laboratorios-Chalver-MailScanner-Information: Please contact the ISP for more information
-X-Laboratorios-Chalver-MailScanner-ID: 99E2E1F25931.A0E03
-X-Laboratorios-Chalver-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
+Received: by 2002:a05:6e02:1baf:0:0:0:0 with HTTP; Sun, 20 Jun 2021 06:35:45
+ -0700 (PDT)
+Reply-To: sarahkoffi389@yahoo.co.jp
+From:   Sarah Koffi <sarah.koffi101@gmail.com>
+Date:   Sun, 20 Jun 2021 15:35:45 +0200
+Message-ID: <CA+ifgLGSH5KW9J+Z85axgUznJEQcab5mED6rZZnS3OBzXTnaxw@mail.gmail.com>
+Subject: Greetings From Mrs. Sarah Koffi
+To:     sarahkoffi389@yahoo.co.jp
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
+Greetings From Mrs. Sarah Koffi
 
-Lieber Freund,
+I'm contacting you based on your good profiles I read and for a good
+reasons, I am in search of a property to buy in your country as I
+intended to come over to your
+country for investment, Though I have not meet with you before but I
+believe that one has to risk confiding in someone to succeed sometimes
+in life.
 
-Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der =
-Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zu=
-f=C3=A4llige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Ma=
-il nach einem Spinball ausgew=C3=A4hlt.Ich habe den gr=C3=B6=C3=9Ften Teil =
-meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=A4tigkeitsorganisationen =
-und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die =
-Summe von =E2=82=AC 2.000.000,00 an Sie als eine der ausgew=C3=A4hlten 5 zu=
- spenden, um meine Gewinne zu =C3=BCberpr=C3=BCfen, sehen Sie bitte meine Y=
-ou Tube Seite unten.
+My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
+Federal Government of Sudan and he has a personal Oil firm in Bentiu
+Oil zone town and Upper
+Nile city. What I have experience physically, I don't wish to
+experience it again in my life due to the recent civil Ethnic war
+cause by our President Mr. Salva Kiir
+and the rebel leader Mr Riek Machar, I have been Under United Nation
+refuge camp in chad to save my life and that of my little daughter.
 
-UHR MICH HIER: https://www.youtube.com/watch?v=3DZ6ui8ZDQ6Ks
+Though, I do not know how you will feel to my proposal, but the truth
+is that I sneaked into Chad our neighboring country where I am living
+now as a refugee.
+I escaped with my little daughter when the rebels bust into our house
+and killed my husband as one of the big oil dealers in the country,
+ever since then, I have being on the run.
 
+I left my country and move to Chad our neighboring country with the
+little ceasefire we had, due to the face to face peace meeting accord
+coordinated by the US Secretary of State, Mr John Kerry and United
+Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
+and the rebel leader Mr Riek Machar to stop this war.
 
+I want to solicit for your partnership with trust to invest the $8
+million dollars deposited by my late husband in Bank because my life
+is no longer safe in our country, since the rebels are looking for the
+families of all the oil business men in the country to kill, saying
+that they are they one that is milking the country dry.
 
-Das ist dein Spendencode: [TS530342018]
+I will offer you 20% of the total fund for your help while I will
+partner with you for the investment in your country.
+If I get your reply.
 
+I will wait to hear from you so as to give you details.With love from
 
+ i need you to contact me here sarahkoffi389@yahoo.co.jp
 
-Antworten Sie mit dem SPENDE-CODE an diese
-
-E-Mail:Tayebsouam.spende@gmail.com
-
-
-Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
-
-Gr=C3=BC=C3=9Fe
-Herr Tayeb Souami
+Mrs. Sarah Koffi
