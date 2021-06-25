@@ -2,67 +2,42 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 509E43B1F48
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 23 Jun 2021 19:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D59C3B4875
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 25 Jun 2021 19:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbhFWRQn convert rfc822-to-8bit (ORCPT
+        id S230159AbhFYRwD convert rfc822-to-8bit (ORCPT
         <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 23 Jun 2021 13:16:43 -0400
-Received: from [183.90.58.236] ([183.90.58.236]:38420 "EHLO ns1.zackeruz.tk"
+        Fri, 25 Jun 2021 13:52:03 -0400
+Received: from [200.6.136.10] ([200.6.136.10]:44033 "EHLO srv01.toppnet.com.br"
         rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229688AbhFWRQm (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 23 Jun 2021 13:16:42 -0400
-Received: from johnlewis.com (unknown [192.168.20.1])
-        by ns1.zackeruz.tk (Postfix) with ESMTPSA id 34BFC847521
-        for <reiserfs-devel@vger.kernel.org>; Thu, 24 Jun 2021 01:14:22 +0800 (+08)
-Reply-To: robert_turner@johnlewis-trading.com,
-          pippawicks.sales@johnlewis-trading.com
-From:   John Lewis & Partnersip <robert.turner107@johnlewis.com>
-To:     reiserfs-devel@vger.kernel.org
-Subject: 6/23/2021 Product Inquiry 
-Date:   23 Jun 2021 17:14:22 +0000
-Message-ID: <20210623094116.87547CA928E81ECA@johnlewis.com>
+        id S230302AbhFYRvy (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Fri, 25 Jun 2021 13:51:54 -0400
+X-Greylist: delayed 3095 seconds by postgrey-1.27 at vger.kernel.org; Fri, 25 Jun 2021 13:51:54 EDT
+Received: from [84.38.130.143] (helo=IP-130-143.dataclub.eu)
+        by srv01.toppnet.com.br with esmtpa (Exim 4.92.2)
+        (envelope-from <davidben8376@gmail.com>)
+        id 1lwp9P-00033I-9n
+        for reiserfs-devel@vger.kernel.org; Fri, 25 Jun 2021 13:57:55 -0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
 Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Hello Dear, I have sent you two emails. ,
+To:     reiserfs-devel@vger.kernel.org
+From:   "David Ben" <davidben8376@gmail.com>
+Date:   Fri, 25 Jun 2021 19:57:51 +0300
+Reply-To: davidben@davidbens.com
+Message-Id: <E1lwp9P-00033I-9n@srv01.toppnet.com.br>
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Dear reiserfs-devel
+Hello Dear,
 
-The famous brand John Lewis Partnership, is UK's largest multi-
-channel retailer with over 126 shops and multiple expansion in 
-Africa furnished by European/Asian/American products. We are 
-sourcing new products to attract new customers and also retain 
-our existing ones, create new partnerships with companies dealing 
-with different kinds of goods globally.
+My names are David Ben, I have sent you two emails and you did not respond, I even sent another message a few days ago with more details still no response from you.
 
-Your company's products are of interest to our market as we have 
-an amazing market for your products.
+Please are you still using this email address? I am VERY SORRY if sincerely you did not receive those emails, I will resend it now as soon as you confirm you never received them.
 
-Provide us your current catalog through email to review more. We 
-hope to be able to order with you and start a long-term friendly,
-respectable and solid business partnership. Please we would 
-appreciate it if you could send us your stock availability via 
-email if any.
+Regards,
 
-Our payment terms are 15 days net in Europe, 30 days Net in UK 
-and 30 days net in Asia/USA as we operate with over 5297 
-suppliers around the globe for the past 50 years now. For 
-immediate response Send your reply to robert_turner@johnlewis-
-trading.com for us to be able to 
-treat with care and urgency.
-
-
-Best Regards
-
-Rob Turner
-Head Of Procurement Operations
-John Lewis & Partners.
-robert_turner@johnlewis-trading.com
-Tel: +44-7451-274090
-WhatsApp: +447497483925
-www.johnlewis.com
-REGISTERED OFFICE: 171 VICTORIA STREET, LONDON SW1E 5NN 
+Mr. David Ben.
