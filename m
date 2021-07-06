@@ -2,39 +2,39 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D82B3BD35E
-	for <lists+reiserfs-devel@lfdr.de>; Tue,  6 Jul 2021 13:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 786743BD35F
+	for <lists+reiserfs-devel@lfdr.de>; Tue,  6 Jul 2021 13:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236349AbhGFLvI (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 6 Jul 2021 07:51:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47550 "EHLO mail.kernel.org"
+        id S231790AbhGFLvK (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 6 Jul 2021 07:51:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47560 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237461AbhGFLgL (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 6 Jul 2021 07:36:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1BD3B61F2C;
-        Tue,  6 Jul 2021 11:28:04 +0000 (UTC)
+        id S237632AbhGFLgU (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
+        Tue, 6 Jul 2021 07:36:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E5CA761F4A;
+        Tue,  6 Jul 2021 11:28:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625570884;
-        bh=dVBJfQRirVoOIzRNPs88vxExJ0Go3B8dpqE3QDSy/mw=;
+        s=k20201202; t=1625570937;
+        bh=PZXYuut4wmd+WgVsl4d2dnci3renyfwjVzoF4ECIl1U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fs+yZ+OS3phuozim1/teBeLGWgU2V0YhWs0dCx9yWUo7J14zRERdC1hkhqPn+XRoH
-         rWqrq9EMXY1+pLPoY7jAcEAyI0GNepqT4n96tUxUuKf+3WdJvDHJzvmNtQMWB28gGw
-         KFTRevd02OOfFmFZoyYifX20ImVc8y6Bje6dDREeJ5lBT9MewC1HjX2xr+n0mO5vFF
-         o0z3vTgW0EYBD+Eah4nxgE16PonBq8b4lALcXdUrRlvZWnDkduDf18Pd0Y/t3pv4Q7
-         RpQHZXuGKi99Tg7fQ/nBiYWTpnCZqSiOs6HPPIVvxoaQUQC/cmWn0NXW3OUIOriJLd
-         /5EO2DLJv1MEA==
+        b=JdXEDd7oMOYhFiHvmlqR3J3iMP+ncInLYtZZr7Oi5lEO7+622YBBeNbhgkdXpOibf
+         YarBZacFL0vfMzULbTbvj2FErfZAHlswlqA2tOVDrx4pGwD569NNU0VhAyUX+lV1aG
+         SUEyHnJ3phoFGqjAK3XhWgmxWVkIrrX2vgSiCUV6jz0pTXRLYV5t83pH09YpvvqoA8
+         rt14EH04Tgnq7+WNzfoshaMHiRQzK0XJwHDpfhttK0GsWim428sdpE9+YuTRA50vld
+         P7rqM00+1fa3av4AI6C5yzr9BDsByWaIs0zftZGc9XZOtVmHI0FbPH6+TbhFJFbmBm
+         RDo4/BP3c+IFA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Pavel Skripkin <paskripkin@gmail.com>,
         syzbot+0ba9909df31c6a36974d@syzkaller.appspotmail.com,
         Jan Kara <jack@suse.cz>, Sasha Levin <sashal@kernel.org>,
         reiserfs-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 11/45] reiserfs: add check for invalid 1st journal block
-Date:   Tue,  6 Jul 2021 07:27:15 -0400
-Message-Id: <20210706112749.2065541-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 07/35] reiserfs: add check for invalid 1st journal block
+Date:   Tue,  6 Jul 2021 07:28:19 -0400
+Message-Id: <20210706112848.2066036-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210706112749.2065541-1-sashal@kernel.org>
-References: <20210706112749.2065541-1-sashal@kernel.org>
+In-Reply-To: <20210706112848.2066036-1-sashal@kernel.org>
+References: <20210706112848.2066036-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -68,10 +68,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 14 insertions(+)
 
 diff --git a/fs/reiserfs/journal.c b/fs/reiserfs/journal.c
-index 2be907231375..1a6e6343fed3 100644
+index 2a5c4813c47d..94871f611fa8 100644
 --- a/fs/reiserfs/journal.c
 +++ b/fs/reiserfs/journal.c
-@@ -2769,6 +2769,20 @@ int journal_init(struct super_block *sb, const char *j_dev_name,
+@@ -2766,6 +2766,20 @@ int journal_init(struct super_block *sb, const char *j_dev_name,
  		goto free_and_return;
  	}
  
