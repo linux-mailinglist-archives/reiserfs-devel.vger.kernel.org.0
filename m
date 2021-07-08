@@ -2,96 +2,75 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0DC73BD684
-	for <lists+reiserfs-devel@lfdr.de>; Tue,  6 Jul 2021 14:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD663BF6D4
+	for <lists+reiserfs-devel@lfdr.de>; Thu,  8 Jul 2021 10:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232440AbhGFMhG (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 6 Jul 2021 08:37:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42474 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235469AbhGFLbb (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 6 Jul 2021 07:31:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1510861CEF;
-        Tue,  6 Jul 2021 11:22:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625570550;
-        bh=TAJ0SnSUpJfc+Cqj1aFA6K5OlqU8tHyKbd/ynWD3xIA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lhJ1DOB+w3uhSbHBiWUp9gQOq87CarQgpcXlKaRv5YoxTLj1ffjjyzv83zVI9CyMq
-         E560Atd8OIsSReBs5RXSxMg2W1bePiNxEGzzE81wupbXi9/+ietDYm4YxF30WBY2q/
-         V92BWePexrAmPcONORjLA2U1s1RIlsYq7xXDIzwmPsWsAkPzeD+1aKlEo8rY/DWX/P
-         5SlQMXJ9C8XHI2pYx5Y5K+jfuxLW6qXFsJlbq0loa3VRkpjxYfiqWMLkBYmA6apzeP
-         kedmtabBFPtRpfEtiveDL031XJJWTS54+1u3pIe4gU2972FJeGSN/uRNW3BBwO4Lhl
-         wA0qBBW9RLcgA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        syzbot+0ba9909df31c6a36974d@syzkaller.appspotmail.com,
-        Jan Kara <jack@suse.cz>, Sasha Levin <sashal@kernel.org>,
-        reiserfs-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 020/137] reiserfs: add check for invalid 1st journal block
-Date:   Tue,  6 Jul 2021 07:20:06 -0400
-Message-Id: <20210706112203.2062605-20-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210706112203.2062605-1-sashal@kernel.org>
-References: <20210706112203.2062605-1-sashal@kernel.org>
+        id S231124AbhGHIUh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 8 Jul 2021 04:20:37 -0400
+Received: from mail8.turbodal.cl ([200.27.120.195]:55933 "EHLO
+        debian.turbodal.cl" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230509AbhGHIUh (ORCPT
+        <rfc822;reiserfs-devel@vger.kernel.org>);
+        Thu, 8 Jul 2021 04:20:37 -0400
+X-Greylist: delayed 5586 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Jul 2021 04:20:37 EDT
+Received: from mail4.turbodal.cl (unknown [192.100.110.128])
+        by debian.turbodal.cl (Postfix) with ESMTPS id 8AC07169D54;
+        Thu,  8 Jul 2021 02:16:38 -0400 (-04)
+Received: from mail4.turbodal.cl (localhost [127.0.0.1])
+        by mail4.turbodal.cl (Postfix) with ESMTPS id 47A3D62E070D;
+        Thu,  8 Jul 2021 02:17:04 -0400 (-04)
+Received: from localhost (localhost [127.0.0.1])
+        by mail4.turbodal.cl (Postfix) with ESMTP id 31F5762E06F1;
+        Thu,  8 Jul 2021 02:17:04 -0400 (-04)
+Received: from mail4.turbodal.cl ([127.0.0.1])
+        by localhost (mail4.turbodal.cl [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 4Fm-_ExFp2xi; Thu,  8 Jul 2021 02:17:04 -0400 (-04)
+Received: from cris-PC.wifi (unknown [105.9.19.190])
+        by mail4.turbodal.cl (Postfix) with ESMTPSA id 09F3F62E0604;
+        Thu,  8 Jul 2021 02:16:55 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsfonds_von_2=2C000=2C000_euro?=
+To:     Recipients <fae.eva@ptt.cl>
+From:   ''Charles jackson'' <fae.eva@ptt.cl>
+Date:   Thu, 08 Jul 2021 08:16:40 +0200
+Reply-To: charlesjacksonjr001@gmail.com
+Message-Id: <20210708061656.09F3F62E0604@mail4.turbodal.cl>
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+Lieber Freund,
 
-[ Upstream commit a149127be52fa7eaf5b3681a0317a2bbb772d5a9 ]
 
-syzbot reported divide error in reiserfs.
-The problem was in incorrect journal 1st block.
 
-Syzbot's reproducer manualy generated wrong superblock
-with incorrect 1st block. In journal_init() wasn't
-any checks about this particular case.
+ Ich bin Herr Charles W Jackson, North Carolina, Vereinigte Staaten von
+Amerika, der Mega-Gewinner von 344 Millionen US-Dollar. Beim
+Mega-Millions-Jackpot spende ich an 5 zuf&auml;llige Personen. Wenn
+Sie diese E-Mail erhalten, wurde Ihre E-Mail zu einem Spinball, den ich
+am h&auml;ufigsten verteilt habe von meinem Verm&ouml;gen an
+eine Reihe von Wohlt&auml;tigkeitsorganisationen. Ich habe mich
+ freiwillig entschlossen, Ihnen als einer der ausgew&auml;hlten 5
+einen Betrag von &euro; 2.000.000,00 zu spenden, um meine Gewinne zu
+ &uuml;berpr&uuml;fen.
 
-For example, if 1st journal block is before superblock
-1st block, it can cause zeroing important superblock members
-in do_journal_end().
+ Dies ist Ihr Spendencode: [CJ530342019]
 
-Link: https://lore.kernel.org/r/20210517121545.29645-1-paskripkin@gmail.com
-Reported-by: syzbot+0ba9909df31c6a36974d@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/reiserfs/journal.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
 
-diff --git a/fs/reiserfs/journal.c b/fs/reiserfs/journal.c
-index e98f99338f8f..df5fc12a6cee 100644
---- a/fs/reiserfs/journal.c
-+++ b/fs/reiserfs/journal.c
-@@ -2760,6 +2760,20 @@ int journal_init(struct super_block *sb, const char *j_dev_name,
- 		goto free_and_return;
- 	}
- 
-+	/*
-+	 * Sanity check to see if journal first block is correct.
-+	 * If journal first block is invalid it can cause
-+	 * zeroing important superblock members.
-+	 */
-+	if (!SB_ONDISK_JOURNAL_DEVICE(sb) &&
-+	    SB_ONDISK_JOURNAL_1st_BLOCK(sb) < SB_JOURNAL_1st_RESERVED_BLOCK(sb)) {
-+		reiserfs_warning(sb, "journal-1393",
-+				 "journal 1st super block is invalid: 1st reserved block %d, but actual 1st block is %d",
-+				 SB_JOURNAL_1st_RESERVED_BLOCK(sb),
-+				 SB_ONDISK_JOURNAL_1st_BLOCK(sb));
-+		goto free_and_return;
-+	}
-+
- 	if (journal_init_dev(sb, journal, j_dev_name) != 0) {
- 		reiserfs_warning(sb, "sh-462",
- 				 "unable to initialize journal device");
--- 
-2.30.2
 
+ www.youtube.com/watch?v=BSr8myiLPMQ
+
+
+
+Antworten Sie auf diese E-Mail mit dem SPENDER-CODE:
+
+charlesjacksonjr001@gmail.com
+
+ Ich hoffe, Sie und Ihre Familie gl&uuml;cklich zu machen
+
+ Sch&ouml;ne Gr&uuml;&szlig;e
+
+ Mr. Charles Jackson 
