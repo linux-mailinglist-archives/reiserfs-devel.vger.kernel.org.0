@@ -2,71 +2,57 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A82973C26E9
-	for <lists+reiserfs-devel@lfdr.de>; Fri,  9 Jul 2021 17:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B403C3DC1
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 11 Jul 2021 17:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbhGIPhV (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 9 Jul 2021 11:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232415AbhGIPhV (ORCPT
+        id S236258AbhGKP4O convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 11 Jul 2021 11:56:14 -0400
+Received: from mail.07d05.mspz7.gob.ec ([186.46.59.139]:49644 "EHLO
+        mail.07d05.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236268AbhGKP4N (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 9 Jul 2021 11:37:21 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C864C0613DD;
-        Fri,  9 Jul 2021 08:34:38 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id m83so1362116pfd.0;
-        Fri, 09 Jul 2021 08:34:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:reply-to:mime-version
-         :content-disposition;
-        bh=U9h1S56hNKKk2cU+ZFfbrBy2KFpOOYwxQwTzjnZy34Q=;
-        b=UFSzO2N3dVir/1+6/YHEPkmvSMQj7F6tUiY8f5FhcL7/gWw2uojL3E3hF7Vtr72B2G
-         rzGEdzCZ+b3qPI1AYxTT3XAPH5dZ/PazedW2d97kA3B6YtSobEA59BrLStiJy2hSgSA7
-         SEV5DdLvwnbJK/3DMbHKVGAXbaAAljGA1bOI1EIkKyAY/3UOUcpeMjAUWUKPxe3Ilgdn
-         ib/R82tUfArGjfDhjHzSIbk4TfnoGc/bzIbA6LbT6SA8lYmATzixHssbX2505GjkWK+9
-         Rpscl6XFH9JFb801bhUH/fTUOjzygWO73z4NSJvMlws0SjymAEjGN+z6NF+Mb8GZsnpT
-         SkLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :mime-version:content-disposition;
-        bh=U9h1S56hNKKk2cU+ZFfbrBy2KFpOOYwxQwTzjnZy34Q=;
-        b=rupr/WqoMkR90XI1sPWRH58TEkfRwuUrMoHQI3YO+VcVKpwG6Lz1Y8kbLUXdJ9wJ+M
-         J6uIaQVz+IYqlSZP93RtbCpWKDM0Rvm0AG4Whn+JPS7s99IG6XmxdmUOfbQpVHIPqcsQ
-         sw6LgN1+YImgyjv3H2Sa/VvsbcYnkDja3Sft5GnZeaL3BZYDYFyJqPozyBfEfTAWYU8R
-         GAcnHUOnyp7FE0lI4xx5/FccOChIcdZP7ypvwT6lXubEr/fevu/duYV/NjWK5o80rcYv
-         a4J3u3aG90+9ITV0XPYxCwrOEMfxEX+kRScl37egIgDog1tToAVjw3qV8wEMnASSdZb7
-         LmaA==
-X-Gm-Message-State: AOAM530FcUyMmkytJB1rxwXJv8tmcR7PF+0FVswByoDiM+4khkaZq8YD
-        DLUmULnAYflZBeHrOZt9uZs=
-X-Google-Smtp-Source: ABdhPJwTl1l1HppSSCZfrPOiskVqTI+UPzK6XqQCTQRrMIjnpxJP/C1YYHQeA3Yj6Yxe3Bz6CxpvPA==
-X-Received: by 2002:a63:470d:: with SMTP id u13mr23010946pga.318.1625844877539;
-        Fri, 09 Jul 2021 08:34:37 -0700 (PDT)
-Received: from fedora ([2405:201:6008:6ce2:9fb0:9db:90a4:39e2])
-        by smtp.gmail.com with ESMTPSA id f31sm7278628pgm.1.2021.07.09.08.34.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jul 2021 08:34:37 -0700 (PDT)
-Date:   Fri, 9 Jul 2021 21:04:32 +0530
-From:   Shreyansh Chouhan <chouhan.shreyansh630@gmail.com>
-To:     jack@suse.cz
-Cc:     rkovhaev@gmail.com, reiserfs-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Verify the items that we read from blocks
-Message-ID: <YOhsiA2XnhQ8BX+U@fedora>
-Reply-To: 20210705113329.GE15373@quack2.suse.cz
+        Sun, 11 Jul 2021 11:56:13 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTP id E9DB51845D70;
+        Sun, 11 Jul 2021 09:31:57 -0500 (-05)
+Received: from mail.07d05.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.07d05.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id N2FoKYAA2b8J; Sun, 11 Jul 2021 09:31:57 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTP id 7FC0D1845309;
+        Sun, 11 Jul 2021 09:31:57 -0500 (-05)
+X-Virus-Scanned: amavisd-new at 07d05.mspz7.gob.ec
+Received: from mail.07d05.mspz7.gob.ec ([127.0.0.1])
+        by localhost (mail.07d05.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id bK_CZBsoIVLc; Sun, 11 Jul 2021 09:31:57 -0500 (-05)
+Received: from cris-PC.wifi (unknown [105.9.79.139])
+        by mail.07d05.mspz7.gob.ec (Postfix) with ESMTPSA id 8A831184573D;
+        Sun, 11 Jul 2021 09:31:49 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: spende von 2,000,000 euro
+To:     Recipients <maria.coronel@07d05.mspz7.gob.ec>
+From:   ''Tayeb souami'' <maria.coronel@07d05.mspz7.gob.ec>
+Date:   Sun, 11 Jul 2021 16:31:40 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20210711143149.8A831184573D@mail.07d05.mspz7.gob.ec>
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hi,
+Hallo mein lieber Freund
+Mein Name ist Tayeb Souami aus New Jersey in Amerika und ich habe den America Lottery Jackpot von 315 Millionen Euro gewonnen. Ich habe mich entschlossen, die Summe von 2.000.000 Euro an fünf glückliche Personen zu spenden, und Sie wurden als einer der Begünstigten ausgewählt. Bitte klicken Sie auf diesen Link, um mehr über meinen Gewinn zu erfahren.
 
-Thanks a lot for your input. After investing this much time on the bug, I
-thought I'd just send a patch. Hope that won't be a problem.
 
-Thank you,
-Shreyansh Chouhan
+UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
+
+Bitte kontaktieren Sie mich über diese E-Mail:Tayebsouam.spende@gmail.com
+
+
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+
+Grüße
+Herr Tayeb Souami
