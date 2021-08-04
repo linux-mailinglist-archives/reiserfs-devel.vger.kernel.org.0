@@ -2,118 +2,74 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C97FA3DECCE
-	for <lists+reiserfs-devel@lfdr.de>; Tue,  3 Aug 2021 13:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA41A3DFA38
+	for <lists+reiserfs-devel@lfdr.de>; Wed,  4 Aug 2021 06:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236225AbhHCLpQ (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 3 Aug 2021 07:45:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36016 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236350AbhHCLpF (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 3 Aug 2021 07:45:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C94CF610FD;
-        Tue,  3 Aug 2021 11:44:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627991094;
-        bh=Fra+xviE6GKyepm+SKDA3lXdcyo451/6M8Jg6WcLpuI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H5uel+OVV8y7QtIJUHOv88hpDzjLYSnUK6u9C4RhNmxF1jyTXWNre81fKIih7e5vQ
-         uMg0vEAdxCpU7xDSVd2ndbbccZcGkcPMWP6IiGmjMsXV4EVG65Q3358o67EKPaFAva
-         nHxflwxi9OSBF+T6h8tR3eRlTPjZEzdUe6UVxLPdTf0KW8K+DTlJeLozLyYaz/TCo7
-         Uz4Ie5bRIJVbRDBLC1Zmnb8gfYy8LYZJqy6oy6zerXZaXKsvlN442DCnle2d20Fjcg
-         DAMBSILfD/S8TVVsaYMPZ8OIor+WZTqVMlojh0tlnVgG94+HoscdHy15LPJ3Ec08j4
-         zDuGwUfx8ZMAQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Shreyansh Chouhan <chouhan.shreyansh630@gmail.com>,
-        syzbot+c31a48e6702ccb3d64c9@syzkaller.appspotmail.com,
-        Jan Kara <jack@suse.cz>, Sasha Levin <sashal@kernel.org>,
-        reiserfs-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 2/4] reiserfs: check directory items on read from disk
-Date:   Tue,  3 Aug 2021 07:44:49 -0400
-Message-Id: <20210803114451.2253268-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210803114451.2253268-1-sashal@kernel.org>
-References: <20210803114451.2253268-1-sashal@kernel.org>
+        id S234051AbhHDEUE (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 4 Aug 2021 00:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57484 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229562AbhHDEUE (ORCPT
+        <rfc822;reiserfs-devel@vger.kernel.org>);
+        Wed, 4 Aug 2021 00:20:04 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35705C0613D5
+        for <reiserfs-devel@vger.kernel.org>; Tue,  3 Aug 2021 21:19:52 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id yk17so1709849ejb.11
+        for <reiserfs-devel@vger.kernel.org>; Tue, 03 Aug 2021 21:19:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=GvSEm2IhMBJ052xe9DI9VvCgaL6z88P134FZp7B8Jpk=;
+        b=cPAiPMaprjaJtKRJYA2JmjBU+2WxcPC2d/bkm+NslU7u0zxYb+fIozz2DWo7qZAA+Z
+         TA0G6py98JEUUeWElh8IZ+/cZ4uRaGgk57Wo18Jf1E+ceoqVX/GyH2oPBNVQl7h4BGPB
+         suQYuNzsTmkGQrYdZPcTh3Nq9Dloa/qsImMQU46ERlW6A9wNZwgvufuxEKROm5d6QPAm
+         g+pU+0ou9+3JJwQs2YV7CS+snWXeSmdz0reeZR5Do80ZdFbMPeIm8ncXZ9jbHxwfOQmU
+         n1UMBrhckmLgd+xes/gUDU0XESVp2DdVhh3SjUtYTOOsgxhRpl+3D5R4vkve4MUOsscC
+         984Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=GvSEm2IhMBJ052xe9DI9VvCgaL6z88P134FZp7B8Jpk=;
+        b=FCPuAEIAQfVo40tlDnnh0BqO3WoqLwjkP3A7QRfMRsX8SzYVp6QLrDTYcqWOJwOyNK
+         iCu62vO5z+4eq30tn+McphlItIDbiWp/3dsXfHTwIWloK8acB4/SFEQThSOw3zjEczvE
+         JHI3rJt5VDblz4JZ3t7HAPWpm6mjhTSWQyn/FANIO12r377hDqWyGLE8Tg+GRzgS9AA3
+         9ptultpYkcPS3DPzz80EdgseSwy9NsqLpMNUcUm7/sk0+keO0728LVR8TbaE+6ndW/Rz
+         m+a70szsvUrWuJbZwed/qDEj7xvlH9EA69hKazLe+Hjz401IfSs8NbeO6ZHIg13X8x5C
+         1k1Q==
+X-Gm-Message-State: AOAM531wKAYM2/MN4sxg9CZVPEV9vo1/bN9ZRF5EQ8AyOJAX84ekJiwX
+        tpmAwEpqw2YjS/SEZ4tRGcMGujHaYv6S2DIvKZk=
+X-Google-Smtp-Source: ABdhPJy3rt4AoYiZHLbd/MdmdXQTgsnUlYQaTcnPo3chd/GGdY9g+AD1bnBucCNmsGy7u3B+y4smnXG+VZxIIhQKyvM=
+X-Received: by 2002:a17:906:8248:: with SMTP id f8mr24398265ejx.229.1628050790881;
+ Tue, 03 Aug 2021 21:19:50 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a17:906:9253:0:0:0:0 with HTTP; Tue, 3 Aug 2021 21:19:50
+ -0700 (PDT)
+Reply-To: ablahikazabl67@gmail.com
+From:   Abdoulahi Kazim <aigaddafi11@gmail.com>
+Date:   Wed, 4 Aug 2021 05:19:50 +0100
+Message-ID: <CANMgZfdq+6c+BOPvED5_=HK12q4gtGMxcROBZJGakz5q+SnQtg@mail.gmail.com>
+Subject: More Authentic Information
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-From: Shreyansh Chouhan <chouhan.shreyansh630@gmail.com>
-
-[ Upstream commit 13d257503c0930010ef9eed78b689cec417ab741 ]
-
-While verifying the leaf item that we read from the disk, reiserfs
-doesn't check the directory items, this could cause a crash when we
-read a directory item from the disk that has an invalid deh_location.
-
-This patch adds a check to the directory items read from the disk that
-does a bounds check on deh_location for the directory entries. Any
-directory entry header with a directory entry offset greater than the
-item length is considered invalid.
-
-Link: https://lore.kernel.org/r/20210709152929.766363-1-chouhan.shreyansh630@gmail.com
-Reported-by: syzbot+c31a48e6702ccb3d64c9@syzkaller.appspotmail.com
-Signed-off-by: Shreyansh Chouhan <chouhan.shreyansh630@gmail.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/reiserfs/stree.c | 31 ++++++++++++++++++++++++++-----
- 1 file changed, 26 insertions(+), 5 deletions(-)
-
-diff --git a/fs/reiserfs/stree.c b/fs/reiserfs/stree.c
-index 33b78ee9fb9e..13322c39e6cc 100644
---- a/fs/reiserfs/stree.c
-+++ b/fs/reiserfs/stree.c
-@@ -386,6 +386,24 @@ void pathrelse(struct treepath *search_path)
- 	search_path->path_length = ILLEGAL_PATH_ELEMENT_OFFSET;
- }
- 
-+static int has_valid_deh_location(struct buffer_head *bh, struct item_head *ih)
-+{
-+	struct reiserfs_de_head *deh;
-+	int i;
-+
-+	deh = B_I_DEH(bh, ih);
-+	for (i = 0; i < ih_entry_count(ih); i++) {
-+		if (deh_location(&deh[i]) > ih_item_len(ih)) {
-+			reiserfs_warning(NULL, "reiserfs-5094",
-+					 "directory entry location seems wrong %h",
-+					 &deh[i]);
-+			return 0;
-+		}
-+	}
-+
-+	return 1;
-+}
-+
- static int is_leaf(char *buf, int blocksize, struct buffer_head *bh)
- {
- 	struct block_head *blkh;
-@@ -453,11 +471,14 @@ static int is_leaf(char *buf, int blocksize, struct buffer_head *bh)
- 					 "(second one): %h", ih);
- 			return 0;
- 		}
--		if (is_direntry_le_ih(ih) && (ih_item_len(ih) < (ih_entry_count(ih) * IH_SIZE))) {
--			reiserfs_warning(NULL, "reiserfs-5093",
--					 "item entry count seems wrong %h",
--					 ih);
--			return 0;
-+		if (is_direntry_le_ih(ih)) {
-+			if (ih_item_len(ih) < (ih_entry_count(ih) * IH_SIZE)) {
-+				reiserfs_warning(NULL, "reiserfs-5093",
-+						 "item entry count seems wrong %h",
-+						 ih);
-+				return 0;
-+			}
-+			return has_valid_deh_location(bh, ih);
- 		}
- 		prev_location = ih_location(ih);
- 	}
 -- 
-2.30.2
+Dear Partner,
 
+I am soliciting your partnership to relocate $12.5 Million to your
+country for investment on my behalf and you will be entitled to 30% of
+the sum once the transaction is successful made.
+
+ Please indicate your genuine interest if you are capable so that i
+will send you the authentic details and documents of the transaction
+in awareness with some of my fellow Directors in the bank.
+If you are interested, here is my private Email address: (
+ablahikazabl67@gmail.com )
+For more authentic and legit information.
+
+
+Regards : Abdoulahi Kazim
