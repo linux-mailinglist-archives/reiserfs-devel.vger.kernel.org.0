@@ -2,89 +2,61 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB793E8BB4
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 11 Aug 2021 10:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E40913E916B
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 11 Aug 2021 14:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbhHKIXq (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 11 Aug 2021 04:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
+        id S230426AbhHKMc5 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 11 Aug 2021 08:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235867AbhHKIXq (ORCPT
+        with ESMTP id S231308AbhHKMcs (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 11 Aug 2021 04:23:46 -0400
-Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B19C061765
-        for <reiserfs-devel@vger.kernel.org>; Wed, 11 Aug 2021 01:23:23 -0700 (PDT)
-Received: by mail-qv1-xf43.google.com with SMTP id v1so713383qva.7
-        for <reiserfs-devel@vger.kernel.org>; Wed, 11 Aug 2021 01:23:22 -0700 (PDT)
+        Wed, 11 Aug 2021 08:32:48 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D613C02983C
+        for <reiserfs-devel@vger.kernel.org>; Wed, 11 Aug 2021 05:30:50 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id w6so4245953oiv.11
+        for <reiserfs-devel@vger.kernel.org>; Wed, 11 Aug 2021 05:30:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=M46nZc2nL9RSonYgcNxpcgN50d8y5o3zTcXKhUU97To=;
-        b=rzBvuhN3zcSWdKNwlTwTUTKVRT+thR+jqcQ6fdHZL+ceThFsAeqdbWrxjZ+AbCki4v
-         BqDNtfFe3jv28NDV2Tl4Q9Nh7SNVMJGQEdhsRro+vFeikpmO/rV6IPCaWU19fH2WjQyQ
-         mAKQSCVcXFxl9wixN7CZSNuamDJCMzITr3qFb6VLVJu40y14f+BGF1qbcP+djK4xsQZW
-         mv1NpT4WlhWbX8pS33Bqw5gSRYtS6V7mWpPjcBhyZxrL89iOr10ieuEi+FoqSlPJwCDq
-         xbLtNlEuPZyf2OF1hNAL9Y8L5b/kVs8TIxNimDXP7lgauwVIDQL1csM60lJriB618Ofp
-         DQgw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
+        b=hdHPl6EhPO0rbYNHyzk/Qo8j2rhdvZw/z+/z3eKcJgnhYdIuV06zrz+zfq2oDrvqk1
+         c0LKRXc22iojVXH74sinAySKjYxv5qL4FjuzYeq7i+GiqO20jdVJ7UTxOeUF4SiSuiJX
+         RewKmhiwkp/6WsiVbTH9E136ovvKd6DNxFFBy4cd/2Trvv1j8/9pYWO5AOAs9fGFYGCd
+         iJ2P7Jrk1siLmf7tcfdXJyYqiDCNX3jxYLZ2givbERMcqk+LrtRXQVXYxkyOtGLqz+Qz
+         QvmU8mGajKHdAoDkeskW/1G1/HhtTB3nYcj6MlaVO9aRxejlmxHNIw739MwGHzNSpwcZ
+         ZsEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=M46nZc2nL9RSonYgcNxpcgN50d8y5o3zTcXKhUU97To=;
-        b=gJjAHq1tHPYy2QaFBUj2acLzS32uDBDt4qA3lCyB1724TBWZCG+4oY/CakNyDjaeJN
-         /9145ZVYZNEyfo5uA8kAd3cKc8qYxV0W/HcF0HjMgcQghBDSllJqqPWF4baj7YupfsWc
-         YC2uyd61dcTNKTesRpeAFjao9FnMwdg9Wterc+d1htMMiM6j+bwPQoinvucAAo0pd7h+
-         1w0LCECLWhaK6R3lnt2Cc3Z/2Hr2O6XTjsCIlZMWfiPpdu72+2NdtTWTmHyZZP1CUqA1
-         JihhNSy+YaVKxxCaI8/+4iArJGfIJoYPp5M2Z8POH0rbgitbh2ideas56ch4lzerdmJ3
-         Ccww==
-X-Gm-Message-State: AOAM530IpskUSGY3JjoO/9iUIT4KS2heZYwQzBy9K18fk8rM+F+40PS+
-        yQpTAu55/ezjlRg9gHSw/MjWFCalWb873+gTCcE=
-X-Google-Smtp-Source: ABdhPJz/f5E6iMjxxpuOsS7VeTcID/0quYZUnfDbMRmlYeGI81dDLx2F9LDfCLE5AoPsJeFF9jf2i002ly7xI+ozK4Y=
-X-Received: by 2002:a05:6214:19e9:: with SMTP id q9mr22041465qvc.28.1628670202106;
- Wed, 11 Aug 2021 01:23:22 -0700 (PDT)
+         :subject:to;
+        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
+        b=akw+fD1XQuH4ozRzrpc/hteRHx66f3g+ewu5ZzRcM30FC4KhaMMlIKDfz+WfBU1spK
+         +Fab5GHHNPR+CsCkBejLK0qtLfspeQq7xs8ul7cORXWeR/Lkq/CKKwTr4Fy9htMhYzfV
+         fBzD67BLTLlHNYvdMdAAJezs46bjSD5Asegbh2LPzTtR90COyONNAefThX8m2297IcuS
+         w/kM+yzsr4LNNMvpzYYSi3HmLm706Niq2DRyhkSkjvkOGRhkjWq4r1YZZFpLXnO3SOcg
+         CHIaqfGr9wV94L2KqcMlB05vvsM7TW+xo/p/6mlG2TBzM+GiDkO2xWEVsbwoPiCFfPYk
+         kymg==
+X-Gm-Message-State: AOAM533MWH7T73AYfZvlkagsJKe+yxzQiEAvGWumyoIlBWrIlXZSAaI3
+        UvCmx3KtTU7nuhcDcOC2EgYcnYWLc1AfPSEZuyM=
+X-Google-Smtp-Source: ABdhPJzQ7QNnWBNY+00bZ2/vHMEXadQHBg9sM7+hqX/w5OdV5gUABk+MeuK4xdHXt9RivYMg5+YhMPfmKAKJ2sTGTK4=
+X-Received: by 2002:aca:1817:: with SMTP id h23mr11856802oih.146.1628685049402;
+ Wed, 11 Aug 2021 05:30:49 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6214:2428:0:0:0:0 with HTTP; Wed, 11 Aug 2021 01:23:21
+Received: by 2002:a05:6830:23a5:0:0:0:0 with HTTP; Wed, 11 Aug 2021 05:30:49
  -0700 (PDT)
-Reply-To: info.dynamicfinc@gmail.com
-From:   Dynamic Funds Inc <davestrub2016@gmail.com>
-Date:   Wed, 11 Aug 2021 09:23:21 +0100
-Message-ID: <CAOMfsSxhf-EQcH59jk5Qdxn81wVWOkUyueECFX9gH0FeQh8dbg@mail.gmail.com>
-Subject: 
+Reply-To: rihabmanyang07@yahoo.com
+From:   Rihab Manyang <ndourandiogou1@gmail.com>
+Date:   Wed, 11 Aug 2021 13:30:49 +0100
+Message-ID: <CAP5_mB5JzCUj=G2=OFQTUAHntUyVzX9U4Cd6GCXO82jwGUg2bQ@mail.gmail.com>
+Subject: hi
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
---=20
-Sch=C3=B6ne Gr=C3=BC=C3=9Fe.
-
-Ich bin Noah Blackstein, Kreditvermittler bei Dynamic Funds Inc, einem
-eingetragenen Finanzunternehmen. Wir vergeben Kredite in H=C3=B6he von 3%
-im Bereich von 5.000 bis 15 Millionen Dollar, Pfund und Euro. (Keine
-Sozialversicherung und keine Bonit=C3=A4tspr=C3=BCfung, 100% garantiert!) I=
-ch
-freue mich darauf, mit Ihnen Gesch=C3=A4fte zu machen.
-
-Erbrachte Dienstleistungen umfassen; Pers=C3=B6nliche Darlehen,
-Refinanzierung, Heimwerker, Investitionsdarlehen, Autokredit,
-Studentendarlehen, Schuldenkonsolidierung, Kreditlinie, zweite
-Hypothek, Gesch=C3=A4ftsdarlehen. Bei Interesse kontaktieren Sie uns bitte
-mit den folgenden Informationen.
-
-BORROWERS DATEN FORMULAR, F=C3=9CLLEN UND R=C3=9CCKGABE
-Vollst=C3=A4ndiger Name :.
-Kontakt Adresse:.
-Telefon :.
-Land :.
-Erforderlicher Betrag als Darlehen :.
-Leihdauer :.
-Zweck des Darlehens :.
-Geschlecht :.
-
-Gr=C3=BC=C3=9Fe,
-Dynamic Funds Inc.
-info.dynamicfinc@gmail.com
+-- 
+How are you?I am miss.Rihab Manyang i will like to be your friend
+please write me back on my email for more details, Thanks.
