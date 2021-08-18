@@ -2,256 +2,120 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9563EDDD0
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 16 Aug 2021 21:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDCC3EFE89
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 18 Aug 2021 10:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbhHPTWz (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 16 Aug 2021 15:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48446 "EHLO
+        id S238369AbhHRIBw (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 18 Aug 2021 04:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbhHPTWz (ORCPT
+        with ESMTP id S237348AbhHRIBw (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 16 Aug 2021 15:22:55 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D21C0613C1
-        for <reiserfs-devel@vger.kernel.org>; Mon, 16 Aug 2021 12:22:21 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d9so15108960qty.12
-        for <reiserfs-devel@vger.kernel.org>; Mon, 16 Aug 2021 12:22:21 -0700 (PDT)
+        Wed, 18 Aug 2021 04:01:52 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BEDC061764
+        for <reiserfs-devel@vger.kernel.org>; Wed, 18 Aug 2021 01:01:18 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id k14so1421617pga.13
+        for <reiserfs-devel@vger.kernel.org>; Wed, 18 Aug 2021 01:01:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metztli-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=AQDl3/h6ZmlJMTNQ0/Ak5TGO+G6HIuh2vcGomLmr81I=;
-        b=bbgelVpbhdXzWfJZobqv1dAbjsjTDqet0r3c3kAzn7X3Lij5To+GkCJ3Sa9iWfQWBt
-         PpNbUCfxNX63ygcJGzMSujz438Ou1Jyv2JwaBQ0wfQ6adfVXgd7EyXmOKHZ1ColvO25u
-         6RbHywaRZJweDLUwyiZLe0/HIezaPJOHJwEbhJiXV8b9RSz+YDrXc1QxREZSuLmuhYPu
-         rykPZN7egCjZZW/Kj44Emo51mrMQoSG51HQE1+1/Je8Qp8DsnvAjOLFjJXt6+hYp2wEi
-         IZJw2kcn7d/K/DBjHGVN6KX/cvAdq8tYhEz+bjmK74x2W9Bf9ngW0Eyfn5dxIUXj7RJe
-         kS4Q==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=RZd2EPpa+0IzGiASvV0USnaW0JFO1iWZeUGWtK85EDw=;
+        b=VVMbXUqIgAFUxBF3iu4GRac25drCIRkTO5lr21zo8yicaEp49wRqDjQhXEbK3cSFoz
+         ZhshX9J5AC3zP81G/r6K/f7KKTYyp0woBCuCS6g7Z8cPlv5255hpPfb2NAtpwd4ZCRkB
+         DuZcib+DjJyfZ6EdcIUT9g10lmSPT0UtyFI38VZo5+fflexR2oXbrdN/nyMMpeaAb7Y4
+         kutgstIr4d+ftUutRUStnphBBRdEu5kclr83jejQANi8xrD4PviDeFOI3FhCXvhx3hom
+         aohju0mVAPNRaoZIDjeMtU1OlZhFeeB/zCzUS1H2+dGoR537zyfRjbySdO9Dhhkl0z99
+         8jfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=AQDl3/h6ZmlJMTNQ0/Ak5TGO+G6HIuh2vcGomLmr81I=;
-        b=OsT+KbW1ZS8LlGMy3zlD/VerSJgIlFfVspO9yp2LGO9KUSJRcpMpEtFWOrRAYc4uuo
-         +LlFGhgoFB+8p4afqIIt8sbzmA1bRkEx3NqXDboat3LVthfmrPR0pDFmm7X09X8VekpJ
-         rsx7eHh4JMROySyBKFV4jcHfRzbkmRVYD6kIlpYRz8BXbQsNEbO5hRAy0OUcuWdxvts5
-         KBol4BDOyFKTgRJdx9N/VZQo8OGVaweI+NMOxZXdGalO7aY8zaoGvOap4SJQceFuTWRu
-         uRw61NMm+g1nfTgO5Msnp6f6oMdYWiOaD0fOIZtI7KCsdsFSYsOKLTnAn2ENKJBfNSR/
-         KDKQ==
-X-Gm-Message-State: AOAM5335qv4edds4chJRrqQwIaK73uQVB8lBWQokKoIf8WC28Wln6RcR
-        iEaPgJyWB8yaQWft5G+pLJOzMbMBY0aGArUy
-X-Google-Smtp-Source: ABdhPJwPCmRpw8q2JPIriaZMiffa1Ozk3nvSBF0zI2czkYYmIeNBfL1Q4yJkRCyIfdesndMtGc8P2w==
-X-Received: by 2002:ac8:1106:: with SMTP id c6mr490578qtj.20.1629141740254;
-        Mon, 16 Aug 2021 12:22:20 -0700 (PDT)
-Received: from ?IPv6:2600:1700:6470:27a0:4e80:93ff:fe00:3ff7? ([2600:1700:6470:27a0:4e80:93ff:fe00:3ff7])
-        by smtp.gmail.com with ESMTPSA id d26sm89340qto.75.2021.08.16.12.22.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Aug 2021 12:22:19 -0700 (PDT)
-Subject: Re: [reiser4 SFRN 5.1.3] kernel [5.10.x] read not supported for file
- /test-exec \(pid: 10094 comm: debootstrap\)
-To:     Edward Shishkin <edward.shishkin@gmail.com>
-Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20210208125427.CFC7C75EED90@huitzilopochtli.metztli-it.com>
- <e37d5585-318e-3130-82c9-7a740b9af8af@gmail.com>
- <d85555853f76b7f46ce3b7514d2890091b304c12.camel@metztli.com>
- <12924b25-baa4-2965-65de-bc64ed43069f@gmail.com>
-From:   Metztli Information Technology <jose.r.r@metztli.com>
-Message-ID: <1fb139b8-7c96-54c6-5bb7-2ee88399395c@metztli.com>
-Date:   Mon, 16 Aug 2021 12:22:03 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
-MIME-Version: 1.0
-In-Reply-To: <12924b25-baa4-2965-65de-bc64ed43069f@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=RZd2EPpa+0IzGiASvV0USnaW0JFO1iWZeUGWtK85EDw=;
+        b=rIgJ9fRcVT58iDvq01WQKJmqbSoBqdtZrbVpopSbEzOJLk3AxpH6zZt2EmD2BT6e8R
+         uzc9UPsX/QmDGReR5gQ8onN0t/tcIYdEwgWSG55DzgVCzZGnIXq9aP388aNEMZIcPXc+
+         Z4e5tsFPfAgf71mlKZ33GfKYiGbIebu8QJyjBD54WxV7+gKIGV09g1zaLxdxudQOVMQK
+         detqKyNHSUfNkiHVU7/EPWDHum64SK5duL1K2k+7UuR7HUik5Byd75ant5ffplOnmpG3
+         FFhL+8MTPRbYcr4Bzk4wlKz506fK1TWYHJ7npJXzjmAjVXQcantQZ2Q2kc3bJwWviVaI
+         qg/g==
+X-Gm-Message-State: AOAM530YcpVFG+5+5oLACyJsjcbdOjDA9NvdkOfOmm2nahO4fAndiuCW
+        Kc2NQMuEAn9bt1x3QFvB6Kg=
+X-Google-Smtp-Source: ABdhPJw/rK5zhsu14zVL+4Ha1zRQ7j9jkQu880LHE1l2xsV4ZyZvVmeW8Ip0V9C2RNr26OpbhOQvOA==
+X-Received: by 2002:aa7:84c5:0:b0:3e1:16bb:6e22 with SMTP id x5-20020aa784c5000000b003e116bb6e22mr8133574pfn.32.1629273677874;
+        Wed, 18 Aug 2021 01:01:17 -0700 (PDT)
+Received: from localhost.localdomain ([42.194.241.189])
+        by smtp.gmail.com with ESMTPSA id fv2sm4212820pjb.53.2021.08.18.01.01.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 18 Aug 2021 01:01:17 -0700 (PDT)
+From:   tcs.kernel@gmail.com
+X-Google-Original-From: tcs_kernel@tencent.com
+To:     christian.brauner@ubuntu.com, mszeredi@redhat.com,
+        jamorris@linux.microsoft.com, gustavoars@kernel.org,
+        reiserfs-devel@vger.kernel.org
+Cc:     Haimin Zhang <tcs_kernel@tencent.com>
+Subject: [PATCH] fs: reiserfs: fix NULL pointer dereference in
+Date:   Wed, 18 Aug 2021 16:01:07 +0800
+Message-Id: <1629273667-7687-1-git-send-email-tcs_kernel@tencent.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
+From: Haimin Zhang <tcs_kernel@tencent.com> 
 
-On 8/14/21 4:00 AM, Edward Shishkin wrote:
-> On 08/13/2021 05:20 PM, Metztli Information Technology wrote:
->
-> [...]
->
->>>>
->>>> Notwithstanding, I would appreciate if you can take a look at the
->>>> attached patch. Probably it can be streamlined and/or improved
->>>>    further to minimize pain on subsequent Linux kernel upgrades.
->>>
->>>
->>> That patch is an attempt to swim against the current ;)
->>>
->>> I no longer remember, why they want to get rid of set_fs for already
->>> 15
->>> years, but ->read() and ->write() methods seem to be deprecated, and
->>> the
->>> correct way would be to implement the new ->read_iter() and
->>> write_iter()
->>> methods, where reiser4 works with "chunked" streams, represented by
->>> iov_iter structure, rather than with "continuous" streams,
->>> represented
->>> by char __user *buf. The task is not that difficult, but rather time
->>> consuming - I don't have a time for this right now..
->>
->> On Sun, Jun 20, 2021 at 10:45 AM Edward Shishkin
->> <edward.shishkin@gmail.com> wrote:
->>        So, I have implemented ->read_iter() for all plugins (*). It is
->>        included
->>        to reiser4-for-5.12 stuff. Not sure if it is enough to make 
->> distro with
->>        root over reiser4 though: ->write_iter() is not yet 
->> implemented (not so
->>        trivial because of transactions).
->>               (*)
->> https://github.com/edward6/reiser4/commit/ac72aba7e8bb16a28755c1b2b762971927d17c3c
->> https://github.com/edward6/reiser4/commit/4d3200fbcb2003c680cdb822e3f616d3fa83c391
->>               Edward.
->
-> Hello,
->
-> Now the new striped file plugin implements ->write_iter():
-> https://github.com/edward6/reiser4/commit/a3795ffffbb841bfaa66bfb18c12fb317533d1ff 
->
+If root_inode->i_op is reiserfs_special_inode_operations
+reiserfs_special_inode_operations doesn't implement the lookup callback
+function,resulting an NULL pointer when the reiserfs_lookup_privroot() 
+function was called.
 
-Wow! That must have been a lot of extra work on your part, Sir, Спасибо!
+Call Trace:
+ __lookup_slow+0x267/0x490 build/../fs/namei.c:1646
+ lookup_one_len+0x163/0x190 build/../fs/namei.c:2663
+ reiserfs_lookup_privroot+0x92/0x290 build/../fs/reiserfs/xattr.c:980
+ reiserfs_fill_super+0x1f2a/0x2d80 build/../fs/reiserfs/super.c:2176
+ mount_bdev+0x33d/0x410 build/../fs/super.c:1368
+ legacy_get_tree+0x103/0x210 build/../fs/fs_context.c:610
+ vfs_get_tree+0x86/0x2f0 build/../fs/super.c:1498
+ do_new_mount build/../fs/namespace.c:2905 [inline]
+ path_mount+0x688/0x1d10 build/../fs/namespace.c:3235
+ do_mount+0xf1/0x110 build/../fs/namespace.c:3248
+ __do_sys_mount build/../fs/namespace.c:3456 [inline]
+ __se_sys_mount build/../fs/namespace.c:3433 [inline]
+ __x64_sys_mount+0x1d5/0x220 build/../fs/namespace.c:3433
+ do_syscall_x64 build/../arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x34/0xb0 build/../arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Debian Installer (d-i) makes use of BusyBox. Notwithstanding, for 
-whatever reason, BusyBox barebones (link) mount utility failed with 
-similar message -- even though I took care to build the latest from source:
+Reported-by: syzbot+11c49c...@syzkaller.appspotmail.com
+Signed-off-by: Haimin Zhang <tcs_kernel@tencent.com>
+---
+ fs/reiserfs/namei.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-< https://www.busybox.net/ >
-
-I had to hack a mount-udeb small package, wrapping mount and umount within:
-
-< https://metztli.it/readOnlyEphemeral/mount-udeb_2.37.1-1_amd64.udeb >
-
-by utilizing debian packaging for previous version of util-linux
-< https://packages.debian.org/sid/util-linux >
-
-and a more recent util linux source
-< https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.37/ >
-
-That solved the d-i 'mount -o bind' and/or 'mount --bind' issue on /dev 
-resources (i.e., red underlined)
-
-< https://metztli.it/bullseye-reiser5/non-busybox-mount-d-i.png >
-
-> [...]
->
->> I finally got around to creating an SFRN 5.1.3 -enabled Debian
->> Installer (d-i) for upcoming Debian 11 (codenamed Bullseye). Applied
->> your unstable reiser4 for 5.12 patch onto my debianized hack packaging
->> for Linux kernel 5.12.19 EOL.
->>
->> I gave the d-i a spin in VirtualBox 6.1.26 and it choked on the
->> following code fragment:
->> ---------------------------------------------------------------------
->> setup_dev_linux () {
->>          # Ensure static device nodes created during install are
->> preserved
->>          # Tests in MAKEDEV require this is done in the D-I environment
->>          mkdir -p /dev/.static/dev
->>          chmod 700 /dev/.static/
->>          mount --bind /target/dev /dev/.static/dev
->>          # Mirror device nodes in D-I environment to target
->>          mount --bind /dev /target/dev/
->> }
->> -----------------------------------------------------------------------
->>
->> specifically:
->> mount --bind /target/dev /dev/.static/dev
->>
->> See relevant code fragment next to VirtualBox VM, where I manually
->> entered the above directive:
->> < https://metztli.it/bullseye-reiser5/d-i-sfrn5-fail.jpg >
->>
->> i.e., '--bind' is causing the SFRN5 -enabled installer to bail out
->> *only* for this reiser4 unstable SFRN 5.1.3 -patched kernel. On the
->> other hand, as reported previously, no such issue occurs with your
->> reiser4 stable SFRN 4.0.2 patch applied to the *same* debianized kernel
->> source tree, Ed.
->
-> I have checked - everything works for me (Linux-5.12).
->
-> # mount /dev/vdd1 /mnt/test
-> # volume.reiser4 /mnt/test
->
-> Logical Volume Info:
-> ID:             03ac5995-bf77-4851-a302-e875a6fd752f
-> volume:         0x1 (asym)
-> distribution:   0x1 (fsx32m)
-> stripe:         262144
-> segments:       1024
-> bricks total:   3
-> bricks in DSA:  3
-> slots:          3
-> map blocks:     2
-> balanced:       Yes
-> health:         OK
->
-> # mkdir bindmnt
-> # mount --bind /mnt/test bindmnt
-> # mount
-> [...]
-> /dev/vdd1 on /mnt/test type reiser4 
-> (rw,relatime,atom_max_size=0x3d88e,atom_max_age=0x927c0,atom_min_size=0x100,atom_max_flushers=0x1,cbk_cache_slots=0x10)
-> /dev/vdd1 on /root/bindmnt type reiser4 
-> (rw,relatime,atom_max_size=0x3d88e,atom_max_age=0x927c0,atom_min_size=0x100,atom_max_flushers=0x1,cbk_cache_slots=0x10)
-
-Summarizing...
-
-Your modified reiser4 SFRN 4.0.2 patch implementing '->read_iter() for 
-all plugins (*)' successfully enabled Debian Installer netboot for 
-bullseye to install upcoming Debian 11 Bullseye for AMD64 with hacked 
-Linux kernel 5.12.19-2 EOL
-
-< https://metztli.it/bullseye-reiser5/guided-install-sfrn4.jpg >
-
-
-Analogously, your modified reiser4 SFRN 5.1.3 patch implementing 
-'->read_iter() for all plugins (*)' and ' ->write_iter()' successfully 
-enabled Debian Installer netboot for bullseye to install upcoming Debian 
-11 Bullseye for AMD64 with hacked Linux kernel 5.12.19-2 EOL
-
-guided installation (which defaults to MSDOS partitioning) with sample 
-from one of three options: /home and / root reiser4 but /boot JFS
-
-< https://metztli.it/bullseye-reiser5/guided-install-sfrn5.jpg >
-
-
-Or expert, which enables GPT partitioning; here is a / reiser4 and /boot 
-JFS VirtualBox 6.1.26 VM JPG snapshot:
-
-< https://metztli.it/bullseye-reiser5/expert-install-sfrn5.jpg >
-
-and the PoC reiser4 SFRN 5.1.3 -enabled Debian Installer (d-i):
-
-< https://metztli.it/bullseye-reiser5/netboot-ng/metztli-reiser4-sfrn5.iso >
-
-< 
-https://metztli.it/bullseye-reiser5/netboot-ng/metztli-reiser4-sfrn5.iso.SHA256SUM 
- >
-
-I have not tested the bricks feature for which you specifically created 
-the SFRN 5.1.3 enhancement. Other Linux users are welcomed to test that 
-feature and provide feedback to you, Sir. The entry into reiser4 is 
-substantially lowered with a native reiser4 installer, which is what I 
-have done with the above ISO images freely made available but with *NO 
-IMPLICIT NOR EXPLICIT WARRANTIES*
-
-
-Best Professional Regards.
-
-
-P.S. Reiser4 quirk: If during expert installation of reiser4 -enhanced 
-Debian /tmp is formatted in other than reiser4, after a reboot 
-attempting a MySQL/MariaDB installation will fail. I experienced that in 
-a remote bare metal server.
-
-
+diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
+index 3d7a35d..947b51b 100644
+--- a/fs/reiserfs/namei.c
++++ b/fs/reiserfs/namei.c
+@@ -350,6 +350,12 @@ static int reiserfs_find_entry(struct inode *dir, const char *name, int namelen,
+ 	}			/* while (1) */
+ }
+ 
++static struct dentry *reiserfs_noop_lookup(struct inode *dir, struct dentry *dentry,
++				      unsigned int flags)
++{
++	return ERR_PTR(-ENOENT);
++}
++
+ static struct dentry *reiserfs_lookup(struct inode *dir, struct dentry *dentry,
+ 				      unsigned int flags)
+ {
+@@ -1680,6 +1686,7 @@ static int reiserfs_rename(struct user_namespace *mnt_userns,
+  * special file operations.. just xattr/acl stuff
+  */
+ const struct inode_operations reiserfs_special_inode_operations = {
++	.lookup = reiserfs_noop_lookup,
+ 	.setattr = reiserfs_setattr,
+ 	.listxattr = reiserfs_listxattr,
+ 	.permission = reiserfs_permission,
+-- 
+1.8.3.1
 
