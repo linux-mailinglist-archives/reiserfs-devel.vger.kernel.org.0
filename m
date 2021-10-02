@@ -2,57 +2,56 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF89D41FAC8
-	for <lists+reiserfs-devel@lfdr.de>; Sat,  2 Oct 2021 12:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263BD41FB4D
+	for <lists+reiserfs-devel@lfdr.de>; Sat,  2 Oct 2021 13:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232715AbhJBKIN (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sat, 2 Oct 2021 06:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35374 "EHLO
+        id S232978AbhJBMAy (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sat, 2 Oct 2021 08:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232691AbhJBKIM (ORCPT
+        with ESMTP id S232935AbhJBMAw (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sat, 2 Oct 2021 06:08:12 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1938C061570
-        for <reiserfs-devel@vger.kernel.org>; Sat,  2 Oct 2021 03:06:26 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id k26so10177582pfi.5
-        for <reiserfs-devel@vger.kernel.org>; Sat, 02 Oct 2021 03:06:26 -0700 (PDT)
+        Sat, 2 Oct 2021 08:00:52 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8980DC061781
+        for <reiserfs-devel@vger.kernel.org>; Sat,  2 Oct 2021 04:59:05 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id b6so13385874ilv.0
+        for <reiserfs-devel@vger.kernel.org>; Sat, 02 Oct 2021 04:59:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:reply-to:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=Djpr1AS9BhRB0i84aUYk51L5QfT0/KDcZHhY+64EDVg=;
-        b=eSQvkEToliMZ2Ec0Fz06cD27TPQeVxDkhrjl5fbMiB9TxedBn6hWJQqXiCjWppHpPS
-         Fwy4lloO8cesJ2pCEI64g3/4ZXh7XR1bZv4L/j+yOZyUBVE/ACWDFxHmnut0dSMNJpvr
-         eGwShLknWS2mBs35e1ZR0D5XBzTAkFy3ZuBAOSNm75pe4m15acT8merD6T3bYCy4kvNq
-         USjEYGHx5J+tJW2Aw70YzdjoeKkFQBDeueZx5IrS5kMVaius9BZWc+eIiGkb/NERSJH3
-         s19GPyd3zegAqBgGYhq0HPj21IXyRC2D2Y40hv5kGsxGN04/t/AuSok0h9fAZcjOxy7m
-         UTAA==
+        bh=nsZbpm1YBoHMpWTnzHLuE/zYZ0yg4jBiKD5Q7oCTPBE=;
+        b=UMcJW0fAQ7gTisaYLI8AckvYa/fSsMtmqFBzJBLmAgNSnmcOVIbjq/6pHlowPr+e/g
+         pB/4VsEQPoU3bz+G6//dg8Ny+eFZGwvt4ObXxcMafcjsoK82NhEcylXpmWo2r+V3hRpj
+         zemI25YM792FQuD8eh+T1be8GXEOedCUnwP9b3/GmnBB9RwL68yOhhQKNKopapWkDYq1
+         6hIQdYPp2GIWR42hyGd1Nm/ubo6xKwEseRqdfkTSoCo1P1Ubklk6c7/R2YiqVgQo18+Y
+         8Evsr1ekExsmW2cL7SNRiUdgTVNl6W/xsDKaKMzxGPbK3CQnk/xvASlMQqIp44Xn7C9D
+         D//Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to:content-transfer-encoding;
-        bh=Djpr1AS9BhRB0i84aUYk51L5QfT0/KDcZHhY+64EDVg=;
-        b=yEcS5fsdElw6O7f+NJRIip+NKUj7lrFS/KQIZ1m/DcKzK5QtS8Qn/+Q6m3T1LWyPSx
-         y4xIgHIz649JetNT5pwahVEviPzdPq2cX7Kjqztehdar4yD/4B+rHBDZX4DmW/OdXbvP
-         0nKKpuxSOoLQ+I7XQRtx+KYrZv/HHcIhqDtJB8WFkiiGTC5XRZA43vFWeUvkeBi/BDJE
-         BBs9fSyiDL3u74/MZ0XS6l4lXViBkG8mSTjNdoP6ZZOMDHdH40c+7t3wlOurelqztBUe
-         2zkUobAR96H6JaLb6c+CDHP/TB497cFOIQCqUSmblKgCatQRAarJ9hgPzi729ZUxa/TC
-         m3CA==
-X-Gm-Message-State: AOAM532JyHWKyvOqEeuHndnkzRUPQG6iSodagpW2YPpuRiUX1P/WbpOP
-        r6OmODRT1ve6QSAbM4kLxf7X6bFagFhNregIGtM=
-X-Google-Smtp-Source: ABdhPJxXEUC3gedZ6sy39u/LygybI+CmnPXHo2TvaMAM4dQc1AIJL6AdOSM2DLYUgkgCv9U6NGzmsF0+4F489sxbXvw=
-X-Received: by 2002:a63:740e:: with SMTP id p14mr2233564pgc.329.1633169186269;
- Sat, 02 Oct 2021 03:06:26 -0700 (PDT)
+        bh=nsZbpm1YBoHMpWTnzHLuE/zYZ0yg4jBiKD5Q7oCTPBE=;
+        b=LlcltUtdfwJEeCPVFrJT75IWdzyPCEfOrOtOVvZLYieHR+Gv4+7ubJVA8T0Uwlf7TX
+         a4p94uDK4/USgXd3+WRzXWleiGUhcysBvN2onVTSYLL/J07k808lKZf6CLbiw5K2XQao
+         O8dcoQ1AViTmmbtNCEKltI9WTArDDmqFeRLH0t31MQzvXYBtML3eocRz65VhlZsOxoXa
+         aKdXmizYto1xFLHyS8LsFPMthTWl29qUVSJfPlU0OwDmoh/pB+ZYgw2sLyBQVy6O96LK
+         gu0Et5SrCP/1nAVYRSnQNx4/0e31VSD4Ut86Oeg1o1AgLP3qVAZ710QmMa5JX/Q26mLZ
+         49Nw==
+X-Gm-Message-State: AOAM533QOnWJiMpbw1wo3Q8GpnWmgCPBavrU3le4A3fBa+yvQxQ1aXHb
+        Znu7IFaizWaKr9ldxJWb9LlIMu+4eTfyjOoqJVw=
+X-Google-Smtp-Source: ABdhPJyahlkHA+3aVTPCxx+t7r2z9rk36ZKEqmFq1pcJwH6CaH7pl7p/Rq/UQiztZWPIiaBC3SV3WJU2YMk4Jmp0G3A=
+X-Received: by 2002:a05:6e02:2144:: with SMTP id d4mr2471426ilv.316.1633175944946;
+ Sat, 02 Oct 2021 04:59:04 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:90a:4589:0:0:0:0 with HTTP; Sat, 2 Oct 2021 03:06:25
- -0700 (PDT)
-Reply-To: lerynne_west51@zohomail.eu
-From:   Lerynne West <wisdomloancompany2@gmail.com>
-Date:   Sat, 2 Oct 2021 03:06:25 -0700
-Message-ID: <CALARXnFho=kLTXXft2O_mgVqJsdzxij7TAOwMfEwQM8OgMncTQ@mail.gmail.com>
-Subject: =?UTF-8?Q?ICH_HABE_EINE_SPENDE_F=C3=9CR_DICH_UND_DEINE_FAMILIE?=
-To:     undisclosed-recipients:;
+Received: by 2002:a4f:f90d:0:0:0:0:0 with HTTP; Sat, 2 Oct 2021 04:59:04 -0700 (PDT)
+Reply-To: unitednnation0@gmail.com
+From:   "U.n" <wadebaye33@gmail.com>
+Date:   Fri, 1 Oct 2021 23:59:04 -1200
+Message-ID: <CACE0T5XuTLR43h+shXv_fqEPsKkMRB3xAfFWObFOmzeEd9AZAg@mail.gmail.com>
+Subject: Attention
+To:     unitednnation0@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -62,20 +61,25 @@ X-Mailing-List: reiserfs-devel@vger.kernel.org
 --=20
 
 
+Attention Sir/Madam
+This is the United Nation (UN). We the United Nations (UN) Globally
+has approved (US$2.500,000)( two Million Five hundred thousand
+dollars) compensation as part of our responsibilities for humanitarian
+Aid for fighting against CoronaVirus and you are among the lucky ones.
 
 
-*Beachtung,Sie wurden autorisiert, eine Gesamtspende von 500.000,00 USD aus
-dem Covid-19-Unterst=C3=BCtzungsprogramm des Lerynne West Emergency Fund zu
-erhalten. Um diese Spende einzufordern, kontaktieren Sie sie mit Ihrer
-EMF-ID: COV-0043034. Ihre Spende in H=C3=B6he von 500.000 USD wird Ihnen ge=
-m=C3=A4=C3=9F
-unserer Richtlinie und Mission innerhalb von 78 Stunden von einer
-akkreditierten Gesch=C3=A4ftsbank zugestellt. Siehe den Link unten:*
-https://www.youtube.com/watch?v=3DhtEHuyOHUsc
-
-*Antworten Sie mit EMF-ID: (COV-0043034) auf diese E-Mail*:
-lerynne_west51@zohomail.eu
+This compensation is for the most affected countries, communities and
+families across the global. Your funds were deposited with Bank in USA
+to transfer your funds to you via Internet Banking. You have to send
+your full details as state below:with this email Address
+  ( unitednnation0@gmail.com )
+Your full names:
+Address:
+Telephone:
+Occupation:
 
 
 
-*Peggy Rock,CEOEMF-UNTERST=C3=9CTZUNGSPROGRAMM*
+Yours Sincerely
+Mr. Ant=C3=B3nio Guterres
+United Nations (UN).
