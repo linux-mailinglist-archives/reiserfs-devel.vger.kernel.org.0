@@ -2,84 +2,70 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 263BD41FB4D
-	for <lists+reiserfs-devel@lfdr.de>; Sat,  2 Oct 2021 13:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B21424E62
+	for <lists+reiserfs-devel@lfdr.de>; Thu,  7 Oct 2021 09:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbhJBMAy (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sat, 2 Oct 2021 08:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232935AbhJBMAw (ORCPT
+        id S240316AbhJGIAK (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 7 Oct 2021 04:00:10 -0400
+Received: from artemis.server.nucleus.it ([51.89.16.243]:59497 "EHLO
+        artemis.server.nucleus.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240212AbhJGIAI (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sat, 2 Oct 2021 08:00:52 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8980DC061781
-        for <reiserfs-devel@vger.kernel.org>; Sat,  2 Oct 2021 04:59:05 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id b6so13385874ilv.0
-        for <reiserfs-devel@vger.kernel.org>; Sat, 02 Oct 2021 04:59:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=nsZbpm1YBoHMpWTnzHLuE/zYZ0yg4jBiKD5Q7oCTPBE=;
-        b=UMcJW0fAQ7gTisaYLI8AckvYa/fSsMtmqFBzJBLmAgNSnmcOVIbjq/6pHlowPr+e/g
-         pB/4VsEQPoU3bz+G6//dg8Ny+eFZGwvt4ObXxcMafcjsoK82NhEcylXpmWo2r+V3hRpj
-         zemI25YM792FQuD8eh+T1be8GXEOedCUnwP9b3/GmnBB9RwL68yOhhQKNKopapWkDYq1
-         6hIQdYPp2GIWR42hyGd1Nm/ubo6xKwEseRqdfkTSoCo1P1Ubklk6c7/R2YiqVgQo18+Y
-         8Evsr1ekExsmW2cL7SNRiUdgTVNl6W/xsDKaKMzxGPbK3CQnk/xvASlMQqIp44Xn7C9D
-         D//Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=nsZbpm1YBoHMpWTnzHLuE/zYZ0yg4jBiKD5Q7oCTPBE=;
-        b=LlcltUtdfwJEeCPVFrJT75IWdzyPCEfOrOtOVvZLYieHR+Gv4+7ubJVA8T0Uwlf7TX
-         a4p94uDK4/USgXd3+WRzXWleiGUhcysBvN2onVTSYLL/J07k808lKZf6CLbiw5K2XQao
-         O8dcoQ1AViTmmbtNCEKltI9WTArDDmqFeRLH0t31MQzvXYBtML3eocRz65VhlZsOxoXa
-         aKdXmizYto1xFLHyS8LsFPMthTWl29qUVSJfPlU0OwDmoh/pB+ZYgw2sLyBQVy6O96LK
-         gu0Et5SrCP/1nAVYRSnQNx4/0e31VSD4Ut86Oeg1o1AgLP3qVAZ710QmMa5JX/Q26mLZ
-         49Nw==
-X-Gm-Message-State: AOAM533QOnWJiMpbw1wo3Q8GpnWmgCPBavrU3le4A3fBa+yvQxQ1aXHb
-        Znu7IFaizWaKr9ldxJWb9LlIMu+4eTfyjOoqJVw=
-X-Google-Smtp-Source: ABdhPJyahlkHA+3aVTPCxx+t7r2z9rk36ZKEqmFq1pcJwH6CaH7pl7p/Rq/UQiztZWPIiaBC3SV3WJU2YMk4Jmp0G3A=
-X-Received: by 2002:a05:6e02:2144:: with SMTP id d4mr2471426ilv.316.1633175944946;
- Sat, 02 Oct 2021 04:59:04 -0700 (PDT)
+        Thu, 7 Oct 2021 04:00:08 -0400
+X-Greylist: delayed 468 seconds by postgrey-1.27 at vger.kernel.org; Thu, 07 Oct 2021 04:00:08 EDT
+Received: by artemis.server.nucleus.it (Postfix, from userid 257)
+        id 840F819C798; Thu,  7 Oct 2021 09:50:24 +0200 (CEST)
+X-Nucleus-Antivirus-policy: No
+X-Nucleus-Antispam-policy:  No
+X-Nucleus-IsRelay:         F
+X-Nucleus-SourceIP:        151.82.5.210
+X-Nucleus-Id:              49C9A19C789
+X-Nucleus-From:            marco@nucleus.it
+X-Nucleus-Date:            2021-10-07 09:50:24 CEST
+X-Nucleus-IsFetchMail:     F
+Received: from lobo.localdomain (unknown [151.82.5.210])
+        by artemis.server.nucleus.it (Postfix) with ESMTPA id 49C9A19C789
+        for <reiserfs-devel@vger.kernel.org>; Thu,  7 Oct 2021 09:50:24 +0200 (CEST)
+Received: from lobo.lobo.dom (lobo.lobo.dom [127.0.0.1])
+        by lobo.localdomain (Postfix) with ESMTP id 06D4C762AD7
+        for <reiserfs-devel@vger.kernel.org>; Thu,  7 Oct 2021 09:50:25 +0200 (CEST)
+Date:   Thu, 7 Oct 2021 09:50:19 +0200
+From:   Marco Felettigh <marco@nucleus.it>
+To:     reiserfs-devel@vger.kernel.org
+Subject: reiserfs acl and cp wrong permissions
+Message-ID: <20211007095019.78aec97e@lobo.lobo.dom>
+Organization: Nucleus s.r.l.
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Received: by 2002:a4f:f90d:0:0:0:0:0 with HTTP; Sat, 2 Oct 2021 04:59:04 -0700 (PDT)
-Reply-To: unitednnation0@gmail.com
-From:   "U.n" <wadebaye33@gmail.com>
-Date:   Fri, 1 Oct 2021 23:59:04 -1200
-Message-ID: <CACE0T5XuTLR43h+shXv_fqEPsKkMRB3xAfFWObFOmzeEd9AZAg@mail.gmail.com>
-Subject: Attention
-To:     unitednnation0@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; boundary="Sig_/NJ/ldtgkNKGNTnq9y0PQblx";
+ protocol="application/pgp-signature"; micalg=pgp-sha1
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
---=20
+--Sig_/NJ/ldtgkNKGNTnq9y0PQblx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
+there is some a remote possibility to solve this issue with reiserfs +
+acl and cp permissions ?
 
-Attention Sir/Madam
-This is the United Nation (UN). We the United Nations (UN) Globally
-has approved (US$2.500,000)( two Million Five hundred thousand
-dollars) compensation as part of our responsibilities for humanitarian
-Aid for fighting against CoronaVirus and you are among the lucky ones.
+Here the bug reported more then 1 year ago:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D207971
 
+Thanks
+Marco
 
-This compensation is for the most affected countries, communities and
-families across the global. Your funds were deposited with Bank in USA
-to transfer your funds to you via Internet Banking. You have to send
-your full details as state below:with this email Address
-  ( unitednnation0@gmail.com )
-Your full names:
-Address:
-Telephone:
-Occupation:
+--Sig_/NJ/ldtgkNKGNTnq9y0PQblx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
+iF0EARECAB0WIQRgs4moDz/kAc8JPxco+KAxdHlzYQUCYV6mvAAKCRAo+KAxdHlz
+YUWgAKCifFYq33MC5v94m+hnx5/Oi1+IVQCgvklfbdWYBxX6UvF7S1AuHHNDxIw=
+=NXk7
+-----END PGP SIGNATURE-----
 
-Yours Sincerely
-Mr. Ant=C3=B3nio Guterres
-United Nations (UN).
+--Sig_/NJ/ldtgkNKGNTnq9y0PQblx--
