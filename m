@@ -2,50 +2,50 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AD242B75D
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 13 Oct 2021 08:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF6242B768
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 13 Oct 2021 08:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbhJMGf0 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 13 Oct 2021 02:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
+        id S238001AbhJMGgO (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 13 Oct 2021 02:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231787AbhJMGfZ (ORCPT
+        with ESMTP id S231536AbhJMGgN (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 13 Oct 2021 02:35:25 -0400
+        Wed, 13 Oct 2021 02:36:13 -0400
 Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4CFC061746
-        for <reiserfs-devel@vger.kernel.org>; Tue, 12 Oct 2021 23:33:22 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id t11so1103084plq.11
-        for <reiserfs-devel@vger.kernel.org>; Tue, 12 Oct 2021 23:33:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCF6C061714
+        for <reiserfs-devel@vger.kernel.org>; Tue, 12 Oct 2021 23:34:11 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id v20so1114827plo.7
+        for <reiserfs-devel@vger.kernel.org>; Tue, 12 Oct 2021 23:34:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=KN0hCxg4qCtDzIgJk5dwSpisgOtLaF48lTZLQMzdZGQ=;
-        b=ZSgj9MSpSxiaNFjR5pl+MhsOPNs6TAo40lkstJ1+NMBhxL+4AoJC++ueHgXgDZsxkL
-         A4rqeGya73qL9mbxIoCLhchn4/FA1cf285nRCQSnbarbdqSIQhxR7IZtW3h248WE8YVx
-         CokTYsr+EOLC9mMcAUh/RiJhbXXJcMY50cpmY=
+        bh=6VbHD8PBwfaj43ljVUZZGyMj52YEmx4jfqAsGhf6+JQ=;
+        b=AvobKbPMrQUDEUEp6fPFubcGItxc/wnKkqnDSAjF2JOJIzD6GaHgOkeTfLVH2dVkY7
+         athTU5gaBp9pQ5+vN8pGXUoM6NXB9m94GmbcWoYtzrCupD5haSLJb51jgUAYN2bie92y
+         Cw/fWMm7nAHe57gHGr8VcvjTAn4+/uHsWTDDQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=KN0hCxg4qCtDzIgJk5dwSpisgOtLaF48lTZLQMzdZGQ=;
-        b=OftYG3iQr5/2TzkDLQhjEK6fNJ7XGQdQLw/ebhD+8r46WIfwu7cGZvYRdJCtH0Xfkq
-         xoAq162dQ6BQV0x0ZpalM4SLV1n3vtAxofysSfefzWVZNd1nGU8hP64zGRm4KdBKb/0J
-         dYsOoHI8Ogb+Bzq6a1zaan3wAtNE6b60xFasYrGTYEK5PVH38Bpg2iomzUD3PqST/b6H
-         0ZSWtYaAzrNMrYIB1nNp6ehSbxl9ZNK6N/bJoZ1v6qF/s26aDVJTryyuQTjUphqkxmwf
-         sKmw1glbZgdWn2nlfd+WRNmehYPNLJLEOP90Yny+rOa/hqlXF4vjKn/vslm2oqBLHziu
-         zd9Q==
-X-Gm-Message-State: AOAM533a6galpWHCidVPCZxIBA2stxSTE6ndseRsbLIdTM1djLo/G9vk
-        Oo/eyWiYXCz8eQhQrDqrLXSKEQ==
-X-Google-Smtp-Source: ABdhPJwSbdMnxpZNPs6DEcJzD+WCYFHCQcM73CXxNLIwDuWek8lOvAv7bQAbdyDz750VOQBh4gVb4A==
-X-Received: by 2002:a17:902:e5d2:b0:13f:21c1:b44f with SMTP id u18-20020a170902e5d200b0013f21c1b44fmr23591611plf.30.1634106800893;
-        Tue, 12 Oct 2021 23:33:20 -0700 (PDT)
+        bh=6VbHD8PBwfaj43ljVUZZGyMj52YEmx4jfqAsGhf6+JQ=;
+        b=ulr3UhlEoV3HHCv2oQFYwfD+zgi11atECNFXXRcmZbbGVmcAlk/dg83Iuh0tbl2fbN
+         GIfckDyqtif7BEvGF+JeI8RmFeeWwOr+dqmPpl2fAuxo+SLX8vmOuAv2Q4liYv0fKvaB
+         zXydJuZYHRGmxELvaSbTz12EHA/sZzI5W1ixtBBTUGl14BnsOZmb1sUIqPBUkWdE0iza
+         3m45/bFGaSMw3BZfIjH6RQCMRsTxeFON4T0okJsKr/gOD18tj0hAodrH2cNYseezAbb4
+         ii+qq+Y5p59sFFOm/O/3KsWTd5/XoAcnKYZE7RjIXBl87d4/87uF3NahYf6PZ9STns6f
+         eIWA==
+X-Gm-Message-State: AOAM530kRHuu/nAZj0Qur+wmO1z/K9Yy/TvUvcurT8zlQ3ggARySBG+T
+        2yAwOkQJH+Hn42zT8u+RLtOJew==
+X-Google-Smtp-Source: ABdhPJyCtmPDTqSGxs9iwHCnitZ1F86E6zXvgsm3yviJEZQtBzg0xs5Q4LZVn9iTvPOonDA6xdZ1cg==
+X-Received: by 2002:a17:902:f683:b0:13f:2fbe:498f with SMTP id l3-20020a170902f68300b0013f2fbe498fmr18917273plg.17.1634106850602;
+        Tue, 12 Oct 2021 23:34:10 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s8sm8887899pfh.186.2021.10.12.23.33.20
+        by smtp.gmail.com with ESMTPSA id t3sm13004045pfb.100.2021.10.12.23.34.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Oct 2021 23:33:20 -0700 (PDT)
-Date:   Tue, 12 Oct 2021 23:33:19 -0700
+        Tue, 12 Oct 2021 23:34:10 -0700 (PDT)
+Date:   Tue, 12 Oct 2021 23:34:09 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Jens Axboe <axboe@kernel.dk>, Coly Li <colyli@suse.de>,
@@ -69,19 +69,19 @@ Cc:     Jens Axboe <axboe@kernel.dk>, Coly Li <colyli@suse.de>,
         linux-nfs@vger.kernel.org, linux-nilfs@vger.kernel.org,
         linux-ntfs-dev@lists.sourceforge.net, ntfs3@lists.linux.dev,
         reiserfs-devel@vger.kernel.org
-Subject: Re: [PATCH 28/29] reiserfs: use sb_bdev_nr_blocks
-Message-ID: <202110122333.7CE920EB9@keescook>
+Subject: Re: [PATCH 29/29] udf: use sb_bdev_nr_blocks
+Message-ID: <202110122334.7A3E933D@keescook>
 References: <20211013051042.1065752-1-hch@lst.de>
- <20211013051042.1065752-29-hch@lst.de>
+ <20211013051042.1065752-30-hch@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211013051042.1065752-29-hch@lst.de>
+In-Reply-To: <20211013051042.1065752-30-hch@lst.de>
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 07:10:41AM +0200, Christoph Hellwig wrote:
+On Wed, Oct 13, 2021 at 07:10:42AM +0200, Christoph Hellwig wrote:
 > Use the sb_bdev_nr_blocks helper instead of open coding it.
 > 
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
