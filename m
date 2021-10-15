@@ -2,50 +2,50 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E2A42F77C
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 15 Oct 2021 17:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C84A542F78F
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 15 Oct 2021 18:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbhJOQAI (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 15 Oct 2021 12:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48018 "EHLO
+        id S241081AbhJOQCZ (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 15 Oct 2021 12:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241079AbhJOQAH (ORCPT
+        with ESMTP id S241087AbhJOQCY (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 15 Oct 2021 12:00:07 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2080AC061768
-        for <reiserfs-devel@vger.kernel.org>; Fri, 15 Oct 2021 08:58:01 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id c4so6660164pls.6
-        for <reiserfs-devel@vger.kernel.org>; Fri, 15 Oct 2021 08:58:01 -0700 (PDT)
+        Fri, 15 Oct 2021 12:02:24 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED78C06176D
+        for <reiserfs-devel@vger.kernel.org>; Fri, 15 Oct 2021 09:00:17 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id y4so6704204plb.0
+        for <reiserfs-devel@vger.kernel.org>; Fri, 15 Oct 2021 09:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=rgGaYmDb8aNvCIAME7GO0birqL1mkWt7ydTyP9O/cKE=;
-        b=kIRUc5W9BEwRakFXurh5nloSfV/GZ6KodZpU7B1gErDYA9VUyCtogTyGs+Y5G+H20i
-         dnc1ZbM+E5Bs4xUGAtigRUSltSsKM9wVuaq9ndK9JOr2Z68iGubgRtUXKZR8iuFZIw97
-         IrBdRqOJrF7Mv/zRwmHVkacPzOteyiW6Cc+yE=
+        bh=oA+XtrVpatY111qi9rW+eMi2Ccu5JD4bZ/9KhM3WrlE=;
+        b=XqIRk8njJo5f/smXtBnMnpa5uhREVTwoyHge7bthfJu3PV1eAY0raWnd7H8TUnbAlP
+         6QJTXqryNMqTNsEzDWj/azKOg0JWIJXEUmyPhlYenUOsueW8KFdrQGT7L/i4Eg4OiZnx
+         gS2Q2/7koaDEtdkJVEfY5BHTSx0EojKPtQeUg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=rgGaYmDb8aNvCIAME7GO0birqL1mkWt7ydTyP9O/cKE=;
-        b=U7wwv6unzhaFMyDM03OwtFQh5JBkCiluyaG6RONQadY9oEZCW5yPGYUq/4aRIuucyK
-         UzPmvf68L5CIAF/G5g+UXqChUIJtP7ylB52aWpHPOu78+l0bpH+qgg6Zl+ZnXsquXcX9
-         9rPzf+Q0hFD0DQn5b7aHKtxAedCLX/UUxLRmAgACwi73I45a15vVrlz4HiJ3s72pfVjz
-         yN6yJsAI17QrdYbcRsQykJEw3nl2csTYcDdl6PbPRfa66OAvw7BNWthmKysQYI3zgaqA
-         loi066CR2y2a1CaneRVxnrC7pfwiMg3kpg2uBKJMSeG3DKcd4h/SbGVccGMuJOda0guK
-         Wi2Q==
-X-Gm-Message-State: AOAM531Zd3j6kf9qA4TblJHojhXhssiIFI9dNQ1/stJhBntRHig8neE8
-        pBAxJGRGVap8wwF9u2gDKnT/Vw==
-X-Google-Smtp-Source: ABdhPJx303madCzq8aEdsp3YSciE1Wq7LVhGoNPOEW0M7ZYp3QKmvN8DHnOwfgCID2D8+p9KXQEc7Q==
-X-Received: by 2002:a17:902:b40a:b0:13d:cbcd:2e64 with SMTP id x10-20020a170902b40a00b0013dcbcd2e64mr11832704plr.18.1634313480495;
-        Fri, 15 Oct 2021 08:58:00 -0700 (PDT)
+        bh=oA+XtrVpatY111qi9rW+eMi2Ccu5JD4bZ/9KhM3WrlE=;
+        b=6Uiu/ZfdCQeMOszQJfrKds88/fiCNc6rKovdck7V26DOQPL/2/3oSo0VeBsycbuxo7
+         U2ezrrxr8zhc+bOMUwXtaTCBTHL3/hH12/yB1lt4l4fzdCnKKI8ynX0FxXOGeEM/zfCa
+         jfpMiIRMepzIyeUYNgKpKqQcCCyd4ZFKR4Cuj9KuRAtIsjuhmc0TFRGftt9YLfW5OKz7
+         CJ8c40KWtzIbFmLHi3yBq9jx/UGsGyaVipocgXXnq5Npoz1UyA9XJkdc7nIEZocoS5l9
+         6fsW6CXoeM6o0CKh9ZNV0sEfHNy/CcB0qHe+PdmWcyFXyTTej41FzvAaZBvb999Z3lVX
+         omog==
+X-Gm-Message-State: AOAM533bLSwyMLFnZm0gx0AiBLVR4vqbfnbwzIVQFCkaFtHH9UtOrzwC
+        i8/8muUGj+VOpYbtKcsPt8p4NA==
+X-Google-Smtp-Source: ABdhPJzKtqYe4vRxUad2HzrB2swbKAK83Cb9s6XXYIsx2Jq5whQZG4n13YyVL1QUtSJ6rA0qtwQqhQ==
+X-Received: by 2002:a17:90a:a386:: with SMTP id x6mr14380761pjp.56.1634313616631;
+        Fri, 15 Oct 2021 09:00:16 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i123sm5371745pfg.157.2021.10.15.08.58.00
+        by smtp.gmail.com with ESMTPSA id nn14sm5397718pjb.27.2021.10.15.09.00.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Oct 2021 08:58:00 -0700 (PDT)
-Date:   Fri, 15 Oct 2021 08:57:59 -0700
+        Fri, 15 Oct 2021 09:00:16 -0700 (PDT)
+Date:   Fri, 15 Oct 2021 09:00:15 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Jens Axboe <axboe@kernel.dk>, Coly Li <colyli@suse.de>,
@@ -68,53 +68,26 @@ Cc:     Jens Axboe <axboe@kernel.dk>, Coly Li <colyli@suse.de>,
         jfs-discussion@lists.sourceforge.net, linux-nfs@vger.kernel.org,
         linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
         ntfs3@lists.linux.dev, reiserfs-devel@vger.kernel.org,
-        Chaitanya Kulkarni <kch@nvidia.com>
-Subject: Re: [PATCH 08/30] target/iblock: use bdev_nr_bytes instead of open
- coding it
-Message-ID: <202110150857.A7E96DAE@keescook>
+        Jan Kara <jack@suse.cz>, Chaitanya Kulkarni <kch@nvidia.com>
+Subject: Re: [PATCH 09/30] fs: use bdev_nr_bytes instead of open coding it in
+ blkdev_max_block
+Message-ID: <202110150900.71DDE55E1B@keescook>
 References: <20211015132643.1621913-1-hch@lst.de>
- <20211015132643.1621913-9-hch@lst.de>
+ <20211015132643.1621913-10-hch@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211015132643.1621913-9-hch@lst.de>
+In-Reply-To: <20211015132643.1621913-10-hch@lst.de>
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 03:26:21PM +0200, Christoph Hellwig wrote:
+On Fri, Oct 15, 2021 at 03:26:22PM +0200, Christoph Hellwig wrote:
 > Use the proper helper to read the block device size.
 > 
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
-
-Is this basically an open-coded non-sb version of sb_bdev_nr_blocks()?
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
-
-> ---
->  drivers/target/target_core_iblock.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
-> index 31df20abe141f..b1ef041cacd81 100644
-> --- a/drivers/target/target_core_iblock.c
-> +++ b/drivers/target/target_core_iblock.c
-> @@ -232,9 +232,9 @@ static unsigned long long iblock_emulate_read_cap_with_block_size(
->  	struct block_device *bd,
->  	struct request_queue *q)
->  {
-> -	unsigned long long blocks_long = (div_u64(i_size_read(bd->bd_inode),
-> -					bdev_logical_block_size(bd)) - 1);
->  	u32 block_size = bdev_logical_block_size(bd);
-> +	unsigned long long blocks_long =
-> +		div_u64(bdev_nr_bytes(bd), block_size) - 1;
->  
->  	if (block_size == dev->dev_attrib.block_size)
->  		return blocks_long;
-> -- 
-> 2.30.2
-> 
 
 -- 
 Kees Cook
