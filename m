@@ -2,38 +2,59 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5F8431560
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 18 Oct 2021 12:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE37C432480
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 18 Oct 2021 19:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232280AbhJRKQG (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 18 Oct 2021 06:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S233960AbhJRRSZ (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 18 Oct 2021 13:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbhJRKPQ (ORCPT
+        with ESMTP id S233904AbhJRRSX (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 18 Oct 2021 06:15:16 -0400
-Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72887C061765;
-        Mon, 18 Oct 2021 03:13:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=sSdphJbx9SQw+wN4za3/OjMw3p4iKMeSjeY0No/E5ck=; b=bo+nrVZXl6TTYRQlQ0bto+MepF
-        SigFpnQpZERr9BHx9SPKM5M3oF1djjIgorehkbOAGiSEoKAClU9hAJOhLvQopHL+7ngHbjCp0GYh5
-        HxtbySe0C4GiywWjnxtAHb3ZnvMCNabnqmvTxDGUWVlieN6Rb0q+S5b77qYYfN1Bx6ax5iCz6AGrH
-        9ON2Uwy2yvzZ25ow0GUORw9zUlxRz69RVpLcvbrHTrQMiaF4iHAu1HNZdwtKFs1xQfJ1CQGhdbHTu
-        v3N4NlM4aG9KmvpSER+/Mp3Yql6EAXAHbXbfbCK+GXf7UFAgNzR4TOZtkJ5cVyxvD1MufFJzB6JqD
-        6aD8LsrA==;
-Received: from [2001:4bb8:199:73c5:c70:4a89:bc61:2] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mcPdV-00Ev58-I3; Mon, 18 Oct 2021 10:12:53 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jens Axboe <axboe@kernel.dk>
+        Mon, 18 Oct 2021 13:18:23 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C04C061770
+        for <reiserfs-devel@vger.kernel.org>; Mon, 18 Oct 2021 10:16:11 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id x1so17132641iof.7
+        for <reiserfs-devel@vger.kernel.org>; Mon, 18 Oct 2021 10:16:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=TVetvWb4+B/byEt0HFTw7Li/1VctyD/QgsPHbsid4H8=;
+        b=rkRLnHg1S4u8HX11jOSUsmgOu279172YT/qIHLznH/jwI1IdjUhSA0m6I5uyrdNBJQ
+         GZpTrNqHq3BbgsfYzCH0RiwOG+GG3HdSbaxtt1+taUjeE/o2nf0qjkZ23LPZL14mgyVx
+         r5QceDW/MeG8za7F5qhNzSKPR2x7wRt1a8B5T995CSTZ1u9OS6Ch+FzWEBtUbHpcq9AQ
+         KUlG6PBJnMhvawvbI3ONNOa5vJZRKzg+iSpti1pyNyehN+8MHnCAxM/sIrViilbzyvRG
+         Q5nXCXvu4cEFPGfCltmsbNSsOl86kwWVB1XaqYHb9cyqB+54s92TMxyv7jKS0YWyf0KL
+         kSjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=TVetvWb4+B/byEt0HFTw7Li/1VctyD/QgsPHbsid4H8=;
+        b=EQ7pGi+B0iWvdRzZGqIM38+ldZMqwgAfG3jwx2hAoB5tJVKHk7/u6o1py73vkxX01B
+         fxOrLXlEd0kMTUXaxiW1Myb4rOO0+VAcGPGG8ChQkeAr1p5MeS+pWLjW33Rn2IIHKbAO
+         GXWXrOUmx3fcRoHwvc3j95oz9kUqKnN1sZhv1joa+ebwq7Si2Ptqxf1YqArY7rmXvG1b
+         OF75+99Qe7Eu47eJlt4RIjnnxtpYmv4YuENNf4lT6I65vSemMQf7COLbpfdQWd2XoeJC
+         udNt4RyvyrmQYmZtzfatMtUOcHgSJpkfqa1qk6CUncSDyRwWDtN0ghtONUkPAM9wv24h
+         oheg==
+X-Gm-Message-State: AOAM530uWYoqhUkSJ1snH+34ib6PbVKaEANkyap2DZK+Qanh2CG8isPE
+        Lry2K5MxrzhgsBuVOD1/QlrSHl3jN/pcHw==
+X-Google-Smtp-Source: ABdhPJz+RKspHd19wACUssDbTNQ6NJRkN4g7OdL6jX2ni5qwlHyFbIbt1tgTl8EVs5WghyoBxus9iA==
+X-Received: by 2002:a02:ac8a:: with SMTP id x10mr745552jan.43.1634577370548;
+        Mon, 18 Oct 2021 10:16:10 -0700 (PDT)
+Received: from [192.168.1.30] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id u12sm7081225ioc.33.2021.10.18.10.16.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Oct 2021 10:16:09 -0700 (PDT)
+Subject: Re: don't use ->bd_inode to access the block device size v3
+To:     Christoph Hellwig <hch@lst.de>
 Cc:     Coly Li <colyli@suse.de>, Mike Snitzer <snitzer@redhat.com>,
         Song Liu <song@kernel.org>, David Sterba <dsterba@suse.com>,
         Josef Bacik <josef@toxicpanda.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
+        Theodore Ts'o <tytso@mit.edu>,
         OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
         Dave Kleikamp <shaggy@kernel.org>,
         Ryusuke Konishi <konishi.ryusuke@gmail.com>,
@@ -49,88 +70,40 @@ Cc:     Coly Li <colyli@suse.de>, Mike Snitzer <snitzer@redhat.com>,
         linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
         jfs-discussion@lists.sourceforge.net, linux-nfs@vger.kernel.org,
         linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        ntfs3@lists.linux.dev, reiserfs-devel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>
-Subject: [PATCH 30/30] udf: use sb_bdev_nr_blocks
-Date:   Mon, 18 Oct 2021 12:11:30 +0200
-Message-Id: <20211018101130.1838532-31-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211018101130.1838532-1-hch@lst.de>
+        ntfs3@lists.linux.dev, reiserfs-devel@vger.kernel.org
 References: <20211018101130.1838532-1-hch@lst.de>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <4a8c3a39-9cd3-5b2f-6d0f-a16e689755e6@kernel.dk>
+Date:   Mon, 18 Oct 2021 11:16:08 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20211018101130.1838532-1-hch@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Use the sb_bdev_nr_blocks helper instead of open coding it.
+On 10/18/21 4:11 AM, Christoph Hellwig wrote:
+> Hi Jens,
+> 
+> various drivers currently poke directy at the block device inode, which
+> is a bit of a mess.  This series cleans up the places that read the
+> block device size to use the proper helpers.  I have separate patches
+> for many of the other bd_inode uses, but this series is already big
+> enough as-is,
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Jan Kara <jack@suse.cz>
----
- fs/udf/lowlevel.c | 5 ++---
- fs/udf/super.c    | 9 +++------
- 2 files changed, 5 insertions(+), 9 deletions(-)
+This looks good to me. Followup question, as it's related - I've got a
+hacky patch that caches the inode size in the bdev:
 
-diff --git a/fs/udf/lowlevel.c b/fs/udf/lowlevel.c
-index f1094cdcd6cde..46d6971721975 100644
---- a/fs/udf/lowlevel.c
-+++ b/fs/udf/lowlevel.c
-@@ -47,8 +47,7 @@ unsigned int udf_get_last_session(struct super_block *sb)
- 
- unsigned long udf_get_last_block(struct super_block *sb)
- {
--	struct block_device *bdev = sb->s_bdev;
--	struct cdrom_device_info *cdi = disk_to_cdi(bdev->bd_disk);
-+	struct cdrom_device_info *cdi = disk_to_cdi(sb->s_bdev->bd_disk);
- 	unsigned long lblock = 0;
- 
- 	/*
-@@ -56,7 +55,7 @@ unsigned long udf_get_last_block(struct super_block *sb)
- 	 * Try using the device size...
- 	 */
- 	if (!cdi || cdrom_get_last_written(cdi, &lblock) || lblock == 0)
--		lblock = i_size_read(bdev->bd_inode) >> sb->s_blocksize_bits;
-+		lblock = sb_bdev_nr_blocks(sb);
- 
- 	if (lblock)
- 		return lblock - 1;
-diff --git a/fs/udf/super.c b/fs/udf/super.c
-index b2d7c57d06881..34247fba6df91 100644
---- a/fs/udf/super.c
-+++ b/fs/udf/super.c
-@@ -1175,8 +1175,7 @@ static int udf_load_vat(struct super_block *sb, int p_index, int type1_index)
- 	struct udf_inode_info *vati;
- 	uint32_t pos;
- 	struct virtualAllocationTable20 *vat20;
--	sector_t blocks = i_size_read(sb->s_bdev->bd_inode) >>
--			  sb->s_blocksize_bits;
-+	sector_t blocks = sb_bdev_nr_blocks(sb);
- 
- 	udf_find_vat_block(sb, p_index, type1_index, sbi->s_last_block);
- 	if (!sbi->s_vat_inode &&
-@@ -1838,8 +1837,7 @@ static int udf_check_anchor_block(struct super_block *sb, sector_t block,
- 	int ret;
- 
- 	if (UDF_QUERY_FLAG(sb, UDF_FLAG_VARCONV) &&
--	    udf_fixed_to_variable(block) >=
--	    i_size_read(sb->s_bdev->bd_inode) >> sb->s_blocksize_bits)
-+	    udf_fixed_to_variable(block) >= sb_bdev_nr_blocks(sb))
- 		return -EAGAIN;
- 
- 	bh = udf_read_tagged(sb, block, block, &ident);
-@@ -1901,8 +1899,7 @@ static int udf_scan_anchors(struct super_block *sb, sector_t *lastblock,
- 		last[last_count++] = *lastblock - 152;
- 
- 	for (i = 0; i < last_count; i++) {
--		if (last[i] >= i_size_read(sb->s_bdev->bd_inode) >>
--				sb->s_blocksize_bits)
-+		if (last[i] >= sb_bdev_nr_blocks(sb))
- 			continue;
- 		ret = udf_check_anchor_block(sb, last[i], fileset);
- 		if (ret != -EAGAIN) {
+https://git.kernel.dk/cgit/linux-block/commit/?h=perf-wip&id=c754951eb7193258c35a574bd1ccccb7c4946ee4
+
+so we don't have to dip into the inode itself for the fast path. While
+it's obviously not something being proposed for inclusion right now, is
+there a world in which we can make something like that work?
+
 -- 
-2.30.2
+Jens Axboe
 
