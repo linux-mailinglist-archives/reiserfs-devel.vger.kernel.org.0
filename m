@@ -2,127 +2,81 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1411432B63
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 19 Oct 2021 03:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBB2434B4A
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 20 Oct 2021 14:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233660AbhJSBHW (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 18 Oct 2021 21:07:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
+        id S229864AbhJTMlL (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 20 Oct 2021 08:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233343AbhJSBHS (ORCPT
+        with ESMTP id S229941AbhJTMlI (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 18 Oct 2021 21:07:18 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C496C06161C
-        for <reiserfs-devel@vger.kernel.org>; Mon, 18 Oct 2021 18:05:04 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id s17so18404999ioa.13
-        for <reiserfs-devel@vger.kernel.org>; Mon, 18 Oct 2021 18:05:04 -0700 (PDT)
+        Wed, 20 Oct 2021 08:41:08 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4D6C06161C
+        for <reiserfs-devel@vger.kernel.org>; Wed, 20 Oct 2021 05:38:54 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id b12so2844679qtq.3
+        for <reiserfs-devel@vger.kernel.org>; Wed, 20 Oct 2021 05:38:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=W5z0exFABNpBPX1hRqcH8nqG0V53/7e/1qraB3crDBc=;
-        b=vB+wFpSQtfAUhwdXcfynbmYwp0hdBEQZvbX6X9F6PNzCrR7jlF3UU0FKlXz+m74FXo
-         fYCfnp+UOHId9lQV8O9fyEh4YEI0b538At136V3n0vh4OZ/YzMev/Q7gmlb/eOGGE5cU
-         0c1i9lZ2acvXLmYa878iz+lCi3R78xqn0ZDpYtIVtZNxoFJsKdSEsj9/YVhugl90Ar3H
-         SoUxghi0wJ6VSD6JvL3P+s/JM6f3Wm0mmMYFgaEag1ojhi+wlEeYXumrYWwARkL2eroz
-         Ue9QqS/6wvsrqGxlajrxCGxhjXwobZTI+icumh8oCIQgK1Jfr75Nwh+NZuFxcTfoqOvP
-         WcvQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Djpr1AS9BhRB0i84aUYk51L5QfT0/KDcZHhY+64EDVg=;
+        b=D+cHjhxoQwEc+O6ST42y+JkXXagJhfkKWB1ooUEmzhSlbhPkL4IGtXgLdyaz/N4WeD
+         AQEzpLAdABdA9oXHib5xrJxV7qOEyZEWSE1I5m/44X/0yr6hrxtRxofdQ2tlicY8jsYF
+         aTSCBLI+jZ5UwReFOZ3jg4fC4bpLdZPA/Aj/d65DTnzbwbtTgazrKi/bHN0x6uRiRIBN
+         IWO5gzRyZ4MNNyxzIfRIQKtCQ9/gUFUd+2SqjwHxLsUa4AT6c+xv0im1VG19WSPL5SnN
+         6t7rCdL6trsLoSqDm+uvT+8oceNQpCyePBtkh7woIjRvX6PO0Cta1KaSNjQ4vEODfk9l
+         j2Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=W5z0exFABNpBPX1hRqcH8nqG0V53/7e/1qraB3crDBc=;
-        b=8QJRdAEH48sYLhK8W4/gqVUJ6td6oU/QbhVuVbV8y7xuKO2hnoiNcu4Mu+oSc7zCrO
-         ff1wwfZ3TdlYXMtnRkfR/ggnd7hhF6TEumoFgJClOHePyLVEvzL1OgK5uRcEuB6lOcdg
-         zmStORaqQRyh2kH6HnP4bqyksXlocbPAczFFdqToxPnpEeFfScAi46zoZtJ5vWOaPubU
-         vwkpxoBwVrnGcYg8jqBc+XiVQyJRQZ/NyKqcBp4l+dU/XcHR4ASLGcEdujrW8NZKgpY0
-         ITc2Eqq7soNv4FGQRE2IB6v9oWxhIGO+7cXciU6ItWXVuYZnKunsuSOhMNiGmBnGT5WL
-         ldbQ==
-X-Gm-Message-State: AOAM533oyYzWSxUylS5BVjSfvpPWlNP6MGHFmQcCUvD3k/tbGuIZmo6n
-        VPIzUHnjCjxTYcNdi9N+S9kJ49fvznq6Sw==
-X-Google-Smtp-Source: ABdhPJxThXMAcCMjPpDBYOBzNUVp6z4TAqcvNSoJJDW60phmikuRtzHD4NR4koFPUymcotmxVpLHsA==
-X-Received: by 2002:a6b:102:: with SMTP id 2mr16592131iob.185.1634605499259;
-        Mon, 18 Oct 2021 18:04:59 -0700 (PDT)
-Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id g13sm116963ilf.60.2021.10.18.18.04.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Oct 2021 18:04:58 -0700 (PDT)
-Subject: Re: don't use ->bd_inode to access the block device size v3
-To:     Kari Argillander <kari.argillander@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Coly Li <colyli@suse.de>,
-        Mike Snitzer <snitzer@redhat.com>, Song Liu <song@kernel.org>,
-        David Sterba <dsterba@suse.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Dave Kleikamp <shaggy@kernel.org>,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        Anton Altaparmakov <anton@tuxera.com>,
-        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        Kees Cook <keescook@chromium.org>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        Jan Kara <jack@suse.com>, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, drbd-dev@lists.linbit.com,
-        linux-bcache@vger.kernel.org, linux-raid@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        jfs-discussion@lists.sourceforge.net, linux-nfs@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        ntfs3@lists.linux.dev, reiserfs-devel@vger.kernel.org
-References: <20211018101130.1838532-1-hch@lst.de>
- <4a8c3a39-9cd3-5b2f-6d0f-a16e689755e6@kernel.dk>
- <20211018171843.GA3338@lst.de>
- <2f5dcf79-8419-45ff-c27c-68d43242ccfe@kernel.dk>
- <20211018174901.GA3990@lst.de>
- <e0784f3e-46c8-c90c-870b-60cc2ed7a2da@kernel.dk>
- <20211019010416.vgecxu6wnvwi7fii@kari-VirtualBox>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <81f9ad59-4c15-b265-1274-62c987ad879b@kernel.dk>
-Date:   Mon, 18 Oct 2021 19:04:57 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Djpr1AS9BhRB0i84aUYk51L5QfT0/KDcZHhY+64EDVg=;
+        b=OkLnRAU6sabiTge81MS921pxosxCPZ3WiKYRbGC5zlN8y5u+5V/YfzKJSt7izqLAod
+         lnGG3VYaYI5uDa+UWcWB90ijLRQMBxE1U5UsAJgty0fS2IkWLqyNoii3FjlDGhDaedPm
+         Y9PkOX0pONb8nejBes/30viX012QsdlmHytubaxyI5SL6l9yK0LBI81gH87SnPV7syUs
+         c4m0Ng6igjki+jUzxiK972O2AqxzAAIg2lLiVR56GEAedZl+Y7RK/wIQhUuSh2hCXP/l
+         uwcathdJxzQiI0uoJrKCMzNwVnEdWq0kjgSWb0Qnj4SP7QyUAakNX975Wpt+MSz2Hxj7
+         ixlA==
+X-Gm-Message-State: AOAM533KLH3aTMMLsFZhRfGyIqetXm8E6U9HM7vGqsu6Js9WNu5IFcGg
+        7/5sR9XBeFg3dZ5OnRx7gpcIyTiPvbed+ay8NkE=
+X-Google-Smtp-Source: ABdhPJyGAyBxAhGjUkowe8U4wsKvpw9RBo9iWuQWeGst3qP2vEIKG/Iqd+wxZXeLr58ELzjDhpZ53fkGWjFmzUCuefk=
+X-Received: by 2002:ac8:7c46:: with SMTP id o6mr6549788qtv.197.1634733533955;
+ Wed, 20 Oct 2021 05:38:53 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20211019010416.vgecxu6wnvwi7fii@kari-VirtualBox>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:6214:c87:0:0:0:0 with HTTP; Wed, 20 Oct 2021 05:38:53
+ -0700 (PDT)
+Reply-To: lerynne_west51@zohomail.eu
+From:   Lerynne West <elvismorgan005@gmail.com>
+Date:   Wed, 20 Oct 2021 05:38:53 -0700
+Message-ID: <CAENfNMD0NwLwaciDvDFa7wBFih53ZgyDvntccmm-zOsH5MBgsA@mail.gmail.com>
+Subject: =?UTF-8?Q?Ich_spende_Ihnen_diesen_Betrag=2C_um_den_von_COVID_19_?=
+        =?UTF-8?Q?betroffenen_H=C3=A4usern_zu_helfen?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On 10/18/21 7:04 PM, Kari Argillander wrote:
-> On Mon, Oct 18, 2021 at 11:53:08AM -0600, Jens Axboe wrote:
-> 
-> snip..
-> 
->> diff --git a/include/linux/genhd.h b/include/linux/genhd.h
->> index 7b0326661a1e..a967b3fb3c71 100644
->> --- a/include/linux/genhd.h
->> +++ b/include/linux/genhd.h
->> @@ -236,14 +236,14 @@ static inline sector_t get_start_sect(struct block_device *bdev)
->>  	return bdev->bd_start_sect;
->>  }
->>  
->> -static inline loff_t bdev_nr_bytes(struct block_device *bdev)
->> +static inline sector_t bdev_nr_sectors(struct block_device *bdev)
->>  {
->> -	return i_size_read(bdev->bd_inode);
->> +	return bdev->bd_nr_sectors;
->>  }
->>  
->> -static inline sector_t bdev_nr_sectors(struct block_device *bdev)
->> +static inline loff_t bdev_nr_bytes(struct block_device *bdev)
->>  {
->> -	return bdev_nr_bytes(bdev) >> SECTOR_SHIFT;
->> +	return bdev_nr_setors(bdev) << SECTOR_SHIFT;
-> 
-> setors -> sectors
+--=20
 
-Yep, did catch that prior.
 
--- 
-Jens Axboe
 
+
+*Beachtung,Sie wurden autorisiert, eine Gesamtspende von 500.000,00 USD aus
+dem Covid-19-Unterst=C3=BCtzungsprogramm des Lerynne West Emergency Fund zu
+erhalten. Um diese Spende einzufordern, kontaktieren Sie sie mit Ihrer
+EMF-ID: COV-0043034. Ihre Spende in H=C3=B6he von 500.000 USD wird Ihnen ge=
+m=C3=A4=C3=9F
+unserer Richtlinie und Mission innerhalb von 78 Stunden von einer
+akkreditierten Gesch=C3=A4ftsbank zugestellt. Siehe den Link unten:*
+https://www.youtube.com/watch?v=3DhtEHuyOHUsc
+
+*Antworten Sie mit EMF-ID: (COV-0043034) auf diese E-Mail*:
+lerynne_west51@zohomail.eu
+
+
+
+*Peggy Rock,CEOEMF-UNTERST=C3=9CTZUNGSPROGRAMM*
