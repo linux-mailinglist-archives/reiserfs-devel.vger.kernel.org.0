@@ -2,94 +2,94 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 144F4439DA9
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 25 Oct 2021 19:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2C443C0E3
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 27 Oct 2021 05:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232657AbhJYRgq (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 25 Oct 2021 13:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
+        id S239089AbhJ0Dm2 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 26 Oct 2021 23:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbhJYRgq (ORCPT
+        with ESMTP id S232661AbhJ0Dm2 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 25 Oct 2021 13:36:46 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BC3C061745
-        for <reiserfs-devel@vger.kernel.org>; Mon, 25 Oct 2021 10:34:23 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id bp7so12383474qkb.12
-        for <reiserfs-devel@vger.kernel.org>; Mon, 25 Oct 2021 10:34:23 -0700 (PDT)
+        Tue, 26 Oct 2021 23:42:28 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C398DC061570;
+        Tue, 26 Oct 2021 20:40:03 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id s24so1083527plp.0;
+        Tue, 26 Oct 2021 20:40:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=F26I+cBcpyIkdxRfcHLvmvj+TTSmfbBclURHJNpWXCA=;
-        b=Ptp2NusB5HJcfaDA6tHLXJ1eah2aYTDzP/9fFsUCan1lq3IQAne5dcjHE3mTG6DKMf
-         B91xhGgBWpv+FK1gGeAh1mkhMdqYSepIUKzTgGCf9//P4VrfdzgeCwDrNcxYY424HKNR
-         2+TMv9BVweCi1SZcZw01HrnAjRS0lq8M8TEilDTQZ6kJSaFZtvezbO0v+BF/rhuUkFr0
-         rSG4DdK7eLwG/lkXBqZnEm2Ce7pnhc98YCEX3ZXvRLrCAnXsjZw7+d7lBAZjoimI16vL
-         ukBYzxC7n7q8TbnOZ/RPSx70PlQRfMJKdXwLxn/x3/jkhVysGuScPd779O8UDGC6gjAx
-         1l+w==
+        bh=zyqIHjUAZJUCPVU3obv7Mk0Xb8zYZpGJ80LlJg4jvSA=;
+        b=ThXkgHlwcFlR5t3Zi8ceXLze5pCjjdvbb5o6Z3sbnHH3j6fPHbtgyNj4cO8yJnrZ/Q
+         bbGNAP9VRfv6r3DDTZK956aPTqzp+plwYOxbjr8fAwrybTiGrUcoZPAxbHu4zte+CkzW
+         fXW3hl0nhHuVzCFmzlQZp0fL9hNn2raNNfuerV0b20jvOcXK0brd8Mt8rbPE7kbn5wkV
+         JjeUyC7iP0asn9z8OcjexjvzbM7gzcVBP0uUUIcRSsBhBhU5zgwI6r2oRmrTDT9hDmgc
+         u1Mr7EwiHV+zcUL4AWdG9sze6PXIlk4sJq5SbfYM+XaSc/9/U5qK0srGHbN8CZ7+AoF4
+         yizQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=F26I+cBcpyIkdxRfcHLvmvj+TTSmfbBclURHJNpWXCA=;
-        b=PrNR6b2EM+sbBqrNTqt/MYAKf4o9BAq44zQ/FBf32Q9hlvfk6J+GdnxtSx3lBdRuhE
-         KoUVCwtg6AYbojk2ZGudFi+JwX5p+gtfnjpz3mrlXfL3OYR31/I9WflDyqLrJ/tADEsE
-         O1LwxdDYexQOeON8zrvztqf349V7satxaAH1afpBp0RsVsArczL4PpF8Ec0ZVrY3TTFx
-         fqfao7fxlllm18efiFknlUXFaXT3ILIGt1GAG/qtB1B4VM5ilDzmkUErajGz5Csbt7Tv
-         lrqd57UtAPgsBKEO5J0Gfgc1J0UuHa3qfwc7QSufh0nk5yCOdJYYD7mMLv5JFeau9mia
-         VMng==
-X-Gm-Message-State: AOAM530TAlrwnYFJMwJLy8CR6pkdBqBN4FeJskPpGoAlBliFCEMHiFLb
-        nfc8x94HOQn+Za5VKuq0bajM7cZG486D8CA1hdM=
-X-Google-Smtp-Source: ABdhPJyxo6g71e1H41wdc64S7Yix080cMjMYsH04VxgkemubjDliRv/c4X9WA2C0iPmYVpBkJfrywTbw1zXjL/pvyKo=
-X-Received: by 2002:a05:620a:454f:: with SMTP id u15mr14389436qkp.283.1635183262313;
- Mon, 25 Oct 2021 10:34:22 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zyqIHjUAZJUCPVU3obv7Mk0Xb8zYZpGJ80LlJg4jvSA=;
+        b=znBpnspV8nQbppCavsxtzHhku4y3Nmn6wimlkiFAGy/qJh0LEZiwZ/ucBLHhQfkXif
+         K13nS3wGDs5Rc6Pcc5g5BeGmkjmj4WtRzPw+Zcsx/WyrMyf9faz4R7JNdyg1Dd2JkS0l
+         l6Ie72cy8sobKBXFoT/o6TO8vu3xVO5PqfFKx5JsfKC2uxWHA2x96b9LTGggKJGOucH8
+         aEer6oW20LcWGzvbhZlV/5OKqRXWeQRKVidsV3I2/4SroTXLycKhivOM21AzguitOGF8
+         MXWVEPX6b0Xm2q7WSIe7RvSQhinYBNiamjsOCSudLBN23jY2UPkv+a6+IYSe1SplNer/
+         Be8w==
+X-Gm-Message-State: AOAM530beuOSP/7Jmo3ybw3ZrqkwJPh0r0G1I184jxAh2klRaWnjad8W
+        m1gKHm5Y//P8OlJw3tPjldWHe8RNVdXrLfeQ
+X-Google-Smtp-Source: ABdhPJwuN6d4mEKYvdzLBYr1GzFIOWcl1rB1T9pG4gfDhx0ZmuYt8jFqsUcee4mLjHfVG7RhrwjEsw==
+X-Received: by 2002:a17:903:1111:b0:13f:d1d7:fb67 with SMTP id n17-20020a170903111100b0013fd1d7fb67mr25438685plh.85.1635306003201;
+        Tue, 26 Oct 2021 20:40:03 -0700 (PDT)
+Received: from localhost.localdomain ([94.177.118.99])
+        by smtp.gmail.com with ESMTPSA id u10sm662852pfi.172.2021.10.26.20.40.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Oct 2021 20:40:02 -0700 (PDT)
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+To:     Yu Kuai <yukuai3@huawei.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Jan Kara <jack@suse.cz>, Miklos Szeredi <mszeredi@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        David Howells <dhowells@redhat.com>
+Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] fs: reiserfs: free new_opts in reiserfs_remount
+Date:   Wed, 27 Oct 2021 11:39:25 +0800
+Message-Id: <20211027033947.3992059-1-mudongliangabcd@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Reply-To: martinafrancis01@gmail.com
-Sender: sandrine.lafond75@gmail.com
-Received: by 2002:ad4:5008:0:0:0:0:0 with HTTP; Mon, 25 Oct 2021 10:34:21
- -0700 (PDT)
-From:   Martina Francis <martinafrancis655@gmail.com>
-Date:   Mon, 25 Oct 2021 10:34:21 -0700
-X-Google-Sender-Auth: CtLcnoHpetFEQz8wFcKCFbtWbDo
-Message-ID: <CA+S7B5n5o6ms_ijKYCJnO6BxSmUee_eFWc0Zqkgo_W5Zaw2YFA@mail.gmail.com>
-Subject: =?UTF-8?Q?Dobry_dzie=C5=84_moja_droga?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
---=20
-Dobry dzie=C5=84 moja droga
-Jak si=C4=99 masz i twoja rodzina.
-Jestem pani Martina Francis, chora wdowa pisz=C4=85ca ze szpitalnego =C5=82=
-=C3=B3=C5=BCka
-bez dziecka. Kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, aby=C5=9Bcie dowiedz=
-ieli si=C4=99 o moim
-pragnieniu przekazania sumy (2 700 000,00 USD MILION=C3=93W USD), kt=C3=B3r=
-=C4=85
-odziedziczy=C5=82am po moim zmar=C5=82ym m=C4=99=C5=BCu na cele charytatywn=
-e, obecnie
-fundusz jest nadal w banku. Niedawno m=C3=B3j lekarz powiedzia=C5=82 mi, =
-=C5=BCe mam
-powa=C5=BCn=C4=85 chorob=C4=99 nowotworow=C4=85 i moje =C5=BCycie nie jest =
-ju=C5=BC gwarantowane,
-dlatego podejmuj=C4=99 t=C4=99 decyzj=C4=99..
+Since the commit c3d98ea08291 ("VFS: Don't use save/replace_mount_options
+if not using generic_show_options") eliminates replace_mount_options
+in reiserfs, but did not handle the allocated new_opts,
+it will cause memory leak in the reiserfs_remount.
 
-Chc=C4=99, aby=C5=9Bcie skorzystali z tego funduszu dla ludzi ubogich,
-maltretowanych dzieci, mniej uprzywilejowanych, ko=C5=9Bcio=C5=82=C3=B3w, s=
-ieroci=C5=84c=C3=B3w
-i cierpi=C4=85cych wd=C3=B3w w spo=C5=82ecze=C5=84stwie.
+Fix this by freeing new_opts in the reiserfs_remount temporarily.
 
-Prosz=C4=99, wr=C3=B3=C4=87 do mnie natychmiast po przeczytaniu tej wiadomo=
-=C5=9Bci, aby
-uzyska=C4=87 wi=C4=99cej szczeg=C3=B3=C5=82=C3=B3w dotycz=C4=85cych tej age=
-ndy humanitarnej.
+Fixes: c3d98ea08291 ("VFS: Don't use save/replace_mount_options if not using generic_show_options")
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+---
+ fs/reiserfs/super.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Niech B=C3=B3g ci=C4=99 b=C5=82ogos=C5=82awi, kiedy czekam na twoj=C4=85 od=
-powied=C5=BA.
+diff --git a/fs/reiserfs/super.c b/fs/reiserfs/super.c
+index 58481f8d63d5..b36865c8b66a 100644
+--- a/fs/reiserfs/super.c
++++ b/fs/reiserfs/super.c
+@@ -1594,6 +1594,7 @@ static int reiserfs_remount(struct super_block *s, int *mount_flags, char *arg)
+ 	}
+ 
+ out_ok_unlocked:
++	kfree(new_opts);
+ 	return 0;
+ 
+ out_err_unlock:
+-- 
+2.25.1
 
-Twoja siostra.
-Pani Martina Francis.
