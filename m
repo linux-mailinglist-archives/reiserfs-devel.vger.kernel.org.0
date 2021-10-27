@@ -2,102 +2,114 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BED7943C9B4
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 27 Oct 2021 14:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B20743CC4E
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 27 Oct 2021 16:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241855AbhJ0McM (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 27 Oct 2021 08:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44448 "EHLO
+        id S238722AbhJ0Oh0 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 27 Oct 2021 10:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232724AbhJ0McL (ORCPT
+        with ESMTP id S238657AbhJ0Oh0 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 27 Oct 2021 08:32:11 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EBFC061570;
-        Wed, 27 Oct 2021 05:29:46 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id u13so9805224edy.10;
-        Wed, 27 Oct 2021 05:29:46 -0700 (PDT)
+        Wed, 27 Oct 2021 10:37:26 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F45C061570;
+        Wed, 27 Oct 2021 07:35:01 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id m21so3061348pgu.13;
+        Wed, 27 Oct 2021 07:35:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RmJV7y4H0T7dh+JR8cakBOomZHH6oytwp4hKK/hZKRg=;
-        b=f2bAYZi8bkhaxUekZ1UbLZCe0hFL7njRAVf+CnNlFRWOTum5/g5Jhqo8NhlA6rByT5
-         kKZj+3QeFARk+aLW4mS5X1H623yUQ4o1mcUt2CSXuyohGpe4Lds+tU1wutcHqgNjwWnf
-         20tEFdjfi12LKf41bJJyu3ZmMp/FjT4EPBnNKPa4Ouu4BHhfpxKPk7jvylp3hiXVt5hN
-         kRFIPtatIRWxiOKgtJ5rq5UCFQpjKf9RUpgIk9H/7l359gQi1RmfTAI1VRAiKN33VnNm
-         UpJgpQcOfNEsQJrNvpCt8+/EVqMFKtHVIOp4a8kbp/vPb5AfctTBq5rKVxaxo1/TLd7C
-         eXRA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=thGbGpMmDBLVFCgnHjtOHQz7SQaxdSW9d+9l+tEtUqc=;
+        b=ldKmAOyUDN64FyhAHEjvFrdt6dBfRGeA7ig2+ULovFnlu9zQDtg5/RdNkjY5+o1gww
+         Qzu7x0ToRdIuf7fotbHgkKtG0j0lKjJaTacuWipZCwwNynjegtF3KrkkjrnhRHNg3S6M
+         0Ef4VWYFM1KE+8mH8JsbkYEnn0blhU4p04hDpXawndaMLprISgHBAszpqujvhLAsivkN
+         GQ2nFpe1noGxMD6hmOIu/FkkD4xQ/CRCyERLdOZFuB/0WSC/DX0PZK2c80uCGo9cBcD6
+         EJzDuZaJMIZ4YulniDBNLJ5N5XRxd+G6yHPL24IMXgIo7XryV6CPBxLQjmIDE3W4Sj8/
+         /Buw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RmJV7y4H0T7dh+JR8cakBOomZHH6oytwp4hKK/hZKRg=;
-        b=yMqnWSVyjfOkhgl0XOc0UgdajK8OMY7tdt8APAiI1DhfF/igxaz7GxH/mGCrRlbC70
-         gbpyXjMPPFpdH0Q5fobZYa8FN6Z9Dp/EIGYecGXILt0SjuZ2Tb0bZ+sD4BgJAlPUz6g4
-         z3rgy6A1Vn8YF5LaC3ifoAvieeA982dkU++ta64+6dmuZqNtW3QAw1Cn2BUFRkWZcBpL
-         gKNPmCdEfSAZD4oP+RVCzX9ZowSdXFoD6B8SF4tDQ0wvw96Ak53P5Uy7AiqPL9rP/i7z
-         lMx0eH7/Vg7KbICNWMJo3UxysvEAQRjr6FEFCF1pWbiFVymNVocbwxgL1VCufr6di6my
-         SSNg==
-X-Gm-Message-State: AOAM532BioHsmtsfzzt+GmydtFl30a8TBEanPCZcRQeCiIqed3xGiiyw
-        8b4t2LQkI4N0rVCKiuXZstKMhMNg5ZJUtbDpBoI=
-X-Google-Smtp-Source: ABdhPJzqRMyOpZTPUEieR41Q4H1jW4DWILafBAkotuKIi4c3vdeUwE3OYrbqa4G8OasQ9JkxHme+QcKC5fnZ507Jr6Q=
-X-Received: by 2002:a17:906:248b:: with SMTP id e11mr89432ejb.172.1635337785025;
- Wed, 27 Oct 2021 05:29:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211027033947.3992059-1-mudongliangabcd@gmail.com>
- <20211027094644.GA28650@quack2.suse.cz> <CAD-N9QW48LDX7++chFjeZwr0Q1HX+D0+e=6BcXKxPx=i+DgmUA@mail.gmail.com>
- <20211027111527.GD28650@quack2.suse.cz>
-In-Reply-To: <20211027111527.GD28650@quack2.suse.cz>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=thGbGpMmDBLVFCgnHjtOHQz7SQaxdSW9d+9l+tEtUqc=;
+        b=jn8Mnf+A9ZYYk9lYN1ySWBc6fkX5wznDa7as+jZiDe3Gu5DSwTkjZgSAWXsIROX4xQ
+         ORjTs3Iltet1p5afcCGuhzTkLXzf1Ds+FcNtZF8cNX77zWQh9ChUciS+dRaL2hCjwbhr
+         BrooMxNXMx7m/EepVZ03YuRox5EhwrEDHfmraBKL9RRNmp/22HxNolen3P3Iodq1pGJy
+         EawV6ohoO+qryfq3sZstyx7AOdsk2B2kAAPbGTrIweFpxmFDL3bealCF0mNw46IORrKX
+         caMv1oAvq8Oek3fl11Im1rRka4trz8GQx28FO1gNXtAP8qgt1AbqCMo0BeeaGnK/Oe9u
+         FhYg==
+X-Gm-Message-State: AOAM5304kEwH2FouXLCfAHASxgQRrXd98yb35EqPCGOCfJjb55jVhUc5
+        SquZ15l9/Du2MI+Clbc6Nj0=
+X-Google-Smtp-Source: ABdhPJwV9/vWHLM/HAyanL3zKT+kRpGtHmBTAKNWM89KDm8AYwvq4ZVNs8WDmHwfEeIB77iE8O8mWg==
+X-Received: by 2002:a63:9516:: with SMTP id p22mr20577450pgd.297.1635345300367;
+        Wed, 27 Oct 2021 07:35:00 -0700 (PDT)
+Received: from localhost.localdomain ([94.177.118.99])
+        by smtp.gmail.com with ESMTPSA id g11sm67392pgn.41.2021.10.27.07.34.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Oct 2021 07:34:59 -0700 (PDT)
 From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Wed, 27 Oct 2021 20:29:19 +0800
-Message-ID: <CAD-N9QX01gVnRdntN=pcTgAW7wCXtZj5o_9YctvOSHaf694cxQ@mail.gmail.com>
-Subject: Re: [PATCH] fs: reiserfs: free new_opts in reiserfs_remount
-To:     Jan Kara <jack@suse.cz>
-Cc:     Yu Kuai <yukuai3@huawei.com>, Miklos Szeredi <mszeredi@redhat.com>,
+To:     Jan Kara <jack@suse.cz>, Dongliang Mu <mudongliangabcd@gmail.com>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Yu Kuai <yukuai3@huawei.com>,
         Al Viro <viro@zeniv.linux.org.uk>,
-        David Howells <dhowells@redhat.com>,
-        reiserfs-devel@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        David Howells <dhowells@redhat.com>
+Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] fs: reiserfs: remove useless new_opts in reiserfs_remount
+Date:   Wed, 27 Oct 2021 22:34:41 +0800
+Message-Id: <20211027143445.4156459-1-mudongliangabcd@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 7:15 PM Jan Kara <jack@suse.cz> wrote:
->
-> On Wed 27-10-21 18:19:00, Dongliang Mu wrote:
-> > On Wed, Oct 27, 2021 at 5:46 PM Jan Kara <jack@suse.cz> wrote:
-> > >
-> > > On Wed 27-10-21 11:39:25, Dongliang Mu wrote:
-> > > > Since the commit c3d98ea08291 ("VFS: Don't use save/replace_mount_options
-> > > > if not using generic_show_options") eliminates replace_mount_options
-> > > > in reiserfs, but did not handle the allocated new_opts,
-> > > > it will cause memory leak in the reiserfs_remount.
-> > > >
-> > > > Fix this by freeing new_opts in the reiserfs_remount temporarily.
-> > > >
-> > > > Fixes: c3d98ea08291 ("VFS: Don't use save/replace_mount_options if not using generic_show_options")
-> > > > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> > >
-> > > Thanks for the patch but I can see that new_opts is not actually used at
-> > > all in reiserfs_remount() so we should perhaps just remove them (including
-> > > kstrdup() et al).
-> >
-> > That's also a plan. Since I am not sure if maintainers will use
-> > new_opts anymore, So I propose a temporary patch to fix this memory
-> > leak.
-> >
-> > If you think new_opts is not used anymore, let's remove all the code
-> > related to new_opts.
->
-> If it is ever needed again, we can always add it. Please just remove it.
+Since the commit c3d98ea08291 ("VFS: Don't use save/replace_mount_options
+if not using generic_show_options") eliminates replace_mount_options
+in reiserfs_remount, but does not handle the allocated new_opts,
+it will cause memory leak in the reiserfs_remount.
 
-Sure. I will send a patch v2.
+Because new_opts is useless in reiserfs_mount, so we fix this bug by
+removing the useless new_opts in reiserfs_remount.
 
-> Thanks!
->
->                                                                 Honza
-> --
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
+Fixes: c3d98ea08291 ("VFS: Don't use save/replace_mount_options if not using generic_show_options")
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+---
+ fs/reiserfs/super.c | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/fs/reiserfs/super.c b/fs/reiserfs/super.c
+index 58481f8d63d5..f7b05c6b3dcf 100644
+--- a/fs/reiserfs/super.c
++++ b/fs/reiserfs/super.c
+@@ -1437,7 +1437,6 @@ static int reiserfs_remount(struct super_block *s, int *mount_flags, char *arg)
+ 	unsigned long safe_mask = 0;
+ 	unsigned int commit_max_age = (unsigned int)-1;
+ 	struct reiserfs_journal *journal = SB_JOURNAL(s);
+-	char *new_opts;
+ 	int err;
+ 	char *qf_names[REISERFS_MAXQUOTAS];
+ 	unsigned int qfmt = 0;
+@@ -1445,10 +1444,6 @@ static int reiserfs_remount(struct super_block *s, int *mount_flags, char *arg)
+ 	int i;
+ #endif
+ 
+-	new_opts = kstrdup(arg, GFP_KERNEL);
+-	if (arg && !new_opts)
+-		return -ENOMEM;
+-
+ 	sync_filesystem(s);
+ 	reiserfs_write_lock(s);
+ 
+@@ -1599,7 +1594,6 @@ static int reiserfs_remount(struct super_block *s, int *mount_flags, char *arg)
+ out_err_unlock:
+ 	reiserfs_write_unlock(s);
+ out_err:
+-	kfree(new_opts);
+ 	return err;
+ }
+ 
+-- 
+2.25.1
+
