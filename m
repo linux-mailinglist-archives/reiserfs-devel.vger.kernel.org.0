@@ -2,114 +2,116 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5910143CCA2
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 27 Oct 2021 16:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 961A043DB83
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 28 Oct 2021 08:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbhJ0OsH (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 27 Oct 2021 10:48:07 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:58976 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbhJ0OsF (ORCPT
+        id S229768AbhJ1Gwv (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 28 Oct 2021 02:52:51 -0400
+Received: from mail-io1-f72.google.com ([209.85.166.72]:38564 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229762AbhJ1Gwr (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 27 Oct 2021 10:48:05 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id DF69C1FD43;
-        Wed, 27 Oct 2021 14:45:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1635345938; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PAxvQ4J2xp0slx6QeJiS9IdJxoMa7jLPPdGR/h4z5Ss=;
-        b=WVisAploP76FGRtxAYQHYCg1KfLQGjfyJBmZZxTdltJIUQ1TgMV7dFl5mj+Qe+lrz2fDwS
-        EDRVSseNymFxVSvcfCiBJRCv+KMDZ67+CMmSaPYDIOoQIYm5BkmsqKTUb+ozzOPrB1bX99
-        lGJHkUoLlsf/9AHHeYLU1snhL1oO0cY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1635345938;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PAxvQ4J2xp0slx6QeJiS9IdJxoMa7jLPPdGR/h4z5Ss=;
-        b=tCgb9kgMG4zacd2VksoNMkCiFIENHrCqkDtExxTpLQy+ZRgkmpZ5vRoYSj+ptZ/UKeAswJ
-        YwkldXDwHPcgIOAA==
-Received: from quack2.suse.cz (unknown [10.100.224.230])
-        by relay2.suse.de (Postfix) with ESMTP id CA11AA3B83;
-        Wed, 27 Oct 2021 14:45:38 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 839F91E1973; Wed, 27 Oct 2021 16:45:38 +0200 (CEST)
-Date:   Wed, 27 Oct 2021 16:45:38 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Dongliang Mu <mudongliangabcd@gmail.com>
-Cc:     Jan Kara <jack@suse.cz>, Miklos Szeredi <mszeredi@redhat.com>,
-        Yu Kuai <yukuai3@huawei.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        David Howells <dhowells@redhat.com>,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs: reiserfs: remove useless new_opts in reiserfs_remount
-Message-ID: <20211027144538.GA19815@quack2.suse.cz>
-References: <20211027143445.4156459-1-mudongliangabcd@gmail.com>
+        Thu, 28 Oct 2021 02:52:47 -0400
+Received: by mail-io1-f72.google.com with SMTP id g4-20020a05660226c400b005e14d3f1e6bso2562435ioo.5
+        for <reiserfs-devel@vger.kernel.org>; Wed, 27 Oct 2021 23:50:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=9IOQueOs0l5y9Mce/jggTMg0HEDlO9ktlzNzjIB20JI=;
+        b=Aja+bhhFIbZT2QBiXFcojly4bK+fC7oJlULSpkJaqbWs1hWQ7j1LNhPKUS0Q0R0y42
+         Xf4zVmefAEGeKTZm/B1Qhocurz/c6gQZwsAIHLKD8nGD1XEXHw14YXhsaV0ODTZpEshX
+         XecXT3sDdGJxDpD5AtLimKLmlbiRiyZNDBdFj6h3U3K9ifqzrotUvgwyA+g/i4YUyImy
+         sj3bJx0q61oK1OWE8NwGz/d+HA/5jNGPttYuWaVtiigDobYNdoQFTxnlzgdhlykjREZa
+         BkkviepRAv2ydVNps/EbqO9WMLAwJ/lPxMYCisSa+kjohNOPK2Rg6qEOpJEwPAVzYQXq
+         g9TQ==
+X-Gm-Message-State: AOAM532/6olO4r+gsF6Eytj3yX9jQ+qlZBv9euOZAU3HXXg5rvJEB1i3
+        qGZQ432yB5UwoBEeebK1M5N7X8vOGfS1DbP7hZG9xzh1WXcf
+X-Google-Smtp-Source: ABdhPJwCNWh2hmEW5DYKLzmLxMCaXZow++Zg6Brh9p1Td9PbcUhTecynEi2MVHD0IKCPquN3Rz/fecN8fSoXXNO6/zsOHncBrbo/
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211027143445.4156459-1-mudongliangabcd@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a05:6e02:18cf:: with SMTP id s15mr1987527ilu.198.1635403820543;
+ Wed, 27 Oct 2021 23:50:20 -0700 (PDT)
+Date:   Wed, 27 Oct 2021 23:50:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c9b4c805cf641f0c@google.com>
+Subject: [syzbot] KASAN: null-ptr-deref Read in do_journal_end
+From:   syzbot <syzbot+f0a07c0d7dae72a221d5@syzkaller.appspotmail.com>
+To:     jack@suse.cz, linux-kernel@vger.kernel.org, paskripkin@gmail.com,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tiantao6@hisilicon.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Wed 27-10-21 22:34:41, Dongliang Mu wrote:
-> Since the commit c3d98ea08291 ("VFS: Don't use save/replace_mount_options
-> if not using generic_show_options") eliminates replace_mount_options
-> in reiserfs_remount, but does not handle the allocated new_opts,
-> it will cause memory leak in the reiserfs_remount.
-> 
-> Because new_opts is useless in reiserfs_mount, so we fix this bug by
-> removing the useless new_opts in reiserfs_remount.
-> 
-> Fixes: c3d98ea08291 ("VFS: Don't use save/replace_mount_options if not using generic_show_options")
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Hello,
 
-Thanks. I've added the patch to my tree.
+syzbot found the following issue on:
 
-								Honza
+HEAD commit:    9c0c4d24ac00 Merge tag 'block-5.15-2021-10-22' of git://gi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=130d1b0cb00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=be398dd7862f4b36
+dashboard link: https://syzkaller.appspot.com/bug?extid=f0a07c0d7dae72a221d5
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-> ---
->  fs/reiserfs/super.c | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/fs/reiserfs/super.c b/fs/reiserfs/super.c
-> index 58481f8d63d5..f7b05c6b3dcf 100644
-> --- a/fs/reiserfs/super.c
-> +++ b/fs/reiserfs/super.c
-> @@ -1437,7 +1437,6 @@ static int reiserfs_remount(struct super_block *s, int *mount_flags, char *arg)
->  	unsigned long safe_mask = 0;
->  	unsigned int commit_max_age = (unsigned int)-1;
->  	struct reiserfs_journal *journal = SB_JOURNAL(s);
-> -	char *new_opts;
->  	int err;
->  	char *qf_names[REISERFS_MAXQUOTAS];
->  	unsigned int qfmt = 0;
-> @@ -1445,10 +1444,6 @@ static int reiserfs_remount(struct super_block *s, int *mount_flags, char *arg)
->  	int i;
->  #endif
->  
-> -	new_opts = kstrdup(arg, GFP_KERNEL);
-> -	if (arg && !new_opts)
-> -		return -ENOMEM;
-> -
->  	sync_filesystem(s);
->  	reiserfs_write_lock(s);
->  
-> @@ -1599,7 +1594,6 @@ static int reiserfs_remount(struct super_block *s, int *mount_flags, char *arg)
->  out_err_unlock:
->  	reiserfs_write_unlock(s);
->  out_err:
-> -	kfree(new_opts);
->  	return err;
->  }
->  
-> -- 
-> 2.25.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f0a07c0d7dae72a221d5@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
+BUG: KASAN: null-ptr-deref in test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
+BUG: KASAN: null-ptr-deref in set_buffer_uptodate include/linux/buffer_head.h:120 [inline]
+BUG: KASAN: null-ptr-deref in do_journal_end+0x12da/0x4950 fs/reiserfs/journal.c:4077
+Read of size 8 at addr 0000000000000000 by task syz-executor.0/3707
+
+CPU: 1 PID: 3707 Comm: syz-executor.0 Not tainted 5.15.0-rc6-syzkaller #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Call Trace:
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ __kasan_report mm/kasan/report.c:446 [inline]
+ kasan_report.cold+0x66/0xdf mm/kasan/report.c:459
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read include/linux/instrumented.h:71 [inline]
+ test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
+ set_buffer_uptodate include/linux/buffer_head.h:120 [inline]
+ do_journal_end+0x12da/0x4950 fs/reiserfs/journal.c:4077
+ reiserfs_sync_fs+0xf8/0x120 fs/reiserfs/super.c:78
+ __sync_filesystem fs/sync.c:39 [inline]
+ sync_filesystem fs/sync.c:64 [inline]
+ sync_filesystem+0x105/0x260 fs/sync.c:48
+ generic_shutdown_super+0x70/0x370 fs/super.c:448
+ kill_block_super+0x97/0xf0 fs/super.c:1395
+ deactivate_locked_super+0x94/0x160 fs/super.c:335
+ deactivate_super+0xad/0xd0 fs/super.c:366
+ cleanup_mnt+0x3a2/0x540 fs/namespace.c:1137
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ tracehook_notify_resume include/linux/tracehook.h:189 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
+ exit_to_user_mode_prepare+0x27e/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f0ba0b36ea7
+Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff63b1eb68 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f0ba0b36ea7
+RDX: 00007fff63b1ec3b RSI: 0000000000000002 RDI: 00007fff63b1ec30
+RBP: 00007fff63b1ec30 R08: 00000000ffffffff R09: 00007fff63b1ea00
+R10: 0000555556184893 R11: 0000000000000246 R12: 00007f0ba0b8f035
+R13: 00007fff63b1fcf0 R14: 0000555556184810 R15: 00007fff63b1fd30
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
