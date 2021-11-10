@@ -2,82 +2,79 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEEFB447D23
-	for <lists+reiserfs-devel@lfdr.de>; Mon,  8 Nov 2021 10:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2F744BBC9
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 10 Nov 2021 07:39:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237203AbhKHJ7u (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 8 Nov 2021 04:59:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
+        id S230185AbhKJGmh (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 10 Nov 2021 01:42:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237118AbhKHJ7u (ORCPT
+        with ESMTP id S230117AbhKJGm2 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 8 Nov 2021 04:59:50 -0500
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFA2C061570
-        for <reiserfs-devel@vger.kernel.org>; Mon,  8 Nov 2021 01:57:06 -0800 (PST)
-Received: by mail-qv1-xf32.google.com with SMTP id gh1so11517237qvb.8
-        for <reiserfs-devel@vger.kernel.org>; Mon, 08 Nov 2021 01:57:06 -0800 (PST)
+        Wed, 10 Nov 2021 01:42:28 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664FDC061764
+        for <reiserfs-devel@vger.kernel.org>; Tue,  9 Nov 2021 22:39:40 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so3748576wme.0
+        for <reiserfs-devel@vger.kernel.org>; Tue, 09 Nov 2021 22:39:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=UPFoFNXYaDLY0O3DVp5Pt1DL26C46DIUqVKtliH2N2k=;
-        b=qhVcog6ZHc46pTFUJZsSRWVF8s4m7hIJBy6Ud5/t4nP/kC8rO1y+LW0nK86Bf84G0m
-         ZwepoQqXkw33eCV28NgtWLKKfhVdaQwJ4AiS/IxDJscTxeZimjOjxGwx0kC/sCpiZwsb
-         EnzS1uoTzMYLMBn2BBVEmeN2PuvZlFbtJYMefo2ffPmtbsclrpzDMtTcRh6mZu0dzfPf
-         kY/DJ6/0FkXAzlxpNzTUnhx24hvrq066zE34/NIKCOcl/oMn+jmJiFScMYt5Fwcm2r8T
-         aKJUlQGmmoRmdJVz+U+ylYUGjEAokJcb4PjZ+1w8qbPjiA9jrZnH0SRtBO+XCcTEwlkg
-         xV6A==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=45MiAqcvKNHcyGst44Dl8W3sNjujU4xPnGcGIM2COgY=;
+        b=ax0OenhjG/t7SENlgcOyYT9a4nIQ5miQW8uu//ZPOM0TsYpV6QZPfYZ/BkS+NZK7EZ
+         NEOiCfNvtMBpvD5xlTs8pKXMP+aD2+BmlLPwi2rlSuLAmnFt82gyWEiXV+40ajGKzBZF
+         jEJRTfzAC+e7ZeA5DLgO3i3fvYfYyUipXFXpGh6CeXBDbp8bPuBRf0SHDAJDBD84sYsm
+         PyNe3WZYBkc/jmYcn0kQBanOr4N17782gPFC1uL8P0IWouGOunjEIFFZX0nfvXLsv3XN
+         fBlnzz7MHWMY3UZ4TIXw+FWqFb/iuWZU+9htOiR+GXcmFKt4DXokhW7yzdNNlVG00IPC
+         TYYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=UPFoFNXYaDLY0O3DVp5Pt1DL26C46DIUqVKtliH2N2k=;
-        b=3DrMfDbeoakTz6o4i7xbHPewAOegidzNIo+GEvOKo78F/n6WZ75QHmX1leSP/B7ATQ
-         l7E6Dy5QhJ6VUquhXF5SUTezXt0A0pbIIqWEBRDPq+HhSy3nFfEJBLw4KHP5ZNT9I5ka
-         hJTrBAkIjJ7gZGhB0ocvRPjegI3BTq0WTEe31xSDjpJuLqinEFKv5ZduedVCyFZI3eFQ
-         Up3NTlHZoVcRjC8uVfjcP3iC/xIqhEyukMKHOKsH0OvjeEBUCZpo4SNDseueapuBW1fq
-         ULo3MtE1OR4p8vO7QzKeIwm6y9O4TVCTtTmMQQ64co4z1RjQVPlMRwmMkriczfFXjgXN
-         QXLA==
-X-Gm-Message-State: AOAM532c4TXHMtIXUt0rwdURm8amkbGx/aeXuceT3NtItzLWdQ3elI5p
-        Q808aP0PrgEA3xDmtUEykBUNwcfCtIpWJf1qfCs=
-X-Google-Smtp-Source: ABdhPJxn5Q0jr6uIW2FJNIosV3KcgYIlo0N5dCdGMXIm55YPj7LPHNbQFf77aK13yO2v1oBXbGCdXTMIH7eDeScIxUg=
-X-Received: by 2002:a05:6214:334:: with SMTP id j20mr17392987qvu.15.1636365425225;
- Mon, 08 Nov 2021 01:57:05 -0800 (PST)
+         :subject:to:content-transfer-encoding;
+        bh=45MiAqcvKNHcyGst44Dl8W3sNjujU4xPnGcGIM2COgY=;
+        b=Qdga0XfddtqtAJ7TVZr7Z5PE4TW4wc5xVhgb74JTIUMeGV5v7lpP0jKAw1t13ICFOR
+         Niv+SGu8wSBJF7VuH/QWCNOnmqL0dTdv2FQb1Mh1K4/JDHpQUbMPRxQb4yJZw98/KDmr
+         38LgUO9A1LpBfj5rzUwXbFqdwchqkvEMzwprFzy11bqdrawtPT4FntM5f/cBdDgalLNq
+         RIh2ffgie8SWcvKxAxvZDVRWM23ZLxtaVjht7tGRTIt9vfwTSPHgKDv8uVDdW2D97SWt
+         0ZBTO1EOddyrlx+1Rx7wV06tyHn4f9Jt2vg4LzZRov2UwOYjvTL3kTyiHtfnogUcCwYY
+         zT7Q==
+X-Gm-Message-State: AOAM531s7P2slVUPdqZMyvMLMb1dWGvBJw4mhU6kL3pltnftyotXh8x9
+        4ohg361E8XKsUR4Qr1wrpf310PRs0aadk6frBrQ=
+X-Google-Smtp-Source: ABdhPJxzD5H7IgKe0xG4nEvyh1tkxPWoara3bptcmA0FSD1HL6HH+B2R7ylc6MqcrtzK9ZWjpcTB8+iXpHeI6qM4nkM=
+X-Received: by 2002:a05:600c:3ba5:: with SMTP id n37mr13886506wms.168.1636526378984;
+ Tue, 09 Nov 2021 22:39:38 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:ad4:4ea3:0:0:0:0:0 with HTTP; Mon, 8 Nov 2021 01:57:04 -0800 (PST)
-Reply-To: juliet_paul32@yahoo.com
-From:   Juliet Paul <julietpaul73@gmail.com>
-Date:   Mon, 8 Nov 2021 09:57:04 +0000
-Message-ID: <CACZ5AQRn7Zo9LRsw5=xsUo03=M6T3piYYjSt1fbwefLzVUGB2Q@mail.gmail.com>
-Subject: Investment proposal from Juliet Paul
+Received: by 2002:a05:600c:b52:0:0:0:0 with HTTP; Tue, 9 Nov 2021 22:39:38
+ -0800 (PST)
+Reply-To: stefaniekoren50@gmail.com
+From:   STEFANIE KOREN <smithmark32374939@gmail.com>
+Date:   Wed, 10 Nov 2021 07:39:38 +0100
+Message-ID: <CAEkfBsHGDPdSi_fHM5WiGgue7D4ywra60egd+k2OffqCrM_N7Q@mail.gmail.com>
+Subject: Donation From Koren!!
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Investment proposal from Juliet Paul
-It's a pleasure to write to you after review, because I might
-could not see you face to face, first; please, I need yours
-help.
-one
-I'm Miss Juliet Paul. only daughter of the late Mr. Nguessan Paul,
-from the Ivory Coast. my father put the sum of
-($ 6,800,000.00) in a bank here on Ivory Coast before his death,
-he used my name as his relative and recipient of the money
-after his death he signed a bond with the bank that prevented me
-from access to the money here if they are not transferred abroad for
-investment purposes.
+--=20
+Lieber E-Mail-Besitzer
 
-Now I am looking for a reliable person to help me transfer and take
-against the money with his bank account abroad where I will have
-access the money and also work with the person for one
-lifetime investment abroad with the money.
+  Ihre E-Mail-Adresse wurde am 22.09.2021 mit einem Computer-Spinball
+zuf=C3=A4llig ausgew=C3=A4hlt, um eine Geldspende (900.000,00 USD) vom Kore=
+n
+Charitable Trust zu erhalten. Kontaktieren Sie
+stefaniekoren50@gmail.com f=C3=BCr weitere Informationen.
 
-please reply me so that I can give you more information and
-discusses how we can benefit you and me in the future. We
-should discuss what becomes of your percentage after the transfer when
-you answer. Thanks for your consideration.
+Koren Trust
+_______________________________________________________________________
+Dear Email Owner
 
-Greetings,
-juliet pau
+ Your email address was randomly selected with a computer spinball on
+22/09/2021 to receive a monetary donation ($900,000.00 USD) from Koren
+Charitable Trust. contact stefaniekoren50@gmail.com for more
+information.
+
+Koren Trust
