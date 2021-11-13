@@ -2,85 +2,93 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFF044F2BD
-	for <lists+reiserfs-devel@lfdr.de>; Sat, 13 Nov 2021 12:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B220344F545
+	for <lists+reiserfs-devel@lfdr.de>; Sat, 13 Nov 2021 21:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232925AbhKML2K (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sat, 13 Nov 2021 06:28:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
+        id S232203AbhKMUcT (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sat, 13 Nov 2021 15:32:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231735AbhKML2J (ORCPT
+        with ESMTP id S236140AbhKMUaT (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sat, 13 Nov 2021 06:28:09 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711F4C061766
-        for <reiserfs-devel@vger.kernel.org>; Sat, 13 Nov 2021 03:25:17 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id r12so48529853edt.6
-        for <reiserfs-devel@vger.kernel.org>; Sat, 13 Nov 2021 03:25:17 -0800 (PST)
+        Sat, 13 Nov 2021 15:30:19 -0500
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5159C061767
+        for <reiserfs-devel@vger.kernel.org>; Sat, 13 Nov 2021 12:27:26 -0800 (PST)
+Received: by mail-ua1-x92c.google.com with SMTP id l43so26163210uad.4
+        for <reiserfs-devel@vger.kernel.org>; Sat, 13 Nov 2021 12:27:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Hu2ZB1euoLzJY+I63Uh/+Kij0UsVokvOFJBcm1hwiI4=;
-        b=HzYL0NbcKRMtPpjfhI3yJEzaeVYdXTqc1BMJXUNLxYrqk3BGv4rGrX04KOWI7qRSRc
-         z5bm/aDsewhkf5HcYe1dRKaqI2Pujmt9ZLuY8sffxEOC922Q2M3EwXKvyXS1po54NmE5
-         VvFLAwqnDUJAIyXkP9WxDVIgqDCtU7XpY3GshMv7qT20nXZNh9gZtclNdn3Il0oCkZzT
-         77nJX9/sYaD0Abd21+Xvl7tm/C8qmRKfV6v31wFGIqDpzfZf7aqViBqkwSc8px68AzxB
-         hkCzJsNw5o5DQJInp0btcnDe1KiEV08mXCyrl+Qf309O6wpue+aH+3r+NI459nAEncCT
-         avGQ==
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=WeOVAkz9Du/PMbvz3f0ckve3VeQzpJMgdKgUBtKRVbo=;
+        b=iwLKopq4NllfzsiBKZqP4GJg0/df+yeXRU7IlkfwioCR+tD4IGsp9zEOik9mjOkt3L
+         idYNgLyyYvwpxNEUC9sGL8oIIC7nxhHVlAohnj8ASYJ47XGBUv4onGDqfxXSbN2np9PA
+         KiETBDUDFNVKRN8uLfUWUPVZ263UtC67SN/Zr3YRV4D01Bwv8UK9poloReySzCirWhpg
+         U90x0LeAAKqOpCM72M/vZkH0eHytyEGZ1Y6CbS2v33ADWyAOFm+VIBG4zX7ag52a5FuC
+         sOnOumEboFHn91E5ghTF3glKIjNGiJZEEcMHEtkXdDSUZbuIAS7npagTAJSCTj5JwUV1
+         TABQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Hu2ZB1euoLzJY+I63Uh/+Kij0UsVokvOFJBcm1hwiI4=;
-        b=mkTGDDfalYyPjMZ8SM2ITdA6F10y7LRk6C2ijFOqlYEmNR8roekQdzg6wjqtLvZUw4
-         2pPJYI+er9djSLeHswopzigT9I3+asfifOUDeoepRgLQ+4q2jS0ZEPWkAoy9kBmRujfU
-         ew0TZH98UvWNoIjU4biiTWuoxJhC7BopJ0XfXBZBV67hcMZqiTsLOr74jYgKlzvnx7TJ
-         KwXgP1rzSTNmNPXwVEWHAnNCgoU1IN0OWVOJRVta5n4U6beJpRaLubm8cMgoaglEwxm1
-         jtts6GuJiaOs+/U5N6ogpVSRmN9ufgc5cfjipA+m6hcwmYnrtfQgNsi6gFR9nHLT47xd
-         d7bw==
-X-Gm-Message-State: AOAM532631AnIm9m7x6/YkKMt6tchCM/Hrl0hESZ1+QRr1v/ibcCIxST
-        Nfx8ibFr+Xi/VYoUMQ9YR37Vk9DAkzFFPU6/Ld0=
-X-Google-Smtp-Source: ABdhPJycXmfR+w6W/zG7FV3iwO8NO+R+LZc5XT8QWeFRMqqOp5eXZRfzHek2JqVrjOg4aMvq2tAOBvHBaYNofsjKm2Y=
-X-Received: by 2002:a05:6402:42c8:: with SMTP id i8mr31155110edc.373.1636802716068;
- Sat, 13 Nov 2021 03:25:16 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=WeOVAkz9Du/PMbvz3f0ckve3VeQzpJMgdKgUBtKRVbo=;
+        b=qBOblJiyHZ2Kr9WcwE0YpyKQNlyb+QUlgVinJ1FbBofJR44sNIPeM1FvSlRBAKk0jL
+         9SMRBjBN48NFn+ivtSykp2hZtDb1w9ME5r1oy5J4gciSyLidMdxATAXG94M2N7Bekq1q
+         iZ/y94RF9+tMjECYRcbpb7j5O9pr1WtDqwrBFlnbuSRrtArWGAbJgVu3V5vvi5LAlNsq
+         VhlTYZgGZKam+Q/gXnUzjHumsO4FL2Yu4BsWRgdbUlhgDmJk/m9RwwR5lgHkiyeSYCDJ
+         U3MMl0Em44sAlEY7GY00yqwH8c57V3iLaAxvzJBkU9iejoXeiYQ+TAMMyJHmqCRF417S
+         cFAg==
+X-Gm-Message-State: AOAM530zFEy6JR4WYRrVsNQ58FDEoF7womxCpzC92a6N3VhzaOe8fUt0
+        dPk/1ZbJrwPL0wNCdDVTH32QnDw/DEXf+xaSYEc=
+X-Google-Smtp-Source: ABdhPJw2e/Qh9EJOYoQeA14GPkkGhE2ZywP/6lkTaqtWuM9/gxXegHBvhVaCn8MoZwoNezH9yrENII2Ls4sowJlrCGI=
+X-Received: by 2002:a05:6102:a4c:: with SMTP id i12mr24795126vss.41.1636835246099;
+ Sat, 13 Nov 2021 12:27:26 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:ab4:944f:0:0:0:0:0 with HTTP; Sat, 13 Nov 2021 03:25:15
- -0800 (PST)
-Reply-To: mariaelisabethdonation@outlook.com
-From:   Maria-Elisabeth Schaeffler <kayejar07@gmail.com>
-Date:   Sat, 13 Nov 2021 03:25:15 -0800
-Message-ID: <CADYczin=z-KaPoq8S8xGfSwGvpVZmw+MkXtOd1N9TJLtSGP50g@mail.gmail.com>
-Subject: SPENDE
+Reply-To: lilianchrstph@gmail.com
+Sender: aishacoulibaly4@gmail.com
+Received: by 2002:a59:cdc3:0:b0:238:d22f:51ca with HTTP; Sat, 13 Nov 2021
+ 12:27:25 -0800 (PST)
+From:   Miss lilian christoph <lilianchristophe.0@gmail.com>
+Date:   Sat, 13 Nov 2021 21:27:25 +0100
+X-Google-Sender-Auth: ZTmbiQFyaIIErBhc_5sw7u-su_0
+Message-ID: <CAO0H1XB49zLoYauY3DQAwaaUs2Z3STj38HzHBYPjPXntD=L9CQ@mail.gmail.com>
+Subject: Are you available?
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
---=20
+-- 
+Are you available?
+
+My name is Miss. Lilian Christophe I am a Canadian,
+
+I will like to request your services to be my partner,investor to
+support me transfer and manage my funds by investing in a profit
+investment and 30% of the money for you.
 
 
---=20
-Hallo,
-Ich bin Maria Elisabeth Schaeffler, eine deutsche Unternehmerin, Investorin
-und CEO der Schaeffler Gruppe. Ich bin einer der Eigent=C3=BCmer der Schaef=
-fler
-Gruppe. Ich habe 25 Prozent meines pers=C3=B6nlichen Verm=C3=B6gens f=C3=BC=
-r wohlt=C3=A4tige
-Zwecke gespendet. Und ich habe auch versprochen, die restlichen 25% in
-diesem Jahr 2021 an Individual zu verschenken. Ich habe mich entschlossen,
-2.000.000,00 Euro an Sie zu spenden. Wenn Sie an meiner Spende interessiert
-sind, kontaktieren Sie mich bitte f=C3=BCr weitere Informationen.
+I have a reasonable sum that I inherited from my late father, late Dr.
+Dan Christophe, the amount of $10.5 Million dollars
+presently with the with the bank.
 
-Sie k=C3=B6nnen auch =C3=BCber den untenstehenden Link mehr =C3=BCber mich =
-lesen
+Below is the main reason why I am communicating with you.
 
-https://en.wikipedia.org/wiki/Maria-Elisabeth_Schaeffler
+(1) Provide a new empty bank account which this Fund will be
+transferred into, in case you do not want us to use your
+personal account.
 
-Mit freundlichen Gr=C3=BC=C3=9Fen,
-Frau Maria Elisabeth Schaeffler,
-CEO der
-Schaeffler-Gruppe.
-E-Mail: mariaelisabethdonation@outlook.com
+(2) To serve as guardian of this fund as the bank insisted that its
+agreement with my late father that I should provide a foreign partner
+before the fund could be released.
+
+(3) To make arrangements for me to come over to your country,settle
+down and start a new life after the transfer of this money to your
+country.
+
+I will like to stop for now until I hear from you, have a great day.
+
+Yours Faithful
+
+Lilian Christophe.
