@@ -2,81 +2,82 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1148455955
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 18 Nov 2021 11:45:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40950455C77
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 18 Nov 2021 14:17:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235730AbhKRKsu (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 18 Nov 2021 05:48:50 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:58728 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245744AbhKRKst (ORCPT
+        id S229635AbhKRNUs (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 18 Nov 2021 08:20:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229461AbhKRNUs (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 18 Nov 2021 05:48:49 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B0ABD218B8;
-        Thu, 18 Nov 2021 10:45:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1637232348; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7yxGpvysaQjXI6Ptt8Gp6dG+FEHHiyleCV3iHc2uni8=;
-        b=REl+qZG7r3KzLa/AZSLfHfENXkNYaV/qQ4fksyh96zKlaCHrgiuJjbqZKrHfQ46FGDpqJl
-        xqwjTkGLUXJbMddkAHUu6swtYDCT2umUF3gF7Aiu1dbwIfhsCj/LnNKU5ha2/x7iDNpUPa
-        lIEg50spgwzgnnxYhDHDOdUNHeEaVEQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1637232348;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7yxGpvysaQjXI6Ptt8Gp6dG+FEHHiyleCV3iHc2uni8=;
-        b=96eMI/IgypBaORscUQ3ttn971Z59zrz2+l5ld/ajM+MPPl/5jQylJ4VRSYRlqb7jEsqFFk
-        ZkyeVrhHFoDB5uAg==
-Received: from quack2.suse.cz (unknown [10.100.200.198])
-        by relay2.suse.de (Postfix) with ESMTP id 2C9BBA3B85;
-        Thu, 18 Nov 2021 10:45:48 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 3A39A1F2C78; Thu, 18 Nov 2021 11:45:44 +0100 (CET)
-Date:   Thu, 18 Nov 2021 11:45:44 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] reiserfs: don't use congestion_wait()
-Message-ID: <20211118104544.GB13047@quack2.suse.cz>
-References: <163712368225.13692.3419908086400748349@noble.neil.brown.name>
+        Thu, 18 Nov 2021 08:20:48 -0500
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC15C061764
+        for <reiserfs-devel@vger.kernel.org>; Thu, 18 Nov 2021 05:17:48 -0800 (PST)
+Received: by mail-vk1-xa2d.google.com with SMTP id s17so3761078vka.5
+        for <reiserfs-devel@vger.kernel.org>; Thu, 18 Nov 2021 05:17:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=7LQzuG5zPADyGghetUKfYzNcTmPaWCXO5pCvjIHTH58=;
+        b=N0VOBc4haHgLr/ecWCAH9xr48ldtQGqvqNCVmFWkLTe+ussEQ5zL1YGfU94+GvGWXJ
+         j+EWMuBhg/HEF8uNgRGlQzwCYctJn6ZGs2GLbbMTBVt+4Qz7FNkF6yNU90CWR2pQkCCd
+         OTaQDlpFXluv8eSu2y55/UloedRUfHsiU4Bhq/ss5dqmi+IL/osGh5jwPZG/gS12ay+O
+         of5Pr5/am8sOxpkfygfVODzlng0T4kqaeNA8kFNfNisXf2JXoMCO609HDQwf4dTy55Zv
+         UixRM4mqf5oa+1m6B4yyC2DMdZqAhQt0/2g9dLSZpep4UyiPIVEFZ3/30pa5KtHysqFU
+         BrJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=7LQzuG5zPADyGghetUKfYzNcTmPaWCXO5pCvjIHTH58=;
+        b=hGxM2M3iAtlRpZsDuUDc2O9S0JSt9GJ3suzTSLijQvzYAw1F7GtJzq1rOgxiSBchwj
+         qtKQI/5/BN45e3O+Kkse/kZO81LYPwWGJqad2qw8wpBNhS7tqFsvW6N8iNWDii20qo3n
+         gaLr/HkKrfIvvkKagmDFg7SxMkDiGBrG9zDxLmiRKSWN7bHExTZD8ohElRE9UIouT7Ff
+         vuc5oLGMer0LamIeMn7E8P5h/f6HtETticGnlqLL+OvMcV+N8r6AlQijBOkudwA8PNe9
+         okuM5pTOhvKAYNzESU5OU5Sw9S8+v7xGb9n8RXF/yPngPENdUoQd9DeMD7eZjrXolLGu
+         y3xg==
+X-Gm-Message-State: AOAM532ZLBrhZwlmH7XN4QObiBuRy8rWpniouE7q8yE28NIo0eg/Fx3S
+        JeIULSycBSRkw+tdPLAro6rOL2fZwv4lVCecfrE=
+X-Google-Smtp-Source: ABdhPJxKKquE4hPq4EPh1KuEtUXJs84ZuZSQxKheOBBunKaJRq6idU9bYsmg1ZWc4zAGjTGA/U8aPE00wdMsEO2YMfc=
+X-Received: by 2002:a05:6122:1788:: with SMTP id o8mr103238143vkf.8.1637241467509;
+ Thu, 18 Nov 2021 05:17:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <163712368225.13692.3419908086400748349@noble.neil.brown.name>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a59:c8ad:0:b0:245:5389:9d29 with HTTP; Thu, 18 Nov 2021
+ 05:17:47 -0800 (PST)
+Reply-To: UNCC-CH@outlook.com
+From:   United Nations Compensation Commission 
+        <mikailshuaibu247@gmail.com>
+Date:   Thu, 18 Nov 2021 05:17:47 -0800
+Message-ID: <CAJKdpu_MjL9W8WWtBtdq-aFnY+cpC5q=fZNFKZbdma2trOm6=w@mail.gmail.com>
+Subject: re
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Wed 17-11-21 15:34:42, NeilBrown wrote:
-> 
-> Block devices do not, in general, report congestion any more, so this
-> congestion_wait() is effectively just a sleep.
-> 
-> It isn't entirely clear what is being waited for, but as we only wait
-> when j_async_throttle is elevated, it seems reasonable to stop waiting
-> when j_async_throttle becomes zero - or after the same timeout.
-> 
-> So change to use wait_event_event_timeout() for waiting, and
-> wake_up_var() to signal an end to waiting.
-> 
-> Signed-off-by: NeilBrown <neilb@suse.de>
-> ---
-> 
-> I have no idea who might take this.... Jens and Jan have both landed
-> reiserfs patches recently...
+--=20
+Attenzione: Beneficiario,
 
-Yeah, I guess I can take this one. Honestly the whole code around
-j_async_throttle looks a bit suspicious but your patch does not make it
-worse so it looks safe to me :).
+Questa =C3=A8 la seconda volta che ti informiamo dello statuto dei tuoi
+fondi di compensazione di =E2=82=AC 5.500.000,00 (cinque milioni e
+cinquecentomila euro). Si informa che siamo stati autorizzati dalla
+Commissione di compensazione delle Nazioni Unite (UNCC) a rilasciare i
+fondi di compensazione di =E2=82=AC 5.500.000,00 tramite bonifico bancario.
 
+sito web
+https://uncc.ch/home
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Per la richiesta di fondi contatta le informazioni di seguito
+
+regista
+Signor Hartmut Wenner
+E-MAIL: UNCC-CH@outlook.com
+Commissione di compensazione delle Nazioni Unite
+
+Distinti saluti
+La signora Susan borowoski.
