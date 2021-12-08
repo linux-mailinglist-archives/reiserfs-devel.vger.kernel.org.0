@@ -2,93 +2,65 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 685FC46CC03
-	for <lists+reiserfs-devel@lfdr.de>; Wed,  8 Dec 2021 05:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE9646D2AD
+	for <lists+reiserfs-devel@lfdr.de>; Wed,  8 Dec 2021 12:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244131AbhLHEOw (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 7 Dec 2021 23:14:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
+        id S229533AbhLHLr3 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 8 Dec 2021 06:47:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239919AbhLHEOv (ORCPT
+        with ESMTP id S229530AbhLHLr2 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 7 Dec 2021 23:14:51 -0500
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52111C061574
-        for <reiserfs-devel@vger.kernel.org>; Tue,  7 Dec 2021 20:11:20 -0800 (PST)
-Received: by mail-il1-x144.google.com with SMTP id w4so1024984ilv.12
-        for <reiserfs-devel@vger.kernel.org>; Tue, 07 Dec 2021 20:11:20 -0800 (PST)
+        Wed, 8 Dec 2021 06:47:28 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06915C061746
+        for <reiserfs-devel@vger.kernel.org>; Wed,  8 Dec 2021 03:43:57 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id p27-20020a05600c1d9b00b0033bf8532855so1586847wms.3
+        for <reiserfs-devel@vger.kernel.org>; Wed, 08 Dec 2021 03:43:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
-        b=CutUi/r6lKIoJjLP2bKTPbdDwhETyEFLP1nH/f7tvCrk1D7qPFSC5JRsw7j8CoO0zm
-         dRYtIvSq3VBVEHuI4jhmwDm1IURo7ecEVE5W+U5L5VzEnrHmt1Y8ZB3G9Fy10YLjnPAm
-         Ek0r5KC4mvOY2CD/U3S6pkqBE6iv+0uQFzHwIuOl76VfJxuUPH0WSMZVjZcautTMYmTn
-         1RQobfMFgSDgYXJGHFPA3aOzPm+SH+ajl7dL2+W7XuIR8J8S/V1ffF/4nkQzM3Y6yUpn
-         yaDKfHXr8AruzzSPerufLyIVTAFov2PGYSu3+4YGiZiI00GL7ra4uTn/Wd6Rh9zmXkQc
-         MhnA==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=esxAadU3+UzyTWgJKT1bUwFTK6KpmX9nIkgAaCqEFJ8=;
+        b=QqMeR00j/feEM8LKYcJrmyfzL1Xigbwbr5Zzyr5wMQw4CMo94+wjN7N3DrGIFmSFeQ
+         AhkHLgbznv28KKcoS14IA/A+jEKQ5ifizRB2sMcYE9iILdNMNdRLmTHhzBCSCakrGiUx
+         V5e0hmlIDvTbQKKx6KyKqAU2jCNhCx0yWhhS8Pq0RbVJT71s1hygV0DREH4GC/dn/s9N
+         Ju8t+4OAmaFKKXX54maWIqXVoQtrpTSkjVZAUMxmUGZC7ry0vVBxJO7DxVvd67whFRCD
+         kpQOrPBr1+fenrdCihvk62k9RjHcRAT9bk7ft2RjOcQec+RgdCfhZuibNU6h39AkBOtT
+         noBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
-        b=LwuopmYy2ywHX3YqLZPdSwg2bVG7P+Fm8D2Qcvlk2d7ayT9BaW2w2QwZPxOWX/AAMT
-         JCao8eIWGUIjUvDoXH5crbOX0ZQhIJZyjk0yhlxzqxxbZocBbdfzcVfyk0suoPG6bNqi
-         DHihv4WC1OKqGbSQhtM+hRqtU6GkXcPj43ymE6HVRZSYzubt0XJluyuIuz7H//oCJuqp
-         kpyWNMk/rCYdugy2/DFKl6g/tRPMJ906WsYA9EnrfR6kQssnLumCX3muYkbUdlBfEahK
-         QrRrIijMs4yBBun8yoNrbli48OyR4zVmXe60ONOAg9G9GHab2WIQLRE+hNKeVYhqA2Qz
-         l6FA==
-X-Gm-Message-State: AOAM533lnL6cpfTaO11QOfviWBDV7QnnLeFRnd0P4wyJtWEQ7AgDepjq
-        VuXR3jaSdaWXKU1SuSmqS3ZLjvjKqQn9W+vBLvI=
-X-Google-Smtp-Source: ABdhPJzhb1y1AIlUvd97u1v5bkva7AmRbKBstEOI25Zv9QP//bzNtmStIOPnKQrCUoF0WLInKwt2YXin8B2MhgoyPAI=
-X-Received: by 2002:a92:600f:: with SMTP id u15mr3948508ilb.292.1638936679742;
- Tue, 07 Dec 2021 20:11:19 -0800 (PST)
+         :subject:to:content-transfer-encoding;
+        bh=esxAadU3+UzyTWgJKT1bUwFTK6KpmX9nIkgAaCqEFJ8=;
+        b=lAyBKJEy4Dxu7bzBnUpvNvAfRF1jFr/ZKEe75kGa+cykANCw7zbtXjmvhBdxCC+qf2
+         Cti2GvQB0tilMJ6EJYD6Ag4VonZ8SHbv4no/IG1f/hWEx+8WS9BULXWETK433nCfBftD
+         Y9918gwsAuhFovN4TQsc18gCs5wgCU0+bSd29aCwPdM26Di4YLwnUIP3T7I0yKPoGkHf
+         PWGPqyDuTODRoqHoiLLDsYZXUWbCOgsEQ5AFNG4xXgvvtHk4QKsui+0MsrVV57uZSI+z
+         48WISYCv2FncHmZqdQl6WTt1VJZXHmTLG9pIlft/xuZlwZRdNlRmsVN40T9fMTR/3kvt
+         Dukg==
+X-Gm-Message-State: AOAM530ByVI5/Nk9htlU8UF9bxqmV+q7toECqnYovOsJeDRfCe/jHz3q
+        JIWywFIwmMAoACBA+C3ZMb0EOzU5IyJZCNps89c=
+X-Google-Smtp-Source: ABdhPJwSc9Xxyt51BAAm/TgAAPz3d0uZ2l2ypU7BKg9LXy5mZHlRqW8jfOMbFqI9O5Eq1No9tkKvXU1LF9UKzqzopag=
+X-Received: by 2002:a7b:c10a:: with SMTP id w10mr15208624wmi.183.1638963835517;
+ Wed, 08 Dec 2021 03:43:55 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1a07:0:0:0:0 with HTTP; Tue, 7 Dec 2021 20:11:19
- -0800 (PST)
-Reply-To: dj0015639@gmail.com
-From:   David Jackson <enkenpaul@gmail.com>
-Date:   Wed, 8 Dec 2021 05:11:19 +0100
-Message-ID: <CAG7-cQ8DY3yKJUkHdXFz5B2Npn4frRu3Q4JJjd1c=_NMoWd7tw@mail.gmail.com>
-Subject: FEDERAL BUREAU OF INVESTIGATION
+Received: by 2002:a7b:cd8d:0:0:0:0:0 with HTTP; Wed, 8 Dec 2021 03:43:54 -0800 (PST)
+Reply-To: t50730171@gmail.com
+From:   Maria-Elisabeth_Schaeffler <chepkemoiharriet@gmail.com>
+Date:   Wed, 8 Dec 2021 14:43:54 +0300
+Message-ID: <CAB2gf_whE4+Za0HF=QK3Cyrn_KWGZw34Gd21ByboztHSv93TiA@mail.gmail.com>
+Subject: Spende
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Our Ref: RTB /SNT/STB
-To: Beneficiary
+--=20
+Ich bin Maria Elisabeth Schaeffler, ich habe eine Spende f=C3=BCr Sie,
+E-Mail f=C3=BCr weitere Informationen.
 
-This is FBI special agents, David Jackson. I was delegated along side
-others by the United Nations to investigate scammers who has been in
-the business of swindling foreigners especially those that has one
-form of transaction/contracts and another. Please be informed that in
-the course of our investigation, we detected that your name and
-details in our Scammed Monitoring Network. We also found out that you
-were scammed of a huge sum of money by scammers via Western union and
-MoneyGram. Be informed here that in a bid to alleviate the suffering
-of scammed victims, the United Nations initiated this compensation
-program and therefore, you are entitled to the sum of Five Million Two
-Hundred Thousand United States Dollars ($5,200,000.00 USD) for being a
-victim.
-
-Note that the said fund will be transfer to you via the Citibank being
-the paying bank mandated by the United Nations officials.
-
-However, we have to inform you that we have been able to arrest some
-of the swindlers who has been in this illicit business and will all be
-prosecuted accordingly. Be informed as well that we have limited time
-to stay back here, so we will advice that you urgently respond to this
-message ASAP. And do not inform any of the people that collected money
-from you before now about this new development to avoid jeopardizing
-our investigation. All you need to do is to follow our instruction and
-receive your compensation accordingly as directed by the United
-Nations.
-
-We urgently wait to receive your response.
-
-Regards,
-DAVID JACKSON
-FEDERAL BUREAU OF INVESTIGATION
-INVESTIGATION ON ALL ONLINE WIRE TRANSFER
+Gr=C3=BC=C3=9Fe
+Maria-Elisabeth_Schaeffler
