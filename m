@@ -2,78 +2,87 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2AC47104B
-	for <lists+reiserfs-devel@lfdr.de>; Sat, 11 Dec 2021 03:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0753D471379
+	for <lists+reiserfs-devel@lfdr.de>; Sat, 11 Dec 2021 11:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345682AbhLKCFx (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 10 Dec 2021 21:05:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48230 "EHLO
+        id S229461AbhLKKwL (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sat, 11 Dec 2021 05:52:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345688AbhLKCFv (ORCPT
+        with ESMTP id S229456AbhLKKwJ (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 10 Dec 2021 21:05:51 -0500
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87CBC061B38
-        for <reiserfs-devel@vger.kernel.org>; Fri, 10 Dec 2021 18:02:15 -0800 (PST)
-Received: by mail-ed1-x544.google.com with SMTP id l25so35620017eda.11
-        for <reiserfs-devel@vger.kernel.org>; Fri, 10 Dec 2021 18:02:15 -0800 (PST)
+        Sat, 11 Dec 2021 05:52:09 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F16C061714
+        for <reiserfs-devel@vger.kernel.org>; Sat, 11 Dec 2021 02:52:09 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id l5so10637730ilv.7
+        for <reiserfs-devel@vger.kernel.org>; Sat, 11 Dec 2021 02:52:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=UB8HPXfiFrSS8lJHVD9imqT8IM8lXgQeVTQMVTTdoew=;
-        b=YLFlW2EU3wC14KpVTk+IM58oSghSYLjMmVu6zQ/IYCwgsR5Sf12xJCL/5+CVpbXsnt
-         22KfNqT06o98mhCtfoOfWNh/4tfFmj2AFDjLdssqJs8+fwuuzWeqstsrP9Eqc87OlMHn
-         TvZYh66KNDgDYMOMzV+7fqlsVNnsPbs5tbKal0uE5CTp2Rk7sipJ65nnPaJWW6urjiYG
-         yjhaQr0+DsLsyIMnaiNd6rjtUc7yQgIo65YEuBLpX5cuMOVjNiZW8dTCMF1ZcQmI8lLg
-         ts2zRNIssQ7WVu8YEQseHp9elEHPuA+qDafMGck3ipNTcw1LcoccQXJFJcltFVTtty4m
-         33gA==
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=9Pm1ZZNqNR51f3pcy0p7ZDjptiZvuuOtgQluWaY6SaQ=;
+        b=TrGzexCe3ySh0X++7VScWi+xoGY1VtmJHUTq26CrWdgrLd+7oUcu5iyS/Vejqyp97+
+         lbVblXfg8jdojZDaOz449fPWZA9/Tag238KeZZADvuVOC0GPOjETYt2BwjLCuJ5PFrRJ
+         D+npTmipKd4CEsJyx6TCVHCA144ngb+t69nEHIpulOLjUGQirIO87Uk2W5XM0XAqCVn8
+         0FltGmmaIFj7jLxZnrShb4jNVs0W/HwlQV/tc8v1HdbuNif1chigut00TL7LvRLsuF0I
+         tRCZkh7GBPEih+RDgU+gTLDudk8mfy6WRP6lcAWe5aLWy6gWkZUZ474/C4rrQKQSHaQr
+         Pfhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=UB8HPXfiFrSS8lJHVD9imqT8IM8lXgQeVTQMVTTdoew=;
-        b=HxjsLa/3dEe7RCM62FjZYtMQ7+k6nTki1kqWMBeR5LJbtxZC4sVZ5YidZ035tYlVEN
-         TpZvwjHQTgyK+sIWqPnCEkCKIopIKUFU+PV0avM2rq3OZaUDcr5kEWWGQpMm68ZonMVi
-         IWn49m/l/k1FRpSdI+qnDh7dI1exFYkaYwy4TTNlA6ed2T7LdtDi4fZibkmUZelgi9ZX
-         Y1gOfVsylyiJu5z6P1FQqSiwzv2jdkbNlgnlMo8Urk4jS9PHjsLY+Ps5gy/n/4zeBxD9
-         0VT5E1KuwF9CY+lg3bpBfQ5G1OBoD+8A7S5qFu/6PyKjUeYxYLmBME+7RbhYFIywJGkh
-         WAPw==
-X-Gm-Message-State: AOAM531ekOPAGFI5kkPp+r7BSY8XeQ2A0lNhv9vhVKHFVEW2XJa5IcSB
-        kpvz5NJfHDSlhZKdzm0/kCVzJ2JTPvlzQznuk+oG9EHj8L1wo0k9
-X-Google-Smtp-Source: ABdhPJxBVYZ26kuukI+qghu2oEbePULLlY8UzOvy8Thh2XI49DVZF++TlN5eyoWkvajWnohXM36KonRfGTJC1IRe82w=
-X-Received: by 2002:a2e:9d8f:: with SMTP id c15mr17452679ljj.477.1639188123220;
- Fri, 10 Dec 2021 18:02:03 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=9Pm1ZZNqNR51f3pcy0p7ZDjptiZvuuOtgQluWaY6SaQ=;
+        b=QZ1AnMBouXffEJ3LpH3zOBu/hekecJ3FSFX0FJrNaZm/xQ715n2v4CgHYoCaVQ71/7
+         6kJt6UudgCt6ft+WGa848klAVCS3hHSUIGBTnJ1GxkLvNoqTrFWsO+sLN9NHFCT4FUAp
+         ycVp2CAnhBRMAh/ehgCA/93CZDpgKVXvCJUa04Fcobq+2+hekAb39K94ggMRhoz+ixQo
+         jOt3ZXLAGpHAOSQySWAl3AYRZH5JF4PfTAlHJjs2ngVcezBRpwvNx0JMCCl+B1iTfQkV
+         baKxaCDNcYLHYflOYeR3hPywIXs2o+S6ta0gOgoP8l/fcnc4kH5oce37ff2mSLvX7/mW
+         rLxA==
+X-Gm-Message-State: AOAM530bjkkzrK1Fq205sAzgxmXxMIL8La4V0Cb4No34bRJigU/4+69u
+        01g8geRl6ErFTzawpF99RuYFuBoG+u1FyLgOP8c=
+X-Google-Smtp-Source: ABdhPJxyZ8ViXkesqx0964/nSNoOb4tabWqyk11+NWROjfdm1y8Y2Eia/hJiuGSKGbpmU6UJiQiwYK2cPW45ibNFZQg=
+X-Received: by 2002:a05:6e02:178b:: with SMTP id y11mr22195831ilu.126.1639219928903;
+ Sat, 11 Dec 2021 02:52:08 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6512:12c7:0:0:0:0 with HTTP; Fri, 10 Dec 2021 18:02:02
+Reply-To: martinafrancis022@gmail.com
+Sender: louisedupont100amour@gmail.com
+Received: by 2002:a05:6638:4184:0:0:0:0 with HTTP; Sat, 11 Dec 2021 02:52:08
  -0800 (PST)
-Reply-To: internationallmonetary695@gmail.com
-From:   International Monetary fund <abubakarsadiq1297@gmail.com>
-Date:   Fri, 10 Dec 2021 18:02:02 -0800
-Message-ID: <CAHXNoSg3Z7iK4ieUWhau28hUaL637ztb2vgqOT3oZCxEMRC3RQ@mail.gmail.com>
-Subject: Dear Beneficiary,
+From:   Martina Francis <martinafrancis655@gmail.com>
+Date:   Sat, 11 Dec 2021 02:52:08 -0800
+X-Google-Sender-Auth: gpGJm99HXbKyDLENxRtHd327TEA
+Message-ID: <CAEoVoBr23Vzt-SHsTTzT5e8dC_ZrhXP9qtqwP9LrUhgiiCWQuA@mail.gmail.com>
+Subject: Bom Dia meu querido
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
--- 
- I.M.F Head Office
-#1900 Pennsylvania Ave NW,
-Washington, DC 20431
-INTERNATIONAL MONETARY FUND.
-REF:-XVGNN82010
-internationallmonetary695@gmail.com
-Telephone : +12062785473
+--=20
+Bom Dia meu querido
+Como voc=C3=AA est=C3=A1 e sua fam=C3=ADlia.
+Meu nome =C3=A9 Sra. Martina Francis, uma vi=C3=BAva doente. Estou entrando=
+ em
+contato para que voc=C3=AA saiba meu desejo de doar a soma de ($
+2.700.000,00 MILH=C3=95ES de d=C3=B3lares) que herdei de meu falecido marid=
+o
+para caridade. Atualmente o fundo ainda est=C3=A1 no banco. Tenho uma
+doen=C3=A7a grave de c=C3=A2ncer e minha vida n=C3=A3o est=C3=A1 mais garan=
+tida, por isso
+tomo essa decis=C3=A3o.
 
-This message is from International Monetary fund (IMF) I am Mr Bo Li
-deputy to  Kristalina Georgieva the current president of International
-  Monetary fund (IMF) We are aware of the stress you have been passing
-through and how you have lost your money trying to claim your fund ,
-you have to worry no more for the international monetary fund is fully
- in-charge of your fund now, contact  me for more info on how you will
-receive your fund( internationallmonetary695@gmail.com) or call me
-on-Telephone : +12062785473 for more info.
+Eu quero que voc=C3=AA fa=C3=A7a uso deste fundo para os pobres, crian=C3=
+=A7as
+maltratadas, menos privilegiados, igrejas, orfanatos e vi=C3=BAvas
+sofredoras na sociedade.
 
-Regards,
-Mr Bo Li
+Por favor, volte para mim imediatamente ap=C3=B3s ler esta mensagem para
+obter mais detalhes sobre esta agenda humanit=C3=A1ria.
+
+Deus te aben=C3=A7oe enquanto espero sua resposta.
+
+
+Sra. Martina Francis.
