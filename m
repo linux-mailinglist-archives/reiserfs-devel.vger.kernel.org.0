@@ -2,55 +2,55 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5474770C4
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 16 Dec 2021 12:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85706477EB8
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 16 Dec 2021 22:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233173AbhLPLmy (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 16 Dec 2021 06:42:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
+        id S235310AbhLPV0K (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 16 Dec 2021 16:26:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233534AbhLPLml (ORCPT
+        with ESMTP id S234224AbhLPV0K (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 16 Dec 2021 06:42:41 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9A9C06175A
-        for <reiserfs-devel@vger.kernel.org>; Thu, 16 Dec 2021 03:42:39 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id eq6so1667612qvb.7
-        for <reiserfs-devel@vger.kernel.org>; Thu, 16 Dec 2021 03:42:39 -0800 (PST)
+        Thu, 16 Dec 2021 16:26:10 -0500
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198ACC061574
+        for <reiserfs-devel@vger.kernel.org>; Thu, 16 Dec 2021 13:26:10 -0800 (PST)
+Received: by mail-vk1-xa2d.google.com with SMTP id s144so263648vkb.8
+        for <reiserfs-devel@vger.kernel.org>; Thu, 16 Dec 2021 13:26:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
-        b=K+n9/Q643hF06qaRTfNZAWda8LVlgLOG5CgJcxFPWIFoMhWM1EYpXAS64XJojMwQQx
-         EqR+WcL8ZKNdKxI1rlI6J1X97CAv/GhyzN+frFPEhWEVujbKy2tsQcjkeqXCKP3RT5yd
-         lKeuN0Xs1P/9DhC82fVpgIS54J8emMt0iaVxeunUZuwWzCiKeFFLaXjlQtjXsDp+7Fh/
-         B+VWl/xgmUtxz+BtFM5UhxSltD/0zH4S4seawy0715by/jAvKD9YON3PqOtBI62SbWBD
-         jWpeya/GzA0ycvExWcOcBmWl/DCk9yUsFN2bNj9QfFGM6FIFkaKrPoGkEqRJBjgcerBq
-         tR0g==
+        bh=BIGsyT/jIw9GrteMkVHRWAVM0ojLHj0SnpyntqL4m/c=;
+        b=ZgnFYy+A9Va0kp1BkhdV4DPR+VTfFacfa8LRRdtBQLyuJE7gk9WUHMBM/OJXDxwhMG
+         qFwdRV2hBYqwRhbkQvf2StfPHY8KS6Db7OW3IvN/HeXDtuU4Usw7jPyXoXLj6M9HDBgy
+         axymzuSVtatp7NIMZuYW5eXnaS8q4+CeDHWRQImeJun5QsRZAQF3cmfgz6SwXuLQqW7B
+         IIhAuLBUkY0EFIoNOTqhKJEjDM8TFEkbRB+O5bLCwG6FyGWVZQAUve7Plw0klA/XCcOl
+         ZVkobE9oPS7toKQ2x/fbhOHH9reZ6I/3nFLKK3YJpB9FtkNdg522uKTjExKCosE+MLLv
+         s3pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
-        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
-        b=7KifF+GZEEXuF7nM0e03YgpBOJLzHiJwiLUBWwtRpNEevtzMQHbmXPg11g5Xphcpvq
-         ujf9x6wXzu+XhBQ7NTrQ13FBeSTaEEl/mt51Js/FDB+V8dLRH5rjPiUueKydxCS/EMg+
-         rfwOGfApHdidglqM1kUUjdMU6xiLWEy4SJpFxHu+bIdvtvha8eJNR/x6LXbYPWlnehil
-         nLwBwoGWa/TpM7opVXMl/1x41VnE0E52/fkRCw3QO5bAIHuXVWxL5jQjsKSDDAPqHb2o
-         ZALgr5RUTqGaTbDovWRnUIFZolRUZ2fT388idv08w/Eu/1CazNKezp+GRfp5KkXIGvmg
-         3opg==
-X-Gm-Message-State: AOAM533JmY2Nwgpn7CJcJSe7GCLYUWXyZbk9UCT10pNEZ1vginuWId7U
-        TJget16mT1yFLl47e3PQr2FMOQ+v4PpmT9cOcFg=
-X-Google-Smtp-Source: ABdhPJw1cRuUMMVas+y+QgdrxBW0LuhuWfZ+tfQTS0xFMTT3zW1pjnPXSYKcurxzVoeaOVJevX3+oCe2P65vw9z9/aU=
-X-Received: by 2002:a0c:e5d1:: with SMTP id u17mr15209801qvm.120.1639654958961;
- Thu, 16 Dec 2021 03:42:38 -0800 (PST)
+        bh=BIGsyT/jIw9GrteMkVHRWAVM0ojLHj0SnpyntqL4m/c=;
+        b=39/RmRz/gwF3beYJK2DqHVqfp8IZ1ASxQGqJin6pwTAZrdySACXFVJc2BAJJQjKsUJ
+         p/+PUf0TWxYHBEFEfYcUzZADyr06PTxw1PdC1i33kNcEUPQmH4J2YtbZrcu4yW3xX2D8
+         rkm8lLSTNWVVGCT8eBki/qoTAUJQOARnJ7CLhvKKKfvu2U2NgqFIRWLnua8fJBNQ5+Sp
+         Oome3EGHLP+0xzGikY8wv8jmftVjOS6hd6MkprDLJE0IHiJiOA3YcWBq33UPOPyHf0NR
+         tbFD+nj3UYU9G5sK4HkadoOYhC9wkoJb8phKfF+wYm8nqtwqRQbS4fvlXOS2iMfJn9lP
+         PQLw==
+X-Gm-Message-State: AOAM5317XfPehNn2asrjFNzsYggSkZwzBZnXqXw19Yd4DLBCig8yQ1sC
+        SwcmSIzT5gkd/h1Dd/V5eAcZdWpFVG1HE0s0zgY=
+X-Google-Smtp-Source: ABdhPJz7W3jYjaxnYAD2nJXbHRckZQzwsEZ2cVQdy40kLigbNwUSDvbVNy3P+j5GCne3uLlyWHNI3UrbpAvaGbvwRWM=
+X-Received: by 2002:a05:6122:8c6:: with SMTP id 6mr7283954vkg.33.1639689968160;
+ Thu, 16 Dec 2021 13:26:08 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:622a:199c:0:0:0:0 with HTTP; Thu, 16 Dec 2021 03:42:38
- -0800 (PST)
-Reply-To: selviasantiago1@gmail.com
-From:   Selvia Santiago <mariamatinez119@gmail.com>
-Date:   Thu, 16 Dec 2021 11:42:38 +0000
-Message-ID: <CAONDhKPEx+GKyJvnzbcBxs-brt1E0c+b0jdG7u7Uf+rYJ1N+fA@mail.gmail.com>
-Subject: Urgent
+Received: by 2002:a59:b365:0:b0:270:9a8d:3e94 with HTTP; Thu, 16 Dec 2021
+ 13:26:07 -0800 (PST)
+Reply-To: schaefflermariaelisabeth5@gmail.com
+From:   Maria-Elisabeth Schaeffler <jolinkinvestcoyahoo.co@gmail.com>
+Date:   Thu, 16 Dec 2021 13:26:07 -0800
+Message-ID: <CAPee4heUjQxfXjc0q6u5bUy6FbJztWvnTJh8QyfsRmH3HmLwWQ@mail.gmail.com>
+Subject: =?UTF-8?Q?Herzlichen_Gl=C3=BCckwunsch_an_Sie_und_Ihre_Familie?=
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
@@ -58,30 +58,18 @@ List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
 -- 
-Urgent
+I'm Maria Elisabeth Schaeffler, a German businesswoman, investor
+and Managing Director of the Schaeffler Group. I am one of the owners
+of the Schaeffler Group. I have 25 percent of my personal wealth
+given away for charity. And I also agreed to that
+to give the remaining 25% to individuals this year 2021. Because of the
+I have the corona virus outbreak in Europe and the rest of the world
+decided to give you and some other random people 2,500,000.00 euros
+to donate. Contact me for more information.
+Simply contact us at: schaefflermariaelisabeth5@gmail.com
 
-I am Mrs. Selvia Santiago from Abidjan, Cote D'Ivoire, I am a widow
-suffering from long time illness (Cancer), there is funds I inherited
-from my late loving husband Mr. Santiago Carlos, the sum of (US$2.7
-Million Dollars) which he deposited in bank before his death, I need a
-honest and Faithful person that can use these funds for humanity work.
-
-I took this decision because I don't have any child that will inherit
-this money and I don't want a situation where this money will be used
-in an ungodly way. That is why I am taking this decision, and my
-doctor has confirmed to me that I have less than two weeks to live,
-having known my condition I decided to donate this fund to a charity
-or individual that will utilize this money to assist the poor and the
-needy in accordance to my instructions.
-
-I want you to use 70% of this funds for orphanages, school, church,
-widows, propagating the word and other humanity works,The remaining
-30% should be yours for your efforts as the new beneficiary.
-
-Please if you would be able to use these funds for humanity work
-kindly reply me. As soon as I have received your response, I will give
-you further directives on how you are to go about the claims of the
-said funds.
-
-Remain blessed.
-Mrs Selvia Santiago.
+Elisabeth_Schaeffler ===================================
+==================
+Kind regards,
+Mrs. Maria-Elisabeth Schaeffler,
+Managing Director of the Schaeffler Group
