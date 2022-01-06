@@ -2,51 +2,71 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D4847F651
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 26 Dec 2021 10:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7F6486554
+	for <lists+reiserfs-devel@lfdr.de>; Thu,  6 Jan 2022 14:36:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233206AbhLZJnF (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sun, 26 Dec 2021 04:43:05 -0500
-Received: from slot0.jllresort.com ([62.197.136.5]:48201 "EHLO
-        slot0.jllresort.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233202AbhLZJnF (ORCPT
+        id S231253AbiAFNgp (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 6 Jan 2022 08:36:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230323AbiAFNgp (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sun, 26 Dec 2021 04:43:05 -0500
-X-Greylist: delayed 743 seconds by postgrey-1.27 at vger.kernel.org; Sun, 26 Dec 2021 04:43:04 EST
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=jllresort.com;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=ele.mon@jllresort.com;
- bh=bFiQpQCHWCGVvny0hQ9jaamMpcA=;
- b=Xb5uX26uml2fogEHCFwof+2QWt13SaYvJhDHR7+jYH4Fu4qNCrNtYj3yOjjQBM7WSOweQeyII06D
-   nQNVsvyeF6ltjz606nqVwjm20q57rcvaHZ3MnVCE1J+1tCG5CZK1VI6W4KPq44Jf2p+IUVUg2kCB
-   ODlWTsHNmpCd+inBxXwiTnk+3d9rjduztT/fTR65zpCL/Got7Njcz+gDcGDWYkLDLEzUJzXR0xCC
-   CJHbx50zWoGqZJZ6+eZZmvzoGmBjIqKpd6zWhe30L2O9FG3wnyfOr1GRWDw+o8b3h2InzYNcOHs+
-   cDshgT1AMqvBOJ8YmwAeFD3iMpy3CtZV4Ubshw==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=jllresort.com;
- b=sw/ZhmBCL+z9ocVe8q+84miqEYm7MwcHmYdlJwiEs56gtv27Mb8nQ8qfmKNycpyMSrWmvtxhBzcZ
-   OaAiq9q8NQeEKPp/+xKo5M82Rjq8TeWYVA+9q0fqdtdbkRokec75K/vWhM43pzerkvJUYH4fNnNt
-   ZUEn5QmYGhBMY35ViB9uLTULchrEXn06MNjLwGayYeWfVwPcmiwwwhm+4ToCmn59iIFD1MIeId05
-   EpfJydCBqv/bGQhdh6xIAeF4Ru9zeo9143Uxi3MH3g5jqBYwJ4sEho/wNi4OtY8VWdbTkkCH7RUi
-   IA0OzY31W48yuqOvu7rkEWxKUJZcFE0qAhtH9A==;
-Reply-To: mustafa.ayvaz@ayvazburosu.com
-From:   ele.mon@jllresort.com
-To:     reiserfs-devel@vger.kernel.org
-Subject: Happy Weekend:
-Date:   26 Dec 2021 10:29:35 +0100
-Message-ID: <20211226102855.9EB79A2A136A3694@jllresort.com>
+        Thu, 6 Jan 2022 08:36:45 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAA7C061245
+        for <reiserfs-devel@vger.kernel.org>; Thu,  6 Jan 2022 05:36:45 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id r4so4981923lfe.7
+        for <reiserfs-devel@vger.kernel.org>; Thu, 06 Jan 2022 05:36:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=uJgY9Ja/bTx8jUQfCQ75cZQHBoMIGN7zUd7qufLcWbc=;
+        b=GWa6lTZ7FFNrMhj+/5T07FO5cvLsENvBwxNCe/XNcVLGiCgYxxbGydcHHwMXV2B9GK
+         H4ghRhwC0d5d8SBja4J1nP3WjT8tRmsePo0HoPjXMIHIV2i/iE+URFQ1+4Zlf02TDUfJ
+         rJ0hDnTeVlS9kyEu1mlREfUwJHugx22BEDxP8uyMA4svgmE7a5MzK1EQXUNanHIw2/xy
+         gMrNj6/OqAYceldK+kTwwWofWGozX+5DI0q6g+Q1QBpysfa1+LVAZBl4mEnrK7H8avv7
+         NrrcVmReAXuwoAehaLBgkgJeImRm0rk5U/uWUapH6pSUfIzPRmZQH8w6JRXZ7/yGF6+e
+         Er/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=uJgY9Ja/bTx8jUQfCQ75cZQHBoMIGN7zUd7qufLcWbc=;
+        b=5JheUfbUSempxxmRnDMcMbLAvXHtcn7Ff7biKlrCc49sk2Q5TfmLSruy6pgRjv1KrT
+         oVqQqy8Z1wNoHhhoUWpAuZg3HA48mVNA1Zgb/r81ZOGbzOWfFRscsHHtBUFD8/76bWgA
+         JtJtdL9XXPkDZFyF8+aEfws7kkicmdZ2VoPhoK5ukpj6R3ZhdJjmOjA9JPVfWHAYF6J2
+         l/9Lfm2UW6Hy7hzq/cGdX+1xyejanbeRluQKmofHE8ur0vmaJwORb5vrZ8T6Q2MToDWL
+         UZM7niV0GnB8ZMT1JRI4ANQDIrfkWUGcixvbk055y4uDhnWMuk1bgJZsj5n8bbkB/rgc
+         f8Yw==
+X-Gm-Message-State: AOAM532j64tHvKq9liX1Ug4OtcMhSWLEI2hMpcrfCn/grTABCPn45RKq
+        La41eONv7rUdapi7zDKdIJo1m7BRtp6yLvoDeCs=
+X-Google-Smtp-Source: ABdhPJyxapnuWcr1aUUckZlSIwGBUNgShX0INr+DtdzxtjjiBM6xwPVpN0PGQchavPuFqSLjlAy74gogvF38MpQ3hlc=
+X-Received: by 2002:a05:6512:3b11:: with SMTP id f17mr51818318lfv.658.1641476202997;
+ Thu, 06 Jan 2022 05:36:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Received: by 2002:a05:6520:25ca:b0:181:d466:506c with HTTP; Thu, 6 Jan 2022
+ 05:36:42 -0800 (PST)
+Reply-To: xiauchanyu@gmail.com
+From:   Mrs Xiau Chan Yu <aabuduhuda866@gmail.com>
+Date:   Thu, 6 Jan 2022 05:36:42 -0800
+Message-ID: <CAOQS-tOpRaUezsQKeeY1jiLyw-KjS4jny0J8pEgM4t8YHp=aZw@mail.gmail.com>
+Subject: =?UTF-8?Q?Sch=C3=B6nen_Tag=2E?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Greetings to you reiserfs-devel,
+-- 
+Beautiful day,
 
-I was wondering if you got my previous email? I have been trying=20
-to reach you by email reiserfs-devel@vger.kernel.org, kindly get=20
-back to me swiftly, it is very important and urgent.
+I'm Xiu Chan Yu, Credit and Marketing Director of Chong Hin
+Bank, Hong Kong, Chong Hing Bank Center, 24 Des Voeux Road Central,
+Hong Kong. I have a business proposal for $ 13,991,674
 
-Thanks
-Mustafa Ayvaz
-Email: mustafa.ayvaz@ayvazburosu.com
+All confirmable documents to secure the claims will be given to you
+before your acceptance and as soon as I have received your return
+Provided.
+
+Regards
+Xiau Chan Yu
