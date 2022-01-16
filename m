@@ -2,25 +2,25 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A81C648F9DA
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 16 Jan 2022 01:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C2348FFBB
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 17 Jan 2022 01:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233939AbiAPAFG convert rfc822-to-8bit (ORCPT
+        id S231953AbiAQAa6 convert rfc822-to-8bit (ORCPT
         <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sat, 15 Jan 2022 19:05:06 -0500
-Received: from ec2-13-115-114-132.ap-northeast-1.compute.amazonaws.com ([13.115.114.132]:42606
+        Sun, 16 Jan 2022 19:30:58 -0500
+Received: from ec2-13-115-114-132.ap-northeast-1.compute.amazonaws.com ([13.115.114.132]:37306
         "EHLO mail.gunma-suigai-risk.jp" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233933AbiAPAFF (ORCPT
+        by vger.kernel.org with ESMTP id S231480AbiAQAa6 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sat, 15 Jan 2022 19:05:05 -0500
-Received: from Unknown (unknown [189.90.63.122])
-        by mail.gunma-suigai-risk.jp (Postfix) with ESMTPA id 2B40F1FC456A;
-        Sat, 15 Jan 2022 21:21:11 +0000 (UTC)
-Message-ID: <FAFF491A11C5EB28F4F1B804003D804C@qnmzl>
+        Sun, 16 Jan 2022 19:30:58 -0500
+Received: from Unknown (unknown [103.124.137.27])
+        by mail.gunma-suigai-risk.jp (Postfix) with ESMTPA id 56F8B2BA2993;
+        Sun, 16 Jan 2022 07:48:23 +0000 (UTC)
+Message-ID: <8A8F396A61B59B588481C874702CB168@neoacp>
 Reply-To: "Fredrik Elvebakk" <fcresswell9@gmail.com>
 From:   "Fredrik Elvebakk" <investment@dnb.no>
 Subject: Re:
-Date:   Sat, 15 Jan 2022 13:21:07 -0800
+Date:   Sat, 15 Jan 2022 23:47:30 -0800
 MIME-Version: 1.0
 Content-Type: text/plain;
         format=flowed;
@@ -29,8 +29,8 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 8BIT
 X-Priority: 3
 X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2900.5931
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.6157
+X-Mailer: Microsoft Windows Live Mail 15.4.3538.513
+X-MimeOLE: Produced By Microsoft MimeOLE V15.4.3538.513
 To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
