@@ -2,80 +2,91 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 262504A4145
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 31 Jan 2022 12:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD75C4A46FB
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 31 Jan 2022 13:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358495AbiAaLDX (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 31 Jan 2022 06:03:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
+        id S233037AbiAaM03 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 31 Jan 2022 07:26:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358951AbiAaLCP (ORCPT
+        with ESMTP id S1377151AbiAaM01 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 31 Jan 2022 06:02:15 -0500
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934CFC06134A
-        for <reiserfs-devel@vger.kernel.org>; Mon, 31 Jan 2022 03:00:25 -0800 (PST)
-Received: by mail-il1-x143.google.com with SMTP id e8so10992583ilm.13
-        for <reiserfs-devel@vger.kernel.org>; Mon, 31 Jan 2022 03:00:25 -0800 (PST)
+        Mon, 31 Jan 2022 07:26:27 -0500
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FFDC061714
+        for <reiserfs-devel@vger.kernel.org>; Mon, 31 Jan 2022 04:26:26 -0800 (PST)
+Received: by mail-yb1-xb41.google.com with SMTP id 23so39811671ybf.7
+        for <reiserfs-devel@vger.kernel.org>; Mon, 31 Jan 2022 04:26:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=FANIUiWvB3mdY3zLX2DODg2pUIL5eGT5wlydl6jYk40=;
-        b=UiZkV1xu/1z5A/ztD5Jldn3XOzfxCb5dH+/DMk1AFwK/nat4JXJLhGvMZnA2+IcjXR
-         YpW9r7ae6KAHd2sg0/6YFTRnkZ3XqJMzbhN9flAzZs0JoNMicLhQj4whv/k5nByjCpr2
-         OPf/s6NNTy4WRB8M3asGC42AidvYisjk++OWaBieA6XGemBs4Y+JGAvZ5l41ammJrDB4
-         p5lGBdvbZ5NrWMYLncN5GoY37UsWl4xjwHwFxwvY+3e/m9UxQRtNwA1vx+Ngxm2/RcIf
-         HB+3yGJS8mnEVkIPxbImLKA3AmKSXwrPGXKRYLzTh8tWOJi5P+SVpgZzGLkgPt54T4WY
-         uPBA==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
+        b=JO+O+PDXoYkYtTRpcEG7SP1oKCTQmOKp040wjpqdz4kvsNzr3RLp+bXtJdo5moEBEc
+         1HI/q1mb8j6RyJwzl9ogmFpthkiizZ+/KuCwUxe8epUbcsk/xrP7peJUCgLVSmltWV/2
+         3xU2hYxnQE8RRoE5SZQeEGWrZidN0B/fm8omTJ8tclsJP3hyOTwouYqmjRtWR4UNEWx4
+         b5Am7CdnYQg22dNWm6MWvEXo7MRh420eK7otBc9d4wSgyq+YXrjpA5x5WE6d3vS8AIIz
+         eknCjkw46hOCtcd4GjKSJjAfo8eSp7wl2fBddFdLZaFGNhAph9FEG7d9AWvweHZk+GyR
+         KwMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=FANIUiWvB3mdY3zLX2DODg2pUIL5eGT5wlydl6jYk40=;
-        b=1AtCZD1hAqihUjNxPcwlAWwEJgI0eRylqCUQ9ftevQy8M0QYrc7el0PYqAkx6rO98h
-         QLI4Ev6TeV57nO+8b8ndFIp6Dhl4YczscvTlh2ES+X0yvebipVoscAowahZpQJhC36oZ
-         SIjBm5IV6rPQyfqEpK3HeXtSV0HqTcb11V3b8fJIkI7x2IiPPIYFHJlQYyG+Syj43QWZ
-         GKeg7GdYNJ2AsWdOO/zlrn6LPehc3qlMbRkz+bU12F/yblLRH8cfZakJDwSyJNg7qzjQ
-         7lch+NJkNFST5ddNeTXP2jJSKot2wPWbtqawnr3TwFABzrP+bOjjOXAZEL7kNNA33ooR
-         12dw==
-X-Gm-Message-State: AOAM530ZZgcF/77QxcP1sSBX4Tij0hIms4IjAl6COO9XjLb3MQpjGoFT
-        Op66PFUB+JmwYs1QdfWWxhadU0xT42DG7f+Cvdo=
-X-Google-Smtp-Source: ABdhPJzd4XpulgxPqo3GJyz/7qJgMmqyQWLIjLiq4E497a4l1ZK6xwd0ZMb9kbBqw+HfcfevS7FYQFhhZjxFTzbYWZE=
-X-Received: by 2002:a92:bf01:: with SMTP id z1mr11261719ilh.18.1643626824914;
- Mon, 31 Jan 2022 03:00:24 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
+        b=SCbjZThpxd8TtoRL7S1JqhrizFnUic59OINWxbV5/jCciIhcVkdjspM0solgZEyBoE
+         J/jAn6Wmnh0T+ravCZZ5eoB1VEDrVa3s1yMRYEN6AVl0b58/jgB9pzdcy2F04VIToQ19
+         QXwF5e7atEnaGDF73RliaI/5FOj+ZivewByU9TUSVujKD9tLVE4zlWPRBcIDt/A1JKef
+         EUrWFfEuh4wltJqajcsI+fnORprkZBPtte5EkTJi1GUuOVAEUU+TsrK4dXtkfmSJqrs+
+         GT20ivkPG53d9mXmnZ8yK47XFYtC7Isd9Ku2QecUaW/Kogc1gL1cfBLQqy2QhnOXrv54
+         Jsaw==
+X-Gm-Message-State: AOAM530+NX9u5IPQel9oZ93x/NPPVSEXLRi3IADYLBaIU9GTCq3lEz/M
+        LSTFrq9vCuYS/qfsjPYnizB7mBauMTtkluJKlhI=
+X-Google-Smtp-Source: ABdhPJxO0h/oNCYjUPDcH3gqsc2w/ImTlnFuffclcKP+i8+0Eqamy+EqCAVRZbAlX8pI/JL4N5fFc4KejvmvHTbE4fY=
+X-Received: by 2002:a25:d106:: with SMTP id i6mr28332515ybg.125.1643631986038;
+ Mon, 31 Jan 2022 04:26:26 -0800 (PST)
 MIME-Version: 1.0
-Reply-To: daniellakyle60@gmail.com
-Sender: drdanielmorris11111@gmail.com
-Received: by 2002:a05:6638:1248:0:0:0:0 with HTTP; Mon, 31 Jan 2022 03:00:24
+Received: by 2002:a05:7108:2bc9:0:0:0:0 with HTTP; Mon, 31 Jan 2022 04:26:25
  -0800 (PST)
-From:   Mrs daniell akyle <daniellakyle60@gmail.com>
-Date:   Mon, 31 Jan 2022 12:00:24 +0100
-X-Google-Sender-Auth: In2hlqlpPwPr7MI-yh9_QFub_fE
-Message-ID: <CAKFcj-MLAnZBo0A2RqXf-exs+KAG-o6Ln5XerrcTvaKWSBL9yQ@mail.gmail.com>
-Subject: Ahoj
+Reply-To: westerunion909@gmail.com
+From:   "Antonia Lloyd." <anthonylloydatmxxx08@gmail.com>
+Date:   Mon, 31 Jan 2022 04:26:25 -0800
+Message-ID: <CAKm0ww7hMmx+42gwcuV1-XeSc1Crs0VTOdTZO26Qf2cp55de3g@mail.gmail.com>
+Subject: Dear Email ID Owner.(USD$4000 IMF COMPENSATION FUND TO PICK UP TODAY).
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Pozdravy
-Jmenuji se pan=C3=AD Daniella Kyleov=C3=A1, je mi 58 let
-Filip=C3=ADny. V sou=C4=8Dasn=C3=A9 dob=C4=9B jsem hospitalizov=C3=A1n na F=
-ilip=C3=ADn=C3=A1ch, kde jsem
-podstupuje l=C3=A9=C4=8Dbu akutn=C3=ADho karcinomu j=C3=ADcnu. jsem um=C3=
-=ADraj=C3=ADc=C3=AD,
-vdova, kter=C3=A1 se rozhodla darovat =C4=8D=C3=A1st sv=C3=A9ho majetku spo=
-lehliv=C3=A9 osob=C4=9B
-kter=C3=A1 tyto pen=C3=ADze pou=C5=BEije na pomoc chud=C3=BDm a m=C3=A9n=C4=
-=9B privilegovan=C3=BDm. Chci
-poskytnout dar ve v=C3=BD=C5=A1i 3 700 000 =C2=A3 na sirotky nebo charitati=
-vn=C3=AD organizace
-ve va=C5=A1=C3=AD oblasti. Zvl=C3=A1dne=C5=A1 to? Pokud jste ochotni tuto n=
-ab=C3=ADdku p=C5=99ijmout
-a ud=C4=9Blejte p=C5=99esn=C4=9B tak, jak v=C3=A1m =C5=99=C3=ADk=C3=A1m, pa=
-k se mi vra=C5=A5te pro dal=C5=A1=C3=AD vysv=C4=9Btlen=C3=AD.
-pozdravy
-Pan=C3=AD Daniella Kyleov=C3=A1
+Dear Email ID Owner.
+
+The IMF is compensating all the email address that was funds as one of
+the ward win Victims and your email address and your name is among the
+listed one of approved to pay the sum of $3.6 million U.S Dollars. We
+have concluded to effect your own payment through Western Union Money
+Transfer for easy pick-up of those funds in good condition,$4000 twice
+daily,till the $3.6 million is completely transferred to you.We now
+need your information where we will be sending the funds,such
+as;Receiver name(Your full Name)address and phone number.Contact
+Western Union agent with this Email: ( westerunion995@gmail.com  ) for
+your payment fund.
+
+Ms.Maria Zatto
+E-mail:westerunion995@gmail.com
+Telephone: +229 682 97 169
+
+Contact Ms.Maria,immediately you get this mail through western union
+email address above to enable her speed-up.your payment and release
+the $4000 dollars MTCN today for you to pick up the payment OK.
+
+You are expected to provide us with the details as prescribed below to
+enable safe and easy release of your funds today.
+
+(1)Your Full name:
+(2)Your Phone number:
+(3)Your Country:
+(4)Your Age:
+
+Thank you,
+Dr.Antonia Lloyd.
+Contact Dir.Western Union Money Transfer,
+Cotonou-Benin Republic.
