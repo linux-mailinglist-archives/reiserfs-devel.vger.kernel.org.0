@@ -2,91 +2,104 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD75C4A46FB
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 31 Jan 2022 13:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B4B4A5C85
+	for <lists+reiserfs-devel@lfdr.de>; Tue,  1 Feb 2022 13:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233037AbiAaM03 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 31 Jan 2022 07:26:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36716 "EHLO
+        id S234501AbiBAMp6 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 1 Feb 2022 07:45:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377151AbiAaM01 (ORCPT
+        with ESMTP id S238158AbiBAMp6 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 31 Jan 2022 07:26:27 -0500
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FFDC061714
-        for <reiserfs-devel@vger.kernel.org>; Mon, 31 Jan 2022 04:26:26 -0800 (PST)
-Received: by mail-yb1-xb41.google.com with SMTP id 23so39811671ybf.7
-        for <reiserfs-devel@vger.kernel.org>; Mon, 31 Jan 2022 04:26:26 -0800 (PST)
+        Tue, 1 Feb 2022 07:45:58 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E79C061714
+        for <reiserfs-devel@vger.kernel.org>; Tue,  1 Feb 2022 04:45:57 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id h7so32569wrc.5
+        for <reiserfs-devel@vger.kernel.org>; Tue, 01 Feb 2022 04:45:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
-        b=JO+O+PDXoYkYtTRpcEG7SP1oKCTQmOKp040wjpqdz4kvsNzr3RLp+bXtJdo5moEBEc
-         1HI/q1mb8j6RyJwzl9ogmFpthkiizZ+/KuCwUxe8epUbcsk/xrP7peJUCgLVSmltWV/2
-         3xU2hYxnQE8RRoE5SZQeEGWrZidN0B/fm8omTJ8tclsJP3hyOTwouYqmjRtWR4UNEWx4
-         b5Am7CdnYQg22dNWm6MWvEXo7MRh420eK7otBc9d4wSgyq+YXrjpA5x5WE6d3vS8AIIz
-         eknCjkw46hOCtcd4GjKSJjAfo8eSp7wl2fBddFdLZaFGNhAph9FEG7d9AWvweHZk+GyR
-         KwMQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=r2Ws6xRbNpqlKYkUgkX1lPpc6GjEar8sa1UbtAiXfsw=;
+        b=mVNLFKa/MFridCPmNur31wQITx9yQ2Ma0ujzAHsD/R3g/X696WMa3JMSd0Xod3qyBz
+         JDfMfv/i+ZXZfgRHuXi7VhkuRkm+cYGawSCYUIj71qQdc0yiRc4YIs4ydzlFP6zsWnLD
+         osqsUXzFF8HSHVuC6+j1kVEQz3B7pGuQIVfWbqGjFsCyyBuoiEmc7FJJCXEZT2RrydI3
+         Kt6O6EP0/3xYGs8rPzF3RHtb4eC/cI6vE0RKxDLUSrx0Y9DTsiV0xOyN/4UQmxeDteTS
+         Xu5+g+UwCIPMOg/Egx3VKE8HMxaHBs0iiHnoqgzvTgHiUMXGIU/lYtYEu/EA6jF0PTZw
+         5NRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
-        b=SCbjZThpxd8TtoRL7S1JqhrizFnUic59OINWxbV5/jCciIhcVkdjspM0solgZEyBoE
-         J/jAn6Wmnh0T+ravCZZ5eoB1VEDrVa3s1yMRYEN6AVl0b58/jgB9pzdcy2F04VIToQ19
-         QXwF5e7atEnaGDF73RliaI/5FOj+ZivewByU9TUSVujKD9tLVE4zlWPRBcIDt/A1JKef
-         EUrWFfEuh4wltJqajcsI+fnORprkZBPtte5EkTJi1GUuOVAEUU+TsrK4dXtkfmSJqrs+
-         GT20ivkPG53d9mXmnZ8yK47XFYtC7Isd9Ku2QecUaW/Kogc1gL1cfBLQqy2QhnOXrv54
-         Jsaw==
-X-Gm-Message-State: AOAM530+NX9u5IPQel9oZ93x/NPPVSEXLRi3IADYLBaIU9GTCq3lEz/M
-        LSTFrq9vCuYS/qfsjPYnizB7mBauMTtkluJKlhI=
-X-Google-Smtp-Source: ABdhPJxO0h/oNCYjUPDcH3gqsc2w/ImTlnFuffclcKP+i8+0Eqamy+EqCAVRZbAlX8pI/JL4N5fFc4KejvmvHTbE4fY=
-X-Received: by 2002:a25:d106:: with SMTP id i6mr28332515ybg.125.1643631986038;
- Mon, 31 Jan 2022 04:26:26 -0800 (PST)
+         :subject:to:content-transfer-encoding;
+        bh=r2Ws6xRbNpqlKYkUgkX1lPpc6GjEar8sa1UbtAiXfsw=;
+        b=vBtFPmG3mPeuU7dI/V9lEMOY0x1YuoAWvAuI9tz04JJGLpolqagSuetpEBBrnLNS14
+         Qe4AjWTF9iHo6rgdZqL14m9iV0Jy7c+qKZkKC9e6N5RlPIbguLe6gKpjpDaYd5tSNlYh
+         74D/6l3YOGSxhoV+BilBOHGZzG5cl9ipAcw0I219BKWA+NOfX4NNzMEQv84+76Od9wgB
+         +C5ePmzdQj/qX/q/GuvNa54GSQQHe6FEzFQq+xcupsMfT9n9A21m2uWjth949cALf8N+
+         3xh+tBfyE83zNoSOyCAn7toBkJxlGbeAWmnVmLjRUUS04MRCHc3bHxd5hOX5orhZaxNa
+         CNlg==
+X-Gm-Message-State: AOAM531L+h81/+REPBZu6Dg9rijYmESO6Z0Zm1ibcKtJ3NPNhvZsPpTI
+        hkuEvVne0vRK8Edk+8su0wXdsKtfStb/FLlVTXI=
+X-Google-Smtp-Source: ABdhPJwdLhKsTWZBeBanQ95Khkb94jrKq20HLT3tblWCCGQXQnzbwUfZJL/wOo25wDHuWXOIRVluxkuD5SraS4GKwUA=
+X-Received: by 2002:adf:e748:: with SMTP id c8mr21659826wrn.598.1643719556187;
+ Tue, 01 Feb 2022 04:45:56 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:7108:2bc9:0:0:0:0 with HTTP; Mon, 31 Jan 2022 04:26:25
- -0800 (PST)
-Reply-To: westerunion909@gmail.com
-From:   "Antonia Lloyd." <anthonylloydatmxxx08@gmail.com>
-Date:   Mon, 31 Jan 2022 04:26:25 -0800
-Message-ID: <CAKm0ww7hMmx+42gwcuV1-XeSc1Crs0VTOdTZO26Qf2cp55de3g@mail.gmail.com>
-Subject: Dear Email ID Owner.(USD$4000 IMF COMPENSATION FUND TO PICK UP TODAY).
+Received: by 2002:adf:f786:0:0:0:0:0 with HTTP; Tue, 1 Feb 2022 04:45:55 -0800 (PST)
+Reply-To: interpolnig@yahoo.com
+From:   Emmanuel Maduka <sulesabonyaro@gmail.com>
+Date:   Tue, 1 Feb 2022 13:45:55 +0100
+Message-ID: <CAHZUfEzHDeg_2wbH6YOazc4bhNB4VSe=cyP8Nveh+wwSDJ8Ltw@mail.gmail.com>
+Subject: 
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Dear Email ID Owner.
+--=20
+INTERPOL WESTAFRIKA, UNTERREGION, ABUJA NIGERIA
+Antworten Sie an unsere direkte E-Mail-Adresse: interpolnig@yahoo.com
 
-The IMF is compensating all the email address that was funds as one of
-the ward win Victims and your email address and your name is among the
-listed one of approved to pay the sum of $3.6 million U.S Dollars. We
-have concluded to effect your own payment through Western Union Money
-Transfer for easy pick-up of those funds in good condition,$4000 twice
-daily,till the $3.6 million is completely transferred to you.We now
-need your information where we will be sending the funds,such
-as;Receiver name(Your full Name)address and phone number.Contact
-Western Union agent with this Email: ( westerunion995@gmail.com  ) for
-your payment fund.
+Achtung Beg=C3=BCnstigter,
 
-Ms.Maria Zatto
-E-mail:westerunion995@gmail.com
-Telephone: +229 682 97 169
+Wir machen Sie auf die Verhaftung von zwei Betr=C3=BCgern aufmerksam, die
+Ausl=C3=A4nder mit der Absicht betrogen haben, ihnen Spendenzusch=C3=BCsse,
+Darlehen, Liebesbetrug, gef=C3=A4lschte Lotteriegewinne,
+Investitionsvorschl=C3=A4ge, Geldautomatenkarten, Bankschecks,
+Geld=C3=BCberweisungen, Angeh=C3=B6rige usw. Wir verhafteten sie aufgrund d=
+er
+Berichte, die wir von verschiedenen Personen aus Afrika, Europa, Asien
+und Amerika erhielten.
 
-Contact Ms.Maria,immediately you get this mail through western union
-email address above to enable her speed-up.your payment and release
-the $4000 dollars MTCN today for you to pick up the payment OK.
+W=C3=A4hrend des Verh=C3=B6rs haben sie ein Gest=C3=A4ndnis abgegeben, dass=
+ es ihnen
+gelungen ist, so viele Menschen mit ihren L=C3=BCgen und anderen
+Vorschl=C3=A4gen zu betr=C3=BCgen, und wir haben herausgefunden, dass Sie e=
+ines
+ihrer Opfer waren. Wir beschlagnahmten ihre Besitzt=C3=BCmer und verkauften
+sie, und die nigerianische Regierung sagte, wir sollten ihre zwanzig
+Opfer mit dem Geld entsch=C3=A4digen, das aus ihren beschlagnahmten
+Besitzt=C3=BCmern stammt, und auch mit dem Geld, das wir von ihren
+Bankkonten zur=C3=BCckerhalten haben.
 
-You are expected to provide us with the details as prescribed below to
-enable safe and easy release of your funds today.
+Wir haben 250.000,00 US-Dollar f=C3=BCr jeden von Ihnen vorgesehen, der
+zuf=C3=A4llig ihr Opfer ist. Sie m=C3=BCssen uns Ihren vollst=C3=A4ndigen N=
+amen, Ihr
+Geschlecht, Ihr Alter, Ihren Familienstand, eine Kopie Ihres g=C3=BCltigen
+Personalausweises, Ihre Telefonnummer, Ihre Privatadresse, Ihr Land,
+Ihren Beruf und Ihre Bankkontodaten mitteilen, die Sie verwenden
+werden, um Ihre zur=C3=BCckgeforderte Entsch=C3=A4digung zu erhalten Mittel=
+.
 
-(1)Your Full name:
-(2)Your Phone number:
-(3)Your Country:
-(4)Your Age:
+Es tut uns leid, was Sie in den H=C3=A4nden dieser Betr=C3=BCger durchgemac=
+ht
+haben m=C3=BCssen. Hoffe bald von dir zu h=C3=B6ren.
 
-Thank you,
-Dr.Antonia Lloyd.
-Contact Dir.Western Union Money Transfer,
-Cotonou-Benin Republic.
+BEACHTEN SIE, DASS SIE IHRE ANTWORT AN UNSERE DIREKTE E-MAIL-ADRESSE
+SENDEN M=C3=9CSSEN: interpolnig@yahoo.com
+
+Gr=C3=BC=C3=9Fe,
+Inspektor Emmanuel Maduka
+Antworten Sie an unsere direkte E-Mail-Adresse: interpolnig@yahoo.com
