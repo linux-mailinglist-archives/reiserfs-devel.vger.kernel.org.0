@@ -2,73 +2,87 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A954BCFBF
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 20 Feb 2022 17:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B954BD29A
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 21 Feb 2022 00:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbiBTQT7 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sun, 20 Feb 2022 11:19:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43918 "EHLO
+        id S245244AbiBTXVh (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 20 Feb 2022 18:21:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbiBTQT7 (ORCPT
+        with ESMTP id S236754AbiBTXVg (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sun, 20 Feb 2022 11:19:59 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9469A286F9
-        for <reiserfs-devel@vger.kernel.org>; Sun, 20 Feb 2022 08:19:37 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id p14so26976671ejf.11
-        for <reiserfs-devel@vger.kernel.org>; Sun, 20 Feb 2022 08:19:37 -0800 (PST)
+        Sun, 20 Feb 2022 18:21:36 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEAB11C09;
+        Sun, 20 Feb 2022 15:21:15 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id cm8so16177859edb.3;
+        Sun, 20 Feb 2022 15:21:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=ymEpgIXl54yuSlZg88NLeYK1RJf0YDtYgXWD/9J1GQ0=;
-        b=Fd/D63HqwAzkWfGIXxUjIJ/VzuueSvLZ6+ALqM8Kn4xToEYjDE2wjctsGV3uCvUPZ+
-         Rf8TYxiE/ZpW9/YU+KvN/ULEb7tKwI27u/5oK0PqEMMfmlHU+0/LYIo0buE1nMhWXE42
-         9YJRzLFtEV+n2D4poXXuOF6Vf4aIeXVe2pxCfcgfzLkCK0fus9AlTvfg/G40NHxftTMA
-         6xaaW+sg++yNSMLXvOHF7sZouIWWAB2/du6EtgKiuPHpUVO4E1msN3XbCi8gmo91ctdS
-         Ug5y999OxlVsLRaEDXV/yFraEFIynAScaGh/3zzevJa22ggc82sBYr+4/loVY/57Lh33
-         sRRw==
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=fDq3b+MqL0QmT25AsPMDwBUjZnQZoBnhIAME0gjmEdI=;
+        b=g9Du09O+dLFuuHvdk9LB2JKidh3SK7T2Oe20hax9r1/HkZ41KDv8RlJhjAoywW4SUs
+         QhHsqBOz6o53QqVhWJJU5F2YDRBYqgtSW+Lgw4p0STbx1aYWMwK/idwVT14XUHq296iD
+         bcJMD9ITPQ9F1EMSJ0XZZ8p+dPvw1OY1OZH7l4cx7YWCdP3Y6yjaPwKmxEzkrqofzHVP
+         iRnhntTn66gNBprvmxoB8sZDoOtQwDFhk42AEUqsEjv69lQkSyFxPaUEX1ejRVMiKkUZ
+         U6dH2Bhr+Zp+sbiwObmeRp/TmGVyU/eOOesbvl3PV/BnJqfGyEAbdYdNVbmLeYVTbTqh
+         aQ+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=ymEpgIXl54yuSlZg88NLeYK1RJf0YDtYgXWD/9J1GQ0=;
-        b=CECwPmGTKXjzvRzsat0cncSQ+Ud2VozPUAmy580V7VP13T7eu7ft5faAlWaNlsQamz
-         AItKyqfNh7Ia+iGzzu8C5igp+cOSf8gDQcGyJEBooIu8WTTVyLl7QUV5li7qi0zuIMg0
-         GbEecMHY7Z0pIywN0cGNIrNt7ltwrRqupB9T3HwBN8ueVN0nxu9d4PfrOAsUnDpnvKYd
-         bFawqMx+VpisY5ZDyCmLezSZzGofPmu8w/p7VfkX2JUX7qnR4fnw1uNOKPRgZ/oJ2EAF
-         +JuyfgbdD0YuIJ3lrz+XBBKMdiWsaMz2BtUFJDZXljUwUop7oRp8NtDENNp63hns36V4
-         Ru4Q==
-X-Gm-Message-State: AOAM532V6fzak8aZG5I/pmGaGPocNM/NvxS/xQ7F+7a/iquBkMqnPSHk
-        KisOsgiUaLW4WSbryEOrFyQxJaNrfkULNMS60rI=
-X-Google-Smtp-Source: ABdhPJyxuIqcvfwQZjX9rIKuLX5C+WMUQ3Bg2ewFsEISWnER85GEobKcG/qN5gjgu7POHp4Cb09blBJ4XNxtMH2CuYM=
-X-Received: by 2002:a17:906:715:b0:6b7:21d5:dd0a with SMTP id
- y21-20020a170906071500b006b721d5dd0amr12792253ejb.500.1645373975639; Sun, 20
- Feb 2022 08:19:35 -0800 (PST)
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fDq3b+MqL0QmT25AsPMDwBUjZnQZoBnhIAME0gjmEdI=;
+        b=UL0xWUlu/lZ6fRt/UP23i2bEPwUFdhMZ6bV6hZMx3hOiMXKMHWPw2izqwHwY2ampvG
+         HvVIg2kfZ3qBIGkNCbUU74/hW/YnEKyJNO4fbGnbhK/2wRrZsVpCa3XMpMTMC7/FLDdy
+         ffDPESjfuufl3OhJiektAQdApLqNbEoUJXTeTdSKiS1d/PsGj4ejDxUHrmigFXC31UQS
+         l+ciuGD5WoELVFpiXlspTZwA5fwJFi2r+nWLiF1TPci1I6LqcKGOqZiPc/nWcpCIbGzB
+         q4qtuFZngP9+crOwvekXDTrPZKmqx65ZNxYrR3406YNXz8elZP2/8+uxxLwEjOruB0rC
+         rVEg==
+X-Gm-Message-State: AOAM530kkvM6ZPA1EeRbAflCUieI8N/B+ZfnzA3DOa9tkFrWknt67uYM
+        X2h5DadcGwv/QXTzf6ZQeQE=
+X-Google-Smtp-Source: ABdhPJz7G3T995hFgbk0UZASONQra2YDixjNdDbsxLZhhCVewurdtkPB5CR3YNWY455EpDmoqqpDCA==
+X-Received: by 2002:aa7:d648:0:b0:412:b567:3664 with SMTP id v8-20020aa7d648000000b00412b5673664mr15172392edr.296.1645399273777;
+        Sun, 20 Feb 2022 15:21:13 -0800 (PST)
+Received: from [192.168.0.48] (ip-046-005-230-144.um12.pools.vodafone-ip.de. [46.5.230.144])
+        by smtp.gmail.com with ESMTPSA id s10sm4577721ejm.0.2022.02.20.15.21.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 20 Feb 2022 15:21:13 -0800 (PST)
+Subject: Re: Is it time to remove reiserfs?
+To:     Matthew Wilcox <willy@infradead.org>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>
+References: <YhIwUEpymVzmytdp@casper.infradead.org>
+From:   Edward Shishkin <edward.shishkin@gmail.com>
+Message-ID: <fbc744c9-e22f-138c-2da3-f76c3edfcc3d@gmail.com>
+Date:   Mon, 21 Feb 2022 00:21:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.5.2
 MIME-Version: 1.0
-Received: by 2002:a54:38c1:0:0:0:0:0 with HTTP; Sun, 20 Feb 2022 08:19:35
- -0800 (PST)
-Reply-To: fatibaro01@yahoo.com
-From:   Fatimah Baro <imanosose@gmail.com>
-Date:   Sun, 20 Feb 2022 17:19:35 +0100
-Message-ID: <CAFEyOE4M3CzrE3HHSFkzTzae=ZdjFbiQD8w9sP_Gu05Zbgh1_g@mail.gmail.com>
-Subject: Business invitation
-To:     imanosose <imanosose@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.8 required=5.0 tests=ADVANCE_FEE_3_NEW,BAYES_50,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+In-Reply-To: <YhIwUEpymVzmytdp@casper.infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Greetings from Burkina Faso,
-Please pardon me if my request offend your person; I need you to stand
-as my foreign partner for investment in your country. Please reply
-immediately if you are interested, so that I can give you more
-information.
-Fatimah Baro
+On 02/20/2022 01:13 PM, Matthew Wilcox wrote:
+> Keeping reiserfs in the tree has certain costs.  For example, I would
+> very much like to remove the 'flags' argument to ->write_begin.  We have
+> the infrastructure in place to handle AOP_FLAG_NOFS differently, but
+> AOP_FLAG_CONT_EXPAND is still around, used only by reiserfs.
+
+
+Please, consider the patch (next email in the thread) which drops that
+flag from reiserfs.
+
+Thanks,
+Edward.
