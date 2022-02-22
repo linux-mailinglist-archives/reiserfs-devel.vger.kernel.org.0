@@ -2,89 +2,77 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B19C34BF759
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 22 Feb 2022 12:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4A34BF98C
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 22 Feb 2022 14:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbiBVLkZ (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 22 Feb 2022 06:40:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60290 "EHLO
+        id S231225AbiBVNit (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 22 Feb 2022 08:38:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbiBVLkY (ORCPT
+        with ESMTP id S232147AbiBVNis (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 22 Feb 2022 06:40:24 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1521A13700B;
-        Tue, 22 Feb 2022 03:39:59 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id l2-20020a7bc342000000b0037fa585de26so823233wmj.1;
-        Tue, 22 Feb 2022 03:39:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=zncUP4k0qWTkrruw/2Qwtl328+sz3ixjRaMsIKFNcuk=;
-        b=J0YrKwOpbUfqraOO9E41qOPkgPyLuArO/jKiPXyL/a+y6mYGCec4wocwAYxIqjgSEi
-         EC411gJCwZDRNbtM8yXldOqf/yIK3xB2NQiJnScFJwbiFj7qMQIz8DhgGSaykFzfnG4i
-         CP2itFJmT73SO/ivn4phrMBjFoeuW69P6R4tsVxTfWTdDK9Y6aKDxeaalgOQtDT1sOoV
-         PV3dqkpWp6WYCWCat1SOxD82QrjAAmlzp3FqV/GubPC6cuqBJD2pr1PHX9uiC+24Iw3C
-         nEvwtIeCLw1R5Rzg8Kw5Faz9fNmYgLSgDAsWC9Ze2F6SSZfn2d9UAaOfMyu4b2xt/XGY
-         PW4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=zncUP4k0qWTkrruw/2Qwtl328+sz3ixjRaMsIKFNcuk=;
-        b=WajVr0KgUeXZWRX9wQjFZDQvCSlGrmIXjS0z3nDycxcdbAErk46W0lwO3Sk62NzWxU
-         q13bm6jbFnxRaxQwzYnZ5KI/oWHYFEE57jc+TAz1beXdPsQZuQBmaLhMrKGTJjszbP2d
-         By1TcHAzu576qM71DG7PSjPYCMp5Fp2XArEf5YY7UKQ7qt6fZEx33lmH6SrLxLFmVjy9
-         J4WNCT4o/FUCEmn4xQSB7bFIDE0N8syeBPJgrZwWT4gHm3fMQ6eGYmZkPXpv3SO5adBk
-         P28f4anb76lAd8ZO2tFQSX14zz/FLpjhrQBMpuYXEuDtLzJwUjsLKXjeNo2/uQrfOS+N
-         z7hw==
-X-Gm-Message-State: AOAM5304HfYsZ3h2ClzcFir50EMmw0OQhfxKRqLukIDxLhSMfZxXJnxl
-        I4v9FyRyoIyr/brhtQX8eOc=
-X-Google-Smtp-Source: ABdhPJwf5XXk+nm1c1aQoW5W3sS0bpeUEvQEKw0jMqDwHDSUwhUk9wLVBFHdsPdibESz1etUflZwpg==
-X-Received: by 2002:a05:600c:33a7:b0:380:dc3b:a315 with SMTP id o39-20020a05600c33a700b00380dc3ba315mr1563211wmp.135.1645529997722;
-        Tue, 22 Feb 2022 03:39:57 -0800 (PST)
-Received: from MACBOOKPROF612.localdomain ([102.165.192.234])
-        by smtp.gmail.com with ESMTPSA id d29sm20265237wra.63.2022.02.22.03.39.46
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Tue, 22 Feb 2022 03:39:51 -0800 (PST)
-Message-ID: <6214cb87.1c69fb81.403ca.725a@mx.google.com>
-From:   Scott Godfrey <markmillercom322@gmail.com>
-X-Google-Original-From: Scott Godfrey
-Content-Type: text/plain; charset="iso-8859-1"
+        Tue, 22 Feb 2022 08:38:48 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2C6C7D4F;
+        Tue, 22 Feb 2022 05:38:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xaR5BAb2iA8Q4IbzOaNaow/c/pauqA9sg81gbN/llx8=; b=oyYMROg7m2mOqCt2bM5HiEQqX0
+        y18gWLnlDNIZ5IneEYSH8eVd0PLoookyCw/NGZJ7UqiOHVW90p4QyGVdadCDeDpwnG1KzmVbs21Cr
+        u9jkfSQBaUfOUUzMhVSCSZ/e8HTK7/O6Bk/fVWnnO21HGl+c7nm7MjLQ9FlIw5tygrE9Iqtwzf/AX
+        z99H267wLxeeHijwbGhCPjbsQKFC8eUI+igkP1tm4MMzKv0fHbE/NgGLUFErNYZ4887HDR9FuKmsw
+        bmNifFUV2CYdHFlZSYZG5pEQ+2gC8UPycw3kBkUIBNHEXE3scDmPaIYNhiWH5PORVY9bT42gF1T7n
+        VMS0iZuw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nMVMx-002nWP-F9; Tue, 22 Feb 2022 13:38:19 +0000
+Date:   Tue, 22 Feb 2022 13:38:19 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Edward Shishkin <edward.shishkin@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org
+Subject: Re: [PATCH] reiserfs: get rid of AOP_FLAG_CONT_EXPAND flag
+Message-ID: <YhTnSwmHVRe5AzJQ@casper.infradead.org>
+References: <fbc744c9-e22f-138c-2da3-f76c3edfcc3d@gmail.com>
+ <20220220232219.1235-1-edward.shishkin@gmail.com>
+ <20220222102727.2sqf4wfdtjaxrqat@quack3.lan>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: CONGRATULATION!!!!
-To:     Recipients <Scott@vger.kernel.org>
-Date:   Tue, 22 Feb 2022 13:39:44 +0200
-Reply-To: scottgodfrey.net@gmail.com
-X-Antivirus: AVG (VPS 220222-0, 2/22/2022), Outbound message
-X-Antivirus-Status: Clean
-X-Spam-Status: No, score=4.6 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FRAUD_3,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,TO_MALFORMED,T_SCC_BODY_TEXT_LINE,
-        XFER_LOTSA_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220222102727.2sqf4wfdtjaxrqat@quack3.lan>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-My Name is Scott Godfrey. I wish to inform you that The sum of $2,500,000(M=
-illion)has been donated to you.I
-won a fortune of $699.8 Million in the Million Dollars Power-Ball Jackpot L=
-ottery,2021.And I am
-donating part of it to five lucky people and five Charity
-organization. Your email came out victorious. Please contact via email: sco=
-ttgodfrey.net@gmail.com. For more information about your claims. Thanks.
+On Tue, Feb 22, 2022 at 11:27:27AM +0100, Jan Kara wrote:
+> On Mon 21-02-22 00:22:19, Edward Shishkin wrote:
+> > Signed-off-by: Edward Shishkin <edward.shishkin@gmail.com>
+> > ---
+> >  fs/reiserfs/inode.c | 16 +++++-----------
+> >  1 file changed, 5 insertions(+), 11 deletions(-)
+> 
+> Thanks! I have queued this patch into my tree.
 
+I added the following commit message to it for my tree:
 
--- 
-This email has been checked for viruses by AVG.
-https://www.avg.com
+Author: Edward Shishkin <edward.shishkin@gmail.com>
+Date:   Mon Feb 21 00:22:19 2022 +0100
 
+    reiserfs: Stop using AOP_FLAG_CONT_EXPAND flag
+
+    We can simplify write_begin() and write_end() by handling the
+    cont_expand case in reiserfs_setattr().
+
+    Signed-off-by: Edward Shishkin <edward.shishkin@gmail.com>
+    Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+
+I don't object if it goes via your tree; I doubt I'll get the AOP_FLAG
+removal finished in time for the next merge window.
