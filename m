@@ -2,91 +2,64 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2269A4C09EB
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 23 Feb 2022 04:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9AC84C1298
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 23 Feb 2022 13:18:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237087AbiBWDGg (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 22 Feb 2022 22:06:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S240409AbiBWMSM (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 23 Feb 2022 07:18:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiBWDGg (ORCPT
+        with ESMTP id S237095AbiBWMSM (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 22 Feb 2022 22:06:36 -0500
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB3A56C19;
-        Tue, 22 Feb 2022 19:06:10 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 701D85803E9;
-        Tue, 22 Feb 2022 22:06:09 -0500 (EST)
-Received: from imap49 ([10.202.2.99])
-  by compute2.internal (MEProxy); Tue, 22 Feb 2022 22:06:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sladewatkins.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; bh=/WQK49W8GxXyK9
-        YnBpCAPS3p+vBZF3m8kdDflUfTGps=; b=jDYPanjJ0l7ayKHV2D3mosn3kgcD2H
-        0mrWJ3TRL0a/UtQPxHRRLSpmRjmMDgjO3JwgROUCSg2HHC/eGwaL//PnW/AJ+hlQ
-        kdq6TxH4OxEoD4YdYamGehF5ub3JCPNPz8XxbfdBljbZ5Z3u30mFYWKfmatVU1le
-        GRWwrGVJDEcgZQwTZ7kbducNkGfDVLtqly9BM1DwGt/mGKrTi4XtZofvbk6eFyH2
-        ZUw81DdVAXWxaKQ5tI4rkbhp4ZDFkxc/Z3zUIB9Jt6OfxhQfWEF+L4+zhgxi+3M5
-        n14ff42YelRb1R+i8EWUtm74VE+gPaJ9e46MgoAfg3F+0YHZSloz91UQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=/WQK49W8GxXyK9YnB
-        pCAPS3p+vBZF3m8kdDflUfTGps=; b=oH0iKW615JNU/dnWMiLfSEh3lBBQEEJ7P
-        PNPojxqKeOVHmMX1EA7ow708yXLiPvGfQLY+IzqnjDxVYRdTKYEcc047Ej0dN0o4
-        eXFmNibFcE9bMx2I0L3WVeIfWQmQjXNqqdThVDIY+NC/C5hZvD/hgvsWga6Ofzme
-        FGZ94SlVF8PLGzoiLYjzedwL28JypG58Jny4W7+xnncqWUpdqG7hhi1IvlsBeRpw
-        dT5FybWNu8GNiFgGTKnZNPAbe5AzJ5ipHRldBCe9bZADh//OG2OqERwNB/t2qjIN
-        v26PHnJWxir64u/4Ql2puW5S26bGTbrCmnv9jBmWslPlbT7QOud1Q==
-X-ME-Sender: <xms:oKQVYipo7dlC_VoK0OYJHj0YN3xM7G5NP_FR5_NHDvEahXM41bx7XQ>
-    <xme:oKQVYgoyWdCfznMfvXJwLVg1MwkS0KSiUmtFIbF7s-m1Q3skK-kbtHDwYKvkAk1Ih
-    c26i49ghEQJKpdiNLk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeelgdehgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhlrggu
-    vgcuhggrthhkihhnshdfuceoshhlrgguvgesshhlrgguvgifrghtkhhinhhsrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeeuieffteejieetgfevteelheevudehteeihffhteehtdet
-    leegtedtvdevvddugeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehslhgruggvsehslhgruggvfigrthhkihhnshdrtghomh
-X-ME-Proxy: <xmx:oKQVYnOih52Ne5XyhxWZoneGzAUySweh_Fm1u67ISPkhWh6eaJADEw>
-    <xmx:oKQVYh7pmq8qGDDtkw23vMlJ8RoibxqaW4XMx0DUh0BYubOnxkX-Xg>
-    <xmx:oKQVYh76URoF8nAMP4NG4fdqJQ0oMUBquDWlOELF2Q0uEA1SmOWHdg>
-    <xmx:oaQVYrsNgALnslbkKk6kwr9Xb1kfwSw8Q8ZjBxQrjnJIqsFWlXNVMv8ul_k>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 9338DF6007E; Tue, 22 Feb 2022 22:06:08 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4778-g14fba9972e-fm-20220217.001-g14fba997
-Mime-Version: 1.0
-Message-Id: <d8dcb9b9-02ab-4992-82fc-7faf0b388aeb@www.fastmail.com>
-In-Reply-To: <61892434-1007-1aa0-f686-d66409550c84@metztli.com>
-References: <CAOhMmr7bWv_UgdkFZz89O4=WRfUFhXHH5hHEOBBfBaAR8f4Ygw@mail.gmail.com>
- <CA+h21hqrX32qBmmdcNiNkp6_QvzsX61msyJ5_g+-FFJazxLgDw@mail.gmail.com>
- <YXY15jCBCAgB88uT@d3>
- <CA+pv=HPyCEXvLbqpAgWutmxTmZ8TzHyxf3U3UK_KQ=ePXSigBQ@mail.gmail.com>
- <61f29617-1334-ea71-bc35-0541b0104607@pensando.io>
- <CA+pv=HOTQUzd0EYCuunC9AUPOVLEu6htyhNwiUB1fTjhUHsN5Q@mail.gmail.com>
- <61892434-1007-1aa0-f686-d66409550c84@metztli.com>
-Date:   Tue, 22 Feb 2022 22:06:07 -0500
-From:   "Slade Watkins" <slade@sladewatkins.com>
-To:     "Metztli Information Technology" <jose.r.r@metztli.com>
-Cc:     "Shannon Nelson" <snelson@pensando.io>,
-        "Benjamin Poirier" <benjamin.poirier@gmail.com>,
-        "Vladimir Oltean" <olteanv@gmail.com>,
-        "Lijun Pan" <lijunp213@gmail.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "Edward Shishkin" <edward.shishkin@gmail.com>,
-        "ReiserFS Development List" <reiserfs-devel@vger.kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        vbox-dev@virtualbox.org
-Subject: Re: Unsubscription Incident
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        Wed, 23 Feb 2022 07:18:12 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B7D9E57D;
+        Wed, 23 Feb 2022 04:17:44 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id AF7AD212B8;
+        Wed, 23 Feb 2022 12:17:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645618663; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z25zmfa1BH9FbZAkPcAjAOIvBZxhio/HEtOcbGxkK2s=;
+        b=iBLlmwQKBfdGXCAAeg3wvlnrV4J7/udoMQQsDdu2Cee3a60Gai9m9bpGPUSAITEkoMaU8s
+        1//GkQuJVdkXZW2F3rLTgCANQjuKMwtQWqcfgugd/zWATYwJ3OL5tTae/rSTpI2MgrUQn2
+        85bOgy9hMuJpJjjUpIHA/9zHbWWnRZ4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645618663;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z25zmfa1BH9FbZAkPcAjAOIvBZxhio/HEtOcbGxkK2s=;
+        b=XIUgtLKy3brznIghNde4scldLLjKyFNVYfgKgSPS1OgKLfn3fJyCKSDJsMuABr1N7A2HJi
+        gggIq5wSLuuz1jCw==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id A0D3BA3B83;
+        Wed, 23 Feb 2022 12:17:43 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id E6B50A0605; Wed, 23 Feb 2022 13:17:37 +0100 (CET)
+Date:   Wed, 23 Feb 2022 13:17:37 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Jan Kara <jack@suse.cz>,
+        Edward Shishkin <edward.shishkin@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org
+Subject: Re: [PATCH] reiserfs: get rid of AOP_FLAG_CONT_EXPAND flag
+Message-ID: <20220223121737.bsyoih6rt63pev54@quack3.lan>
+References: <fbc744c9-e22f-138c-2da3-f76c3edfcc3d@gmail.com>
+ <20220220232219.1235-1-edward.shishkin@gmail.com>
+ <20220222102727.2sqf4wfdtjaxrqat@quack3.lan>
+ <YhTnSwmHVRe5AzJQ@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhTnSwmHVRe5AzJQ@casper.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -95,16 +68,46 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Sun, Feb 20, 2022, at 6:54 PM, Metztli Information Technology wrote:
-> I will resubscribe to Linux Kernel Mailing List 
-> <linux-kernel@vger.kernel.org>; unless, of course, I have been placed on 
-> a black list by the Penguins and/or their 'morally virtuous' 
-> govt/corporate overlords ;-)
+On Tue 22-02-22 13:38:19, Matthew Wilcox wrote:
+> On Tue, Feb 22, 2022 at 11:27:27AM +0100, Jan Kara wrote:
+> > On Mon 21-02-22 00:22:19, Edward Shishkin wrote:
+> > > Signed-off-by: Edward Shishkin <edward.shishkin@gmail.com>
+> > > ---
+> > >  fs/reiserfs/inode.c | 16 +++++-----------
+> > >  1 file changed, 5 insertions(+), 11 deletions(-)
+> > 
+> > Thanks! I have queued this patch into my tree.
+> 
+> I added the following commit message to it for my tree:
+> 
+> Author: Edward Shishkin <edward.shishkin@gmail.com>
+> Date:   Mon Feb 21 00:22:19 2022 +0100
+> 
+>     reiserfs: Stop using AOP_FLAG_CONT_EXPAND flag
+> 
+>     We can simplify write_begin() and write_end() by handling the
+>     cont_expand case in reiserfs_setattr().
+> 
+>     Signed-off-by: Edward Shishkin <edward.shishkin@gmail.com>
+>     Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-Hi there,
-I doubt that you got black listed, or that anything like that is what happened here... I personally believe your situation may've been a fluke, but it also may not have been. Hard to tell because I haven't seen anything else come across my inbox similar to this besides your email. Who knows.
+Yeah, I have written some changelog as well :) Something like:
 
-All I can say for sure is I haven't seen your name cross my inbox in a _while_ so something definitely happened.
+    reiserfs: get rid of AOP_FLAG_CONT_EXPAND flag
+    
+    Remove usage of AOP_FLAG_CONT_EXPAND flag. Reiserfs is the only user of
+    it and it is easy to avoid.
+    
+    Link: https://lore.kernel.org/r/20220220232219.1235-1-edward.shishkin@gmail.com
+    Signed-off-by: Edward Shishkin <edward.shishkin@gmail.com>
+    Signed-off-by: Jan Kara <jack@suse.cz>
 
-Cheers,
-Slade
+> I don't object if it goes via your tree; I doubt I'll get the AOP_FLAG
+> removal finished in time for the next merge window.
+
+OK, I'll keep it in my tree then and push it to Linus for the merge window.
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
