@@ -2,128 +2,172 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B574C1DBF
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 23 Feb 2022 22:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE844C2692
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 24 Feb 2022 09:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242439AbiBWVb6 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 23 Feb 2022 16:31:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
+        id S231599AbiBXIrL (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 24 Feb 2022 03:47:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234865AbiBWVb6 (ORCPT
+        with ESMTP id S230419AbiBXIrL (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 23 Feb 2022 16:31:58 -0500
-Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEA554EF74;
-        Wed, 23 Feb 2022 13:31:29 -0800 (PST)
-Received: from dread.disaster.area (pa49-186-17-0.pa.vic.optusnet.com.au [49.186.17.0])
-        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 2889E10E245E;
-        Thu, 24 Feb 2022 08:31:28 +1100 (AEDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1nMzEN-00Fc9U-Tf; Thu, 24 Feb 2022 08:31:27 +1100
-Date:   Thu, 24 Feb 2022 08:31:27 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Jan Kara <jack@suse.cz>
-Cc:     reiserfs-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Thu, 24 Feb 2022 03:47:11 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A7910D1;
+        Thu, 24 Feb 2022 00:46:38 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 1A6FB1F43D;
+        Thu, 24 Feb 2022 08:46:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645692397; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jAilycsPN76chkdODgEF2EyORWTyYxCWDyunuPh5Xuw=;
+        b=fxRpkl9EGJrTa9+eShrYpM6pHqVaip2qsiwb/PRylR9bgPKllIcfkMmVYU5yfi7rXWcBiJ
+        jRKCLzWoWIfGSohzUbYhOAHAp5IKwQanRVA3TJgfAl+l8Mr+Gafel3VDGDSgVJvx/aX6MS
+        tLK0zhF+06qs7tLYmK5HT6e5v0O2Og4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645692397;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jAilycsPN76chkdODgEF2EyORWTyYxCWDyunuPh5Xuw=;
+        b=qpbbDj0k5A+m8JrnSThPZiUvxPX1X+IH715hWrA0E6POXGAdxg22Emf4MsgGSjLDJtLmzB
+        P418lKovsvuXyhBg==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id E0937A3B8C;
+        Thu, 24 Feb 2022 08:46:32 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id B4531A0605; Thu, 24 Feb 2022 09:46:36 +0100 (CET)
+Date:   Thu, 24 Feb 2022 09:46:36 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Byron Stanoszek <gandalf@winds.org>
+Cc:     Dave Chinner <david@fromorbit.com>, Jan Kara <jack@suse.cz>,
         Matthew Wilcox <willy@infradead.org>,
-        Edward Shishkin <edward.shishkin@gmail.com>
-Subject: Re: [PATCH] reiserfs: Deprecate reiserfs
-Message-ID: <20220223213127.GI3061737@dread.disaster.area>
-References: <20220223142653.22388-1-jack@suse.cz>
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org
+Subject: Re: Is it time to remove reiserfs?
+Message-ID: <20220224084636.tdobyxoql5xtxkx7@quack3.lan>
+References: <YhIwUEpymVzmytdp@casper.infradead.org>
+ <20220222100408.cyrdjsv5eun5pzij@quack3.lan>
+ <20220222221614.GC3061737@dread.disaster.area>
+ <3ce45c23-2721-af6e-6cd7-648dc399597@winds.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220223142653.22388-1-jack@suse.cz>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=deDjYVbe c=1 sm=1 tr=0 ts=6216a7b1
-        a=+dVDrTVfsjPpH/ci3UuFng==:117 a=+dVDrTVfsjPpH/ci3UuFng==:17
-        a=kj9zAlcOel0A:10 a=oGFeUVbbRNcA:10 a=7-415B0cAAAA:8
-        a=QrCbJ4dQJB4WbGYf2mcA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <3ce45c23-2721-af6e-6cd7-648dc399597@winds.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 03:26:53PM +0100, Jan Kara wrote:
-> Reiserfs is relatively old filesystem and its development has ceased
-> quite some years ago. Linux distributions moved away from it towards
-> other filesystems such as btrfs, xfs, or ext4. To reduce maintenance
-> burden on cross filesystem changes (such as new mount API, iomap, folios
-> ...) let's add a deprecation notice when the filesystem is mounted and
-> schedule its removal to 2024.
-
-Two years might be considered "short notice" for a filesystem, but I
-guess that people running it because it is stable will most likely
-also linger on stable kernels where it will live "maintained" for
-many years after it has been removed from the upstream code base.
-
-> Signed-off-by: Jan Kara <jack@suse.cz>
-> ---
->  fs/reiserfs/Kconfig | 10 +++++++---
->  fs/reiserfs/super.c |  2 ++
->  2 files changed, 9 insertions(+), 3 deletions(-)
+On Wed 23-02-22 09:48:26, Byron Stanoszek wrote:
+> On Wed, 23 Feb 2022, Dave Chinner wrote:
+> > On Tue, Feb 22, 2022 at 11:04:08AM +0100, Jan Kara wrote:
+> > > Hello!
+> > > 
+> > > On Sun 20-02-22 12:13:04, Matthew Wilcox wrote:
+> > > > Keeping reiserfs in the tree has certain costs.  For example, I would
+> > > > very much like to remove the 'flags' argument to ->write_begin.  We have
+> > > > the infrastructure in place to handle AOP_FLAG_NOFS differently, but
+> > > > AOP_FLAG_CONT_EXPAND is still around, used only by reiserfs.
+> > > > 
+> > > > Looking over the patches to reiserfs over the past couple of years, there
+> > > > are fixes for a few syzbot reports and treewide changes.  There don't
+> > > > seem to be any fixes for user-spotted bugs since 2019.  Does reiserfs
+> > > > still have a large install base that is just very happy with an old
+> > > > stable filesystem?  Or have all its users migrated to new and exciting
+> > > > filesystems with active feature development?
+> > > > 
+> > > > We've removed support for senescent filesystems before (ext, xiafs), so
+> > > > it's not unprecedented.  But while I have a clear idea of the benefits to
+> > > > other developers of removing reiserfs, I don't have enough information to
+> > > > weigh the costs to users.  Maybe they're happy with having 5.15 support
+> > > > for their reiserfs filesystems and can migrate to another filesystem
+> > > > before they upgrade their kernel after 5.15.
+> > > > 
+> > > > Another possibility beyond outright removal would be to trim the kernel
+> > > > code down to read-only support for reiserfs.  Most of the quirks of
+> > > > reiserfs have to do with write support, so this could be a useful way
+> > > > forward.  Again, I don't have a clear picture of how people actually
+> > > > use reiserfs, so I don't know whether it is useful or not.
+> > > > 
+> > > > NB: Please don't discuss the personalities involved.  This is purely a
+> > > > "we have old code using old APIs" discussion.
+> > > 
+> > > So from my distro experience installed userbase of reiserfs is pretty small
+> > > and shrinking. We still do build reiserfs in openSUSE / SLES kernels but
+> > > for enterprise offerings it is unsupported (for like 3-4 years) and the module
+> > > is not in the default kernel rpm anymore.
+> > > 
+> > > So clearly the filesystem is on the deprecation path, the question is
+> > > whether it is far enough to remove it from the kernel completely. Maybe
+> > > time to start deprecation by printing warnings when reiserfs gets mounted
+> > > and then if nobody yells for year or two, we'll go ahead and remove it?
+> > 
+> > Yup, I'd say we should deprecate it and add it to the removal
+> > schedule. The less poorly tested legacy filesystem code we have to
+> > maintain the better.
+> > 
+> > Along those lines, I think we really need to be more aggressive
+> > about deprecating and removing filesystems that cannot (or will not)
+> > be made y2038k compliant in the new future. We're getting to close
+> > to the point where long term distro and/or product development life
+> > cycles will overlap with y2038k, so we should be thinking of
+> > deprecating and removing such filesystems before they end up in
+> > products that will still be in use in 15 years time.
+> > 
+> > And just so everyone in the discussion is aware: XFS already has a
+> > deprecation and removal schedule for the non-y2038k-compliant v4
+> > filesystem format. It's officially deprecated right now, we'll stop
+> > building kernels with v4 support enabled by default in 2025, and
+> > we're removing the code that supports the v4 format entirely in
+> > 2030.
 > 
-> Here's my suggestion for deprecating reiserfs. If nobody has reasons against
-> this, I'll send the patch to Linus during the next merge window.
-
-Is there a deprecation/removal schedule somewhere that documents
-stuff like this? We documented in the XFS section of the kernel
-admin guide (where we also document mount option and
-sysctl deprecation and removal schedules), but I don't think
-anything like that exists for reiserfs or for filesystems in
-general.
-
-Other than that, the patch looks good.
-
-Cheers,
-
-Dave.
-
+> For what it's worth, I have a number of production servers still using
+> Reiserfs, which I regularly maintain by upgrading to the latest Linux kernel
+> annually (mostly to apply security patches). I figured this filesystem would
+> still be available for several more years, since it's not quite y2038k yet.
 > 
-> diff --git a/fs/reiserfs/Kconfig b/fs/reiserfs/Kconfig
-> index 8fd54ed8f844..eafee53ddabc 100644
-> --- a/fs/reiserfs/Kconfig
-> +++ b/fs/reiserfs/Kconfig
-> @@ -1,10 +1,14 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  config REISERFS_FS
-> -	tristate "Reiserfs support"
-> +	tristate "Reiserfs support (deprecated)"
->  	select CRC32
->  	help
-> -	  Stores not just filenames but the files themselves in a balanced
-> -	  tree.  Uses journalling.
-> +	  Reiserfs is deprecated and scheduled to be removed from the kernel
-> +	  in 2024. If you are still using it, please migrate to another
-> +	  filesystem or tell us your usecase for reiserfs.
-> +
-> +	  Reiserfs stores not just filenames but the files themselves in a
-> +	  balanced tree.  Uses journalling.
->  
->  	  Balanced trees are more efficient than traditional file system
->  	  architectural foundations.
-> diff --git a/fs/reiserfs/super.c b/fs/reiserfs/super.c
-> index 82e09901462e..74c1cda3bc3e 100644
-> --- a/fs/reiserfs/super.c
-> +++ b/fs/reiserfs/super.c
-> @@ -1652,6 +1652,8 @@ static int read_super_block(struct super_block *s, int offset)
->  		return 1;
->  	}
->  
-> +	reiserfs_warning(NULL, "", "reiserfs filesystem is deprecated and "
-> +		"scheduled to be removed from the kernel in 2024");
->  	SB_BUFFER_WITH_SB(s) = bh;
->  	SB_DISK_SUPER_BLOCK(s) = rs;
->  
-> -- 
-> 2.31.1
+> I originally installed Reiserfs on these systems as early as 2005 due to the
+> tail-packing feature, which saved space with many small files on older
+> harddrives. Since then, I witnessed the development of ext4, and then btrfs.
+> For a long time, these newer filesystems had occasional reports of instabilities
+> and lost data, and so I shied away from using them. Meanwhile, Reiserfs reached
+> a level of maturity and no longer had active development on it, except for the
+> occasional bugfix. I felt this was a filesystem I could trust going forward
+> (despite its relative slowness), even after popular Linux distributions
+> eventually dropped it from being installed by default.
 > 
-> 
+> I have only recently begun to use XFS on newer installs, only since the XFS
+> developers added bigtime support for y2038k. But for existing installs, I ask
+> that we keep Reiserfs supported in the kernel a little longer. Perhaps use the
+> same deprecation schedule that was picked for XFS v4 (roughly 10 years of
+> deprecation before eventual removal)?
+
+Thanks for letting us know about your usage! Frankly the reality of
+reiserfs is that it gets practically no development time and little
+testing. Now this would not be a big problem on its own because what used
+to work should keep working but the rest of the common filesystem
+infrastructure keeps moving (e.g. with Matthew's page cache changes, new
+mount API, ...) and so it can happen that with a lack of testing &
+development reiserfs will break without us noticing. So I would not
+consider reiserfs a particularly safe choice these days and rather consider
+migration to some other filesystem. Originally I thought about 2 years
+deprecation period but if 5 years make things significantly easier for you
+(here I have to admit I don't have experience with maintaining larger fleet
+of servers and how much effort it takes to move it to a different fs) we can
+live with that I guess.
+
+								Honza
 
 -- 
-Dave Chinner
-david@fromorbit.com
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
