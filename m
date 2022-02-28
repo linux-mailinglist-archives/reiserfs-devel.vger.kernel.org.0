@@ -2,89 +2,79 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA6B4C525A
-	for <lists+reiserfs-devel@lfdr.de>; Sat, 26 Feb 2022 01:00:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C064C7A1B
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 28 Feb 2022 21:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239819AbiBZABW (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 25 Feb 2022 19:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
+        id S229770AbiB1UT5 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 28 Feb 2022 15:19:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiBZABW (ORCPT
+        with ESMTP id S229732AbiB1UT5 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 25 Feb 2022 19:01:22 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8BD1FED87;
-        Fri, 25 Feb 2022 16:00:48 -0800 (PST)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 21Q0093w027074
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Feb 2022 19:00:10 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 9E38515C0038; Fri, 25 Feb 2022 19:00:09 -0500 (EST)
-Date:   Fri, 25 Feb 2022 19:00:09 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Willy Tarreau <w@1wt.eu>, Byron Stanoszek <gandalf@winds.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org
-Subject: Re: Is it time to remove reiserfs?
-Message-ID: <YhltiUy/WtA0Dz5g@mit.edu>
-References: <YhIwUEpymVzmytdp@casper.infradead.org>
- <20220222100408.cyrdjsv5eun5pzij@quack3.lan>
- <20220222221614.GC3061737@dread.disaster.area>
- <3ce45c23-2721-af6e-6cd7-648dc399597@winds.org>
- <YhfzUc8afuoQkx/U@casper.infradead.org>
- <257dc4a9-dfa0-327e-f05a-71c0d9742e98@winds.org>
- <20220225132300.GC18720@1wt.eu>
- <20220225225600.GO3061737@dread.disaster.area>
+        Mon, 28 Feb 2022 15:19:57 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C305372E
+        for <reiserfs-devel@vger.kernel.org>; Mon, 28 Feb 2022 12:19:18 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id b5so17283751wrr.2
+        for <reiserfs-devel@vger.kernel.org>; Mon, 28 Feb 2022 12:19:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=59WOwCVM3VtiovYamgzmNwXHzWchY1f5q/AoPcw2ly8=;
+        b=eH35kE+EquIYv6GJ+MrWU9NQWi2b1HG/zUELwcX8LjI0Tw3epce9+kRJZ7UHAnoRxO
+         bodPkwzF4SvhAXal33Z2hD/UI3IE8iPWoDy5aoP070o/2sAc9/UPWzVDDlD7NDDNif4K
+         Tl52pkRvgEa5KxtR+FtDU06EfuHNJS8sVKZ6NsawAaiZd2+cPoo0M10Y9GoRKz1FdcRw
+         mxrk7mDRncjw31SydoGgs4iDB/4YqGGnDNg2NCDw1XUOrxtO2ycb9eQgbp8wWlsyjW8h
+         vJePQLwvDSK9YxhPAZ+HEdtGw59ZSyyjkgH5laFMRbXa7Ri3ZZrQVMCxGNn6V8A74z1B
+         bMYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=59WOwCVM3VtiovYamgzmNwXHzWchY1f5q/AoPcw2ly8=;
+        b=uKMP98zZHO3CDtNOgVkQrfiDziG2ZXxxhfpzXG4R70ooR2I293j7NbecW5Pwo3D8B8
+         +4pBDt+JAkEUJDjZMvV20efkZlr/QBj/8vOGueyjDaQfk+7u79pciz9vdLtXhrbrrrYC
+         HDb58iG6JNsycMxn8tWlNrIVwA9/fujWjdUDMU9Q9FuiyBOdg5d5kmeaoijlkL7nd+mM
+         WDhrtdi96TdIm1Qh7lYQDFMvCvqVi8E2b5EHxzrzOiY4Mn+zOuJEAv1ZR/h8idQPMW12
+         /uzzaaU9Q2RFOUgy6/ycyS+o+zY8s+VCxxLdJ6Kdi6Ay/Dwg1WiKdK83qfEzdAz0FJAo
+         QOsA==
+X-Gm-Message-State: AOAM533ter7LNOmj4UuVazGKNVcsYoCB6Stks7pybYUp+GsPMN9ED9Cf
+        9hKe7InGlHr/YXJyIRLRGQs9PgMxlRihFQ==
+X-Google-Smtp-Source: ABdhPJy8lOffRIOKBL1A3V9hsOeLsFiaCP0g7XRB1pdoGuO0nKFDY8UATcclSW1vWuASeAawXR8aZQ==
+X-Received: by 2002:adf:d1e3:0:b0:1ea:7e17:6cff with SMTP id g3-20020adfd1e3000000b001ea7e176cffmr17021551wrd.415.1646079556622;
+        Mon, 28 Feb 2022 12:19:16 -0800 (PST)
+Received: from [172.20.10.7] ([197.210.29.197])
+        by smtp.gmail.com with ESMTPSA id n5-20020adffe05000000b001edf8fc0cc3sm11373180wrr.41.2022.02.28.12.19.08
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Mon, 28 Feb 2022 12:19:16 -0800 (PST)
+Message-ID: <621d2e44.1c69fb81.bc404.53b5@mx.google.com>
+From:   Maria Elisabeth Schaeffler <successfrancis129@gmail.com>
+X-Google-Original-From: Maria Elisabeth Schaeffler <info@gmail.com>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225225600.GO3061737@dread.disaster.area>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Wiederherstellung_verlorener_Gelder_von_Online-Betr=C3=BCgern?=
+To:     Recipients <info@gmail.com>
+Date:   Mon, 28 Feb 2022 21:19:03 +0100
+Reply-To: schwartzsoftwarehackins127@gmail.com
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Sat, Feb 26, 2022 at 09:56:00AM +1100, Dave Chinner wrote:
-> 
-> Hence we have to acknowledge that fact that once upstream has
-> deprecated a feature, it's up to distros to decide how they want to
-> handle long term support for that feature. The upstream LTS kernel
-> maintainers are going to have to decide on their own policy, too,
-> because we cannot bind upstream maintenance decisions on random
-> individual downstream support constraints. Downstream has to choose
-> for itself how it handles upstream deprecation notices but, that
-> said, upstream developers also need to listen to downstream distro
-> support and deprecation requirements...
-
-This is as it should be.  It might not make a difference for reiserfs,
-where the development efforts is largely dead already, but once
-upstream deprecates a feature, the distributions can no longer rely on
-upstream developers to fix a critical stability or security bug in
-upstream, so it can be backported into an LTS or stable distro kernel.
-They are on their own.
-
-The bug might even be fixed in one enterprise distro's kernel product,
-but an isolated patch might not be available; only a megapatch of all
-of the distro's changes afgainst an upstrema kernel as a single
-un-broken-out-and-GPL-compliant patch.  So a critical bugfix present
-in one distro release might not be so easily carried over to another
-distro.
-
-So that's an important thing to remember; an LTS kernel as a whole
-might be "supported" by a stable kernel team from a backports
-perspective for years, but that doesn't mean that a deprecated feature
-or subsystem is going to be receiving upstream support, and it's fair
-that this be advertised so that users and distributions can make their
-own decisions about how long they want to use or support a deprecated
-feature or subsystem on a downstream basis.
-
-						- Ted
+Wiederherstellung verlorener Gelder von Online-Betr=FCgern / Kryptow=E4hrun=
+g / Wiederherstellung gestohlener Bitcoin / Bitcoin-Mining / Erh=F6hen Sie =
+Ihre Kreditw=FCrdigkeit / MOBILE SPY REMOTECONTROL ACCESS AUTHORIZATION. En=
+tfernen fehlerhafter Datens=E4tze aus =F6ffentlichen und privaten Datenbank=
+en per E-Mail: schwartzsoftwarehackins127@gmail.com und WhatsApp-Kontakt: +=
+16076220782
