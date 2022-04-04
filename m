@@ -2,105 +2,71 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971DB4F00DD
-	for <lists+reiserfs-devel@lfdr.de>; Sat,  2 Apr 2022 12:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C10204F0D54
+	for <lists+reiserfs-devel@lfdr.de>; Mon,  4 Apr 2022 03:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240403AbiDBK7o (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sat, 2 Apr 2022 06:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
+        id S236423AbiDDBDN (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 3 Apr 2022 21:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiDBK7n (ORCPT
+        with ESMTP id S240336AbiDDBDM (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sat, 2 Apr 2022 06:59:43 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D89C17869B;
-        Sat,  2 Apr 2022 03:57:52 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 62EC51C0B79; Sat,  2 Apr 2022 12:57:51 +0200 (CEST)
-Date:   Sat, 2 Apr 2022 12:57:49 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Jan Kara <jack@suse.cz>, Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org
-Subject: Re: Is it time to remove reiserfs?
-Message-ID: <20220402105749.GB16346@amd>
-References: <YhIwUEpymVzmytdp@casper.infradead.org>
- <20220222100408.cyrdjsv5eun5pzij@quack3.lan>
- <20220222221614.GC3061737@dread.disaster.area>
+        Sun, 3 Apr 2022 21:03:12 -0400
+X-Greylist: delayed 312 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 03 Apr 2022 18:01:17 PDT
+Received: from mta-out-02.alice.it (mta-out-02.alice.it [217.169.118.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B0F9369E4
+        for <reiserfs-devel@vger.kernel.org>; Sun,  3 Apr 2022 18:01:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alice.it; s=20211207; t=1649034077; 
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        h=Reply-To:From:To:Date:Message-ID:MIME-Version;
+        b=OT9ylYIMKckXZIuU6bXD3xqmaAWJu0Bemt/UufVq5L2wNb2gBKvM+5Za6y1kZ09yXPQiEkEqLilaVi55G3k5pPUmd+02lKzJAhgIlPn2ZzaoQPjvUWorktLm7pTj6DrkCBHy0ntbllZ9OZ1OGiylkr3WZnNXgQco3IOE8EjysoSR1RwyC/nnlf4Ya/+8ZhX5x2mgbbUIpSiiE8j9HVUAEpFjwmJZQ9LXyGCmGGGQeYWYF6rmPARrmEE3R3SMy0mE68q+7EvhuHdMknwNRgW6KOAxKrFZZgeJYLeC8ZVuWAOz5GktB2+TxWdZu+cZ80Z8LBiCO8LVXtL+yeWYpdRt6Q==
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrudejuddggeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuvffgnffgvefqoffkvfetnffktedpqfgfvfenuceurghilhhouhhtmecufedtudenucfgmhhpthihuchsuhgsjhgvtghtucdluddtmdengfhmphhthicusghougihucdlhedtmdenucfjughrpehrhffvfffkggestddtfedttddttdenucfhrhhomhephggvuchhrghvvgcurghnuchofhhfvghruchtohcuihhnvhgvshhtuchinhcuhihouhhrucgtohhunhhtrhihuchunhguvghrucgruchjohhinhhtuchvvghnthhurhgvuchprghrthhnvghrshhhihhpuchplhgvrghsvgcurhgvphhlhicufhhorhcumhhorhgvucguvghtrghilhhsuceofhgpphgvnhhnrgesrghlihgtvgdrihhtqeenucggtffrrghtthgvrhhnpeehjeetgefhleetiedtkeelfffgjeeugeegleekueffgfegtdekkeeifedvvdffteenucfkphepudejiedrvddvjedrvdegvddrudeltdenucevlhhushhtvghrufhiiigvpedvkeejnecurfgrrhgrmhephhgvlhhopegrlhhitggvrdhithdpihhnvghtpedujeeirddvvdejrddvgedvrdduledtpdhmrghilhhfrhhomhepfhgpphgvnhhnrgesrghlihgtvgdrihhtpdhnsggprhgtphhtthhopedupdhrtghpthhtoheprhgvihhsvghrfhhsqdguvghvvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-RazorGate-Vade-Verdict: clean 60
+X-RazorGate-Vade-Classification: clean
+Received: from alice.it (176.227.242.190) by mta-out-02.alice.it (5.8.807.04) (authenticated as f_penna@alice.it)
+        id 623C9D0B010D77A5 for reiserfs-devel@vger.kernel.org; Mon, 4 Apr 2022 02:56:03 +0200
+Reply-To: dougfield20@inbox.lv
+From:   We have an offer to invest in your country under a
+         joint venture partnership please reply for more
+         details <f_penna@alice.it>
+To:     reiserfs-devel@vger.kernel.org
+Date:   03 Apr 2022 17:56:02 -0700
+Message-ID: <20220403175602.AF03AD9FBE55BFEE@alice.it>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="gj572EiMnwbLXET9"
-Content-Disposition: inline
-In-Reply-To: <20220222221614.GC3061737@dread.disaster.area>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,BODY_EMPTY,
+        DKIM_INVALID,DKIM_SIGNED,EMPTY_MESSAGE,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,MISSING_SUBJECT,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.7 RCVD_IN_DNSWL_LOW RBL: Sender listed at https://www.dnswl.org/,
+        *       low trust
+        *      [217.169.118.8 listed in list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5020]
+        *  0.9 RCVD_IN_MSPIKE_L3 RBL: Low reputation (-3)
+        *      [217.169.118.8 listed in bl.mailspike.net]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [dougfield20[at]inbox.lv]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [f_penna[at]alice.it]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 RCVD_IN_MSPIKE_BL Mailspike blacklisted
+        *  1.8 MISSING_SUBJECT Missing Subject: header
+        *  2.3 EMPTY_MESSAGE Message appears to have no textual parts and no
+        *      Subject: text
+        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
+        *  0.0 BODY_EMPTY No body text in message
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-
---gj572EiMnwbLXET9
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-> > So from my distro experience installed userbase of reiserfs is pretty s=
-mall
-> > and shrinking. We still do build reiserfs in openSUSE / SLES kernels but
-> > for enterprise offerings it is unsupported (for like 3-4 years) and the=
- module
-> > is not in the default kernel rpm anymore.
-> >=20
-> > So clearly the filesystem is on the deprecation path, the question is
-> > whether it is far enough to remove it from the kernel completely. Maybe
-> > time to start deprecation by printing warnings when reiserfs gets mount=
-ed
-> > and then if nobody yells for year or two, we'll go ahead and remove it?
->=20
-> Yup, I'd say we should deprecate it and add it to the removal
-> schedule. The less poorly tested legacy filesystem code we have to
-> maintain the better.
->=20
-> Along those lines, I think we really need to be more aggressive
-> about deprecating and removing filesystems that cannot (or will not)
-> be made y2038k compliant in the new future. We're getting to close
-> to the point where long term distro and/or product development life
-> cycles will overlap with y2038k, so we should be thinking of
-> deprecating and removing such filesystems before they end up in
-> products that will still be in use in 15 years time.
->=20
-> And just so everyone in the discussion is aware: XFS already has a
-> deprecation and removal schedule for the non-y2038k-compliant v4
-> filesystem format. It's officially deprecated right now, we'll stop
-> building kernels with v4 support enabled by default in 2025, and
-> we're removing the code that supports the v4 format entirely in
-> 2030.
-
-Haha.
-
-It is not up to you. You can't remove feature people are
-using. Sorry. Talk to Linus about that.
-
-Best regards,
-								Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---gj572EiMnwbLXET9
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAmJILCwACgkQMOfwapXb+vL+cwCeKoWjLgQyQtZxSVPyZ3fSK+va
-2y4AnRvT6XFyi/Bb7fAtHmBi382Irkrc
-=Kv/y
------END PGP SIGNATURE-----
-
---gj572EiMnwbLXET9--
