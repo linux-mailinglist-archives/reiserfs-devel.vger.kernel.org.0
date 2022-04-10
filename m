@@ -2,158 +2,285 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22EA64F5685
-	for <lists+reiserfs-devel@lfdr.de>; Wed,  6 Apr 2022 08:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3634FAECD
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 10 Apr 2022 18:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233426AbiDFGX0 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 6 Apr 2022 02:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
+        id S243503AbiDJQOt (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 10 Apr 2022 12:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1840321AbiDFBHq (ORCPT
+        with ESMTP id S240551AbiDJQOs (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 5 Apr 2022 21:07:46 -0400
-Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85E29232114;
-        Tue,  5 Apr 2022 16:04:24 -0700 (PDT)
-Received: from dread.disaster.area (pa49-180-43-123.pa.nsw.optusnet.com.au [49.180.43.123])
-        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 8A01D10E56A4;
-        Wed,  6 Apr 2022 09:04:22 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1nbsDk-00EERK-OM; Wed, 06 Apr 2022 09:04:20 +1000
-Date:   Wed, 6 Apr 2022 09:04:20 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Jan Kara <jack@suse.cz>, Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org
-Subject: Re: Is it time to remove reiserfs?
-Message-ID: <20220405230420.GX1609613@dread.disaster.area>
-References: <YhIwUEpymVzmytdp@casper.infradead.org>
- <20220222100408.cyrdjsv5eun5pzij@quack3.lan>
- <20220222221614.GC3061737@dread.disaster.area>
- <20220402105749.GB16346@amd>
+        Sun, 10 Apr 2022 12:14:48 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC43506CF;
+        Sun, 10 Apr 2022 09:12:37 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id u15so7658139ejf.11;
+        Sun, 10 Apr 2022 09:12:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=n3XGAdzzz/+5bT8q+RENXVS4bI+kwN6cAFNKDEuZ0CM=;
+        b=fvJKrQJTDmhHz0iOM8fM0KwsGjkIykaNWD1jdY+C9TWjGFr+d6dYicINChuFgTeoAA
+         jNK+GFEKcCY3Rcjm2pYFIkGxSGF3LavBhM3mzAKr/4AvCAVoEleq/jbxVcgwXaPhkJfk
+         QHAnb2/pscghhG1kaQtwNiYqr7lLAEgwornR2G0tvnUHL/Ip0MUqElhw/RcK+LWpAJdu
+         wi9HMrUhzloQnkUoU21IW3cv0WTOGA27tnZmRFKJ+c654Hs5qAQbTEcThr8Mwb/AGHJ6
+         Udkv38Pgi04b1HXI1hjJJZzMyws9j45MDIntOEAgp2/wBQyBrw8ikvQbrmK6anfnCslv
+         Q2Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=n3XGAdzzz/+5bT8q+RENXVS4bI+kwN6cAFNKDEuZ0CM=;
+        b=hLi9/qmUPk7naNT84MFBgmDS57S+Ai9sWS9ThUksLSKLENaefx3D8NpFmpzlhGNwl2
+         CCidSLYOZD32xZoQwWtCCFhtbqlyFtpegFpBmArN/6Xyp7aROw8T2VIydl6kGRlvzNTU
+         vAXgjqcbZR5HkIk4o4ODWyzqXzghiQS05gRpoz+4e1Oah+8XdXG8DpWboIcE+DttFofN
+         /RPwgKEB2QRTrpRSrUViusnJ58/OS/z0rjOyif5vGF5Qmt8V4X9NY6+AX4AcrsS1qaXz
+         VYbBMuEg3jpqRLxQ4QOUwbq5zaZBctyDX8WtSGm/nEMlw2FUXXpBzBr74dKn/2hefADm
+         5cPw==
+X-Gm-Message-State: AOAM530dJz57Zfq0L+urBL/jekZXDU5Q6S7tupMBOy1LR0POHKFQgkQZ
+        1NtlIMFniUIsSxEFae/rF14=
+X-Google-Smtp-Source: ABdhPJxF7lFhqFw6a56Dsiepy+Qq5WHEgzFtdFF8g1vUVid2LANDepiYCz2afM8oYFSWNNgdXuQkYA==
+X-Received: by 2002:a17:907:7b86:b0:6e8:5116:f4f6 with SMTP id ne6-20020a1709077b8600b006e85116f4f6mr11001952ejc.392.1649607156304;
+        Sun, 10 Apr 2022 09:12:36 -0700 (PDT)
+Received: from [192.168.0.48] (ip-046-005-230-076.um12.pools.vodafone-ip.de. [46.5.230.76])
+        by smtp.gmail.com with ESMTPSA id bw3-20020a170906c1c300b006e88cdfbc32sm656132ejb.45.2022.04.10.09.12.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 10 Apr 2022 09:12:35 -0700 (PDT)
+From:   Edward Shishkin <edward.shishkin@gmail.com>
+Subject: Reiser5: Parallel scaling out on local hosts. Numbers!
+To:     ReiserFS development mailing list 
+        <reiserfs-devel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Andy Lavr <andy.lavr@gmail.com>
+Message-ID: <488ed272-d2ee-d311-aa0c-23eb212b21bf@gmail.com>
+Date:   Sun, 10 Apr 2022 18:12:34 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.5.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220402105749.GB16346@amd>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=624ccaf7
-        a=MV6E7+DvwtTitA3W+3A2Lw==:117 a=MV6E7+DvwtTitA3W+3A2Lw==:17
-        a=_MjYSGqaCGpKE7YW:21 a=kj9zAlcOel0A:10 a=z0gMJWrwH1QA:10 a=VwQbUJbxAAAA:8
-        a=7-415B0cAAAA:8 a=AvG-BbIAFkt7vrdm4KcA:9 a=CjuIK1q_8ugA:10
-        a=xNNtwZicer8A:10 a=aebnku51ZD03SSuSuSm5:22 a=AjGcO6oz07-iQ99wixmX:22
-        a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Sat, Apr 02, 2022 at 12:57:49PM +0200, Pavel Machek wrote:
-> > > So from my distro experience installed userbase of reiserfs is pretty small
-> > > and shrinking. We still do build reiserfs in openSUSE / SLES kernels but
-> > > for enterprise offerings it is unsupported (for like 3-4 years) and the module
-> > > is not in the default kernel rpm anymore.
-> > > 
-> > > So clearly the filesystem is on the deprecation path, the question is
-> > > whether it is far enough to remove it from the kernel completely. Maybe
-> > > time to start deprecation by printing warnings when reiserfs gets mounted
-> > > and then if nobody yells for year or two, we'll go ahead and remove it?
-> > 
-> > Yup, I'd say we should deprecate it and add it to the removal
-> > schedule. The less poorly tested legacy filesystem code we have to
-> > maintain the better.
-> > 
-> > Along those lines, I think we really need to be more aggressive
-> > about deprecating and removing filesystems that cannot (or will not)
-> > be made y2038k compliant in the new future. We're getting to close
-> > to the point where long term distro and/or product development life
-> > cycles will overlap with y2038k, so we should be thinking of
-> > deprecating and removing such filesystems before they end up in
-> > products that will still be in use in 15 years time.
-> > 
-> > And just so everyone in the discussion is aware: XFS already has a
-> > deprecation and removal schedule for the non-y2038k-compliant v4
-> > filesystem format. It's officially deprecated right now, we'll stop
-> > building kernels with v4 support enabled by default in 2025, and
-> > we're removing the code that supports the v4 format entirely in
-> > 2030.
-> 
-> Haha.
-> 
-> It is not up to you. You can't remove feature people are
-> using. Sorry. Talk to Linus about that.
+Hi all,
 
-I think you have the wrong end of the stick. We're not removing
-stuff that people use, we're removing support for functionality that
-will be *fundamentally broken* and *unfixable* come 2038. Hence we
-need a process for ensuring that nobody is still requiring us to
-support it by the scheduled removal date.
+Earlier we announced a logical volume manager with parallel scaling out
+on local hosts, which is different from the traditional RAID arrays and
+is more like volume managers of networking file systems:
+https://reiser4.wiki.kernel.org/index.php/Logical_Volumes_Background
 
-Every long term project needs to have a deprecation process so that
-they can clean out unmaintained, broken, unfixable and/or unused
-code without putting users at risk. If we can't/won't/don't clear
-out unmaintained or unfixable code, the risk of data loss, security
-breaches, etc in that code is a real and present danger to
-any kernel that includes that code. We learnt this lesson the hard
-way recently, and we simply removed the legacy code responsible in
-response. Even Linus agreed that prompt removal of the functionality
-was the right thing to do.
+Here we provide some numbers for the latest Reiser5 software release.
 
-This occurred despite the fact we had a feature deprecation policy
-for XFS long before that incident occurred - we just had not been
-applying it to dusty corners of the user API we inherited from Irix.
-It has been used for things like proc/sysfs knobs and mount options
-that are no longer supported, and the lesson we learn is that is
-should be applied to user APIs as well. We'd already extended that
-process for deprecation and removal of support for on-disk formats
-(i.e. the V4 format) but not legacy user APIS.
+Note that performance of volume operations have different topicality.
+E.g. performance of device removal is more topical than performance of
+adding a device. Indeed, user usually wants the deleted device to go to
+other needs immediately, whereas, when adding a device he gets more disk
+space immediately after issuing the command (there is no need to wait
+for rebalancing completion).
 
-W.r.t to the V4 format deprecation, the kernel issues warnings
-at mount time right now to say that the v4 format is deprecated and
-will be going away.
 
-XFS (dm-0): Deprecated V4 format (crc=0) will not be supported after September 2030.
-XFS (dm-0): Mounting V4 Filesystem
-XFS (dm-0): Ending clean mount
-xfs filesystem being mounted at /mnt/scratch supports timestamps until 2038 (0x7fffffff)
 
-mkfs.xfs warns if you explicitly make a v4 fielsystem:
+Hardware:
 
-# mkfs.xfs -N -m crc=0 /dev/mapper/fast
-V4 filesystems are deprecated and will not be supported by future versions.
-....
-#
+Dell OptiPlex 7050 6C2XR, Intel Core i7-7700, 16GB RAM
+(4 Cores / 8 Threads)
 
-The timeframe for support is documented in both the mkfs.xfs man
-page and the XFS section of the kernel admin guide published here:
+Storage media:
 
-https://docs.kernel.org/admin-guide/xfs.html#deprecation-of-v4-format
+DEV1: Lite-On LCS-256M6S, SSD 256GB, SATAIII, 2.5"
+DEV2: Intenso 2.5" SSD TOP, 256G, SATAIII, 2.5"
+DEV3: Intenso 2.5" SSD TOP, 256G, SATAIII, 2.5"
+DEV4: Intenso M.2  SSD TOP, 256G, SATAIII, m.2 2280
+RAM0: Block device in RAM
 
-Indeed, if you keep reading down that link, you'll see all the
-deprecated mount options, sysctls, etc and their removal schedule,
-as well as all the removed options and when they were removed.
 
-Deprecation and removal of old features is something that all long
-term projects need to be able to perform, and the Linux kernel is no
-different.  Just because the Linux kernel project as a whole
-doesn't have full software lifecycle management processes, it
-doesn't mean that every kernel subsystems have no full software
-lifecycle management processes.
+Software:
 
-Rather than saying "you cannot do X", it is better to learn why "we
-*need* to do X" and then come up with a sane process for allowing X
-to occur. The recent a.out removal and the reverted /dev/urandom
-changes are good examples of how having a well thought out feature
-deprecation and removal process is a really good thing to have.
+Reiser4-for-5.16.patch (software release 5.1.3), download at:
+https://sourceforge.net/projects/reiser4/files/v5-unstable/kernel/reiser4-for-5.16.patch.gz/download
 
-Cheers,
 
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Reiser4progs-2.0.5 (software release 5.1.3), download at:
+https://sourceforge.net/projects/reiser4/files/v5-unstable/progs/reiser4progs-2.0.5.tar.gz/download
+
+
+
+
+                Sequential RAW operations
+
+
+Data set: 10G at zero offset
+
+
+1. Read from RAW device
+
+Device     Speed, M/s
+
+   DEV1         470
+   DEV2         530
+
+
+2. Write to RAW device
+
+Device     Speed, M/s
+
+
+   DEV1        390
+   DEV2        420
+
+
+
+              Sequential file operations
+
+
+Stripe size: 128K
+Data set: one 10G file
+
+
+
+            1. Read/Write a large file, Speed (M/s)
+
+
+
+Nr of Disks in the Volume       Write               Read
+
+  1 (DEV1)                        380                 460
+  1 (DEV2)                        410                 518
+  2 (DEV1+DEV2)                   695                 744
+  3 (DEV1+DEV2+DEV3)              890                 970
+  4 (DEV1+DEV2+DEV3+DEV4)         950                1100
+
+
+
+             2. Copy data from/to formatted device
+
+
+
+  From device                  To device           Speed (M/s)
+
+      DEV1                        DEV2                260
+      DEV2                        DEV1                255
+
+
+                         Volume operations
+
+
+Stripe size: 128K
+Data set: one 10G file
+
+
+Speed of any volume operation is defined as D/T, where
+D - total amount of data stored on the volume
+T - operation time (including full data rebalancing/migration and sync)
+Caches are dropped before each operation.
+
+More details about logical volumes management can be found here:
+https://reiser4.wiki.kernel.org/index.php/Logical_Volumes_Administration
+
+
+
+              1. Adding a device to a logical volume
+
+
+
+      Volume             Device to add              Speed M/s
+
+  DEV1                        DEV2                     284
+  DEV1+DEV2                   DEV3                     457
+  DEV1+DEV2+DEV3              DEV4                     574
+
+
+               2. Removing a device from a logical volume
+
+
+
+     Volume              Device to remove           Speed M/s
+
+  DEV1+DEV2+DEV3+DEV4         DEV4                     890
+  DEV1+DEV2+DEV3              DEV3                     606
+  DEV1+DEV2                   DEV2                     336
+
+
+
+                    3. Flushing a proxy device
+
+
+
+More details about proxy device management can be found here:
+https://reiser4.wiki.kernel.org/index.php/Proxy_Device_Administration
+
+Before each operation all data of the logical volume are on the proxy
+device. After the operation all the data are on the permanent storage
+denoted as "Volume".
+
+
+     Volume                Proxy device             Speed M/s
+
+
+  DEV1                         DEV4                    228
+  DEV1+DEV2                    DEV4                    244
+  DEV1+DEV2+DEV3               DEV4                    290
+
+
+  DEV1                         RAM0                    283
+  DEV1+DEV2                    RAM0                    301
+  DEV1+DEV2+DEV3               RAM0                    374
+  DEV1+DEV2+DEV3+DEV4          RAM0                    427
+
+
+
+                     4. Migrating a file
+
+
+
+More details about file migration in Reiser5 volumes can be found here:
+https://reiser4.wiki.kernel.org/index.php/Transparent_File_Migration
+
+Before each operation all data of the file are fairly distributed among
+all devices-components of the logical Volume. After the operation all
+file's data are stored on the Target device.
+
+
+     Volume                Target Device            Speed M/s
+
+
+DEV1+DEV2+DEV3+DEV4           DEV1                     387
+DEV1+DEV2+DEV3                DEV1                     403
+DEV1+DEV2                     DEV1                     427
+
+
+Comment. With increasing number of components, the speed of file
+migration approaches (from top) the write speed to the formatted device
+DEV1 (380 M/s).
+
+
+
+                            Comments
+
+
+
+Parallel O(1)-defragmentor of compound Reiser5 volumes is in plans!
+Proxy devices are also a subject of defragmentation.
+
+All file and volume operations are a subject of further performance
+improvements. Currently IO requests against devices-components of a
+logical volume are submitted by the same thread. This serialization
+factor leads to performance drop. Once the software stability reaches
+beta level, the things should be parallelized. Also currently for
+simplicity _all_ data are read from the volume during its re-balancing.
+It would be more reasonable to read only those data which are a subject
+of migration.
+
+Theoretical limit for the speed of adding(removing) a second device is a
+double copy speed from DEV1 to DEV2 (respectively from DEV2 to DEV1).
+Currently we have respectively 1.1 and 1.3 of the copy speed.
