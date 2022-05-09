@@ -2,101 +2,80 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2F451B44F
-	for <lists+reiserfs-devel@lfdr.de>; Thu,  5 May 2022 02:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97DE651F389
+	for <lists+reiserfs-devel@lfdr.de>; Mon,  9 May 2022 06:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232388AbiEEAGj (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 4 May 2022 20:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
+        id S229881AbiEIEoE (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 9 May 2022 00:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354186AbiEDX6y (ORCPT
+        with ESMTP id S234262AbiEIEmL (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 4 May 2022 19:58:54 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC335468E
-        for <reiserfs-devel@vger.kernel.org>; Wed,  4 May 2022 16:54:17 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id h10-20020a056830400a00b00605e92cc450so1928239ots.11
-        for <reiserfs-devel@vger.kernel.org>; Wed, 04 May 2022 16:54:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=ampHH5WJLIBWSsxWwzVjbk5pO9UBFxn81pZ6QIDzZtY=;
-        b=jG1k/bO0Nq5OpfddybGyQMOWQigENT/JFNekaKtm1E/HZ1a8FuNBrgE9fRE7gcHC8O
-         1kvgjim+YyPR4q8yTYXW90TRFMvMtD3eFdFmlzCVzkwSKdd7AyHudhbo4nNGRQcu/Har
-         zU3zphNWQ6lSCdG6gYbEoPfZ9KDbFp7PnHYnN0rBoPuWowQiYjRuat0gViGMFTu3V0RP
-         J9hqm8PqQhnlG6nJCbOivw+BF52aXpQBxk6hfyTrbqQSdM97zI7NJJ1KcU0LFzvtHCOc
-         Mz3Ce7R6uc6NL7bBGz/4sYD+R48TcX34R4EupJw8ycmUAbR5uqKN5wNKBWPj7yY5Uynx
-         q5mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=ampHH5WJLIBWSsxWwzVjbk5pO9UBFxn81pZ6QIDzZtY=;
-        b=G9Uqsc2Wv4wxXgthSioiDrad2abwRUlnPxvEURckJwTaPDNouI8BGWXHVqZXjngcKr
-         W1HiXj55tAa8nvvuLHr2GqSsr3IrvzS+wNKxj/weW3G5zCPwBM7/0WtVoLHXke8o8rJ/
-         1dOA2a3IRJdF7bdNQVKCLUd6f+9MNRyHHibfEqDcBnofa9zw8e7+P6NryqVFlj+qxRJ5
-         /oqcun1ECRbWnFnoFXNNyy7bEuBWYsn4BOoq7/990M0a3e3Vpu9Q9I0dgTbkMlyF02ih
-         hhiBSH3WxJWtFcf7JE/bOt4657nIb4WeKjBQoVeb8PwiKROqwu66oUX/Va/fevdf978o
-         8DdQ==
-X-Gm-Message-State: AOAM531ZzXlRTF+WCdP6PXwhXuEWe1w2IDn90lJB6I15Tz5iVp2KPDLQ
-        /TrvnNEtOzsQznRo5Uv/nETnq2G5cLwCZOr2S9s=
-X-Google-Smtp-Source: ABdhPJyobZJlcsZ6zCytgK5JW+Q09o0HYFp1zwLPWaFfYXPyjmVGzEvNCr+16hunmHPMGASL3FJ/dZw/arR6sb3w6PU=
-X-Received: by 2002:a9d:400c:0:b0:605:f835:974c with SMTP id
- m12-20020a9d400c000000b00605f835974cmr8455450ote.269.1651708457384; Wed, 04
- May 2022 16:54:17 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6802:1a9:0:0:0:0 with HTTP; Wed, 4 May 2022 16:54:17
- -0700 (PDT)
-Reply-To: ortegainvestmmentforrealinvest@gmail.com
-From:   Info <joybhector64@gmail.com>
-Date:   Thu, 5 May 2022 05:24:17 +0530
-Message-ID: <CAP7KLYghodqQ8mxOwNTzCK_KCfu7gm5og-TXWb9cWgFAR7i9XQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:343 listed in]
-        [list.dnswl.org]
+        Mon, 9 May 2022 00:42:11 -0400
+X-Greylist: delayed 40133 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 08 May 2022 21:38:18 PDT
+Received: from yodobashi.com (unknown [107.155.45.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB71C424AD
+        for <reiserfs-devel@vger.kernel.org>; Sun,  8 May 2022 21:38:18 -0700 (PDT)
+Sender: info@yodobashi.com
+Date:   Mon, 9 May 2022 12:38:05 +0800
+From:   "yodobashi.com" <mail@yodobashi.com>
+To:     <reiserfs-devel@vger.kernel.org>
+Subject: =?gb2312?B?peilyaXQpbelyaXDpcils6Xgo7qhuKSqv82YlMfpiPOhuYnkuPzSwA==?=
+        =?gb2312?B?7m3K3Li2pM6ktN9CvWogdjMzbWg4YW02dGQ4?=
+Message-ID: <20220509123819375503@yodobashi.com>
+X-mailer: Foxmail 6, 13, 102, 15 [cn]
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="gb2312"
+Content-Transfer-Encoding: base64
+X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_50,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_SBL_CSS,RCVD_IN_VALIDITY_RPBL,RDNS_NONE,
+        SPF_FAIL,SPF_HELO_FAIL,TVD_SPACE_ENCODED,TVD_SPACE_RATIO_MINFP,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
+        *      bl.spamcop.net
+        *      [Blocked - see <https://www.spamcop.net/bl.shtml?107.155.45.197>]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [107.155.45.197 listed in zen.spamhaus.org]
         *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
         *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [joybhector64[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [joybhector64[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [107.155.45.197 listed in bl.score.senderscore.com]
+        *  0.0 SPF_FAIL SPF: sender does not match SPF record (fail)
+        *      [SPF failed: Please see http://www.openspf.org/Why?s=mfrom;id=info%40yodobashi.com;ip=107.155.45.197;r=lindbergh.monkeyblade.net]
+        *  0.0 SPF_HELO_FAIL SPF: HELO does not match SPF record (fail)
+        *      [SPF failed: Please see http://www.openspf.org/Why?s=helo;id=yodobashi.com;ip=107.155.45.197;r=lindbergh.monkeyblade.net]
         * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
+        *  0.0 TVD_SPACE_ENCODED Space ratio & encoded subject
+        *  0.0 TVD_SPACE_RATIO_MINFP Space ratio (vertical text obfuscation?)
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
--- 
-I am an investor. I came from the USA and I have many investments all
-over the world.
+ofah9qG4pKq/zZiUx+mI86G5ieS4/NLA7m3K3Li2pM6ktN9CvWqh9qH2DQqjqKSzpM6l4algpeuk
+z6GixeTQxYyf08OkzqWipcml7KW5pMfF5NDFpLWk7KTGpKSk3qS5o6kNCg0KDQql6KXJpdClt6XJ
+pcOlyKWzpeCk8qS0wPvTw6SkpL+kwKStoaKkoqTqpKykyKSmpLSktqSkpN6kuaGjDQqkqr/NmJSk
+zqSqv82YlMfpiPOJ5Lj8yta+QaStpPKkqqSzpMqkpKTepLekv6GjDQrE2sjdpM6ktLRf1Uqk8qSq
+7oqkpKSkpL+kt6TepLmhow0Ko6il0aW5pe+pYKXJpM+horHtyr6kt6TGpKqk6qTepLuk86OpDQoN
+CqG+ieS4/Iydz/OkzrvhhlRJRKG/DQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0Ku+GGVElEoaE6oaFyZWlzZXJmcy1kZXZlbEB2Z2Vy
+Lmtlcm5lbC5vcmcNCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tDQoNCqHxieS4/KS1pOykv6Sqv82YlMfpiPMgDQotLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0K64rUkresusUN
+CsjV1tCkzqS030K9as/I64rUkresusUNCg0KpLS1x+Vox+mI86TPoaLPwtObobikqr/NmJSMn9PD
+pdqpYKW4obmkq6TppLS0X9VKpK+kwKS1pKShow0KDQqhoaiLpKq/zZiUjJ/Tw6XaqWCluA0KaHR0
+cHM6Ly9zLnlhbS5jb20vV2ZDN20NCg0Kofmks6TOpeGpYKXrxNrI3aTL0MSkoqS/pOqkzqTKpKSI
+9rrPpM+hoqSqytbK/aTHpLmkrKGipeilyaXQpbc/pcmlw6XIP6WzpeCkqoaWpKS6z6TvpLu3mb/a
+pNjWwbyxpLTfQr1qpPKkqu6KpKSkpKS/pLek3qS5oaMNCg0KDQqks6TOpeGpYKXrpM+hosXk0MWM
+n9PDpM6loqXJpeyluaTHxeTQxaS1pOykxqSkpN6kuaGjDQqkqsrWyv2k8qSqkuyksaSkpL+kt6Te
+pLmkrKGipLOkzqXhqWCl66TOxNrI3aTLpMSkpKTGpM6kqoaWpKS6z6TvpLukz8/C05ukzt9CvWrP
+yKTepMekqu6KpKSkpKS/pLek3qS5oaMNCg0KpeilyaXQpbelyaXDpcils6XgIKSqhpakpLrPpO+k
+u7eZv9oNCkVtYWlsOiBpbmZvQHlvZG9iYXNoaS5jb20NCg0KQ29weXJpZ2h0MjAyMiBZb2RvYmFz
+aGkgQ2FtZXJhIENvLixMdGQuDQoNCiANCg==
 
-I want you to partner with me to invest in your country I am into many
-investment such as real Estate or buying of properties i can also
-invest money in any of existing business with equity royalty or by %
-percentage so on,
-Warm regards
+
