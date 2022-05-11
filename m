@@ -2,80 +2,105 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97DE651F389
-	for <lists+reiserfs-devel@lfdr.de>; Mon,  9 May 2022 06:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5CD3522B5D
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 11 May 2022 06:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbiEIEoE (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 9 May 2022 00:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51422 "EHLO
+        id S231858AbiEKEmA (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 11 May 2022 00:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234262AbiEIEmL (ORCPT
+        with ESMTP id S238781AbiEKEl6 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 9 May 2022 00:42:11 -0400
-X-Greylist: delayed 40133 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 08 May 2022 21:38:18 PDT
-Received: from yodobashi.com (unknown [107.155.45.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB71C424AD
-        for <reiserfs-devel@vger.kernel.org>; Sun,  8 May 2022 21:38:18 -0700 (PDT)
-Sender: info@yodobashi.com
-Date:   Mon, 9 May 2022 12:38:05 +0800
-From:   "yodobashi.com" <mail@yodobashi.com>
-To:     <reiserfs-devel@vger.kernel.org>
-Subject: =?gb2312?B?peilyaXQpbelyaXDpcils6Xgo7qhuKSqv82YlMfpiPOhuYnkuPzSwA==?=
-        =?gb2312?B?7m3K3Li2pM6ktN9CvWogdjMzbWg4YW02dGQ4?=
-Message-ID: <20220509123819375503@yodobashi.com>
-X-mailer: Foxmail 6, 13, 102, 15 [cn]
-Mime-Version: 1.0
-Content-Type: text/plain;
-        charset="gb2312"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_50,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_SBL_CSS,RCVD_IN_VALIDITY_RPBL,RDNS_NONE,
-        SPF_FAIL,SPF_HELO_FAIL,TVD_SPACE_ENCODED,TVD_SPACE_RATIO_MINFP,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
-        *      bl.spamcop.net
-        *      [Blocked - see <https://www.spamcop.net/bl.shtml?107.155.45.197>]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [107.155.45.197 listed in zen.spamhaus.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [107.155.45.197 listed in bl.score.senderscore.com]
-        *  0.0 SPF_FAIL SPF: sender does not match SPF record (fail)
-        *      [SPF failed: Please see http://www.openspf.org/Why?s=mfrom;id=info%40yodobashi.com;ip=107.155.45.197;r=lindbergh.monkeyblade.net]
-        *  0.0 SPF_HELO_FAIL SPF: HELO does not match SPF record (fail)
-        *      [SPF failed: Please see http://www.openspf.org/Why?s=helo;id=yodobashi.com;ip=107.155.45.197;r=lindbergh.monkeyblade.net]
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
-        *  0.0 TVD_SPACE_ENCODED Space ratio & encoded subject
-        *  0.0 TVD_SPACE_RATIO_MINFP Space ratio (vertical text obfuscation?)
-X-Spam-Level: *******
+        Wed, 11 May 2022 00:41:58 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FE7AE274
+        for <reiserfs-devel@vger.kernel.org>; Tue, 10 May 2022 21:41:51 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id x52so939699pfu.11
+        for <reiserfs-devel@vger.kernel.org>; Tue, 10 May 2022 21:41:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
+        b=crfI6LDY4zdwb51InG7AHpY2OQsv0U+ZcsbrWQ4xznl2v6tqINUkJbYT6vduPxTeKj
+         LcsKJ9SCTBRB+F7T1yGAGOy9gYKd4/MGgemnnE0Hkdd7D5sC7q5AF/HBEcegIFV2OAz0
+         QYPAZoQxk+vBn9FVbvTE1x46byRhAKtTgcNka2ceI4Hll4kFNuppRhVDY81QO19S7HTI
+         yoc1Z1o4MIF+Lc1o5XZKcnVyoITI3L7XV0zq77flA/u1JDjRYp99ezMpF8TnAzPMQ08b
+         nu04waRdwYR8dPLU0516NKRoSLa1lr5tnijeqK5/oJ+laGkoIMgVReFiofoBZXSEfZCG
+         wieg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
+        b=IpfpfoKDL4PXk99zu8W5bHhiXOL/6yrgJ1lvwnl155cLTiHuHB4MqnEZZrgFqgezyX
+         mFgfaoHv6QZxCBU3zuSDHbWmbWAQnY4BpfC8lX4XzuW18UtaS3xTaqpplGCl7JBxxeVt
+         /GBY8gaf2kAEMdK/5pp9LBh/CRfXPeURJy1/x7WvP3QHTtqewpXJyM3Gl2s9jF6Q+cIn
+         v2ATu7QuN9FNgkaYTMmJhur6iZNR5GYP+PAnCwldEyKs6ztR2jIXLBp23RFuIG4Yhbmo
+         Ez2DdeF+OPkouUdeP0pSHKw/iZFz4yUYyw7OhxPh/EbdW5anTH101VzhBwffDC0SLkla
+         W2qA==
+X-Gm-Message-State: AOAM533uK06JxzH13+D9fCEgBXI4DJVV+Fj1HjekvGIhnkgwfAH9b/FV
+        nOiQH8J4pYL13mDGFBkEQ1uWaQFzaIN7mU/a/Nw=
+X-Google-Smtp-Source: ABdhPJxRT2VF3kksMu0TjrqavK6VDv9EtZvdjThs9Dpa9DoMjqaRUkX4hOeywSSVMMQvh0qSdR7nrPytG4wy2W750qY=
+X-Received: by 2002:a62:5ec6:0:b0:510:71a1:f2f6 with SMTP id
+ s189-20020a625ec6000000b0051071a1f2f6mr23804137pfb.69.1652244111305; Tue, 10
+ May 2022 21:41:51 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:6a10:319:0:0:0:0 with HTTP; Tue, 10 May 2022 21:41:50
+ -0700 (PDT)
+From:   Private Mail <privatemail1961@gmail.com>
+Date:   Tue, 10 May 2022 21:41:50 -0700
+Message-ID: <CANjAOAhh9gBV+h7FM7L0tu5AiLZs7dsMvjxZGHKuXKsf=W+EYg@mail.gmail.com>
+Subject: Have you had this? It is for your Benefit
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.3 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
+        BAYES_50,DEAR_BENEFICIARY,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
+        LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-ofah9qG4pKq/zZiUx+mI86G5ieS4/NLA7m3K3Li2pM6ktN9CvWqh9qH2DQqjqKSzpM6l4algpeuk
-z6GixeTQxYyf08OkzqWipcml7KW5pMfF5NDFpLWk7KTGpKSk3qS5o6kNCg0KDQql6KXJpdClt6XJ
-pcOlyKWzpeCk8qS0wPvTw6SkpL+kwKStoaKkoqTqpKykyKSmpLSktqSkpN6kuaGjDQqkqr/NmJSk
-zqSqv82YlMfpiPOJ5Lj8yta+QaStpPKkqqSzpMqkpKTepLekv6GjDQrE2sjdpM6ktLRf1Uqk8qSq
-7oqkpKSkpL+kt6TepLmhow0Ko6il0aW5pe+pYKXJpM+horHtyr6kt6TGpKqk6qTepLuk86OpDQoN
-CqG+ieS4/Iydz/OkzrvhhlRJRKG/DQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0Ku+GGVElEoaE6oaFyZWlzZXJmcy1kZXZlbEB2Z2Vy
-Lmtlcm5lbC5vcmcNCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tDQoNCqHxieS4/KS1pOykv6Sqv82YlMfpiPMgDQotLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0K64rUkresusUN
-CsjV1tCkzqS030K9as/I64rUkresusUNCg0KpLS1x+Vox+mI86TPoaLPwtObobikqr/NmJSMn9PD
-pdqpYKW4obmkq6TppLS0X9VKpK+kwKS1pKShow0KDQqhoaiLpKq/zZiUjJ/Tw6XaqWCluA0KaHR0
-cHM6Ly9zLnlhbS5jb20vV2ZDN20NCg0Kofmks6TOpeGpYKXrxNrI3aTL0MSkoqS/pOqkzqTKpKSI
-9rrPpM+hoqSqytbK/aTHpLmkrKGipeilyaXQpbc/pcmlw6XIP6WzpeCkqoaWpKS6z6TvpLu3mb/a
-pNjWwbyxpLTfQr1qpPKkqu6KpKSkpKS/pLek3qS5oaMNCg0KDQqks6TOpeGpYKXrpM+hosXk0MWM
-n9PDpM6loqXJpeyluaTHxeTQxaS1pOykxqSkpN6kuaGjDQqkqsrWyv2k8qSqkuyksaSkpL+kt6Te
-pLmkrKGipLOkzqXhqWCl66TOxNrI3aTLpMSkpKTGpM6kqoaWpKS6z6TvpLukz8/C05ukzt9CvWrP
-yKTepMekqu6KpKSkpKS/pLek3qS5oaMNCg0KpeilyaXQpbelyaXDpcils6XgIKSqhpakpLrPpO+k
-u7eZv9oNCkVtYWlsOiBpbmZvQHlvZG9iYXNoaS5jb20NCg0KQ29weXJpZ2h0MjAyMiBZb2RvYmFz
-aGkgQ2FtZXJhIENvLixMdGQuDQoNCiANCg==
+Our Ref: BG/WA0151/2022
 
+Dear Beneficiary
 
+Subject: An Estate of US$15.8 Million
+
+Blount and Griffin Genealogical Investigators specializes in probate
+research to locate missing heirs and beneficiaries to estates in the
+United Kingdom and Europe.
+
+We can also help you find wills, obtain copies of certificates, help
+you to administer an estate, as well as calculating how an estate,
+intestacy or trust should be distributed.
+
+You may be entitled to a large pay out for an inheritance in Europe
+worth US$15.8 million. We have discovered an estate belonging to the
+late Depositor has remained unclaimed since he died in 2011 and we
+have strong reasons to believe you are the closest living relative to
+the deceased we can find.
+
+You may unknowingly be the heir of this person who died without
+leaving a will (intestate). We will conduct a probate research to
+prove your entitlement, and can submit a claim on your behalf all at
+no risk to yourselves.
+
+Our service fee of 10% will be paid to us after you have received the estate.
+
+The estate transfer process should take just a matter of days as we
+have the mechanism and expertise to get this done very quickly. This
+message may come to you as a shock, however we hope to work with you
+to transfer the estate to you as quickly as possible.
+
+Feel free to email our senior case worker Mr. Malcolm Casey on email:
+malcolmcasey68@yahoo.com for further discussions.
+
+With warm regards,
+
+Mr. Blount W. Gort, CEO.
+Blount and Griffin Associates Inc
