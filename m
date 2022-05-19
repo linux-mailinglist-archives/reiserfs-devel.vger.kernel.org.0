@@ -2,63 +2,78 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C8C952C9C6
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 19 May 2022 04:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C782952CF34
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 19 May 2022 11:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232861AbiESC0e (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 18 May 2022 22:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
+        id S231860AbiESJVI (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 19 May 2022 05:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiESC0d (ORCPT
+        with ESMTP id S236089AbiESJU6 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 18 May 2022 22:26:33 -0400
-X-Greylist: delayed 405 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 May 2022 19:26:32 PDT
-Received: from sv12374.xserver.jp (sv12374.xserver.jp [202.233.66.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544CF68FA2
-        for <reiserfs-devel@vger.kernel.org>; Wed, 18 May 2022 19:26:32 -0700 (PDT)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/521/virusgw12001.xserver.jp)
-Received: by sv12374.xserver.jp (Postfix, from userid 20068)
-        id 8C1CB1003DDD96; Thu, 19 May 2022 11:19:45 +0900 (JST)
-To:     reiserfs-devel@vger.kernel.org
-Subject: =?ISO-2022-JP?B?GyRCJCpMZCQkOWckbyQ7PHUbKEI=?=
- =?ISO-2022-JP?B?GyRCSVUkTiQqQ04kaSQ7GyhC?=
-From:   =?UTF-8?B?5LiA5YSE57eP5rS76LqN44Ki44Oz44OG44OK?= 
-        <cocotemplete@gmail.com>
+        Thu, 19 May 2022 05:20:58 -0400
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B28205C6
+        for <reiserfs-devel@vger.kernel.org>; Thu, 19 May 2022 02:20:56 -0700 (PDT)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 0B898EEFA90;
+        Thu, 19 May 2022 11:20:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1652952048;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IEpxxtS6dFfW2hXHPdJoyZva/Nsb9sB2MQUZZ8l7jNQ=;
+        b=jjyGEN/2eo0tkC8gh4Uv4eViRmIwRBOkkq7tOSpJmJZnIfec0nx1ugl+MsNsuxLQ0TATA+
+        e4I7m6NXv0IGWkHkh1yVRrc5S1B/WcrYeBsMWoLCDa0Ku955GNDG4yMDX9ka59LexSb7SG
+        Xnzo96SgzCWHbuGF1W5o5gEqV66FNIg=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?utf-8?B?TWljaGHFgg==?= Dec <moog621@gmail.com>,
+        reiserfs-devel@vger.kernel.org, Jan Kara <jack@suse.cz>
+Subject: Re: Alternatives after removal of ReiserFS
+Date:   Thu, 19 May 2022 11:20:24 +0200
+Message-ID: <2631780.mvXUDI8C0e@natalenko.name>
+In-Reply-To: <54db8933-f2f3-d31a-c71f-860285e25abf@gmail.com>
+References: <54db8933-f2f3-d31a-c71f-860285e25abf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-2022-JP
-Content-Transfer-Encoding: 7bit
-Message-Id: <20220519021945.8C1CB1003DDD96@sv12374.xserver.jp>
-Date:   Thu, 19 May 2022 11:19:45 +0900 (JST)
-X-Spam-Status: No, score=3.2 required=5.0 tests=BAYES_50,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
-X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
+Hello.
 
-? Jasmine is interested in your profile! More info: https://wondergirl22.page.link/29hQ?0ikr ? 様 
+On st=C5=99eda 18. kv=C4=9Btna 2022 14:10:25 CEST Micha=C5=82 Dec wrote:
+> Does the Linux kernel actually offer any alternatives to users whose use=
+=20
+> cases are satisfied by ReiserFS? These users will probably be stuck with=
+=20
+> a much older kernel once ReiserFS is completely removed. I'm one of=20
+> those users and I use ReiserFS to keep around large quantities of small=20
+> files and quite ironically these are copies of the Linux kernel. I keep=20
+> around 2, maybe 3 separate kernel trees to make sure the kernels I have=20
+> on my devices can be rebuilt at any time.
 
-一億総活躍アンテナ にお問い合わせありがとうございます。
+I think the advantage of using reiserfs for small files faded away over tim=
+e and became an old tale that is being passed from one generation to anothe=
+r without any modern adequate testing.
 
-改めて担当者よりご連絡をさせていただきますので、
+XFS should serve you well.
 
-今しばらくお待ちください。
+=2D-=20
+Oleksandr Natalenko (post-factum)
 
 
-
--------------------------------------------------
-
-お名前：? Jasmine is interested in your profile! More info: https://wondergirl22.page.link/29hQ?0ikr ? 
-
-メールアドレス：reiserfs-devel@vger.kernel.org 
-
-お問い合わせ内容：f9c99l 
-
--------------------------------------------------
 
