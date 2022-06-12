@@ -2,142 +2,178 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A765553FA7A
-	for <lists+reiserfs-devel@lfdr.de>; Tue,  7 Jun 2022 11:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A205479C8
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 12 Jun 2022 12:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240352AbiFGJz6 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 7 Jun 2022 05:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S236089AbiFLKif (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 12 Jun 2022 06:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240229AbiFGJzr (ORCPT
+        with ESMTP id S234824AbiFLKie (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:55:47 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F838E733E
-        for <reiserfs-devel@vger.kernel.org>; Tue,  7 Jun 2022 02:55:39 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id i29so10697906lfp.3
-        for <reiserfs-devel@vger.kernel.org>; Tue, 07 Jun 2022 02:55:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=p7cyveT4bvEtCVZfKnt9HMSBuDucwLXScRMPEQg6smQ=;
-        b=Slws/HFDl6DfKRrRwYFe++S+8nGl6Tt2pRI05IG0lP68zO4PV2Xex7XnRqTF3PmXzZ
-         1h1SFmVbtec7YVU9nOdIv2E9RTwnUtxPvikWvzt3RXYcaq55YxFj32kJnLsAO/VjqI2G
-         FWV09oxmvZAz98kyjfZkAbwF6wneUrolUYiLgZuOCc6PsgymiQe9pYEUYNfwBfcQgF7F
-         QuUZD4jDcwm1eiOE/N68BSLoRuCPsovncJHNr2bc/2uUfXhuwG52sSKqmCT2UEySNj1O
-         ItSSb0ppbmbHjfOUZgERzDrVfSs9JR1WpDB4UAFw18cnwLsIM2FgnpLlPlYUh8BW9gWK
-         7Hbg==
+        Sun, 12 Jun 2022 06:38:34 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460F965435
+        for <reiserfs-devel@vger.kernel.org>; Sun, 12 Jun 2022 03:38:31 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id x5-20020a923005000000b002d1a91c4d13so2750849ile.4
+        for <reiserfs-devel@vger.kernel.org>; Sun, 12 Jun 2022 03:38:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=p7cyveT4bvEtCVZfKnt9HMSBuDucwLXScRMPEQg6smQ=;
-        b=QqmbzoB9AlQvRUCsEDUy55qR5nGNZpJqHh3g0FZktXYXygQTEEwlrrqd506gP2voGW
-         yPbmDHZzAxoCwA0gYpcT7RrP7fPl1EFp1Lhwq4MTnTsXX/qp4sc0oqbnrlIWHVAiRJgz
-         GvzUEiaY32c3k9ZHCxvHs3kY0lsFDpzBRzpSwDvr+Or55LobzSPW6t4rLq5LPZWAHyCC
-         xm9mt+1cr1EdmgxLPeGtMmbPLAU73XaRFFg43uHtHc4DL6jfKTyCcDjGZvvr3z5mVQJg
-         dCI6hT92dSeGe4EtnLRNgRVyORVNe8AUIrSrdMeW57q14zjjgwlCmDDGQ8FIqRNYdnAn
-         PMEw==
-X-Gm-Message-State: AOAM531Mrxx8dUySkbF/sI9dQaHiSRc2ja2yc4oWrmiyEXWzclWrfxcY
-        E/aDv7J+/xwH7c5cliE5/DRf1jRJyTKz846mN2s=
-X-Google-Smtp-Source: ABdhPJzlc91ACd/hXTmSK+jKWjS5Z2FtvmGU5H//W99WmtXVPjUStGy61g7RpHrIyMq3xyWFbdJM1tagecoRodFWT4A=
-X-Received: by 2002:a05:6512:c1b:b0:479:150b:c7c9 with SMTP id
- z27-20020a0565120c1b00b00479150bc7c9mr14563206lfu.574.1654595737391; Tue, 07
- Jun 2022 02:55:37 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=uctmbV0hgK2xuiqWbJ+CSqDdpDM7bCIrenNDXNQ8zeU=;
+        b=8Dfhkq9CVatYMlba9ucbUalUxffMZ5v4NYjAwX9Q+5ql5cozw0yODuOqiO/3UEYQG/
+         9e3adSESjebh4a+ChM3iOpTkhqIQCrJnXs4I+7UJ0B2WoT0b1cnmEYIKmICLBmi3sexW
+         1OBS/aniUyURp50GqICqVyWPIXI18dadDYRCA38IeCvxhoUxHbUhLfi2eyUub8sFixXe
+         6K7QZzmEqj1CL4gU1K4ei5SMV1E4PkBVF30LAzPzhLsfLwg216jIzxXCbErRBIXe+xZg
+         wZkXKGCs9vg+9pWBtpKYJulr8+gZ6GsnlCnUClb9OL1OfLA1InhUFNqo8VrmRWdG2Uv0
+         3UBg==
+X-Gm-Message-State: AOAM531GfzIhxIIW7PZens0h7UjEaNIhabNKmx6gZwmb+TbHhwHqJbbE
+        jJ0aNT3NNWDIgeQRKgADBpJmTCAeTIJkiVIu33/UB/g8+qYj
+X-Google-Smtp-Source: ABdhPJxYCRtT6CHGjyIAGfFiv2X0xKiwJzU9+Zzci6ZIKcAC4LBY7/GI8okFYLZJMWY21OgmYVhLbmt7SOa3unW7ANRT3hAMrtt4
 MIME-Version: 1.0
-Received: by 2002:a05:6504:51d0:b0:1cf:9a7b:1066 with HTTP; Tue, 7 Jun 2022
- 02:55:34 -0700 (PDT)
-Reply-To: robertbaileys_spende@aol.com
-From:   Robert Baileys <mrnazy58@gmail.com>
-Date:   Tue, 7 Jun 2022 11:55:34 +0200
-Message-ID: <CAKTXsVk=Q4K-2M-ETCP=evjYsiYV_gP+vtUMhW-W_qTf2yisdw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+X-Received: by 2002:a92:d406:0:b0:2d6:5a35:c95b with SMTP id
+ q6-20020a92d406000000b002d65a35c95bmr13508628ilm.318.1655030310286; Sun, 12
+ Jun 2022 03:38:30 -0700 (PDT)
+Date:   Sun, 12 Jun 2022 03:38:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bcbb0205e13dc53a@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in search_by_entry_key (2)
+From:   syzbot <syzbot+ffe24b1afbc4cb5ae8fb@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:132 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrnazy58[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrnazy58[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
---=20
-Sehr geehrter Beg=C3=BCnstigter,
+Hello,
 
-Sie erhalten diese E-Mail von der Robert Baileys Foundation. Ich bin
-ein pensionierter Regierungsangestellter aus Harlem und ein Powerball
-Lotterie-Jackpot-Gewinner von 343,8 Millionen US-Dollar. Ich bin der
-gr=C3=B6=C3=9Fte Jackpot-Gewinner in der Geschichte der New York Lottery in
-Amerika. Ich habe diese Lotterie am 27. Oktober 2018 gewonnen und
-m=C3=B6chte Ihnen mitteilen, dass Google in Zusammenarbeit mit Microsoft
-f=C3=BCr eine zuf=C3=A4llige ''E-Mail-Adresse'' 3 Millionen Pfund ausgibt. =
-Ich
-glaube fest an "Geben w=C3=A4hrend des Lebens".
-Ich spende diese 3 Millionen Pfund an Sie, um auch
-Wohlt=C3=A4tigkeitsorganisationen und armen Menschen in Ihrer Gemeinde zu
-helfen, damit wir die Welt zu einem besseren Ort zum Leben machen
-k=C3=B6nnen. Um mehr Informationen in meinem Gewinn zu erhalten, k=C3=B6nne=
-n Sie
-die Website besuchen, also k=C3=B6nnen Sie skeptisch sein es .
-https://nypost.com/2018/11/14/meet-the-winner-of-the-biggest-lottery-jackpo=
-t-in-new-york-history/Sie
-Sie k=C3=B6nnen auch auf meinem YouTube nach weiteren Best=C3=A4tigungen su=
-chen:
-https://www.youtube.com/watch?v=3DH5vT18Ysavc
- Ich hatte eine Idee, die sich nie ge=C3=A4ndert hat: dass Sie Ihr Verm=C3=
-=B6gen
-verwenden sollten, um Menschen zu helfen, und ich habe beschlossen,
-heimlich { 3000.000 =C2=A3} an ausgew=C3=A4hlte Menschen auf der ganzen Wel=
-t zu
-spenden, Menschen, die einen gro=C3=9Fen Einfluss auf die Gesellschaft
-hatten durch Verhalten. Nach Erhalt dieser E-Mail sollten Sie sich als
-gl=C3=BCckliche Person betrachten und daher berechtigt sein, ein
-Beg=C3=BCnstigter zu sein.
-Bitte beachten Sie, dass alle Antworten an
-(robertbaileys_spende@aol.com) gesendet werden sollten, und erhalten
-Sie weitere Informationen dar=C3=BCber, wie Sie diese Spende auf Ihr
-Bankkonto erhalten.
+syzbot found the following issue on:
 
-KONTAKT-E-MAIL: robertbaileys_spende@aol.com
+HEAD commit:    1c27f1fc1549 iov_iter: fix build issue due to possible typ..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16c41c0ff00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=20ac3e0ebf0db3bd
+dashboard link: https://syzkaller.appspot.com/bug?extid=ffe24b1afbc4cb5ae8fb
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=114e04bbf00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14cec6e7f00000
 
-Gr=C3=BC=C3=9Fe,
-Robert Bailey
-* * * * * * * * * * * * * * * * * * * *
-Powerball-Jackpot-Gewinner
-E-Mail: robertbaileys_spende@aol.com
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ffe24b1afbc4cb5ae8fb@syzkaller.appspotmail.com
+
+REISERFS (device loop0): journal params: device loop0, size 15748, journal first block 18, max trans len 1024, max batch 900, max commit age 0, max trans age 30
+REISERFS (device loop0): checking transaction log (loop0)
+REISERFS (device loop0): Using r5 hash to sort names
+REISERFS (device loop0): using 3.5.x disk format
+==================================================================
+BUG: KASAN: use-after-free in bin_search_in_dir_item fs/reiserfs/namei.c:40 [inline]
+BUG: KASAN: use-after-free in search_by_entry_key+0x81f/0x960 fs/reiserfs/namei.c:165
+Read of size 4 at addr ffff8880715ee014 by task syz-executor352/3611
+
+CPU: 0 PID: 3611 Comm: syz-executor352 Not tainted 5.19.0-rc1-syzkaller-00263-g1c27f1fc1549 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ bin_search_in_dir_item fs/reiserfs/namei.c:40 [inline]
+ search_by_entry_key+0x81f/0x960 fs/reiserfs/namei.c:165
+ reiserfs_find_entry.part.0+0x139/0xdf0 fs/reiserfs/namei.c:322
+ reiserfs_find_entry fs/reiserfs/namei.c:368 [inline]
+ reiserfs_lookup+0x24a/0x490 fs/reiserfs/namei.c:368
+ __lookup_slow+0x24c/0x480 fs/namei.c:1701
+ lookup_one_len+0x16a/0x1a0 fs/namei.c:2730
+ reiserfs_lookup_privroot+0x92/0x280 fs/reiserfs/xattr.c:980
+ reiserfs_fill_super+0x21bb/0x2fb0 fs/reiserfs/super.c:2176
+ mount_bdev+0x34d/0x410 fs/super.c:1367
+ legacy_get_tree+0x105/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1497
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1320/0x1fa0 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f33c6185c8a
+Code: 48 c7 c2 c0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 a8 00 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffcd4af74c8 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007ffcd4af7520 RCX: 00007f33c6185c8a
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffcd4af74e0
+RBP: 00007ffcd4af74e0 R08: 00007ffcd4af7520 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000286 R12: 00000000200000a0
+R13: 0000000000000003 R14: 0000000000000004 R15: 0000000000000004
+ </TASK>
+
+The buggy address belongs to the physical page:
+page:ffffea0001c57b80 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x715ee
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000000 ffffea0001c57bc8 ffff8880b9a403c0 0000000000000000
+raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as freed
+page last allocated via order 0, migratetype Movable, gfp_mask 0x8(__GFP_MOVABLE), pid 1, tgid 1 (swapper/0), ts 8666191765, free_ts 9438327718
+ split_map_pages+0x1ef/0x520 mm/compaction.c:99
+ isolate_freepages_range+0x30f/0x350 mm/compaction.c:739
+ alloc_contig_range+0x2f6/0x490 mm/page_alloc.c:9192
+ __alloc_contig_pages mm/page_alloc.c:9215 [inline]
+ alloc_contig_pages+0x35a/0x4c0 mm/page_alloc.c:9292
+ debug_vm_pgtable_alloc_huge_page mm/debug_vm_pgtable.c:1098 [inline]
+ init_args mm/debug_vm_pgtable.c:1221 [inline]
+ debug_vm_pgtable+0x88f/0x2a94 mm/debug_vm_pgtable.c:1259
+ do_one_initcall+0x103/0x650 init/main.c:1295
+ do_initcall_level init/main.c:1368 [inline]
+ do_initcalls init/main.c:1384 [inline]
+ do_basic_setup init/main.c:1403 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1610
+ kernel_init+0x1a/0x1d0 init/main.c:1499
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1371 [inline]
+ free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1421
+ free_unref_page_prepare mm/page_alloc.c:3343 [inline]
+ free_unref_page+0x19/0x6a0 mm/page_alloc.c:3438
+ free_contig_range+0xb1/0x180 mm/page_alloc.c:9314
+ destroy_args+0xa8/0x646 mm/debug_vm_pgtable.c:1031
+ debug_vm_pgtable+0x2a03/0x2a94 mm/debug_vm_pgtable.c:1354
+ do_one_initcall+0x103/0x650 init/main.c:1295
+ do_initcall_level init/main.c:1368 [inline]
+ do_initcalls init/main.c:1384 [inline]
+ do_basic_setup init/main.c:1403 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1610
+ kernel_init+0x1a/0x1d0 init/main.c:1499
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+
+Memory state around the buggy address:
+ ffff8880715edf00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8880715edf80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff8880715ee000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                         ^
+ ffff8880715ee080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8880715ee100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
