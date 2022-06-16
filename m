@@ -2,178 +2,80 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A205479C8
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 12 Jun 2022 12:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D350554DF67
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 16 Jun 2022 12:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236089AbiFLKif (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sun, 12 Jun 2022 06:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
+        id S229748AbiFPKqP (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 16 Jun 2022 06:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234824AbiFLKie (ORCPT
+        with ESMTP id S229555AbiFPKqP (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sun, 12 Jun 2022 06:38:34 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460F965435
-        for <reiserfs-devel@vger.kernel.org>; Sun, 12 Jun 2022 03:38:31 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id x5-20020a923005000000b002d1a91c4d13so2750849ile.4
-        for <reiserfs-devel@vger.kernel.org>; Sun, 12 Jun 2022 03:38:31 -0700 (PDT)
+        Thu, 16 Jun 2022 06:46:15 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B4E5DD02
+        for <reiserfs-devel@vger.kernel.org>; Thu, 16 Jun 2022 03:46:14 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id l18so1023870lje.13
+        for <reiserfs-devel@vger.kernel.org>; Thu, 16 Jun 2022 03:46:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
+        b=ad/AlXc5aE2YX0/sROKAHST10fWZqGiQXpzpSvqZFqE0ormL9SNc9e107oA/k1CfdD
+         d0f9KbnxWwc/QV/IMp+THyoIKQeFqWWccmZeU6OgSgjf3HEnsOPIW/Wrexai66F2dkuL
+         UFRHDDdSKoGnh0lgPUl5didzrFbBKWnWPAaJ4o2hLwGQXOisyVlZ38ww+tG4BPMTIjsl
+         iMnIRtZ8dzhoZBjPki+uSJkqEBElALf6YUVDZkiaNuE17z6sAXyA4xHJu2D+ji3NZrEN
+         VF0cA76+JduxpFmCEEM6/9vLNOXFv0xGEqXCOJ2pmQTEJrwIkJPkMK4m5oZHQlar7/J5
+         j0Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=uctmbV0hgK2xuiqWbJ+CSqDdpDM7bCIrenNDXNQ8zeU=;
-        b=8Dfhkq9CVatYMlba9ucbUalUxffMZ5v4NYjAwX9Q+5ql5cozw0yODuOqiO/3UEYQG/
-         9e3adSESjebh4a+ChM3iOpTkhqIQCrJnXs4I+7UJ0B2WoT0b1cnmEYIKmICLBmi3sexW
-         1OBS/aniUyURp50GqICqVyWPIXI18dadDYRCA38IeCvxhoUxHbUhLfi2eyUub8sFixXe
-         6K7QZzmEqj1CL4gU1K4ei5SMV1E4PkBVF30LAzPzhLsfLwg216jIzxXCbErRBIXe+xZg
-         wZkXKGCs9vg+9pWBtpKYJulr8+gZ6GsnlCnUClb9OL1OfLA1InhUFNqo8VrmRWdG2Uv0
-         3UBg==
-X-Gm-Message-State: AOAM531GfzIhxIIW7PZens0h7UjEaNIhabNKmx6gZwmb+TbHhwHqJbbE
-        jJ0aNT3NNWDIgeQRKgADBpJmTCAeTIJkiVIu33/UB/g8+qYj
-X-Google-Smtp-Source: ABdhPJxYCRtT6CHGjyIAGfFiv2X0xKiwJzU9+Zzci6ZIKcAC4LBY7/GI8okFYLZJMWY21OgmYVhLbmt7SOa3unW7ANRT3hAMrtt4
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
+        b=Lj8x3XVoN2/XqYOUGqaT5SxOJwZ7GPNrzrZ68B8IpWbo0ODTQRTZk4SvjnD4rBdPfg
+         39c09W4V0qlfrH4JNqj8ogHGx9R2UZ9FMxklkPXgiH4sFK0/Fbng4KQ17FbfQExQY2OK
+         wySQJyjXb7iSzwR8mI8pwCpFmqDn62nLgCiJQPItDP+ch+qIgLhMUiGaPSvXn/34cqC/
+         Bm/4Ddzo0/XawzIDomlBnjcsmwvO3xv3stHezPkr7RtHzFzngJad9T41YL3aUtq3BMgx
+         UOFBbiWEDvNGqXW22oF8B7N8cPChf/4VARDwQ0IVo8W4zhAXmKqdniHfxzvD+7RLqGPA
+         yPwQ==
+X-Gm-Message-State: AJIora+taQ3jNMwhaCqhqgXHKfpY5zGA5ukZ+rnP8IyQacCP+h2fmqX+
+        c4f6YzYv5ngP3NBDEZH0JLRQhldKIdbmTr3iC2U=
+X-Google-Smtp-Source: AGRyM1v1k+ngF4Z0wg9S9QFwQToeIig6RE2q7k4DPSy/dAAK4unvLdYvD+WoVJ/iPLpEtbtRpAvpumnYFtkFwT41fe0=
+X-Received: by 2002:a2e:8694:0:b0:25a:3902:a3c8 with SMTP id
+ l20-20020a2e8694000000b0025a3902a3c8mr2272404lji.490.1655376372537; Thu, 16
+ Jun 2022 03:46:12 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:d406:0:b0:2d6:5a35:c95b with SMTP id
- q6-20020a92d406000000b002d65a35c95bmr13508628ilm.318.1655030310286; Sun, 12
- Jun 2022 03:38:30 -0700 (PDT)
-Date:   Sun, 12 Jun 2022 03:38:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bcbb0205e13dc53a@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in search_by_entry_key (2)
-From:   syzbot <syzbot+ffe24b1afbc4cb5ae8fb@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+Received: by 2002:a05:6520:28c2:b0:1f3:cf5:e20d with HTTP; Thu, 16 Jun 2022
+ 03:46:11 -0700 (PDT)
+Reply-To: clmloans9@gmail.com
+From:   MR ANTHONY EDWARD <bashirusman02021@gmail.com>
+Date:   Thu, 16 Jun 2022 11:46:11 +0100
+Message-ID: <CAGOBX5bqM7HbMO-8uKpOZiN61A336QgQ=53fQs7p3wQA=5HW1w@mail.gmail.com>
+Subject: DARLEHENSANGEBOT
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+--=20
+Ben=C3=B6tigen Sie ein Gesch=C3=A4ftsdarlehen oder ein Darlehen jeglicher A=
+rt?
+Wenn ja, kontaktieren Sie uns
 
-syzbot found the following issue on:
-
-HEAD commit:    1c27f1fc1549 iov_iter: fix build issue due to possible typ..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16c41c0ff00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=20ac3e0ebf0db3bd
-dashboard link: https://syzkaller.appspot.com/bug?extid=ffe24b1afbc4cb5ae8fb
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=114e04bbf00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14cec6e7f00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ffe24b1afbc4cb5ae8fb@syzkaller.appspotmail.com
-
-REISERFS (device loop0): journal params: device loop0, size 15748, journal first block 18, max trans len 1024, max batch 900, max commit age 0, max trans age 30
-REISERFS (device loop0): checking transaction log (loop0)
-REISERFS (device loop0): Using r5 hash to sort names
-REISERFS (device loop0): using 3.5.x disk format
-==================================================================
-BUG: KASAN: use-after-free in bin_search_in_dir_item fs/reiserfs/namei.c:40 [inline]
-BUG: KASAN: use-after-free in search_by_entry_key+0x81f/0x960 fs/reiserfs/namei.c:165
-Read of size 4 at addr ffff8880715ee014 by task syz-executor352/3611
-
-CPU: 0 PID: 3611 Comm: syz-executor352 Not tainted 5.19.0-rc1-syzkaller-00263-g1c27f1fc1549 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- bin_search_in_dir_item fs/reiserfs/namei.c:40 [inline]
- search_by_entry_key+0x81f/0x960 fs/reiserfs/namei.c:165
- reiserfs_find_entry.part.0+0x139/0xdf0 fs/reiserfs/namei.c:322
- reiserfs_find_entry fs/reiserfs/namei.c:368 [inline]
- reiserfs_lookup+0x24a/0x490 fs/reiserfs/namei.c:368
- __lookup_slow+0x24c/0x480 fs/namei.c:1701
- lookup_one_len+0x16a/0x1a0 fs/namei.c:2730
- reiserfs_lookup_privroot+0x92/0x280 fs/reiserfs/xattr.c:980
- reiserfs_fill_super+0x21bb/0x2fb0 fs/reiserfs/super.c:2176
- mount_bdev+0x34d/0x410 fs/super.c:1367
- legacy_get_tree+0x105/0x220 fs/fs_context.c:610
- vfs_get_tree+0x89/0x2f0 fs/super.c:1497
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1320/0x1fa0 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f33c6185c8a
-Code: 48 c7 c2 c0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 a8 00 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcd4af74c8 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007ffcd4af7520 RCX: 00007f33c6185c8a
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffcd4af74e0
-RBP: 00007ffcd4af74e0 R08: 00007ffcd4af7520 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000286 R12: 00000000200000a0
-R13: 0000000000000003 R14: 0000000000000004 R15: 0000000000000004
- </TASK>
-
-The buggy address belongs to the physical page:
-page:ffffea0001c57b80 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x715ee
-flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000000 ffffea0001c57bc8 ffff8880b9a403c0 0000000000000000
-raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as freed
-page last allocated via order 0, migratetype Movable, gfp_mask 0x8(__GFP_MOVABLE), pid 1, tgid 1 (swapper/0), ts 8666191765, free_ts 9438327718
- split_map_pages+0x1ef/0x520 mm/compaction.c:99
- isolate_freepages_range+0x30f/0x350 mm/compaction.c:739
- alloc_contig_range+0x2f6/0x490 mm/page_alloc.c:9192
- __alloc_contig_pages mm/page_alloc.c:9215 [inline]
- alloc_contig_pages+0x35a/0x4c0 mm/page_alloc.c:9292
- debug_vm_pgtable_alloc_huge_page mm/debug_vm_pgtable.c:1098 [inline]
- init_args mm/debug_vm_pgtable.c:1221 [inline]
- debug_vm_pgtable+0x88f/0x2a94 mm/debug_vm_pgtable.c:1259
- do_one_initcall+0x103/0x650 init/main.c:1295
- do_initcall_level init/main.c:1368 [inline]
- do_initcalls init/main.c:1384 [inline]
- do_basic_setup init/main.c:1403 [inline]
- kernel_init_freeable+0x6b1/0x73a init/main.c:1610
- kernel_init+0x1a/0x1d0 init/main.c:1499
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1371 [inline]
- free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1421
- free_unref_page_prepare mm/page_alloc.c:3343 [inline]
- free_unref_page+0x19/0x6a0 mm/page_alloc.c:3438
- free_contig_range+0xb1/0x180 mm/page_alloc.c:9314
- destroy_args+0xa8/0x646 mm/debug_vm_pgtable.c:1031
- debug_vm_pgtable+0x2a03/0x2a94 mm/debug_vm_pgtable.c:1354
- do_one_initcall+0x103/0x650 init/main.c:1295
- do_initcall_level init/main.c:1368 [inline]
- do_initcalls init/main.c:1384 [inline]
- do_basic_setup init/main.c:1403 [inline]
- kernel_init_freeable+0x6b1/0x73a init/main.c:1610
- kernel_init+0x1a/0x1d0 init/main.c:1499
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-
-Memory state around the buggy address:
- ffff8880715edf00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff8880715edf80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff8880715ee000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                         ^
- ffff8880715ee080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8880715ee100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+*Vollst=C3=A4ndiger Name:
+* Ben=C3=B6tigte Menge:
+*Leihdauer:
+*Mobiltelefon:
+*Land:
