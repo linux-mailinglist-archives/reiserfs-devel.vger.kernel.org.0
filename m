@@ -2,68 +2,91 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A4E55A1AC
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 24 Jun 2022 21:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1065355CDE5
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 28 Jun 2022 15:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbiFXTWr (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 24 Jun 2022 15:22:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
+        id S239468AbiF0XE3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 27 Jun 2022 19:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbiFXTWq (ORCPT
+        with ESMTP id S239540AbiF0XE2 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 24 Jun 2022 15:22:46 -0400
-X-Greylist: delayed 113 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Jun 2022 12:22:44 PDT
-Received: from jax4mhfb02.myregisteredsite.com (jax4mhfb02.myregisteredsite.com [64.69.218.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278C781A3F
-        for <reiserfs-devel@vger.kernel.org>; Fri, 24 Jun 2022 12:22:44 -0700 (PDT)
-Received: from atl4mhho03.registeredsite.com (atl4mhho03.myregisteredsite.com [209.17.115.59])
-        by jax4mhfb02.myregisteredsite.com (8.14.4/8.14.4) with ESMTP id 25OJKojK017427
-        for <reiserfs-devel@vger.kernel.org>; Fri, 24 Jun 2022 15:20:50 -0400
-Received: from netsolhost.com ([10.30.70.109])
-        by atl4mhho03.registeredsite.com (8.14.4/8.14.4) with ESMTP id 25OJKmSR007632
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 24 Jun 2022 15:20:48 -0400
-Received: from atl4vux178.mgt.hosting.qts.netsol.com (localhost [127.0.0.1])
-        by netsolhost.com (8.14.7/8.14.9) with ESMTP id 25OJKlSS017862;
-        Fri, 24 Jun 2022 15:20:48 -0400
-Received: (from 119625.121219@localhost)
-        by atl4vux178.mgt.hosting.qts.netsol.com (8.14.7/8.14.7/Submit) id 25OJKlqK017855;
-        Fri, 24 Jun 2022 15:20:47 -0400
-Date:   Fri, 24 Jun 2022 15:20:47 -0400
-X-Authentication-Warning: atl4vux178.mgt.hosting.qts.netsol.com: 119625.121219 set sender to info@madf.org using -f
+        Mon, 27 Jun 2022 19:04:28 -0400
+X-Greylist: delayed 48602 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Jun 2022 16:04:26 PDT
+Received: from mail.dica.am (inntech.am [109.75.47.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD951222B2
+        for <reiserfs-devel@vger.kernel.org>; Mon, 27 Jun 2022 16:04:26 -0700 (PDT)
+X-Footer: aW5udGVjaC5hbQ==
+Received: from johnlewis.com ([35.89.234.8])
+        (authenticated user info@inntech.am)
+        by mail.dica.am (Kerio Connect 9.2.1) with ESMTPSA
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256 bits))
+        for reiserfs-devel@vger.kernel.org;
+        Mon, 27 Jun 2022 13:35:10 +0400
+Reply-To: robert_turner@johnlewis-trades.com
+From:   John Lewis & Partners <robert_turner049@johnlewis.com>
 To:     reiserfs-devel@vger.kernel.org
-Subject: =?utf-8?Q?Make_a_Difference_Application?=
-From:   "Make a Difference Foundation" <info@madf.org>
-Reply-To: "info@madf.org" <info@madf.org>
-X-Sender: info@madf.org
-X-Mailer: CodeIgniter
-X-Priority: 3 (Normal)
-Message-ID: <62b60e8f9d787@madf.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-X-vuxuser: 119625.121219
-X-Spam-Status: No, score=3.5 required=5.0 tests=BAYES_50,RCVD_IN_DNSWL_NONE,
-        SHORT_SHORTNER,SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Subject: Order Emquiry 27/06/22
+Date:   27 Jun 2022 19:34:15 +1000
+Message-ID: <20220627171946.AA889A9444F1E862@johnlewis.com>
+MIME-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=ADVANCE_FEE_3_NEW,BAYES_50,
+        SPF_FAIL,SPF_HELO_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.7 SPF_HELO_SOFTFAIL SPF: HELO does not match SPF record
+        *      (softfail)
+        *  0.0 SPF_FAIL SPF: sender does not match SPF record (fail)
+        *      [SPF failed: Please see http://www.openspf.org/Why?s=mfrom;id=robert_turner049%40johnlewis.com;ip=109.75.47.174;r=lindbergh.monkeyblade.net]
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 ADVANCE_FEE_3_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
+Dear reiserfs-devel
 
-💝 Pamela Want To Meet You! More Info:
-Https://sweetkitty22.page.link/enh4?0k36e 💝
-								
-reiserfs-devel@vger.kernel.org
-								
-Thank you for submitting your application to become a part of the Make of
-Difference Team. Please allow 2 to 3 weeks from receipt of your application
-for a response.
-								
-Thank you,
-								
-The Make a Difference Team
+
+ 
+The world famous brand John Lewis & Partners, is UK's largest 
+multi-channel retailer with over 126 shops and multiple expansion 
+in Africa furnished by European/Asian/American products. We are
+sourcing new products to attract new customers and also retain 
+our existing ones, create new partnerships with companies dealing 
+with different kinds of goods globally.
+ 
+Your company's products are of interest to our market as we have 
+an amazing market for your products.Provide us your current 
+catalog through email to review more. We hope to be able to order
+with you and start a long-term friendly, respectable and solid 
+business partnership. Please we would appreciate it if you could 
+send us your stock availability via email if any.
+
+ 
+Our payment terms are 15 days net in Europe, 30 days Net in UK 
+and 30 days net in Asia/USA as we have operated with over 5297 
+suppliers around the globe for the past 50 years now. For
+immediate response Send your reply to "robert_turner@johnlewis-
+trades.com" for us to be able to treat with care and urgency.
+ 
+ 
+Best Regards
+Rob Turner
+Head Of Procurement Operations
+John Lewis & Partners.
+robert_turner@johnlewis-trades.com
+Tel: +44-7451-274090
+WhatsApp: +447497483925
+www.johnlewis.com
+REGISTERED OFFICE: 171 VICTORIA STREET, LONDON SW1E 5NN
+
 
