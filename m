@@ -2,154 +2,129 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8F858116F
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 26 Jul 2022 12:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C442585BBF
+	for <lists+reiserfs-devel@lfdr.de>; Sat, 30 Jul 2022 21:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233341AbiGZKss (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 26 Jul 2022 06:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
+        id S233791AbiG3Ta0 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sat, 30 Jul 2022 15:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232355AbiGZKsr (ORCPT
+        with ESMTP id S230337AbiG3TaZ (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:48:47 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13BE2409A;
-        Tue, 26 Jul 2022 03:48:45 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 495511FAFF;
-        Tue, 26 Jul 2022 10:48:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1658832524; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ATSO4xMIADm7bjDtI8e+Ds4M2Grb2QzkJbDH1yDDJW8=;
-        b=edVJd26qqohpE4iChbKghKyoWrZk3k9/8Wp0maUDI0P9uT1Eqqdvy8NaX9zjZXmnNJT68a
-        prkeJwDlt6MFM0O+PmpHgQhHc7G0rxu6ZIJz+Xm1HiyMXwFfDp5pe5gt6VHs0B8z4PQbPI
-        YwCfgZx9yb3TfRQXm31xFPZScvmM5Vc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1658832524;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ATSO4xMIADm7bjDtI8e+Ds4M2Grb2QzkJbDH1yDDJW8=;
-        b=7YBNe/h7dmfFBM1Nrr6+uMAyQaIP0OV27cPw6pwBuosaOlr+89xROxf1D3Jg71BJoc35K8
-        Ulvk2OTxALT09DAg==
-Received: from quack3.suse.cz (unknown [10.100.200.198])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 029892C15D;
-        Tue, 26 Jul 2022 10:48:43 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id A8B23A0664; Tue, 26 Jul 2022 12:48:42 +0200 (CEST)
-Date:   Tue, 26 Jul 2022 12:48:42 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     zengjx95@gmail.com
-Cc:     reiserfs-devel@vger.kernel.org, willy@infradead.org,
-        jlayton@kernel.org, damien.lemoal@opensource.wdc.com, jack@suse.cz,
-        edward.shishkin@gmail.com, linux-kernel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, kasong@tencent.com,
-        Zeng Jingxiang <linuszeng@tencent.com>
-Subject: Re: [PATCH] fs/reiserfs/inode: remove dead code in
- _get_block_create_0()
-Message-ID: <20220726104842.flhaivkpbikqlhki@quack3>
-References: <20220720083029.1065578-1-zengjx95@gmail.com>
+        Sat, 30 Jul 2022 15:30:25 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5B2101D2
+        for <reiserfs-devel@vger.kernel.org>; Sat, 30 Jul 2022 12:30:22 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id d8-20020a6b6e08000000b0067c3d8c8a34so2624598ioh.11
+        for <reiserfs-devel@vger.kernel.org>; Sat, 30 Jul 2022 12:30:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=ueOooyTmwBgM5EH2k2wYdam4b+rWYWnuwM2QtecUSsA=;
+        b=i2FjPwMOcx4Bzv7NBoRSqN8DrMxGuYciQ7hL5XrAzykh6nmH0K1kr9HyQZEa/XtXqL
+         6l25mTKBnwNYellfZ0lGE8Qfm/QpF9aStwyAXUXT+QDwT9Od08MtX4Kv2lHImDAzzKqc
+         yMVnw/5hdPfnnckfYjSyXTcNT6YhP5Xg3HGPcIAu5l30sHOHmWZPw2htqyRuraULITH1
+         Xw4AKKOHXowZMLeeRFcDUoz8mx/yz+bztX+ZHaON+fvCivE9VP/fYwDlryqjCg2Rluqa
+         i+MaEQA0meAPOAc6ka2lfi5mLaTnjr2YGhVU56nBi/brn6CuOKVBn+4tj9v9NK+7JVcV
+         2z6Q==
+X-Gm-Message-State: AJIora80lBZufbydQj00jL2Ulgj7p8cqb/kYvL3f2vMpMBztR0kf9Jm2
+        SqL1dJQrp5sEiDlBn2AF4E/RBtFAOPcO9/h/zxeMXlbTolMJ
+X-Google-Smtp-Source: AGRyM1vEziy/cad5uzPGDgOcPTHsBa7x1UrxabGAGUu2BUcfWBV5Zoa6Apf4H0VaqgutRFLgIoVQwRVgKP3x7ok9kodl98AdPKuf
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220720083029.1065578-1-zengjx95@gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:2216:b0:67c:70d6:5fcf with SMTP id
+ n22-20020a056602221600b0067c70d65fcfmr2898969ion.61.1659209421996; Sat, 30
+ Jul 2022 12:30:21 -0700 (PDT)
+Date:   Sat, 30 Jul 2022 12:30:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000034d16305e50acc8d@google.com>
+Subject: [syzbot] KASAN: null-ptr-deref Read in do_journal_end (2)
+From:   syzbot <syzbot+845cd8e5c47f2a125683@syzkaller.appspotmail.com>
+To:     damien.lemoal@opensource.wdc.com, jack@suse.cz, jlayton@kernel.org,
+        linux-kernel@vger.kernel.org, neilb@suse.de,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Wed 20-07-22 16:30:29, zengjx95@gmail.com wrote:
-> From: Zeng Jingxiang <linuszeng@tencent.com>
-> 
-> Since commit 27b3a5c51b50 ("kill-the-bkl/reiserfs: drop the fs race
-> watchdog from _get_block_create_0()"), which removed a label that may
-> have the pointer 'p' touched in its control flow, related if statements
-> now eval to constant value now. Just remove them.
-> 
-> Assigning value NULL to p here
-> 293     char *p = NULL;
-> 
-> In the following conditional expression, the value of p is always NULL,
-> As a result, the kunmap() cannot be executed.
-> 308	if (p)
-> 309		kunmap(bh_result->b_page);
-> 
-> 355	if (p)
-> 356		kunmap(bh_result->b_page);
-> 
-> 366	if (p)
-> 367		kunmap(bh_result->b_page);
-> 
-> Also, the kmap() cannot be executed.
-> 399	if (!p)
-> 400		p = (char *)kmap(bh_result->b_page);
-> 
-> Signed-off-by: Zeng Jingxiang <linuszeng@tencent.com>
-> Signed-off-by: Kairui Song <kasong@tencent.com>
+Hello,
 
-Thanks! I've added the patch to my tree. I've also removed the unnecessary
-initialization of 'p' to NULL. I'll push the patch to Linus in the coming
-merge window.
+syzbot found the following issue on:
 
-									Honza
+HEAD commit:    620725263f42 Merge tag 'mm-hotfixes-stable-2022-07-29' of ..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13ee9c82080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=26034e6fe0075dad
+dashboard link: https://syzkaller.appspot.com/bug?extid=845cd8e5c47f2a125683
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-> ---
->  fs/reiserfs/inode.c | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
-> 
-> diff --git a/fs/reiserfs/inode.c b/fs/reiserfs/inode.c
-> index 0cffe054b78e..fe26e1746af9 100644
-> --- a/fs/reiserfs/inode.c
-> +++ b/fs/reiserfs/inode.c
-> @@ -305,8 +305,6 @@ static int _get_block_create_0(struct inode *inode, sector_t block,
->  	result = search_for_position_by_key(inode->i_sb, &key, &path);
->  	if (result != POSITION_FOUND) {
->  		pathrelse(&path);
-> -		if (p)
-> -			kunmap(bh_result->b_page);
->  		if (result == IO_ERROR)
->  			return -EIO;
->  		/*
-> @@ -352,8 +350,6 @@ static int _get_block_create_0(struct inode *inode, sector_t block,
->  		}
->  
->  		pathrelse(&path);
-> -		if (p)
-> -			kunmap(bh_result->b_page);
->  		return ret;
->  	}
->  	/* requested data are in direct item(s) */
-> @@ -363,8 +359,6 @@ static int _get_block_create_0(struct inode *inode, sector_t block,
->  		 * when it is stored in direct item(s)
->  		 */
->  		pathrelse(&path);
-> -		if (p)
-> -			kunmap(bh_result->b_page);
->  		return -ENOENT;
->  	}
->  
-> @@ -396,9 +390,7 @@ static int _get_block_create_0(struct inode *inode, sector_t block,
->  	 * sure we need to.  But, this means the item might move if
->  	 * kmap schedules
->  	 */
-> -	if (!p)
-> -		p = (char *)kmap(bh_result->b_page);
-> -
-> +	p = (char *)kmap(bh_result->b_page);
->  	p += offset;
->  	memset(p, 0, inode->i_sb->s_blocksize);
->  	do {
-> -- 
-> 2.27.0
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+845cd8e5c47f2a125683@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
+BUG: KASAN: null-ptr-deref in test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
+BUG: KASAN: null-ptr-deref in set_buffer_uptodate include/linux/buffer_head.h:120 [inline]
+BUG: KASAN: null-ptr-deref in do_journal_end+0x135f/0x4b00 fs/reiserfs/journal.c:4080
+Read of size 8 at addr 0000000000000000 by task syz-executor.4/7438
+
+CPU: 0 PID: 7438 Comm: syz-executor.4 Not tainted 5.19.0-rc8-syzkaller-00152-g620725263f42 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_report mm/kasan/report.c:432 [inline]
+ kasan_report.cold+0x61/0x1c6 mm/kasan/report.c:491
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read include/linux/instrumented.h:71 [inline]
+ test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
+ set_buffer_uptodate include/linux/buffer_head.h:120 [inline]
+ do_journal_end+0x135f/0x4b00 fs/reiserfs/journal.c:4080
+ reiserfs_sync_fs+0xf8/0x120 fs/reiserfs/super.c:78
+ sync_filesystem.part.0+0x75/0x1d0 fs/sync.c:56
+ sync_filesystem+0x8b/0xc0 fs/sync.c:43
+ generic_shutdown_super+0x70/0x400 fs/super.c:445
+ kill_block_super+0x97/0xf0 fs/super.c:1394
+ deactivate_locked_super+0x94/0x160 fs/super.c:332
+ deactivate_super+0xad/0xd0 fs/super.c:363
+ cleanup_mnt+0x3a2/0x540 fs/namespace.c:1186
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f5f3988a677
+Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffcab38a818 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f5f3988a677
+RDX: 00007ffcab38a8eb RSI: 000000000000000a RDI: 00007ffcab38a8e0
+RBP: 00007ffcab38a8e0 R08: 00000000ffffffff R09: 00007ffcab38a6b0
+R10: 000055555635d8b3 R11: 0000000000000246 R12: 00007f5f398e22a6
+R13: 00007ffcab38b9a0 R14: 000055555635d810 R15: 00007ffcab38b9e0
+ </TASK>
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
