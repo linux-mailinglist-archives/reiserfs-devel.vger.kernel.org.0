@@ -2,129 +2,103 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C442585BBF
-	for <lists+reiserfs-devel@lfdr.de>; Sat, 30 Jul 2022 21:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9845588AAA
+	for <lists+reiserfs-devel@lfdr.de>; Wed,  3 Aug 2022 12:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233791AbiG3Ta0 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sat, 30 Jul 2022 15:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
+        id S232706AbiHCKiL (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 3 Aug 2022 06:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbiG3TaZ (ORCPT
+        with ESMTP id S229925AbiHCKiK (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sat, 30 Jul 2022 15:30:25 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5B2101D2
-        for <reiserfs-devel@vger.kernel.org>; Sat, 30 Jul 2022 12:30:22 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id d8-20020a6b6e08000000b0067c3d8c8a34so2624598ioh.11
-        for <reiserfs-devel@vger.kernel.org>; Sat, 30 Jul 2022 12:30:22 -0700 (PDT)
+        Wed, 3 Aug 2022 06:38:10 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FDADEA9
+        for <reiserfs-devel@vger.kernel.org>; Wed,  3 Aug 2022 03:38:08 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id d14so13910871lfl.13
+        for <reiserfs-devel@vger.kernel.org>; Wed, 03 Aug 2022 03:38:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc;
+        bh=9Q86IpDBWLEP7oSSTnvQ9orLNIQkjNwJszaZE/TDKss=;
+        b=qB+jefKfRK1A2iRr2ROTx71MHFcMWB8+boTOa4RJAzleHpK/X6BYMy5S2lKOoITM8y
+         JQCb6afg0uyA9nWRr67Zxe/n4JjdUuDIj4Dw1epcKVpwQd6QeXCaC+lVcdCLWvVW5Nth
+         vlbfqNQNhoIDMFKxBIMuOJjkWM5eTqJLjEEQc5/x1KZvg2xa8/C0+aBhDuEN3YWlAUFP
+         HFkG/NVdPopvqNc/nDAcTUYsH8nsEm5I65BkuQSHSEBQtIIEfR+IUswNd/f9v/qhH/q+
+         l1XJyD2TZRJNHN4fC5B0sqGoOxGkgHvFFObZVLQwLJYsA3HuOA+wyHxDuMarXXSLW0t+
+         I+8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=ueOooyTmwBgM5EH2k2wYdam4b+rWYWnuwM2QtecUSsA=;
-        b=i2FjPwMOcx4Bzv7NBoRSqN8DrMxGuYciQ7hL5XrAzykh6nmH0K1kr9HyQZEa/XtXqL
-         6l25mTKBnwNYellfZ0lGE8Qfm/QpF9aStwyAXUXT+QDwT9Od08MtX4Kv2lHImDAzzKqc
-         yMVnw/5hdPfnnckfYjSyXTcNT6YhP5Xg3HGPcIAu5l30sHOHmWZPw2htqyRuraULITH1
-         Xw4AKKOHXowZMLeeRFcDUoz8mx/yz+bztX+ZHaON+fvCivE9VP/fYwDlryqjCg2Rluqa
-         i+MaEQA0meAPOAc6ka2lfi5mLaTnjr2YGhVU56nBi/brn6CuOKVBn+4tj9v9NK+7JVcV
-         2z6Q==
-X-Gm-Message-State: AJIora80lBZufbydQj00jL2Ulgj7p8cqb/kYvL3f2vMpMBztR0kf9Jm2
-        SqL1dJQrp5sEiDlBn2AF4E/RBtFAOPcO9/h/zxeMXlbTolMJ
-X-Google-Smtp-Source: AGRyM1vEziy/cad5uzPGDgOcPTHsBa7x1UrxabGAGUu2BUcfWBV5Zoa6Apf4H0VaqgutRFLgIoVQwRVgKP3x7ok9kodl98AdPKuf
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=9Q86IpDBWLEP7oSSTnvQ9orLNIQkjNwJszaZE/TDKss=;
+        b=Skt59oPBPKzllEeLC4byXZf5WIxe8AF5mkdGuYj3o6YpJPXZFswGpbfDsJxapXLx8V
+         aQR841oA9/rciwKrEwl6iCsloPfnzSJl91oiueQHNWxCC9AXP+7hGHl+jM+GBdWKtNNt
+         nGZ/yWatrxbgSklsQ5aRLwF+FiXfOSx6ksz3RKZqTxOkG0/6TiKwuHsFTkSRQvSEV6hY
+         RCaGwyeZMHcZY7kb42FOve6z7B9yHeF2CTaOe7ndbHDzsInG5jI9TQ4GbnCH2QFCUEnW
+         jQV8zVhHY9E9QaYHexTJdGZ6KBKgPWOBEOCrWErMtb1DkXv8FonN/AJMetuuFdFgDOzp
+         0dgw==
+X-Gm-Message-State: AJIora8AKxVdebISRRKgG7l6iaNZ8j10oai5lSxbgVnkGEChy1o68qtQ
+        qYGcxLRxdYKqRj8J3Q56IKY/S50cNIw1sV9SjMU=
+X-Google-Smtp-Source: AGRyM1v+N4KrMijpejTYnVcuYW9Sjmlnzjdy/SAkUaP8FADPqd6GoT+ouqaDArsARHNyXNqVtDIPlSAYe16jFSUTvb4=
+X-Received: by 2002:a05:6512:3f91:b0:48a:d31:4a16 with SMTP id
+ x17-20020a0565123f9100b0048a0d314a16mr10020559lfa.639.1659523086937; Wed, 03
+ Aug 2022 03:38:06 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2216:b0:67c:70d6:5fcf with SMTP id
- n22-20020a056602221600b0067c70d65fcfmr2898969ion.61.1659209421996; Sat, 30
- Jul 2022 12:30:21 -0700 (PDT)
-Date:   Sat, 30 Jul 2022 12:30:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000034d16305e50acc8d@google.com>
-Subject: [syzbot] KASAN: null-ptr-deref Read in do_journal_end (2)
-From:   syzbot <syzbot+845cd8e5c47f2a125683@syzkaller.appspotmail.com>
-To:     damien.lemoal@opensource.wdc.com, jack@suse.cz, jlayton@kernel.org,
-        linux-kernel@vger.kernel.org, neilb@suse.de,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        willy@infradead.org
+Received: by 2002:ab3:6309:0:0:0:0:0 with HTTP; Wed, 3 Aug 2022 03:38:06 -0700 (PDT)
+Reply-To: OLSONFINANCIAL.DE@gmail.com
+From:   OLSON FINANCIAL GROUP <amadip120@gmail.com>
+Date:   Wed, 3 Aug 2022 03:38:06 -0700
+Message-ID: <CAHb0K2Gypdi86rvSuE9Bf-dcVjS6VNCLmPfg-JEiiT7K5qm3YA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:141 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [amadip120[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [amadip120[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    620725263f42 Merge tag 'mm-hotfixes-stable-2022-07-29' of ..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13ee9c82080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=26034e6fe0075dad
-dashboard link: https://syzkaller.appspot.com/bug?extid=845cd8e5c47f2a125683
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+845cd8e5c47f2a125683@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
-BUG: KASAN: null-ptr-deref in test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
-BUG: KASAN: null-ptr-deref in set_buffer_uptodate include/linux/buffer_head.h:120 [inline]
-BUG: KASAN: null-ptr-deref in do_journal_end+0x135f/0x4b00 fs/reiserfs/journal.c:4080
-Read of size 8 at addr 0000000000000000 by task syz-executor.4/7438
-
-CPU: 0 PID: 7438 Comm: syz-executor.4 Not tainted 5.19.0-rc8-syzkaller-00152-g620725263f42 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_report mm/kasan/report.c:432 [inline]
- kasan_report.cold+0x61/0x1c6 mm/kasan/report.c:491
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read include/linux/instrumented.h:71 [inline]
- test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
- set_buffer_uptodate include/linux/buffer_head.h:120 [inline]
- do_journal_end+0x135f/0x4b00 fs/reiserfs/journal.c:4080
- reiserfs_sync_fs+0xf8/0x120 fs/reiserfs/super.c:78
- sync_filesystem.part.0+0x75/0x1d0 fs/sync.c:56
- sync_filesystem+0x8b/0xc0 fs/sync.c:43
- generic_shutdown_super+0x70/0x400 fs/super.c:445
- kill_block_super+0x97/0xf0 fs/super.c:1394
- deactivate_locked_super+0x94/0x160 fs/super.c:332
- deactivate_super+0xad/0xd0 fs/super.c:363
- cleanup_mnt+0x3a2/0x540 fs/namespace.c:1186
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f5f3988a677
-Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcab38a818 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f5f3988a677
-RDX: 00007ffcab38a8eb RSI: 000000000000000a RDI: 00007ffcab38a8e0
-RBP: 00007ffcab38a8e0 R08: 00000000ffffffff R09: 00007ffcab38a6b0
-R10: 000055555635d8b3 R11: 0000000000000246 R12: 00007f5f398e22a6
-R13: 00007ffcab38b9a0 R14: 000055555635d810 R15: 00007ffcab38b9e0
- </TASK>
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--=20
+Hallo guten Morgen,
+Ben=C3=B6tigen Sie dringend einen Kredit f=C3=BCr den Hauskauf? oder ben=C3=
+=B6tigen
+Sie ein Gesch=C3=A4fts- oder Privatdarlehen, um zu investieren? ein neues
+Gesch=C3=A4ft er=C3=B6ffnen, Rechnungen bezahlen? Und zahlen Sie uns
+Installationen zur=C3=BCck? Wir sind ein zertifiziertes Finanzunternehmen.
+Wir bieten Privatpersonen und Unternehmen Kredite an. Wir bieten
+zuverl=C3=A4ssige Kredite zu einem sehr niedrigen Zinssatz von 2 %. F=C3=BC=
+r
+weitere Informationen
+mailen Sie uns an: olsonfinancial.de@gmail.com......
