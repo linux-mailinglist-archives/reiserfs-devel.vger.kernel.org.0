@@ -2,167 +2,79 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5331B5973AA
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 17 Aug 2022 18:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D689598676
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 18 Aug 2022 16:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237665AbiHQQK4 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 17 Aug 2022 12:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
+        id S1343759AbiHROx2 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 18 Aug 2022 10:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241013AbiHQQKh (ORCPT
+        with ESMTP id S1343769AbiHROx0 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 17 Aug 2022 12:10:37 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7318A7F0A1;
-        Wed, 17 Aug 2022 09:10:36 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id x19so1302790plc.5;
-        Wed, 17 Aug 2022 09:10:36 -0700 (PDT)
+        Thu, 18 Aug 2022 10:53:26 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EEF221
+        for <reiserfs-devel@vger.kernel.org>; Thu, 18 Aug 2022 07:53:24 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id e15so2496836lfs.0
+        for <reiserfs-devel@vger.kernel.org>; Thu, 18 Aug 2022 07:53:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=0w5leDnB9oITFRG2hBeGs/cY0LqF9F4f5ngXhRmBvoA=;
-        b=b1IeAz0squDe+6l615WdkACq4EioqEHcrmbzFC8D4MNW5e68Ip3Dy8d05YiN/kUeTB
-         kinEPW2ff5WzBQV39M2JOikWSmSBxOQNUB4Dabzc5h3d3dCFfsEejtCTE1Fr/IVALdDh
-         xoMbF/J9Egn0X3Ew/hueK/z8Qvu2wrwI2rTmgGlXSdGupbwgwBK+Hzd+6SvPFgry3Iy3
-         rA9G7Xl9K7i1llEA0b/2hcFvwrAHpFnB9enms3gdIDJSTvaIYnep8nZuZnNcb6wLlyQ3
-         Ul1wjpN3Uz6zW9IUtvgcwTFHbPRd0doMQMyedsaY/NVohq5dk5+VBSI6w5ZVxMAnh4q6
-         cazg==
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc;
+        bh=DodWHn8jPlip/mIG7oEuL9BF8+ztzQgUP7dJ413D3Nk=;
+        b=NzvNRIvp7ZWCed5O4xCRYW77MBHM6xAOZTemalvI045mKZ9yxtl/wXDhPqz1RcMzBk
+         7Zb9XhiJmS8GvHJxcMXICP18yNqMnTXvXBXp8pNlJgBMWiOTHsrVGnICHa2Atd1pRRJN
+         VJVDTPdr68342Hc0zcD9FUWhzgvkTPqJPZtoRrPWItsPTcckI2mYtKNWthB+zjQQ6Zxo
+         SCA0QIrRy3N/jsMX9Hu3D5T1kSKLrTG4tmpNDgW59Tw2pGyZ4gX2EBhhRWp2K5EQdc8O
+         ixhJEcY5anUWhbRwS/QxF/uIJhkFu637HKmqllRS+dykoj1ir5udQJvVWbZPinXn6bKG
+         k4Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=0w5leDnB9oITFRG2hBeGs/cY0LqF9F4f5ngXhRmBvoA=;
-        b=cZPbCIP41g1lz5Abgcd6UmGe7FLgTAV+uCxS4ezHav6eSi+A8lyOr9N+R+TsSfwcug
-         hnbHmLqMs7OeJJUET7Dmj1nqXlyplZBxWzfFLKnEklRbsnovFAlTPewvqF+5LtGZF5sd
-         sUcaYpClWLYvW861Pmjkib5JNnEiB5JIJQl5ss22upTpwd21BzZPi8d+rOSY6tDl/zvO
-         Am35jQxfqUrS69vPnTQviXvavUwftPSeVwnSdhCffa+0+A+tgbrMGbDhSuqXkgPtKt3v
-         Us19p0izydYvyndMsCYaWt1nXknzpUkpDEiDlbUVxB/2ge4vcop0Zqt9yzbMn5lwkkRW
-         ga4A==
-X-Gm-Message-State: ACgBeo3Jbl9wyA8gKzM1Mz6B5Km3gj8CjeCuYaglShpYyHODkGj3KVHh
-        Y1G/WBXXEdMUz3SlBz9VW3w=
-X-Google-Smtp-Source: AA6agR7bLWJiCbr8SemRp/uA9NkzN4Nflo8rWCbGERFDYp+GuS6IK92hxYHxzM4TJSkt20/AYt0m8w==
-X-Received: by 2002:a17:90a:c58e:b0:1f3:1ab5:22ae with SMTP id l14-20020a17090ac58e00b001f31ab522aemr4501736pjt.45.1660752635824;
-        Wed, 17 Aug 2022 09:10:35 -0700 (PDT)
-Received: from localhost ([36.112.203.167])
-        by smtp.gmail.com with ESMTPSA id a15-20020aa795af000000b0052d5e93fcb7sm10658618pfk.191.2022.08.17.09.10.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 09:10:35 -0700 (PDT)
-From:   Hawkins Jiawei <yin31149@gmail.com>
-To:     syzbot+ffe24b1afbc4cb5ae8fb@syzkaller.appspotmail.com
-Cc:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, 18801353760@163.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        paskripkin@gmail.com, skhan@linuxfoundation.org,
-        Hawkins Jiawei <yin31149@gmail.com>
-Subject: [PATCH v2] reiserfs: add check in bin_search_in_dir_item()
-Date:   Thu, 18 Aug 2022 00:10:28 +0800
-Message-Id: <20220817161028.8027-1-yin31149@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <000000000000bcbb0205e13dc53a@google.com>
-References: <000000000000bcbb0205e13dc53a@google.com>
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=DodWHn8jPlip/mIG7oEuL9BF8+ztzQgUP7dJ413D3Nk=;
+        b=fPUT3Qfj5dXWsIT2Gv4v8gqqaofcJzRMp62vAQtdQObe8qddWJGp5drUggWsxVeZa3
+         dGyoX/mOpwRFgA93NQKarC9hB2+9zyV4DbBvjMyjJXPtmmrSdk/5WzqBNgiVPniX4XH3
+         cnLXkJXD1i46Df9b/Gb45kNVk7GEpHqusNOJ6178YKdeFMDLicahSvBn3qoDp22HCPEF
+         EheNvhJ2r3BWrzj/ZI9en6uqT0bH2HeNZDe+zoEE2WeL2j141ez/PDTj9EfBH6996m2o
+         OoTcEv7dTXPr5IiL2jwoMH+g70sK2jDokJwpcsTNvwIDjYrrg+Wle6CQSOgh32Ltutyt
+         gs8Q==
+X-Gm-Message-State: ACgBeo0xJAevu3oOBLV1XUlmV6K65aa5uJko00HIKfJTDUFcIXOLmwcE
+        WMLLnb6h+kWQAbG9laNrRa3hbb92zUuzaTkQD6U=
+X-Google-Smtp-Source: AA6agR6R+c+zvkklZJIQ0xS1ZCFRCi0sfJ+kEmcx3keEL6CrOisyEC0Nm6Qyq3b+LkLXa6HqW/9jY2kZ+fhLjaHCb6Q=
+X-Received: by 2002:a05:6512:239f:b0:491:cd95:f67d with SMTP id
+ c31-20020a056512239f00b00491cd95f67dmr1024193lfv.184.1660834402057; Thu, 18
+ Aug 2022 07:53:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Received: by 2002:a19:ad06:0:0:0:0:0 with HTTP; Thu, 18 Aug 2022 07:53:21
+ -0700 (PDT)
+Reply-To: golsonfinancial@gmail.com
+From:   OLSON FINANCIAL GROUP <kcpools16@gmail.com>
+Date:   Thu, 18 Aug 2022 07:53:21 -0700
+Message-ID: <CAM8gsMfqRsyrEJJ3FcJV0itgxh=0JX_c1wz8dz8pHOizRJPChg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Syzkaller reports use-after-free Read as follows:
-------------[ cut here ]------------
-BUG: KASAN: use-after-free in bin_search_in_dir_item fs/reiserfs/namei.c:40 [inline]
-BUG: KASAN: use-after-free in search_by_entry_key+0x81f/0x960 fs/reiserfs/namei.c:165
-Read of size 4 at addr ffff8880715ee014 by task syz-executor352/3611
-
-CPU: 0 PID: 3611 Comm: syz-executor352 Not tainted 5.19.0-rc1-syzkaller-00263-g1c27f1fc1549 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- bin_search_in_dir_item fs/reiserfs/namei.c:40 [inline]
- search_by_entry_key+0x81f/0x960 fs/reiserfs/namei.c:165
- reiserfs_find_entry.part.0+0x139/0xdf0 fs/reiserfs/namei.c:322
- reiserfs_find_entry fs/reiserfs/namei.c:368 [inline]
- reiserfs_lookup+0x24a/0x490 fs/reiserfs/namei.c:368
- __lookup_slow+0x24c/0x480 fs/namei.c:1701
- lookup_one_len+0x16a/0x1a0 fs/namei.c:2730
- reiserfs_lookup_privroot+0x92/0x280 fs/reiserfs/xattr.c:980
- reiserfs_fill_super+0x21bb/0x2fb0 fs/reiserfs/super.c:2176
- mount_bdev+0x34d/0x410 fs/super.c:1367
- legacy_get_tree+0x105/0x220 fs/fs_context.c:610
- vfs_get_tree+0x89/0x2f0 fs/super.c:1497
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1320/0x1fa0 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
- </TASK>
-
-The buggy address belongs to the physical page:
-page:ffffea0001c57b80 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x715ee
-flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000000 ffffea0001c57bc8 ffff8880b9a403c0 0000000000000000
-raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as freed
-
-Memory state around the buggy address:
- ffff8880715edf00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff8880715edf80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff8880715ee000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                         ^
- ffff8880715ee080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8880715ee100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
-
-The cause is that the value of rbound in bin_search_in_dir_item()
-is out of bounds.
-
-To be more specific, struct buffer_head's b_data field
-contains the entry headers array, according to
-set_de_item_location(). So the array's length should be less
-than the size of b_data, or it may access the invalid memory.
-
-This patch solves it by checking the array's size with b_data's size.
-
-Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
----
-v2:
-  - rename subject from search_by_entry_key() to bin_search_in_dir_item()
-
- fs/reiserfs/namei.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
-index 3d7a35d6a18b..c4c056ffafde 100644
---- a/fs/reiserfs/namei.c
-+++ b/fs/reiserfs/namei.c
-@@ -33,7 +33,11 @@ static int bin_search_in_dir_item(struct reiserfs_dir_entry *de, loff_t off)
- 	int rbound, lbound, j;
- 
- 	lbound = 0;
--	rbound = ih_entry_count(ih) - 1;
-+	if (ih_location(ih) + ih_entry_count(ih) * IH_SIZE >=
-+	    de->de_bh->b_size)
-+		rbound = (de->de_bh->b_size - ih_location(ih)) / IH_SIZE - 1;
-+	else
-+		rbound = ih_entry_count(ih) - 1;
- 
- 	for (j = (rbound + lbound) / 2; lbound <= rbound;
- 	     j = (rbound + lbound) / 2) {
--- 
-2.25.1
-
+--=20
+Hallo guten Tag,
+Ben=C3=B6tigen Sie dringend einen Kredit f=C3=BCr den Hauskauf? oder ben=C3=
+=B6tigen
+Sie ein Gesch=C3=A4fts- oder Privatdarlehen, um zu investieren? ein neues
+Gesch=C3=A4ft er=C3=B6ffnen, Rechnungen bezahlen? Und Sie zahlen uns
+Installationen zur=C3=BCck? Wir sind ein zertifiziertes Finanzunternehmen.
+Wir bieten Privatpersonen und Unternehmen Kredite an. Zu einem sehr
+niedrigen Zinssatz von 2%. F=C3=BCr weitere Informationen
+mailen Sie uns an: golsonfinancial@gmail.com........
