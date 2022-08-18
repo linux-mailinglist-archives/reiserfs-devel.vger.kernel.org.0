@@ -2,39 +2,37 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7A8598EEF
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 18 Aug 2022 23:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3FB598F10
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 18 Aug 2022 23:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346665AbiHRVJt (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 18 Aug 2022 17:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51612 "EHLO
+        id S1346615AbiHRVLT (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 18 Aug 2022 17:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346628AbiHRVJL (ORCPT
+        with ESMTP id S1346703AbiHRVKQ (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 18 Aug 2022 17:09:11 -0400
+        Thu, 18 Aug 2022 17:10:16 -0400
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720D8BB6A6
-        for <reiserfs-devel@vger.kernel.org>; Thu, 18 Aug 2022 14:04:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D4FD8B06
+        for <reiserfs-devel@vger.kernel.org>; Thu, 18 Aug 2022 14:05:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=aMYZBNOjf/WHCs
-        UrAFZm+J4XfZ3nHNhtn8XZSCDyD7A=; b=rUhDLmCtm3lbAOu6xAIzZtzekToZY2
-        Ms3YtoIq2vSLre2gta1npOsXwUsawPpeGzMCvak3bSaqauyyUFysNUbuOLSCAAhK
-        apgO3xhwVawADATXFLhyJAhp1vdKLRRUMn8l/m0envct8/pq+8m65p9Ggmm0N+MY
-        AvKq2Yb0RSyng=
-Received: (qmail 3961904 invoked from network); 18 Aug 2022 23:01:25 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Aug 2022 23:01:25 +0200
-X-UD-Smtp-Session: l3s3148p1@kRXRSIrm7Zoucref
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=aMYZBNOjf/WHCsUrAFZm+J4XfZ3
+        nHNhtn8XZSCDyD7A=; b=cupEXsUWUPygzUgZqGDHcyBpObnmrjTayHuAd+/oN22
+        X2SHKhXTVBSvAYnhhAJtcVN4SfJS28BrdOPHia2MyV0gZRa6L4MvAPuQniwERmXD
+        Scrjgo5Y43ev8Xy+bCC1SLqnOuF6FQPTNN4btAfslQyJskmdzWroeYEmSIj6B7nI
+        =
+Received: (qmail 3962560 invoked from network); 18 Aug 2022 23:01:54 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Aug 2022 23:01:54 +0200
+X-UD-Smtp-Session: l3s3148p1@XaOHSormpqkucref
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         reiserfs-devel@vger.kernel.org
-Subject: [PATCH 02/14] reiserfs: move from strlcpy with unused retval to strscpy
-Date:   Thu, 18 Aug 2022 23:01:11 +0200
-Message-Id: <20220818210123.7637-2-wsa+renesas@sang-engineering.com>
+Subject: [PATCH] reiserfs: move from strlcpy with unused retval to strscpy
+Date:   Thu, 18 Aug 2022 23:01:53 +0200
+Message-Id: <20220818210153.8095-1-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220818210123.7637-1-wsa+renesas@sang-engineering.com>
-References: <20220818210123.7637-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
