@@ -2,153 +2,76 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5877759984E
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 19 Aug 2022 11:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A0A59E26A
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 23 Aug 2022 14:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345743AbiHSJGt (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 19 Aug 2022 05:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
+        id S1358338AbiHWLwV (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 23 Aug 2022 07:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347388AbiHSJGo (ORCPT
+        with ESMTP id S1358985AbiHWLv1 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 19 Aug 2022 05:06:44 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C38FEE6AA;
-        Fri, 19 Aug 2022 02:06:43 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id CA5EB375E0;
-        Fri, 19 Aug 2022 09:06:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1660900001; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=p1k6Pm+SvbBY62QEofoW7g6l7h0lzojfDX5HDxLdLHU=;
-        b=lbnYwsbtyrnMuUNpFxFU0guvzqLFci8KCRCMsh2j01sk4m+ej0q+grl3ZeOCvCFXwTn5UQ
-        bKLhpV2eGfMds8MA5uOQIU0RzVsgq5yn1DnKD7RqIVKEkwevg+o7vyBa6L7neYd9NL115u
-        PcPMCcBtrP+mV6dyWNjENbzys/AlWzo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1660900001;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=p1k6Pm+SvbBY62QEofoW7g6l7h0lzojfDX5HDxLdLHU=;
-        b=55ayS2WgkhIWYhOv3qj3RAq57e3GpsCPA/oxyJhMYoi/wal43reLcL/nPGDx+Remm/mjJy
-        +1XNF3YryqEYqbAw==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2EDED2C145;
-        Fri, 19 Aug 2022 09:06:41 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 95DE9A0635; Fri, 19 Aug 2022 11:06:40 +0200 (CEST)
-Date:   Fri, 19 Aug 2022 11:06:40 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jiangshan Yi <13667453960@163.com>
-Cc:     jack@suse.cz, axboe@kernel.dk, viro@zeniv.linux.org.uk,
-        akpm@linux-foundation.org, reiserfs-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiangshan Yi <yijiangshan@kylinos.cn>
-Subject: Re: [PATCH] fs/reiserfs: replace ternary operator with min() and
- min_t()
-Message-ID: <20220819090640.lhp5esp7mbcpu53i@quack3>
-References: <20220819075240.3199477-1-13667453960@163.com>
+        Tue, 23 Aug 2022 07:51:27 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0915140ED
+        for <reiserfs-devel@vger.kernel.org>; Tue, 23 Aug 2022 02:32:09 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id s36-20020a17090a69a700b001faad0a7a34so16625414pjj.4
+        for <reiserfs-devel@vger.kernel.org>; Tue, 23 Aug 2022 02:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paolettaphotography-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:subject:reply-to:to:date:from:from:to:cc;
+        bh=0e2uX0Wuf8puJzTMu/nTzV5fsJQi2gtv8R6CfWSCGCQ=;
+        b=mVPaHfE0nMT4Q8cPLBtxHci6LAPbSz7gOB3/z6p26zX4LcPfiD+VpxDLSctjH2GEHY
+         cifPIW4nxHZ4Dx1dnW3C3Prabdab7N21JcRfIFap5hlNFOlRM9y8978muPM6nJWvYrb/
+         NnBEmrh9RiqXSyn+q0dcWD2TR3IrjHPM06WzQ5wgKG7dA202qOIY/GAbZKEnUeMWBKa9
+         3zk3eHeIfONiK7w8itiguDOHZEdySkklmOnyiUvs8ZP9cLtAoBG6R65/RG+EowPQiu3W
+         +HAsBA2iFWP6uO2Pi76o6SqfmC/iNWmGNrNwCNyticDiZeHJA09yfTuVuFTnWqMDn37T
+         b4rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:subject:reply-to:to:date:from
+         :x-gm-message-state:from:to:cc;
+        bh=0e2uX0Wuf8puJzTMu/nTzV5fsJQi2gtv8R6CfWSCGCQ=;
+        b=3s465wGJFVvCHxlFe8h4WFLb9CIwuwPzPHyE+/yZFBUAoJ0WWbyKobSGrA6gdQ0QE6
+         OuqBAp4V9jcYbVmIcCyie5NaBMfyWTWT2Vba1ezLtqzXfTocUaehyAgqkLwF72v2ZTHq
+         Jaoe4bMm/tzfaENHM9LSMGgeCKJV+JxCsgic5Zh3zZdX2NjmAraGn4aVhP6RYMnvFQhk
+         bfHIokkEr3QAa/qvOZq6sL2ekP2MibeGrmI9ren//15q3snbCABCzFogbvDmDKqsftih
+         9qCCcmqqqHH4h4aShxthIq3sxFlCEGZqRGdYE5rZaEjoU87/a8gmZ5Twcjoup7k2ho8b
+         zG2A==
+X-Gm-Message-State: ACgBeo14XtNNoH65jq54JbKLFcpCporptZWjBaObGR2S83aTlgU02BRA
+        0DTuqFJ59aimjJSiwS21UCNU3WfgM+cV
+X-Google-Smtp-Source: AA6agR5wuoMiJ7dnqqdM06IXWZ0kEJeQ2M5VuEGBEoGtlwz6uin3OMN8fufWmyGa/8s6wQKE2+B7/w==
+X-Received: by 2002:a17:90b:3842:b0:1f5:32be:8a1a with SMTP id nl2-20020a17090b384200b001f532be8a1amr2492651pjb.130.1661247126207;
+        Tue, 23 Aug 2022 02:32:06 -0700 (PDT)
+Received: from paolettaphotography.com (ip125.ip-147-135-40.us. [147.135.40.125])
+        by smtp.gmail.com with ESMTPSA id p16-20020a170902e75000b0016ee3d7220esm6682662plf.24.2022.08.23.02.32.05
+        for <reiserfs-devel@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Aug 2022 02:32:05 -0700 (PDT)
+From:   Paoletta Photography <marty@paolettaphotography.com>
+X-Google-Original-From: Paoletta Photography <info@paolettaphotography.com>
+Date:   Tue, 23 Aug 2022 09:32:04 +0000
+To:     reiserfs-devel@vger.kernel.org
+Reply-To: martypaoletta@gmail.com
+Subject: Paoletta Photography "News: Nicht genug Geld fur irgendetwas? Es gibt einen Ausgang"
+Message-ID: <a6c464ffeefc6daca8751f9e06c6e9d1@paolettaphotography.com>
+X-Mailer: PHPMailer 5.2.27 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819075240.3199477-1-13667453960@163.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=UTF-8
+X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FORGED_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Fri 19-08-22 15:52:40, Jiangshan Yi wrote:
-> From: Jiangshan Yi <yijiangshan@kylinos.cn>
-> 
-> Fix the following coccicheck warning:
-> 
-> fs/reiserfs/prints.c:459: WARNING opportunity for min().
-> fs/reiserfs/resize.c:100: WARNING opportunity for min().
-> fs/reiserfs/super.c:2508: WARNING opportunity for min().
-> fs/reiserfs/super.c:2557: WARNING opportunity for min().
-> 
-> min() and min_t() macro is defined in include/linux/minmax.h.
-> It avoids multiple evaluations of the arguments when non-constant and
-> performs strict type-checking.
-> 
-> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+Message Body:
+Sie konnten der nachste Millionar sein. Beeil dich http://news-guardian.beersec.com/SD-2074
 
-Thanks for the cleanup. I've added the patch to my tree.
+--
+This e-mail was sent from a contact form on Paoletta Photography (http://paolettaphotography.com)
 
-								Honza
-
-> ---
->  fs/reiserfs/prints.c | 2 +-
->  fs/reiserfs/resize.c | 2 +-
->  fs/reiserfs/super.c  | 7 ++-----
->  3 files changed, 4 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/reiserfs/prints.c b/fs/reiserfs/prints.c
-> index 30319dc33c18..84a194b77f19 100644
-> --- a/fs/reiserfs/prints.c
-> +++ b/fs/reiserfs/prints.c
-> @@ -456,7 +456,7 @@ static int print_internal(struct buffer_head *bh, int first, int last)
->  		to = B_NR_ITEMS(bh);
->  	} else {
->  		from = first;
-> -		to = last < B_NR_ITEMS(bh) ? last : B_NR_ITEMS(bh);
-> +		to = min_t(int, last, B_NR_ITEMS(bh));
->  	}
->  
->  	reiserfs_printk("INTERNAL NODE (%ld) contains %z\n", bh->b_blocknr, bh);
-> diff --git a/fs/reiserfs/resize.c b/fs/reiserfs/resize.c
-> index 8096c74c38ac..7b498a0d060b 100644
-> --- a/fs/reiserfs/resize.c
-> +++ b/fs/reiserfs/resize.c
-> @@ -97,7 +97,7 @@ int reiserfs_resize(struct super_block *s, unsigned long block_count_new)
->  		 * using the copy_size var below allows this code to work for
->  		 * both shrinking and expanding the FS.
->  		 */
-> -		copy_size = bmap_nr_new < bmap_nr ? bmap_nr_new : bmap_nr;
-> +		copy_size = min(bmap_nr_new, bmap_nr);
->  		copy_size =
->  		    copy_size * sizeof(struct reiserfs_list_bitmap_node *);
->  		for (i = 0; i < JOURNAL_NUM_BITMAPS; i++) {
-> diff --git a/fs/reiserfs/super.c b/fs/reiserfs/super.c
-> index c88cd2ce0665..da1e72494e30 100644
-> --- a/fs/reiserfs/super.c
-> +++ b/fs/reiserfs/super.c
-> @@ -2504,9 +2504,7 @@ static ssize_t reiserfs_quota_read(struct super_block *sb, int type, char *data,
->  		len = i_size - off;
->  	toread = len;
->  	while (toread > 0) {
-> -		tocopy =
-> -		    sb->s_blocksize - offset <
-> -		    toread ? sb->s_blocksize - offset : toread;
-> +		tocopy = min_t(unsigned long, sb->s_blocksize - offset, toread);
->  		tmp_bh.b_state = 0;
->  		/*
->  		 * Quota files are without tails so we can safely
-> @@ -2554,8 +2552,7 @@ static ssize_t reiserfs_quota_write(struct super_block *sb, int type,
->  		return -EIO;
->  	}
->  	while (towrite > 0) {
-> -		tocopy = sb->s_blocksize - offset < towrite ?
-> -		    sb->s_blocksize - offset : towrite;
-> +		tocopy = min_t(unsigned long, sb->s_blocksize - offset, towrite);
->  		tmp_bh.b_state = 0;
->  		reiserfs_write_lock(sb);
->  		err = reiserfs_get_block(inode, blk, &tmp_bh, GET_BLOCK_CREATE);
-> -- 
-> 2.25.1
-> 
-> 
-> No virus found
-> 		Checked by Hillstone Network AntiVirus
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
