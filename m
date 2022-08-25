@@ -2,45 +2,45 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B404E5A18BD
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 25 Aug 2022 20:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C518A5A18C1
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 25 Aug 2022 20:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242158AbiHYSZj (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 25 Aug 2022 14:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
+        id S243309AbiHYS0i (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 25 Aug 2022 14:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243019AbiHYSZh (ORCPT
+        with ESMTP id S243277AbiHYS0i (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:25:37 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5487A2251D
-        for <reiserfs-devel@vger.kernel.org>; Thu, 25 Aug 2022 11:25:36 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id e2-20020a056e020b2200b002e1a5b67e29so15598700ilu.11
-        for <reiserfs-devel@vger.kernel.org>; Thu, 25 Aug 2022 11:25:36 -0700 (PDT)
+        Thu, 25 Aug 2022 14:26:38 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FEB6111D
+        for <reiserfs-devel@vger.kernel.org>; Thu, 25 Aug 2022 11:26:36 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id k1-20020a92c241000000b002e9caf63a57so8718450ilo.20
+        for <reiserfs-devel@vger.kernel.org>; Thu, 25 Aug 2022 11:26:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc;
-        bh=8DJQA3NUl/WNUvdLL1qgsBC65nEwws6Bl4q8FsR6s1Q=;
-        b=so1u4WT80sUg4rGMDx+vW0VnBOd/OQJgM2PNvwiCe8wz2uMGBSOdzzlezf1cTGiL/a
-         qcbEfvhF/whmwqyLwQ8CAoqUKISGmvB6jNT5Ekexx1ZzFOfLA+bqhGrrPwdbWUtvAzWK
-         Eeup7UeQp8W1FLR4N+k7NklpQ15r3OdbdVWW4DAoy0A5/pkwsTMgwuxwH4MsoczR+eh8
-         UT2bVjSu9mByWzMOvVAU+JF7yyAQcdHPilnEFeon8Zjw/UOimOEROu01l9NbTce57kcM
-         cZ3hA2zjRGKLkcR3N+DzzuU7oApydpqAJCO9lRoKbYkk0WLSxIxt8UPFxt9KHgSwkPM/
-         tsRA==
-X-Gm-Message-State: ACgBeo3ZqueCZQV9BRML/Z4udyHysQXtALZVlqcPmsySEmSJlQYexp90
-        IRLZhzWQTTDczLddgDv22OmUoqis63NWdji0qaIJb63ZCjRL
-X-Google-Smtp-Source: AA6agR4EmegXxJDczgxkjZiwTF1Kzrad9adtNkHUcLh1ZvsPLcHpE0XCjA0SODsM65S2yBZIeu6cy9N6x6YrKQkP74+ZCBXAkGKu
+        bh=LwKrF6npo1jj2dev0wAXauVC6HK8/d8AvOms03RjONc=;
+        b=Uh09zgkZ6uEOQaTm9ZDu65ycDDp7rrbh/e2zLiNpMNUIy9Jce6rkgZA0NRRmHBSitl
+         UF4/vDKN4vpmJ6UxH4xCJcMEFymSicvN6TDuiz+DeDkNMQCZOnbH985LV3OJvKb1XFhJ
+         s74ln2XY7AqM9cWUcYe8xL54t3IgoXlsXyycvyXxI85hTKJgqOT2bgs7rUtibsxVv2eD
+         bcZlTmC+lASZkIEu3nBausanzNczUGibub97Ogqds7WryjWbXB2ZiRlbx3NlPUoG9Y6P
+         UccwqCFkR+2158zwK7RI54TVJlqpGMNCdOSf2yiV9OirHMex8vJubmY1bObUJATENBji
+         mx1Q==
+X-Gm-Message-State: ACgBeo1E5brRBx2rIFlioyYtWzp9OfbaKFiO4jji2pca+1KrGQYGudMC
+        J8oQApCC3C0U/rh7DbmxuP28r240m9ar+RM/SW2g+MptWiWK
+X-Google-Smtp-Source: AA6agR7etSFH8tALkAEHHxQ0SDcRlS2k0t2uBZ3T9sdYR4D90vQOLTzcP8ozLcrFOLJ07bsvwCsre1lOzSi62mrfsBeUCxgsQAxB
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:13f0:b0:2e9:4be1:b11e with SMTP id
- w16-20020a056e0213f000b002e94be1b11emr2409186ilj.247.1661451935425; Thu, 25
- Aug 2022 11:25:35 -0700 (PDT)
-Date:   Thu, 25 Aug 2022 11:25:35 -0700
+X-Received: by 2002:a92:d110:0:b0:2e0:ed70:ea86 with SMTP id
+ a16-20020a92d110000000b002e0ed70ea86mr2359562ilb.43.1661451995445; Thu, 25
+ Aug 2022 11:26:35 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 11:26:35 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006c2bbc05e714ec79@google.com>
-Subject: [syzbot] WARNING in reiserfs_lookup
-From:   syzbot <syzbot+392ac209604cc18792e5@syzkaller.appspotmail.com>
+Message-ID: <00000000000000040a05e714f000@google.com>
+Subject: [syzbot] WARNING in reiserfs_readdir_inode
+From:   syzbot <syzbot+798ffe5fe3e88235db59@syzkaller.appspotmail.com>
 To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
@@ -60,37 +60,37 @@ syzbot found the following issue on:
 
 HEAD commit:    a41a877bc12d Merge branch 'for-next/fixes' into for-kernelci
 git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1180b113080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1756ff03080000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=5cea15779c42821c
-dashboard link: https://syzkaller.appspot.com/bug?extid=392ac209604cc18792e5
+dashboard link: https://syzkaller.appspot.com/bug?extid=798ffe5fe3e88235db59
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 userspace arch: arm64
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+392ac209604cc18792e5@syzkaller.appspotmail.com
+Reported-by: syzbot+798ffe5fe3e88235db59@syzkaller.appspotmail.com
 
+loop3: detected capacity change from 0 to 64
+BFS-fs: bfs_fill_super(): loop3 is unclean, continuing
 ------------[ cut here ]------------
 DEBUG_LOCKS_WARN_ON(lock->magic != lock)
-WARNING: CPU: 1 PID: 13919 at kernel/locking/mutex.c:582 __mutex_lock_common+0x49c/0xc28 kernel/locking/mutex.c:582
+WARNING: CPU: 1 PID: 6988 at kernel/locking/mutex.c:582 __mutex_lock_common+0x49c/0xc28 kernel/locking/mutex.c:582
 Modules linked in:
-CPU: 1 PID: 13919 Comm: syz-executor.1 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+CPU: 1 PID: 6988 Comm: syz-executor.3 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/20/2022
 pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
 pc : __mutex_lock_common+0x49c/0xc28 kernel/locking/mutex.c:582
 lr : __mutex_lock_common+0x49c/0xc28 kernel/locking/mutex.c:582
-sp : ffff80001404b8e0
-x29: ffff80001404b950 x28: ffff80000ee9a000 x27: ffff0000e7ff7c30
-x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000002
+sp : ffff8000139aba10
+x29: ffff8000139aba80 x28: ffff80000ee9a000 x27: 0000000000000000
+x26: 0000000000000000 x25: ffff80000876a864 x24: 0000000000000002
 x23: ffff800008794be8 x22: 0000000000000000 x21: 0000000000000000
-x20: 0000000000000000 x19: ffff000100ce2228
- x18: 0000000000000144
-
-x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+x20: 0000000000000000 x19: ffff0000f81c8228 x18: 000000000000031c
+x17: ffff80000c04d6bc x16: 0000000000000000 x15: 0000000000000000
 x14: 0000000000000000 x13: 0000000000000012 x12: 0000000000040000
-x11: 0000000000008995 x10: ffff800017d28000 x9 : 8ae7bd2ab6f62200
-x8 : 8ae7bd2ab6f62200 x7 : 4e5241575f534b43 x6 : ffff800008197c8c
+x11: 0000000000001055 x10: ffff80001d0cc000 x9 : c740583a05b0ad00
+x8 : c740583a05b0ad00 x7 : 4e5241575f534b43 x6 : ffff800008197c8c
 x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
 x2 : 0000000000000000 x1 : 0000000100000000 x0 : 0000000000000028
 Call trace:
@@ -98,16 +98,12 @@ Call trace:
  __mutex_lock kernel/locking/mutex.c:747 [inline]
  mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
  reiserfs_write_lock+0x3c/0x64 fs/reiserfs/lock.c:27
- reiserfs_lookup+0xa4/0x1c4 fs/reiserfs/namei.c:364
- lookup_open fs/namei.c:3391 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x738/0x11c4 fs/namei.c:3688
- do_filp_open+0xdc/0x1b8 fs/namei.c:3718
- do_sys_openat2+0xb8/0x22c fs/open.c:1311
- do_sys_open fs/open.c:1327 [inline]
- __do_sys_openat fs/open.c:1343 [inline]
- __se_sys_openat fs/open.c:1338 [inline]
- __arm64_sys_openat+0xb0/0xe0 fs/open.c:1338
+ reiserfs_readdir_inode+0x9c/0x68c fs/reiserfs/dir.c:79
+ reiserfs_readdir+0x28/0x38 fs/reiserfs/dir.c:274
+ iterate_dir+0x114/0x28c
+ __do_sys_getdents64 fs/readdir.c:369 [inline]
+ __se_sys_getdents64 fs/readdir.c:354 [inline]
+ __arm64_sys_getdents64+0x80/0x214 fs/readdir.c:354
  __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
  invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
  el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
@@ -115,56 +111,94 @@ Call trace:
  el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
  el0t_64_sync+0x18c/0x190
-irq event stamp: 1381
-hardirqs last  enabled at (1381): [<ffff8000085e9378>] seqcount_lockdep_reader_access include/linux/seqlock.h:104 [inline]
-hardirqs last  enabled at (1381): [<ffff8000085e9378>] read_seqbegin include/linux/seqlock.h:836 [inline]
-hardirqs last  enabled at (1381): [<ffff8000085e9378>] d_alloc_parallel+0x254/0xad0 fs/dcache.c:2657
-hardirqs last disabled at (1380): [<ffff8000085e9300>] seqcount_lockdep_reader_access include/linux/seqlock.h:101 [inline]
-hardirqs last disabled at (1380): [<ffff8000085e9300>] read_seqbegin include/linux/seqlock.h:836 [inline]
-hardirqs last disabled at (1380): [<ffff8000085e9300>] d_alloc_parallel+0x1dc/0xad0 fs/dcache.c:2657
-softirqs last  enabled at (1248): [<ffff80000801c1f4>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (1246): [<ffff80000801c1c0>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
+irq event stamp: 1339
+hardirqs last  enabled at (1339): [<ffff800008038c9c>] local_daif_restore arch/arm64/include/asm/daifflags.h:75 [inline]
+hardirqs last  enabled at (1339): [<ffff800008038c9c>] el0_svc_common+0x40/0x220 arch/arm64/kernel/syscall.c:107
+hardirqs last disabled at (1338): [<ffff80000bffee18>] el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+softirqs last  enabled at (1334): [<ffff80000801c1f4>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
+softirqs last disabled at (1332): [<ffff80000801c1c0>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
 ---[ end trace 0000000000000000 ]---
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 6988 at fs/reiserfs/lock.c:91 reiserfs_check_lock_depth+0x48/0x50 fs/reiserfs/lock.c:91
+Modules linked in:
+CPU: 1 PID: 6988 Comm: syz-executor.3 Tainted: G        W          6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/20/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : reiserfs_check_lock_depth+0x48/0x50 fs/reiserfs/lock.c:91
+lr : reiserfs_check_lock_depth+0x48/0x50 fs/reiserfs/lock.c:91
+sp : ffff8000139abaf0
+x29: ffff8000139abaf0 x28: ffff0000f6cc9a80 x27: 0000000000000000
+x26: ffff0000ca4987b8 x25: ffff80000876a864 x24: 0000000000000000
+x23: 0000000000000000 x22: 000000000000003d x21: ffff8000139abd80
+x20: ffff0000ca4987b8 x19: 00000000f81c82c1 x18: 000000000000031c
+x17: ffff80000c04d6bc x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000000012 x12: 0000000000040000
+x11: 00000000000115cc x10: ffff80001d0cc000 x9 : ffff800008794da0
+x8 : 00000000000115cd x7 : 4e5241575f534b43 x6 : ffff800008794be8
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : ffff0000f6cc9a87 x1 : 00000000f81c82c1 x0 : 0000000000000000
+Call trace:
+ reiserfs_check_lock_depth+0x48/0x50 fs/reiserfs/lock.c:91
+ reiserfs_readdir_inode+0xac/0x68c fs/reiserfs/dir.c:81
+ reiserfs_readdir+0x28/0x38 fs/reiserfs/dir.c:274
+ iterate_dir+0x114/0x28c
+ __do_sys_getdents64 fs/readdir.c:369 [inline]
+ __se_sys_getdents64 fs/readdir.c:354 [inline]
+ __arm64_sys_getdents64+0x80/0x214 fs/readdir.c:354
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+irq event stamp: 1339
+hardirqs last  enabled at (1339): [<ffff800008038c9c>] local_daif_restore arch/arm64/include/asm/daifflags.h:75 [inline]
+hardirqs last  enabled at (1339): [<ffff800008038c9c>] el0_svc_common+0x40/0x220 arch/arm64/kernel/syscall.c:107
+hardirqs last disabled at (1338): [<ffff80000bffee18>] el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+softirqs last  enabled at (1334): [<ffff80000801c1f4>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
+softirqs last disabled at (1332): [<ffff80000801c1c0>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
+---[ end trace 0000000000000000 ]---
+Unable to handle kernel NULL pointer dereference at virtual address 000000000000003d
 Mem abort info:
-  ESR = 0x0000000086000006
-  EC = 0x21: IABT (current EL), IL = 32 bits
+  ESR = 0x0000000096000006
+  EC = 0x25: DABT (current EL), IL = 32 bits
   SET = 0, FnV = 0
   EA = 0, S1PTW = 0
   FSC = 0x06: level 2 translation fault
-user pgtable: 4k pages, 48-bit VAs, pgdp=0000000140c5a000
-[0000000000000000] pgd=080000012f58f003, p4d=080000012f58f003, pud=080000012f58c003, pmd=0000000000000000
-Internal error: Oops: 86000006 [#1] PREEMPT SMP
+Data abort info:
+  ISV = 0, ISS = 0x00000006
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=0000000109179000
+[000000000000003d] pgd=080000013ca85003, p4d=080000013ca85003, pud=0800000135d37003, pmd=0000000000000000
+Internal error: Oops: 96000006 [#1] PREEMPT SMP
 Modules linked in:
-CPU: 1 PID: 13919 Comm: syz-executor.1 Tainted: G        W          6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+CPU: 0 PID: 6988 Comm: syz-executor.3 Tainted: G        W          6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/20/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : 0x0
-lr : get_third_component fs/reiserfs/namei.c:196 [inline]
-lr : reiserfs_find_entry+0x130/0x298 fs/reiserfs/namei.c:317
-sp : ffff80001404b960
-x29: ffff80001404b990 x28: 0000000000000000 x27: ffff0000e7ff7c30
-x26: ffff0000e7ffc000 x25: ffff0000eea4f000 x24: 0000000010000000
-x23: ffff0000e7ffc070 x22: 0000000000000005 x21: ffff80001404b9e0
-x20: ffff80001404ba48 x19: ffff0000eb8c0190 x18: 0000000000000144
-x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-x14: 0000000000000002 x13: 0000000000000002 x12: 0000000000040000
-x11: 000000000003ffff x10: ffff800017d28000 x9 : ffff80000875c888
-x8 : 0000000000000000 x7 : 4e5241575f534b43 x6 : ffff800008794be8
-x5 : 0000000000000000 x4 : ffff80001404b9e0 x3 : ffff80001404ba48
-x2 : 0000000000000005 x1 : 0000000000000005 x0 : ffff0000e7ffc070
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : search_by_key+0x110/0x19d8 fs/reiserfs/stree.c:648
+lr : pathrelse fs/reiserfs/stree.c:384 [inline]
+lr : search_by_key+0xf0/0x19d8 fs/reiserfs/stree.c:641
+sp : ffff8000139ab920
+x29: ffff8000139aba60 x28: ffff8000139abc10 x27: 0000000000000000
+x26: ffff0000ca4987b8 x25: ffff80000876a864 x24: 0000000000000000
+x23: 0000000000000000 x22: ffff0000f6492000 x21: 0000000000000001
+x20: ffff0000f6492000 x19: ffff8000139abb50 x18: 000000000000031c
+x17: ffff80000c04d6bc x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000000012 x12: 0000000000040000
+x11: 0000000000023422 x10: ffff80001d0cc000 x9 : 0000000000000002
+x8 : 0000000000000035 x7 : 4e5241575f534b43 x6 : ffff800008794be8
+x5 : 0000000000000000 x4 : 0000000000000003 x3 : 0000000000000008
+x2 : ffff8000139abc10 x1 : 0000000000000001 x0 : 0000000000000001
 Call trace:
- 0x0
- reiserfs_lookup+0xc4/0x1c4 fs/reiserfs/namei.c:368
- lookup_open fs/namei.c:3391 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x738/0x11c4 fs/namei.c:3688
- do_filp_open+0xdc/0x1b8 fs/namei.c:3718
- do_sys_openat2+0xb8/0x22c fs/open.c:1311
- do_sys_open fs/open.c:1327 [inline]
- __do_sys_openat fs/open.c:1343 [inline]
- __se_sys_openat fs/open.c:1338 [inline]
- __arm64_sys_openat+0xb0/0xe0 fs/open.c:1338
+ search_by_key+0x110/0x19d8 fs/reiserfs/stree.c:648
+ search_by_entry_key+0x44/0x370 fs/reiserfs/namei.c:125
+ reiserfs_readdir_inode+0x100/0x68c fs/reiserfs/dir.c:98
+ reiserfs_readdir+0x28/0x38 fs/reiserfs/dir.c:274
+ iterate_dir+0x114/0x28c
+ __do_sys_getdents64 fs/readdir.c:369 [inline]
+ __se_sys_getdents64 fs/readdir.c:354 [inline]
+ __arm64_sys_getdents64+0x80/0x214 fs/readdir.c:354
  __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
  invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
  el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
@@ -172,8 +206,15 @@ Call trace:
  el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
  el0t_64_sync+0x18c/0x190
-Code: bad PC value
+Code: f9433e88 52800049 52800103 f9400508 (b9400901) 
 ---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	f9433e88 	ldr	x8, [x20, #1656]
+   4:	52800049 	mov	w9, #0x2                   	// #2
+   8:	52800103 	mov	w3, #0x8                   	// #8
+   c:	f9400508 	ldr	x8, [x8, #8]
+* 10:	b9400901 	ldr	w1, [x8, #8] <-- trapping instruction
 
 
 ---
