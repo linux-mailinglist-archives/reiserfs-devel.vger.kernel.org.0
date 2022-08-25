@@ -2,76 +2,184 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A0A59E26A
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 23 Aug 2022 14:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B404E5A18BD
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 25 Aug 2022 20:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358338AbiHWLwV (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 23 Aug 2022 07:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
+        id S242158AbiHYSZj (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 25 Aug 2022 14:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358985AbiHWLv1 (ORCPT
+        with ESMTP id S243019AbiHYSZh (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 23 Aug 2022 07:51:27 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0915140ED
-        for <reiserfs-devel@vger.kernel.org>; Tue, 23 Aug 2022 02:32:09 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id s36-20020a17090a69a700b001faad0a7a34so16625414pjj.4
-        for <reiserfs-devel@vger.kernel.org>; Tue, 23 Aug 2022 02:32:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paolettaphotography-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:subject:reply-to:to:date:from:from:to:cc;
-        bh=0e2uX0Wuf8puJzTMu/nTzV5fsJQi2gtv8R6CfWSCGCQ=;
-        b=mVPaHfE0nMT4Q8cPLBtxHci6LAPbSz7gOB3/z6p26zX4LcPfiD+VpxDLSctjH2GEHY
-         cifPIW4nxHZ4Dx1dnW3C3Prabdab7N21JcRfIFap5hlNFOlRM9y8978muPM6nJWvYrb/
-         NnBEmrh9RiqXSyn+q0dcWD2TR3IrjHPM06WzQ5wgKG7dA202qOIY/GAbZKEnUeMWBKa9
-         3zk3eHeIfONiK7w8itiguDOHZEdySkklmOnyiUvs8ZP9cLtAoBG6R65/RG+EowPQiu3W
-         +HAsBA2iFWP6uO2Pi76o6SqfmC/iNWmGNrNwCNyticDiZeHJA09yfTuVuFTnWqMDn37T
-         b4rA==
+        Thu, 25 Aug 2022 14:25:37 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5487A2251D
+        for <reiserfs-devel@vger.kernel.org>; Thu, 25 Aug 2022 11:25:36 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id e2-20020a056e020b2200b002e1a5b67e29so15598700ilu.11
+        for <reiserfs-devel@vger.kernel.org>; Thu, 25 Aug 2022 11:25:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:subject:reply-to:to:date:from
-         :x-gm-message-state:from:to:cc;
-        bh=0e2uX0Wuf8puJzTMu/nTzV5fsJQi2gtv8R6CfWSCGCQ=;
-        b=3s465wGJFVvCHxlFe8h4WFLb9CIwuwPzPHyE+/yZFBUAoJ0WWbyKobSGrA6gdQ0QE6
-         OuqBAp4V9jcYbVmIcCyie5NaBMfyWTWT2Vba1ezLtqzXfTocUaehyAgqkLwF72v2ZTHq
-         Jaoe4bMm/tzfaENHM9LSMGgeCKJV+JxCsgic5Zh3zZdX2NjmAraGn4aVhP6RYMnvFQhk
-         bfHIokkEr3QAa/qvOZq6sL2ekP2MibeGrmI9ren//15q3snbCABCzFogbvDmDKqsftih
-         9qCCcmqqqHH4h4aShxthIq3sxFlCEGZqRGdYE5rZaEjoU87/a8gmZ5Twcjoup7k2ho8b
-         zG2A==
-X-Gm-Message-State: ACgBeo14XtNNoH65jq54JbKLFcpCporptZWjBaObGR2S83aTlgU02BRA
-        0DTuqFJ59aimjJSiwS21UCNU3WfgM+cV
-X-Google-Smtp-Source: AA6agR5wuoMiJ7dnqqdM06IXWZ0kEJeQ2M5VuEGBEoGtlwz6uin3OMN8fufWmyGa/8s6wQKE2+B7/w==
-X-Received: by 2002:a17:90b:3842:b0:1f5:32be:8a1a with SMTP id nl2-20020a17090b384200b001f532be8a1amr2492651pjb.130.1661247126207;
-        Tue, 23 Aug 2022 02:32:06 -0700 (PDT)
-Received: from paolettaphotography.com (ip125.ip-147-135-40.us. [147.135.40.125])
-        by smtp.gmail.com with ESMTPSA id p16-20020a170902e75000b0016ee3d7220esm6682662plf.24.2022.08.23.02.32.05
-        for <reiserfs-devel@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 23 Aug 2022 02:32:05 -0700 (PDT)
-From:   Paoletta Photography <marty@paolettaphotography.com>
-X-Google-Original-From: Paoletta Photography <info@paolettaphotography.com>
-Date:   Tue, 23 Aug 2022 09:32:04 +0000
-To:     reiserfs-devel@vger.kernel.org
-Reply-To: martypaoletta@gmail.com
-Subject: Paoletta Photography "News: Nicht genug Geld fur irgendetwas? Es gibt einen Ausgang"
-Message-ID: <a6c464ffeefc6daca8751f9e06c6e9d1@paolettaphotography.com>
-X-Mailer: PHPMailer 5.2.27 (https://github.com/PHPMailer/PHPMailer)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=8DJQA3NUl/WNUvdLL1qgsBC65nEwws6Bl4q8FsR6s1Q=;
+        b=so1u4WT80sUg4rGMDx+vW0VnBOd/OQJgM2PNvwiCe8wz2uMGBSOdzzlezf1cTGiL/a
+         qcbEfvhF/whmwqyLwQ8CAoqUKISGmvB6jNT5Ekexx1ZzFOfLA+bqhGrrPwdbWUtvAzWK
+         Eeup7UeQp8W1FLR4N+k7NklpQ15r3OdbdVWW4DAoy0A5/pkwsTMgwuxwH4MsoczR+eh8
+         UT2bVjSu9mByWzMOvVAU+JF7yyAQcdHPilnEFeon8Zjw/UOimOEROu01l9NbTce57kcM
+         cZ3hA2zjRGKLkcR3N+DzzuU7oApydpqAJCO9lRoKbYkk0WLSxIxt8UPFxt9KHgSwkPM/
+         tsRA==
+X-Gm-Message-State: ACgBeo3ZqueCZQV9BRML/Z4udyHysQXtALZVlqcPmsySEmSJlQYexp90
+        IRLZhzWQTTDczLddgDv22OmUoqis63NWdji0qaIJb63ZCjRL
+X-Google-Smtp-Source: AA6agR4EmegXxJDczgxkjZiwTF1Kzrad9adtNkHUcLh1ZvsPLcHpE0XCjA0SODsM65S2yBZIeu6cy9N6x6YrKQkP74+ZCBXAkGKu
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FORGED_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+X-Received: by 2002:a05:6e02:13f0:b0:2e9:4be1:b11e with SMTP id
+ w16-20020a056e0213f000b002e94be1b11emr2409186ilj.247.1661451935425; Thu, 25
+ Aug 2022 11:25:35 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 11:25:35 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006c2bbc05e714ec79@google.com>
+Subject: [syzbot] WARNING in reiserfs_lookup
+From:   syzbot <syzbot+392ac209604cc18792e5@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Message Body:
-Sie konnten der nachste Millionar sein. Beeil dich http://news-guardian.beersec.com/SD-2074
+Hello,
 
---
-This e-mail was sent from a contact form on Paoletta Photography (http://paolettaphotography.com)
+syzbot found the following issue on:
 
+HEAD commit:    a41a877bc12d Merge branch 'for-next/fixes' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=1180b113080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5cea15779c42821c
+dashboard link: https://syzkaller.appspot.com/bug?extid=392ac209604cc18792e5
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+392ac209604cc18792e5@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+WARNING: CPU: 1 PID: 13919 at kernel/locking/mutex.c:582 __mutex_lock_common+0x49c/0xc28 kernel/locking/mutex.c:582
+Modules linked in:
+CPU: 1 PID: 13919 Comm: syz-executor.1 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/20/2022
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __mutex_lock_common+0x49c/0xc28 kernel/locking/mutex.c:582
+lr : __mutex_lock_common+0x49c/0xc28 kernel/locking/mutex.c:582
+sp : ffff80001404b8e0
+x29: ffff80001404b950 x28: ffff80000ee9a000 x27: ffff0000e7ff7c30
+x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000002
+x23: ffff800008794be8 x22: 0000000000000000 x21: 0000000000000000
+x20: 0000000000000000 x19: ffff000100ce2228
+ x18: 0000000000000144
+
+x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000000012 x12: 0000000000040000
+x11: 0000000000008995 x10: ffff800017d28000 x9 : 8ae7bd2ab6f62200
+x8 : 8ae7bd2ab6f62200 x7 : 4e5241575f534b43 x6 : ffff800008197c8c
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : 0000000100000000 x0 : 0000000000000028
+Call trace:
+ __mutex_lock_common+0x49c/0xc28 kernel/locking/mutex.c:582
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ reiserfs_write_lock+0x3c/0x64 fs/reiserfs/lock.c:27
+ reiserfs_lookup+0xa4/0x1c4 fs/reiserfs/namei.c:364
+ lookup_open fs/namei.c:3391 [inline]
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0x738/0x11c4 fs/namei.c:3688
+ do_filp_open+0xdc/0x1b8 fs/namei.c:3718
+ do_sys_openat2+0xb8/0x22c fs/open.c:1311
+ do_sys_open fs/open.c:1327 [inline]
+ __do_sys_openat fs/open.c:1343 [inline]
+ __se_sys_openat fs/open.c:1338 [inline]
+ __arm64_sys_openat+0xb0/0xe0 fs/open.c:1338
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+irq event stamp: 1381
+hardirqs last  enabled at (1381): [<ffff8000085e9378>] seqcount_lockdep_reader_access include/linux/seqlock.h:104 [inline]
+hardirqs last  enabled at (1381): [<ffff8000085e9378>] read_seqbegin include/linux/seqlock.h:836 [inline]
+hardirqs last  enabled at (1381): [<ffff8000085e9378>] d_alloc_parallel+0x254/0xad0 fs/dcache.c:2657
+hardirqs last disabled at (1380): [<ffff8000085e9300>] seqcount_lockdep_reader_access include/linux/seqlock.h:101 [inline]
+hardirqs last disabled at (1380): [<ffff8000085e9300>] read_seqbegin include/linux/seqlock.h:836 [inline]
+hardirqs last disabled at (1380): [<ffff8000085e9300>] d_alloc_parallel+0x1dc/0xad0 fs/dcache.c:2657
+softirqs last  enabled at (1248): [<ffff80000801c1f4>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
+softirqs last disabled at (1246): [<ffff80000801c1c0>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
+---[ end trace 0000000000000000 ]---
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+Mem abort info:
+  ESR = 0x0000000086000006
+  EC = 0x21: IABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+user pgtable: 4k pages, 48-bit VAs, pgdp=0000000140c5a000
+[0000000000000000] pgd=080000012f58f003, p4d=080000012f58f003, pud=080000012f58c003, pmd=0000000000000000
+Internal error: Oops: 86000006 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 13919 Comm: syz-executor.1 Tainted: G        W          6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/20/2022
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : 0x0
+lr : get_third_component fs/reiserfs/namei.c:196 [inline]
+lr : reiserfs_find_entry+0x130/0x298 fs/reiserfs/namei.c:317
+sp : ffff80001404b960
+x29: ffff80001404b990 x28: 0000000000000000 x27: ffff0000e7ff7c30
+x26: ffff0000e7ffc000 x25: ffff0000eea4f000 x24: 0000000010000000
+x23: ffff0000e7ffc070 x22: 0000000000000005 x21: ffff80001404b9e0
+x20: ffff80001404ba48 x19: ffff0000eb8c0190 x18: 0000000000000144
+x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000002 x13: 0000000000000002 x12: 0000000000040000
+x11: 000000000003ffff x10: ffff800017d28000 x9 : ffff80000875c888
+x8 : 0000000000000000 x7 : 4e5241575f534b43 x6 : ffff800008794be8
+x5 : 0000000000000000 x4 : ffff80001404b9e0 x3 : ffff80001404ba48
+x2 : 0000000000000005 x1 : 0000000000000005 x0 : ffff0000e7ffc070
+Call trace:
+ 0x0
+ reiserfs_lookup+0xc4/0x1c4 fs/reiserfs/namei.c:368
+ lookup_open fs/namei.c:3391 [inline]
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0x738/0x11c4 fs/namei.c:3688
+ do_filp_open+0xdc/0x1b8 fs/namei.c:3718
+ do_sys_openat2+0xb8/0x22c fs/open.c:1311
+ do_sys_open fs/open.c:1327 [inline]
+ __do_sys_openat fs/open.c:1343 [inline]
+ __se_sys_openat fs/open.c:1338 [inline]
+ __arm64_sys_openat+0xb0/0xe0 fs/open.c:1338
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+Code: bad PC value
+---[ end trace 0000000000000000 ]---
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
