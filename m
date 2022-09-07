@@ -2,207 +2,114 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADCB5AE57B
-	for <lists+reiserfs-devel@lfdr.de>; Tue,  6 Sep 2022 12:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F32475B06D3
+	for <lists+reiserfs-devel@lfdr.de>; Wed,  7 Sep 2022 16:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239583AbiIFKit (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 6 Sep 2022 06:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
+        id S230308AbiIGOc2 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 7 Sep 2022 10:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233801AbiIFKib (ORCPT
+        with ESMTP id S230314AbiIGOb6 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 6 Sep 2022 06:38:31 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B3C5246D
-        for <reiserfs-devel@vger.kernel.org>; Tue,  6 Sep 2022 03:38:30 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id bf4-20020a056602368400b0068baaa4f99bso6405986iob.3
-        for <reiserfs-devel@vger.kernel.org>; Tue, 06 Sep 2022 03:38:30 -0700 (PDT)
+        Wed, 7 Sep 2022 10:31:58 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB84157E21
+        for <reiserfs-devel@vger.kernel.org>; Wed,  7 Sep 2022 07:31:53 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id l14so7328399eja.7
+        for <reiserfs-devel@vger.kernel.org>; Wed, 07 Sep 2022 07:31:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
+        b=hlX5LG70Pfi5xUfXCm2C7WvkXcJVP5UakJZVNodPOy7vNkSXQuxkM6JMnL0NkwpmEx
+         GApIDchppryVktOBo5G41BqVss7NVeWmLRXcOx2bAZqQ+LAYFz8ePbLc684sFXT4Nmqj
+         OcoPmJYuvMlwncvSBL0BFnkvuWLyKibj/n8A5QS+qmy30Nhg7xyf0NkI/q67juR/h0tY
+         bD/nOML45bK21IZjrLP4cVfkyGYdsdvh6OJ7KPKPWGwDpi4WDdxiFiQ5bptV3cHn11YY
+         R2/ccByiK1oIAZVOw3mE9dymIO7CzllUwLBF2JbmBffIhO2NpTaaNqhGzBB+XMxejIE1
+         VDsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=uye+0uA3L0WPBl1M24A1PCgLZiPDl1bpMsz8HwyNdWs=;
-        b=TzcElpJ9uZ3YZ29DT4QndVxJSYyrLkiJLed12H/5YByM96umMo1MGmMqV3sRYoXvyb
-         V/jgQIUNUkdw7ZEeU+66u9orvFK0V/lNNtZptOWhhBsDgneYL1FcF2rYu0l402FP2kJ2
-         KA7b5G42bgmn6Rz+FhtVgQ63efaU2y9Mjmn2NDkjtdtStaNdmFsV0tCl8D8zfm3V2x8b
-         0AcbVtt1Cp+ZC9wx5Y/aUFkRV2w7xQi7u/ZAaPpQMJRqUDA4W1UJ67T+UyVA6iqVcTh/
-         rdb6V6ixUVEkjquTz1hdpNLuZaMUIcPYpe2Cn2WZvDnc4OvBWUGNElKUZNMDY2T8TFLm
-         kGmg==
-X-Gm-Message-State: ACgBeo3mu/yPBEvBZ3bofI9Bhh0dpKTEfhaztcBtGu0FRIMO/rs8tBR8
-        HZikzJSx5t66ypYeJDlIdPB2hg7VrEm1wfEphYyeMhlsrUFx
-X-Google-Smtp-Source: AA6agR5a5aKr7abdGCyQv56kEjKcgoznOlrbDZVOc4HBW2AgH4ABANVgZ0ahSXg958CKzHIO1O6JGh7cX4KbDSGEb7m6c4IrwjIw
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
+        b=DHySlCgYyvb/9cybUs03ipZBfkukqzUqNjXDiKN56c+4BwSqAzedGJIKWbqYMCCCgO
+         DHdp0m412aeyj6ZAk8N39+NJieqfo4hLtSoODYy2nL22x3Gro3y3DlicuIQji/7LKCKx
+         4pxYuhg1aJhrwQosKHXggt9Vv/I2e8ldR5GM007n8TKWqHrqdSz3sAOB8EDskaoqIj2M
+         RFUmG4OQN6CzojL72PT+WQFi0t7THnsynrH6ai5aBDdBQlgxFvD4BHpme04+I8JaJEa9
+         SEnmsdXd7vlozzr/C0AJLD65sj2kZP4Aj6I1fGh8HnyNxsxeTmQDC324252zZhMJiRT2
+         VTMw==
+X-Gm-Message-State: ACgBeo3ibz8jm0f9zNq9imczvEzBGrzQDifBwzaDtLpfbLGeCvwDxubP
+        tZHID6B2CGgoiDDbZ8X5upuIHYdhjVzxC3pP9+w=
+X-Google-Smtp-Source: AA6agR4pyZsB+xbbjgKGlrl2+RDjPAQ7wWCMdSGS3qWC1Sv629AIX++hkd3miN/bJlP1/yRRoX5bdHKo53e2l2Vr/Xc=
+X-Received: by 2002:a17:906:38f:b0:742:1f68:7058 with SMTP id
+ b15-20020a170906038f00b007421f687058mr2510502eja.743.1662561112231; Wed, 07
+ Sep 2022 07:31:52 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1048:b0:2ea:a65c:66e6 with SMTP id
- p8-20020a056e02104800b002eaa65c66e6mr24336405ilj.28.1662460709510; Tue, 06
- Sep 2022 03:38:29 -0700 (PDT)
-Date:   Tue, 06 Sep 2022 03:38:29 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000b262905e7ffcc05@google.com>
-Subject: [syzbot] INFO: trying to register non-static key in open_xa_dir
-From:   syzbot <syzbot+65fa614434c3a3ae70ae@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Received: by 2002:a54:3fc4:0:0:0:0:0 with HTTP; Wed, 7 Sep 2022 07:31:51 -0700 (PDT)
+Reply-To: lumar.casey@outlook.com
+From:   LUMAR CASEY <miriankushrat@gmail.com>
+Date:   Wed, 7 Sep 2022 16:31:51 +0200
+Message-ID: <CAO4StN23CjT73+kAZo3jW6NA7B_rVMGFz9vZYzq4Gs86AZgN6A@mail.gmail.com>
+Subject: ATTENTION/PROPOSAL
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM,UNDISC_MONEY,UPPERCASE_75_100 autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:641 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5021]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [miriankushrat[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 UPPERCASE_75_100 message body is 75-100% uppercase
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 ADVANCE_FEE_4_NEW_MONEY Advance Fee fraud and lots of money
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+ATTENTION
 
-syzbot found the following issue on:
+BUSINESS PARTNER,
 
-HEAD commit:    85413d1e802e Merge branch 'for-next/fixes' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=13aeb7bd080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=57b9bfeca947ab90
-dashboard link: https://syzkaller.appspot.com/bug?extid=65fa614434c3a3ae70ae
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+I AM LUMAR CASEY WORKING WITH AN INSURANCE FINANCIAL INSTITUTE, WITH
+MY POSITION AND PRIVILEGES I WAS ABLE TO SOURCE OUT AN OVER DUE
+PAYMENT OF 12.8 MILLION POUNDS THAT IS NOW SECURED WITH A SHIPPING
+DIPLOMATIC OUTLET.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+I AM SEEKING YOUR PARTNERSHIP TO RECEIVE THIS CONSIGNMENT AS AS MY
+PARTNER TO INVEST THIS FUND INTO A PROSPEROUS INVESTMENT VENTURE IN
+YOUR COUNTRY.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+65fa614434c3a3ae70ae@syzkaller.appspotmail.com
+I AWAIT YOUR REPLY TO ENABLE US PROCEED WITH THIS BUSINESS PARTNERSHIP TOGETHER.
 
-EXT4-fs (loop3): Cannot turn on quotas: error -22
-EXT4-fs error (device loop3): ext4_orphan_get:1419: comm syz-executor.3: bad orphan inode 2147483648
-EXT4-fs (loop3): mounted filesystem without journal. Quota mode: writeback.
-INFO: trying to register non-static key.
-The code is fine but needs lockdep annotation, or maybe
-you didn't initialize this object before use?
-turning off the locking correctness validator.
-CPU: 1 PID: 12538 Comm: syz-executor.3 Not tainted 6.0.0-rc3-syzkaller-16800-g85413d1e802e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call trace:
- dump_backtrace+0x1b0/0x1dc arch/arm64/kernel/stacktrace.c:182
- show_stack+0x2c/0x64 arch/arm64/kernel/stacktrace.c:189
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- assign_lock_key+0x134/0x140 kernel/locking/lockdep.c:979
- register_lock_class+0xc4/0x2f8 kernel/locking/lockdep.c:1292
- __lock_acquire+0xa8/0x30a4 kernel/locking/lockdep.c:4932
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
- down_write_nested+0x64/0xc4 kernel/locking/rwsem.c:1662
- inode_lock_nested include/linux/fs.h:791 [inline]
- open_xa_root fs/reiserfs/xattr.c:127 [inline]
- open_xa_dir+0x5c/0x2a8 fs/reiserfs/xattr.c:152
- xattr_lookup+0x34/0x198 fs/reiserfs/xattr.c:395
- reiserfs_xattr_get+0x8c/0x680 fs/reiserfs/xattr.c:677
- reiserfs_get_acl+0x84/0x1ac fs/reiserfs/xattr_acl.c:214
- get_acl+0x104/0x330 fs/posix_acl.c:152
- check_acl+0x40/0x168 fs/namei.c:306
- acl_permission_check fs/namei.c:351 [inline]
- generic_permission+0x270/0x32c fs/namei.c:404
- reiserfs_permission+0x4c/0x6c fs/reiserfs/xattr.c:954
- do_inode_permission fs/namei.c:458 [inline]
- inode_permission+0x128/0x244 fs/namei.c:525
- may_open+0x1e4/0x2bc fs/namei.c:3185
- do_open fs/namei.c:3555 [inline]
- path_openat+0xdd0/0x11c4 fs/namei.c:3691
- do_filp_open+0xdc/0x1b8 fs/namei.c:3718
- do_sys_openat2+0xb8/0x22c fs/open.c:1311
- do_sys_open fs/open.c:1327 [inline]
- __do_sys_openat fs/open.c:1343 [inline]
- __se_sys_openat fs/open.c:1338 [inline]
- __arm64_sys_openat+0xb0/0xe0 fs/open.c:1338
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
- el0t_64_sync+0x18c/0x190
-Unable to handle kernel paging request at virtual address ffff7fff437161a0
-Mem abort info:
-  ESR = 0x0000000096000004
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x04: level 0 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000004
-  CM = 0, WnR = 0
-swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000001c5736000
-[ffff7fff437161a0] pgd=0000000000000000, p4d=0000000000000000
-Internal error: Oops: 96000004 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 12538 Comm: syz-executor.3 Not tainted 6.0.0-rc3-syzkaller-16800-g85413d1e802e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : decode_cpu kernel/locking/osq_lock.c:34 [inline]
-pc : osq_lock+0x60/0x1cc kernel/locking/osq_lock.c:111
-lr : osq_lock+0x38/0x1cc kernel/locking/osq_lock.c:94
-sp : ffff8000134eb6e0
-x29: ffff8000134eb6e0 x28: 0000000000000030 x27: ffff0000e96a4270
-x26: 0000000000000000 x25: 0000000000000000 x24: ffff0000fc36b500
-x23: 0000000000000000 x22: ffff80000d2e1a00 x21: ffff80000d37cf28
-x20: ffff0001fefefa00 x19: ffff0000f7ce6d50 x18: 0000000000000000
-x17: 6e69676e45206574 x16: 0000000000000001 x15: 0000000000000000
-x14: 0000000000000000 x13: 205d383335323154 x12: 5b5d313738343532
-x11: ff808000095ecd98 x10: 0000000000000000 x9 : 0000000000000002
-x8 : 00000000e6c7324f x7 : 545b5d3137383435 x6 : ffff800008197c80
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000001 x1 : ffff80000ce74037 x0 : 0000000000000001
-Call trace:
- decode_cpu kernel/locking/osq_lock.c:32 [inline]
- osq_lock+0x60/0x1cc kernel/locking/osq_lock.c:111
- rwsem_optimistic_spin+0x38/0x1f4 kernel/locking/rwsem.c:827
- rwsem_down_write_slowpath+0xb0/0x520 kernel/locking/rwsem.c:1114
- __down_write_common kernel/locking/rwsem.c:1297 [inline]
- __down_write kernel/locking/rwsem.c:1306 [inline]
- down_write_nested+0x90/0xc4 kernel/locking/rwsem.c:1663
- inode_lock_nested include/linux/fs.h:791 [inline]
- open_xa_root fs/reiserfs/xattr.c:127 [inline]
- open_xa_dir+0x5c/0x2a8 fs/reiserfs/xattr.c:152
- xattr_lookup+0x34/0x198 fs/reiserfs/xattr.c:395
- reiserfs_xattr_get+0x8c/0x680 fs/reiserfs/xattr.c:677
- reiserfs_get_acl+0x84/0x1ac fs/reiserfs/xattr_acl.c:214
- get_acl+0x104/0x330 fs/posix_acl.c:152
- check_acl+0x40/0x168 fs/namei.c:306
- acl_permission_check fs/namei.c:351 [inline]
- generic_permission+0x270/0x32c fs/namei.c:404
- reiserfs_permission+0x4c/0x6c fs/reiserfs/xattr.c:954
- do_inode_permission fs/namei.c:458 [inline]
- inode_permission+0x128/0x244 fs/namei.c:525
- may_open+0x1e4/0x2bc fs/namei.c:3185
- do_open fs/namei.c:3555 [inline]
- path_openat+0xdd0/0x11c4 fs/namei.c:3691
- do_filp_open+0xdc/0x1b8 fs/namei.c:3718
- do_sys_openat2+0xb8/0x22c fs/open.c:1311
- do_sys_open fs/open.c:1327 [inline]
- __do_sys_openat fs/open.c:1343 [inline]
- __se_sys_openat fs/open.c:1338 [inline]
- __arm64_sys_openat+0xb0/0xe0 fs/open.c:1338
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
- el0t_64_sync+0x18c/0x190
-Code: d503201f d503201f 340005e8 51000508 (f868daa8) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	d503201f 	nop
-   4:	d503201f 	nop
-   8:	340005e8 	cbz	w8, 0xc4
-   c:	51000508 	sub	w8, w8, #0x1
-* 10:	f868daa8 	ldr	x8, [x21, w8, sxtw #3] <-- trapping instruction
+REGARDS,
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+LUMAR CASEY
