@@ -2,45 +2,45 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310AB5F4627
-	for <lists+reiserfs-devel@lfdr.de>; Tue,  4 Oct 2022 17:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D902F5F9725
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 10 Oct 2022 05:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiJDPGz (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 4 Oct 2022 11:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
+        id S230390AbiJJDJn (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 9 Oct 2022 23:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiJDPGn (ORCPT
+        with ESMTP id S230252AbiJJDJl (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 4 Oct 2022 11:06:43 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960A6642C0
-        for <reiserfs-devel@vger.kernel.org>; Tue,  4 Oct 2022 08:06:35 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id l18-20020a056e02067200b002f6af976994so11152356ilt.16
-        for <reiserfs-devel@vger.kernel.org>; Tue, 04 Oct 2022 08:06:35 -0700 (PDT)
+        Sun, 9 Oct 2022 23:09:41 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5217ED8F
+        for <reiserfs-devel@vger.kernel.org>; Sun,  9 Oct 2022 20:09:38 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id u2-20020a056e021a4200b002f9ecfa353cso8008135ilv.20
+        for <reiserfs-devel@vger.kernel.org>; Sun, 09 Oct 2022 20:09:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=4VLRnsgvpZOtfXxDmrVaOMox+pkZCpeI+RKB7416ubw=;
-        b=sKFolU1TglE5ChUtbkIV5v42Czk3yQJ9dPOQ39b2PfC59hKzZAGSL6bECjyt6bd2fd
-         WZckeCTpjAPDbC046rhieHp0Wxqyazgm7mH2hetAAP4brK5UNcu1OhPelId6AHZ4hQX3
-         dVZ9btjKTw0PBw7a2hvF5BLEOOjuZ/IC/AkbYUFqCRtTcNIA/BLOup7ViYdCf7mwIUx1
-         LkHlpzHsTHN8RnIhsrlqbbr/2SgLlzbO/1n2w2eU4YCMiZy1thnufkTKj7c6ukqV0nxx
-         sxxxC+otTnV8Y510SWeXq0PwwE00R9xZhVEeHhPtP4/N9Dar9A+JWWuXLwv0yUBxpeQF
-         frCw==
-X-Gm-Message-State: ACrzQf3BaAw7cte4omFwrgJOZ4OSahZuN7gtaxD31rVJ8lJlTyjrEYDK
-        6/13iM5l0k3Eq1O1qwryvFFFjeM/fUsgckDi+fcN1UOpBDDf
-X-Google-Smtp-Source: AMsMyM5ol8Md0DeCycQuYQbLo4T+/nXrO1HJZfz4DXP23zDAiBh6AkfLN7qwD+vu1U9VE48yFVbH/gMgSsMwHLw5YrC11yKV9J/X
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Civfcs2JBg/Mj54wvoRvnaalPboaswdzomoVTd6Wq2Q=;
+        b=zmbOgJtHgfjrGfhBDzMvOdpveDodr3I7+KmnYdPMpntUspKm4MZq1gN2OY/b0Oy0Y0
+         2msKIXn1U4tZzQuj283GX1E5tjzs03jgsnqffLM7y7kl7xfzOHz/PLCozdxILrPCaHdm
+         SypxsHhSJxAGnn47D8Lpw19AJmHQ9y89MZnQQJG97Ye7PSc4oRj6yQfmZLO/gbQYpRKN
+         gnDHt5rpdFfXuLnmh3yIHUgguoq+GJj11rUTJ9vr5L0cg9+p+uA3WfbQ7j2iivu/s2hN
+         krLphlE0/lIIPGduHVbDxh6gfL624F74UKc23TAI6xJfptZ35CtgkuEf3mCyx0vJxqVU
+         aHsQ==
+X-Gm-Message-State: ACrzQf0HppeZslMSiAqYTqnATUgWhg8K67OThWjr01ECMbnXqdvsYb+m
+        tX1px73S29iAFM7XmRaWvuxGDNPUZTVfyL684PZznNgjiqjp
+X-Google-Smtp-Source: AMsMyM6Y+iU7z6qmvkmWt08GQ2856RDu6Esz0+kSCokFliynaNEeGALD0K+p777iuLEaCasnYspFvbiBJTjC0N3iPPiFbfhzF/gR
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:19ce:b0:2f1:68a6:3bec with SMTP id
- r14-20020a056e0219ce00b002f168a63becmr12120972ill.78.1664895993957; Tue, 04
- Oct 2022 08:06:33 -0700 (PDT)
-Date:   Tue, 04 Oct 2022 08:06:33 -0700
+X-Received: by 2002:a05:6602:2c94:b0:6a1:d9ff:6c8a with SMTP id
+ i20-20020a0566022c9400b006a1d9ff6c8amr8235882iow.117.1665371377697; Sun, 09
+ Oct 2022 20:09:37 -0700 (PDT)
+Date:   Sun, 09 Oct 2022 20:09:37 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004ed3c905ea36cec2@google.com>
-Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in reiserfs_set_acl
-From:   syzbot <syzbot+27d15e986992eff93cd9@syzkaller.appspotmail.com>
+Message-ID: <0000000000006308a805eaa57d87@google.com>
+Subject: [syzbot] possible deadlock in chown_common
+From:   syzbot <syzbot+3abaeed5039cc1c49c7c@syzkaller.appspotmail.com>
 To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
@@ -57,87 +57,146 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=17ec92cc880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=aae2d21e7dd80684
-dashboard link: https://syzkaller.appspot.com/bug?extid=27d15e986992eff93cd9
+HEAD commit:    2bca25eaeba6 Merge tag 'spi-v6.1' of git://git.kernel.org/..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=169d7034880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9df203be43a870b5
+dashboard link: https://syzkaller.appspot.com/bug?extid=3abaeed5039cc1c49c7c
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-
-Unfortunately, I don't have any reproducer for this issue yet.
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1539e7b8880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c6cb32880000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/11078f50b80b/disk-bbed346d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/398e5f1e6c84/vmlinux-bbed346d.xz
+disk image: https://storage.googleapis.com/syzbot-assets/9885e6765755/disk-2bca25ea.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/6e78c91286aa/vmlinux-2bca25ea.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/a0aa130c8e62/mount_0.gz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+27d15e986992eff93cd9@syzkaller.appspotmail.com
+Reported-by: syzbot+3abaeed5039cc1c49c7c@syzkaller.appspotmail.com
 
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000068
-Mem abort info:
-  ESR = 0x0000000096000006
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000006
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=0000000131b9c000
-[0000000000000068] pgd=080000013f9b8003, p4d=080000013f9b8003, pud=080000012eae9003, pmd=0000000000000000
-Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 2588 Comm: syz-executor.3 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : d_really_is_negative include/linux/dcache.h:465 [inline]
-pc : reiserfs_xattr_jcreate_nblocks fs/reiserfs/xattr.h:79 [inline]
-pc : reiserfs_set_acl+0xd0/0x2c0 fs/reiserfs/xattr_acl.c:36
-lr : reiserfs_xattr_jcreate_nblocks fs/reiserfs/xattr.h:78 [inline]
-lr : reiserfs_set_acl+0xc0/0x2c0 fs/reiserfs/xattr_acl.c:36
-sp : ffff80001688b990
-x29: ffff80001688b9e0 x28: ffff0000c8cdfc00 x27: 0000000000000002
-x26: 0000000000000000 x25: 0000000000000036 x24: 000000000000002b
-x23: 0000000000000000 x22: ffff0000eb2ee000 x21: ffff0000ef1d5380
-x20: 0000000000004000 x19: ffff0000ed8f8de0 x18: 00000000000000c0
-x17: ffff80000dd0b198 x16: 0000000000000000 x15: 0000000000000000
-x14: 0000000000000002 x13: 0000000000000020 x12: 0000000000040000
-x11: 00000000000042eb x10: 000000000000006c x9 : 00000000000001c0
-x8 : 0000000000000000 x7 : 0000000000000000 x6 : 000000000000003f
-x5 : 0000000000000c40 x4 : 0000000000000080 x3 : 0000000000004000
-x2 : ffff0000ef1d5380 x1 : 0000000000000000 x0 : 0000000000000000
-Call trace:
- reiserfs_xattr_jcreate_nblocks fs/reiserfs/xattr.h:78 [inline]
- reiserfs_set_acl+0xd0/0x2c0 fs/reiserfs/xattr_acl.c:36
- set_posix_acl fs/posix_acl.c:1015 [inline]
- posix_acl_xattr_set+0x1dc/0x23c fs/posix_acl.c:1034
- __vfs_setxattr+0x250/0x260 fs/xattr.c:182
- __vfs_setxattr_noperm+0xcc/0x320 fs/xattr.c:216
- __vfs_setxattr_locked+0x16c/0x194 fs/xattr.c:277
- vfs_setxattr+0x174/0x280 fs/xattr.c:313
- do_setxattr fs/xattr.c:600 [inline]
- setxattr fs/xattr.c:623 [inline]
- path_setxattr+0x354/0x414 fs/xattr.c:642
- __do_sys_lsetxattr fs/xattr.c:665 [inline]
- __se_sys_lsetxattr fs/xattr.c:661 [inline]
- __arm64_sys_lsetxattr+0x2c/0x40 fs/xattr.c:661
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-Code: f942d388 f10002ff 52803809 52800d8a (f9403508) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	f942d388 	ldr	x8, [x28, #1440]
-   4:	f10002ff 	cmp	x23, #0x0
-   8:	52803809 	mov	w9, #0x1c0                 	// #448
-   c:	52800d8a 	mov	w10, #0x6c                  	// #108
-* 10:	f9403508 	ldr	x8, [x8, #104] <-- trapping instruction
+REISERFS (device loop0): checking transaction log (loop0)
+REISERFS (device loop0): Using rupasov hash to sort names
+REISERFS (device loop0): Created .reiserfs_priv - reserved for xattr storage.
+======================================================
+WARNING: possible circular locking dependency detected
+6.0.0-syzkaller-03015-g2bca25eaeba6 #0 Not tainted
+------------------------------------------------------
+syz-executor428/3608 is trying to acquire lock:
+ffff8880704302e0 (&type->i_mutex_dir_key#6){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ffff8880704302e0 (&type->i_mutex_dir_key#6){+.+.}-{3:3}, at: chown_common+0x414/0x8f0 fs/open.c:729
+
+but task is already holding lock:
+ffff888020438460 (sb_writers#9){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:393
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (sb_writers#9){.+.+}-{0:0}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5666
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1826 [inline]
+       sb_start_write+0x4d/0x1a0 include/linux/fs.h:1901
+       mnt_want_write_file+0x5a/0x1f0 fs/namespace.c:437
+       reiserfs_ioctl+0x16e/0x340 fs/reiserfs/ioctl.c:103
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #1 (&sbi->lock){+.+.}-{3:3}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5666
+       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
+       reiserfs_lookup+0x147/0x490 fs/reiserfs/namei.c:364
+       __lookup_slow+0x266/0x3a0 fs/namei.c:1685
+       lookup_one_len+0x430/0x690 fs/namei.c:2711
+       reiserfs_lookup_privroot+0x85/0x1e0 fs/reiserfs/xattr.c:973
+       reiserfs_fill_super+0x2071/0x24a0 fs/reiserfs/super.c:2176
+       mount_bdev+0x26c/0x3a0 fs/super.c:1400
+       legacy_get_tree+0xea/0x180 fs/fs_context.c:610
+       vfs_get_tree+0x88/0x270 fs/super.c:1530
+       do_new_mount+0x289/0xad0 fs/namespace.c:3040
+       do_mount fs/namespace.c:3383 [inline]
+       __do_sys_mount fs/namespace.c:3591 [inline]
+       __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&type->i_mutex_dir_key#6){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3095 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+       validate_chain+0x18c1/0x6bd0 kernel/locking/lockdep.c:3829
+       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5053
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5666
+       down_write+0x95/0x170 kernel/locking/rwsem.c:1552
+       inode_lock include/linux/fs.h:756 [inline]
+       chown_common+0x414/0x8f0 fs/open.c:729
+       do_fchownat+0x165/0x240 fs/open.c:767
+       __do_sys_lchown fs/open.c:792 [inline]
+       __se_sys_lchown fs/open.c:790 [inline]
+       __x64_sys_lchown+0x81/0x90 fs/open.c:790
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+Chain exists of:
+  &type->i_mutex_dir_key#6 --> &sbi->lock --> sb_writers#9
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(sb_writers#9);
+                               lock(&sbi->lock);
+                               lock(sb_writers#9);
+  lock(&type->i_mutex_dir_key#6);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor428/3608:
+ #0: ffff888020438460 (sb_writers#9){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:393
+
+stack backtrace:
+CPU: 0 PID: 3608 Comm: syz-executor428 Not tainted 6.0.0-syzkaller-03015-g2bca25eaeba6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2175
+ check_prev_add kernel/locking/lockdep.c:3095 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+ validate_chain+0x18c1/0x6bd0 kernel/locking/lockdep.c:3829
+ __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5053
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5666
+ down_write+0x95/0x170 kernel/locking/rwsem.c:1552
+ inode_lock include/linux/fs.h:756 [inline]
+ chown_common+0x414/0x8f0 fs/open.c:729
+ do_fchownat+0x165/0x240 fs/open.c:767
+ __do_sys_lchown fs/open.c:792 [inline]
+ __se_sys_lchown fs/open.c:790 [inline]
+ __x64_sys_lchown+0x81/0x90 fs/open.c:790
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f7b93991899
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffcd35199f8 EFLAGS: 00000246 ORIG_RAX: 000000000000005e
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f7b93991899
+RDX: 0000000000000000 RSI: 000000000000ee01 RDI: 0000000020000080
+RBP: 0000000000000000 R08: 00007f7b939ffec0 R09: 00007f7b939ffec0
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffcd3519a20
+R13: 0000000000000000 R14: 431bde82d7b634db R15: 0000000000000000
+ </TASK>
 
 
 ---
@@ -147,3 +206,5 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
