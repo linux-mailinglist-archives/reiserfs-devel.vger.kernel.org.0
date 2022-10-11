@@ -2,45 +2,45 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D902F5F9725
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 10 Oct 2022 05:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 488BC5FACE7
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 11 Oct 2022 08:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiJJDJn (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sun, 9 Oct 2022 23:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
+        id S229695AbiJKGfm (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 11 Oct 2022 02:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbiJJDJl (ORCPT
+        with ESMTP id S229541AbiJKGfl (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sun, 9 Oct 2022 23:09:41 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5217ED8F
-        for <reiserfs-devel@vger.kernel.org>; Sun,  9 Oct 2022 20:09:38 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id u2-20020a056e021a4200b002f9ecfa353cso8008135ilv.20
-        for <reiserfs-devel@vger.kernel.org>; Sun, 09 Oct 2022 20:09:38 -0700 (PDT)
+        Tue, 11 Oct 2022 02:35:41 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF1B6290E
+        for <reiserfs-devel@vger.kernel.org>; Mon, 10 Oct 2022 23:35:39 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id e15-20020a5d8acf000000b006a3ed059e49so8707479iot.14
+        for <reiserfs-devel@vger.kernel.org>; Mon, 10 Oct 2022 23:35:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Civfcs2JBg/Mj54wvoRvnaalPboaswdzomoVTd6Wq2Q=;
-        b=zmbOgJtHgfjrGfhBDzMvOdpveDodr3I7+KmnYdPMpntUspKm4MZq1gN2OY/b0Oy0Y0
-         2msKIXn1U4tZzQuj283GX1E5tjzs03jgsnqffLM7y7kl7xfzOHz/PLCozdxILrPCaHdm
-         SypxsHhSJxAGnn47D8Lpw19AJmHQ9y89MZnQQJG97Ye7PSc4oRj6yQfmZLO/gbQYpRKN
-         gnDHt5rpdFfXuLnmh3yIHUgguoq+GJj11rUTJ9vr5L0cg9+p+uA3WfbQ7j2iivu/s2hN
-         krLphlE0/lIIPGduHVbDxh6gfL624F74UKc23TAI6xJfptZ35CtgkuEf3mCyx0vJxqVU
-         aHsQ==
-X-Gm-Message-State: ACrzQf0HppeZslMSiAqYTqnATUgWhg8K67OThWjr01ECMbnXqdvsYb+m
-        tX1px73S29iAFM7XmRaWvuxGDNPUZTVfyL684PZznNgjiqjp
-X-Google-Smtp-Source: AMsMyM6Y+iU7z6qmvkmWt08GQ2856RDu6Esz0+kSCokFliynaNEeGALD0K+p777iuLEaCasnYspFvbiBJTjC0N3iPPiFbfhzF/gR
+        bh=UbiXEdBRujkz0+9tjdy23X2wJxWkJWVMFAQgXyUcr2k=;
+        b=v87jxoSVbxMquNxjlytN66tI8dMxZCW7wIh7CjKChWzakhWi5F6sgle5lxraqmY01t
+         VRuj637XJouuF1e88Rk68vdgT49MiGN4RvLSDdKB1BtMTAZRo8ZQ8rhXuZPk6ObW7Xgj
+         Q4be+JSbTk31sFm6xt6OU4Nf2uMyTVj8oEGBG7PypfU16LH2BinvuG6e+uMaxrL/M+3d
+         y+B46NPEImu22EWF0DwQ2wfnf+uoOnwAtZ5ZFV1wTybtAKRWjAIhnZFsdlmEzPzKYL1u
+         ihEwchcRJwOnG8+qoe9C9YtzwXI0l4/9O1QqzJbe/yGryOp+qqHXCbvTjX87Twp926tt
+         N8SA==
+X-Gm-Message-State: ACrzQf1v0euNTMbJpK5VID+k2O5LuI5HZoEIjJgg1SKks2HkTWjm0vDD
+        GgrntT9RfSezFPRyNzYKUIDiQPl/ulDZd5bhx+RjIrd1adxu
+X-Google-Smtp-Source: AMsMyM4x3m/c5mhm7Kgr16uESQ5gjrJ5VzglByktq+xcSUsE/5tYIi+ZWR8iPDsTxpowJUeIRBLtg1KQyku0UqPzVRzMJvrnLWRw
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2c94:b0:6a1:d9ff:6c8a with SMTP id
- i20-20020a0566022c9400b006a1d9ff6c8amr8235882iow.117.1665371377697; Sun, 09
- Oct 2022 20:09:37 -0700 (PDT)
-Date:   Sun, 09 Oct 2022 20:09:37 -0700
+X-Received: by 2002:a6b:6709:0:b0:6bc:269e:e81a with SMTP id
+ b9-20020a6b6709000000b006bc269ee81amr4600601ioc.174.1665470138503; Mon, 10
+ Oct 2022 23:35:38 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 23:35:38 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006308a805eaa57d87@google.com>
-Subject: [syzbot] possible deadlock in chown_common
-From:   syzbot <syzbot+3abaeed5039cc1c49c7c@syzkaller.appspotmail.com>
+Message-ID: <000000000000fd56c405eabc7b6d@google.com>
+Subject: [syzbot] possible deadlock in path_openat (2)
+From:   syzbot <syzbot+a844a888fbc0ba4829ce@syzkaller.appspotmail.com>
 To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
@@ -57,36 +57,35 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    2bca25eaeba6 Merge tag 'spi-v6.1' of git://git.kernel.org/..
+HEAD commit:    833477fce7a1 Merge tag 'sound-6.1-rc1' of git://git.kernel..
 git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=169d7034880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9df203be43a870b5
-dashboard link: https://syzkaller.appspot.com/bug?extid=3abaeed5039cc1c49c7c
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=14ea9e2a880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=dd3623e135f4c106
+dashboard link: https://syzkaller.appspot.com/bug?extid=a844a888fbc0ba4829ce
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1539e7b8880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c6cb32880000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10dfb81a880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15a68f24880000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/9885e6765755/disk-2bca25ea.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/6e78c91286aa/vmlinux-2bca25ea.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/a0aa130c8e62/mount_0.gz
+disk image: https://storage.googleapis.com/syzbot-assets/7c58f480421f/disk-833477fc.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/8a50ac7bd40b/vmlinux-833477fc.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/a95d12af3a6f/mount_0.gz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3abaeed5039cc1c49c7c@syzkaller.appspotmail.com
+Reported-by: syzbot+a844a888fbc0ba4829ce@syzkaller.appspotmail.com
 
-REISERFS (device loop0): checking transaction log (loop0)
-REISERFS (device loop0): Using rupasov hash to sort names
 REISERFS (device loop0): Created .reiserfs_priv - reserved for xattr storage.
 ======================================================
 WARNING: possible circular locking dependency detected
-6.0.0-syzkaller-03015-g2bca25eaeba6 #0 Not tainted
+6.0.0-syzkaller-05118-g833477fce7a1 #0 Not tainted
 ------------------------------------------------------
-syz-executor428/3608 is trying to acquire lock:
-ffff8880704302e0 (&type->i_mutex_dir_key#6){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
-ffff8880704302e0 (&type->i_mutex_dir_key#6){+.+.}-{3:3}, at: chown_common+0x414/0x8f0 fs/open.c:729
+syz-executor874/3610 is trying to acquire lock:
+ffff888073d582e0 (&type->i_mutex_dir_key#6){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ffff888073d582e0 (&type->i_mutex_dir_key#6){+.+.}-{3:3}, at: open_last_lookups fs/namei.c:3478 [inline]
+ffff888073d582e0 (&type->i_mutex_dir_key#6){+.+.}-{3:3}, at: path_openat+0x7b9/0x2df0 fs/namei.c:3688
 
 but task is already holding lock:
-ffff888020438460 (sb_writers#9){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:393
+ffff888075052460 (sb_writers#9){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:393
 
 which lock already depends on the new lock.
 
@@ -137,11 +136,14 @@ the existing dependency chain (in reverse order) is:
        lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5666
        down_write+0x95/0x170 kernel/locking/rwsem.c:1552
        inode_lock include/linux/fs.h:756 [inline]
-       chown_common+0x414/0x8f0 fs/open.c:729
-       do_fchownat+0x165/0x240 fs/open.c:767
-       __do_sys_lchown fs/open.c:792 [inline]
-       __se_sys_lchown fs/open.c:790 [inline]
-       __x64_sys_lchown+0x81/0x90 fs/open.c:790
+       open_last_lookups fs/namei.c:3478 [inline]
+       path_openat+0x7b9/0x2df0 fs/namei.c:3688
+       do_filp_open+0x264/0x4f0 fs/namei.c:3718
+       do_sys_openat2+0x124/0x4e0 fs/open.c:1313
+       do_sys_open fs/open.c:1329 [inline]
+       __do_sys_creat fs/open.c:1405 [inline]
+       __se_sys_creat fs/open.c:1399 [inline]
+       __x64_sys_creat+0x11f/0x160 fs/open.c:1399
        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
        do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
        entry_SYSCALL_64_after_hwframe+0x63/0xcd
@@ -162,11 +164,11 @@ Chain exists of:
 
  *** DEADLOCK ***
 
-1 lock held by syz-executor428/3608:
- #0: ffff888020438460 (sb_writers#9){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:393
+1 lock held by syz-executor874/3610:
+ #0: ffff888075052460 (sb_writers#9){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:393
 
 stack backtrace:
-CPU: 0 PID: 3608 Comm: syz-executor428 Not tainted 6.0.0-syzkaller-03015-g2bca25eaeba6 #0
+CPU: 0 PID: 3610 Comm: syz-executor874 Not tainted 6.0.0-syzkaller-05118-g833477fce7a1 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
 Call Trace:
  <TASK>
@@ -180,21 +182,24 @@ Call Trace:
  lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5666
  down_write+0x95/0x170 kernel/locking/rwsem.c:1552
  inode_lock include/linux/fs.h:756 [inline]
- chown_common+0x414/0x8f0 fs/open.c:729
- do_fchownat+0x165/0x240 fs/open.c:767
- __do_sys_lchown fs/open.c:792 [inline]
- __se_sys_lchown fs/open.c:790 [inline]
- __x64_sys_lchown+0x81/0x90 fs/open.c:790
+ open_last_lookups fs/namei.c:3478 [inline]
+ path_openat+0x7b9/0x2df0 fs/namei.c:3688
+ do_filp_open+0x264/0x4f0 fs/namei.c:3718
+ do_sys_openat2+0x124/0x4e0 fs/open.c:1313
+ do_sys_open fs/open.c:1329 [inline]
+ __do_sys_creat fs/open.c:1405 [inline]
+ __se_sys_creat fs/open.c:1399 [inline]
+ __x64_sys_creat+0x11f/0x160 fs/open.c:1399
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f7b93991899
+RIP: 0033:0x7f4f0b64b899
 Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcd35199f8 EFLAGS: 00000246 ORIG_RAX: 000000000000005e
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f7b93991899
-RDX: 0000000000000000 RSI: 000000000000ee01 RDI: 0000000020000080
-RBP: 0000000000000000 R08: 00007f7b939ffec0 R09: 00007f7b939ffec0
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffcd3519a20
+RSP: 002b:00007fffdc5eba48 EFLAGS: 00000246 ORIG_RAX: 0000000000000055
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f4f0b64b899
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000040
+RBP: 0000000000000000 R08: 00007f4f0b6b9ec0 R09: 00007f4f0b6b9ec0
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fffdc5eba70
 R13: 0000000000000000 R14: 431bde82d7b634db R15: 0000000000000000
  </TASK>
 
