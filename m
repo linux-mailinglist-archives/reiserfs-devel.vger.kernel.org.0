@@ -2,51 +2,52 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4085A5FD5D6
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 13 Oct 2022 10:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A33995FFBC2
+	for <lists+reiserfs-devel@lfdr.de>; Sat, 15 Oct 2022 21:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiJMIAo (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 13 Oct 2022 04:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42110 "EHLO
+        id S229700AbiJOTWp (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sat, 15 Oct 2022 15:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiJMIAk (ORCPT
+        with ESMTP id S229635AbiJOTWo (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 13 Oct 2022 04:00:40 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D6B7EFF4
-        for <reiserfs-devel@vger.kernel.org>; Thu, 13 Oct 2022 01:00:38 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id h10-20020a056e021d8a00b002f99580de6cso938212ila.5
-        for <reiserfs-devel@vger.kernel.org>; Thu, 13 Oct 2022 01:00:38 -0700 (PDT)
+        Sat, 15 Oct 2022 15:22:44 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C20348C9C
+        for <reiserfs-devel@vger.kernel.org>; Sat, 15 Oct 2022 12:22:43 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id 23-20020a5d9c57000000b006bbd963e8adso4944265iof.19
+        for <reiserfs-devel@vger.kernel.org>; Sat, 15 Oct 2022 12:22:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KfNmjLJ2nCCl/6BP47MdEd5Fupmyoh7/veDA+PeHAuY=;
-        b=bzs62XQ3czSEHD6Z1wceKlGAp2x0CKcUkBOzeQ+4dCWYZVEGIyTIKfrEOnnTc0zDRl
-         cjwtGD1GDh0uVRYupYDcfDiYfRuKHIr/xnsbAjitpfefQrzqOvc/qZI51G4inbUxSEwo
-         n4yMQ/tpqSJKVMFCJJDEvSOYk6QXW+6TJ13ECjchqhub+25+oW4gcP8yanp30nQJOftK
-         F3rys99Y5jG6uVhX3tqaig9zZhqToAOHMjOXEGq2/oHGmCAF7QQEcMGQvYHBH5nVSutO
-         i/z6VjTDfhKNhRCmPLgxfPCnbCfMa0dmhbrHsgXWcj0IBcSvkHes0GKKorH2YHwuTjFn
-         lebg==
-X-Gm-Message-State: ACrzQf0kjUbv1sl2+pGU1KpLBC1Xo0/L/q2vQN9p6AIThon/XHaZLDDy
-        EblR9tr12fu/WthzSDfNCpf7m2zfh4EHPtzQv8vahJrpM/vH
-X-Google-Smtp-Source: AMsMyM6rzn6LRvyL52Ijsefu63bbuMoHtUTK58VlD+Rju+fKv8WruYItV0HMDeeGg0ErRJRc4NM9YE7cP9C1IyfJECe1xFuVu8p3
+        bh=4ZABjE9MIeCEWNGCRmpJHEG3TaBWzpt+2u4rcgQ+OFg=;
+        b=mMlRCwL91k3yQO93lmEM1buvPa6H7kQC79+p66ut4ydFkH+42BWdHgiAFqAxgy2Hv1
+         FPemRl0qT8VdRu2xm26bJP2lpB+naDJfQnEYbaYh3yRlOVkNL9PWd58oNMZVXRK+xFGL
+         Qv3OiGPxMxgiVd90JyXBfsQCwpdEgQWkzqdzOfYqClQgV1NAeU0Vf9rm/vmIZ/T5MuYZ
+         kmvny7OpZouwTpLUPTzsKM5ncmUWqJEP78jfCSjENAWOqA36MYOTsIOGzvEoE3ebLS9r
+         Qni3C1wi3bhoZ56E2Fn8NGPHzMb4pzQyRWBe93RZH1LQNYgj5mZ9bz3mV/adghHzQcEO
+         foLg==
+X-Gm-Message-State: ACrzQf1R6Y9QSO9b15RoWSLi7RpdCv66FiC2pT6DKcXLJ4/MfEbqYOMg
+        pthv90ZfpxfI094bvw6is8TguD4NOZSihdWH7bJWnQxoFVdi
+X-Google-Smtp-Source: AMsMyM4xlWpeXvVPmaD8DGvwRcSScV6XT3YtHz00KOp8wx+8/jGj/pGbkpSR12sZl6aB7L/xZ6DqWa/pXFjMIMYkVDc2gt1DpsZM
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2ac8:b0:6bc:c044:ba63 with SMTP id
- m8-20020a0566022ac800b006bcc044ba63mr2113127iov.142.1665648038106; Thu, 13
- Oct 2022 01:00:38 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 01:00:38 -0700
+X-Received: by 2002:a92:c54d:0:b0:2fb:5ecf:8f2 with SMTP id
+ a13-20020a92c54d000000b002fb5ecf08f2mr1769078ilj.270.1665861762352; Sat, 15
+ Oct 2022 12:22:42 -0700 (PDT)
+Date:   Sat, 15 Oct 2022 12:22:42 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a1dfaf05eae5e72c@google.com>
-Subject: [syzbot] general protection fault in mutex_optimistic_spin
-From:   syzbot <syzbot+f587f14d28021bea6455@syzkaller.appspotmail.com>
+Message-ID: <000000000000970d2605eb17aaf9@google.com>
+Subject: [syzbot] WARNING in reiserfs_ioctl
+From:   syzbot <syzbot+9411504628309b2b748e@syzkaller.appspotmail.com>
 To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,101 +58,69 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=127fc1a4880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c29b6436e994d72e
-dashboard link: https://syzkaller.appspot.com/bug?extid=f587f14d28021bea6455
+HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=157831e6880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
+dashboard link: https://syzkaller.appspot.com/bug?extid=9411504628309b2b748e
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c8f5131ab57d/disk-55be6084.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/77167f226f35/vmlinux-55be6084.xz
+disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f587f14d28021bea6455@syzkaller.appspotmail.com
+Reported-by: syzbot+9411504628309b2b748e@syzkaller.appspotmail.com
 
-loop0: detected capacity change from 0 to 64
-general protection fault, probably for non-canonical address 0xe0017c0000000006: 0000 [#1] PREEMPT SMP KASAN
-KASAN: maybe wild-memory-access in range [0x000c000000000030-0x000c000000000037]
-CPU: 1 PID: 13181 Comm: syz-executor.0 Not tainted 6.0.0-syzkaller-09589-g55be6084c8e0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:owner_on_cpu include/linux/sched.h:2283 [inline]
-RIP: 0010:mutex_can_spin_on_owner kernel/locking/mutex.c:409 [inline]
-RIP: 0010:mutex_optimistic_spin+0x12d/0x2d0 kernel/locking/mutex.c:452
-Code: 89 d8 48 c1 e8 03 42 80 3c 28 00 74 08 48 89 df e8 08 99 75 00 4c 8b 23 49 83 e4 f8 74 72 49 8d 6c 24 34 48 89 e8 48 c1 e8 03 <42> 8a 04 28 84 c0 0f 85 4f 01 00 00 83 7d 00 00 74 78 49 83 c4 14
-RSP: 0018:ffffc90004bf77e8 EFLAGS: 00010207
-RAX: 0001800000000006 RBX: ffff88801dc69228 RCX: ffffffff81676b52
-RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffff88801dc69228
-RBP: 000c000000000034 R08: dffffc0000000000 R09: ffffed1003b8d246
-R10: ffffed1003b8d246 R11: 1ffff11003b8d245 R12: 000c000000000000
-R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007fed86ab8700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fed85913e09 CR3: 000000007cedc000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __mutex_lock_common+0x210/0x26c0 kernel/locking/mutex.c:607
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
- reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
- reiserfs_readdir_inode+0x170/0x1470 fs/reiserfs/dir.c:79
- iterate_dir+0x257/0x5f0
- __do_sys_getdents fs/readdir.c:286 [inline]
- __se_sys_getdents+0x1e9/0x4a0 fs/readdir.c:271
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fed8588b5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fed86ab8168 EFLAGS: 00000246 ORIG_RAX: 000000000000004e
-RAX: ffffffffffffffda RBX: 00007fed859abf80 RCX: 00007fed8588b5a9
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: 00007fed858e6580 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd3696e99f R14: 00007fed86ab8300 R15: 0000000000022000
- </TASK>
+loop0: detected capacity change from 0 to 7
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+WARNING: CPU: 0 PID: 8335 at kernel/locking/mutex.c:582 __mutex_lock_common+0x4c4/0xca8 kernel/locking/mutex.c:582
 Modules linked in:
+CPU: 0 PID: 8335 Comm: syz-executor.0 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __mutex_lock_common+0x4c4/0xca8 kernel/locking/mutex.c:582
+lr : __mutex_lock_common+0x4c4/0xca8 kernel/locking/mutex.c:582
+sp : ffff80001c7e3c80
+x29: ffff80001c7e3cf0 x28: ffff80000ee2b000 x27: 0000000000000000
+x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000002
+x23: ffff80000878a408 x22: 0000000000000000 x21: 0000000000000000
+x20: 0000000000000000 x19: ffff00010d57e828 x18: 0000000000000159
+x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000000012 x12: 0000000000040000
+x11: 000000000000103b x10: ffff80001693f000 x9 : dbe221ab05c56400
+x8 : dbe221ab05c56400 x7 : 4e5241575f534b43 x6 : ffff80000819545c
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : 0000000100000000 x0 : 0000000000000028
+Call trace:
+ __mutex_lock_common+0x4c4/0xca8 kernel/locking/mutex.c:582
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ reiserfs_write_lock+0x3c/0x64 fs/reiserfs/lock.c:27
+ reiserfs_ioctl+0x34/0x2a0 fs/reiserfs/ioctl.c:81
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+irq event stamp: 685
+hardirqs last  enabled at (685): [<ffff80000bfc89b4>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+hardirqs last  enabled at (685): [<ffff80000bfc89b4>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
+hardirqs last disabled at (684): [<ffff80000bfc87f0>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:108 [inline]
+hardirqs last disabled at (684): [<ffff80000bfc87f0>] _raw_spin_lock_irqsave+0xa4/0xb4 kernel/locking/spinlock.c:162
+softirqs last  enabled at (672): [<ffff80000801c33c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
+softirqs last disabled at (670): [<ffff80000801c308>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
 ---[ end trace 0000000000000000 ]---
-RIP: 0010:owner_on_cpu include/linux/sched.h:2283 [inline]
-RIP: 0010:mutex_can_spin_on_owner kernel/locking/mutex.c:409 [inline]
-RIP: 0010:mutex_optimistic_spin+0x12d/0x2d0 kernel/locking/mutex.c:452
-Code: 89 d8 48 c1 e8 03 42 80 3c 28 00 74 08 48 89 df e8 08 99 75 00 4c 8b 23 49 83 e4 f8 74 72 49 8d 6c 24 34 48 89 e8 48 c1 e8 03 <42> 8a 04 28 84 c0 0f 85 4f 01 00 00 83 7d 00 00 74 78 49 83 c4 14
-RSP: 0018:ffffc90004bf77e8 EFLAGS: 00010207
-RAX: 0001800000000006 RBX: ffff88801dc69228 RCX: ffffffff81676b52
-RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffff88801dc69228
-RBP: 000c000000000034 R08: dffffc0000000000 R09: ffffed1003b8d246
-R10: ffffed1003b8d246 R11: 1ffff11003b8d245 R12: 000c000000000000
-R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007fed86ab8700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fed85913e09 CR3: 000000007cedc000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	89 d8                	mov    %ebx,%eax
-   2:	48 c1 e8 03          	shr    $0x3,%rax
-   6:	42 80 3c 28 00       	cmpb   $0x0,(%rax,%r13,1)
-   b:	74 08                	je     0x15
-   d:	48 89 df             	mov    %rbx,%rdi
-  10:	e8 08 99 75 00       	callq  0x75991d
-  15:	4c 8b 23             	mov    (%rbx),%r12
-  18:	49 83 e4 f8          	and    $0xfffffffffffffff8,%r12
-  1c:	74 72                	je     0x90
-  1e:	49 8d 6c 24 34       	lea    0x34(%r12),%rbp
-  23:	48 89 e8             	mov    %rbp,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	42 8a 04 28          	mov    (%rax,%r13,1),%al <-- trapping instruction
-  2e:	84 c0                	test   %al,%al
-  30:	0f 85 4f 01 00 00    	jne    0x185
-  36:	83 7d 00 00          	cmpl   $0x0,0x0(%rbp)
-  3a:	74 78                	je     0xb4
-  3c:	49 83 c4 14          	add    $0x14,%r12
 
 
 ---
