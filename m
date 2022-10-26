@@ -2,106 +2,60 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469CB60D625
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 25 Oct 2022 23:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF7760D8F0
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 26 Oct 2022 03:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbiJYVa3 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 25 Oct 2022 17:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
+        id S232000AbiJZBrh (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 25 Oct 2022 21:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbiJYVaX (ORCPT
+        with ESMTP id S231455AbiJZBrg (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 25 Oct 2022 17:30:23 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3752A5246E;
-        Tue, 25 Oct 2022 14:30:20 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0EE9C1F8B3;
-        Tue, 25 Oct 2022 21:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1666733419; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GsChx+MZJNG5dXDKs99vdVY/KWr9zZZnfSpLrLhebqA=;
-        b=1Q1d+7Rr51d6MYXDNZD5NSRsd+RrBP3t89UkSIFI4OXho3Mx53DsfYJDC2Mx5tP8+eHEVw
-        XxVyDYvsWem9SkJU2bpIfyQXhkpTCPI4HnyM3guNyQeKF4AjtXMxRRCN2H+mVEqUIoot7P
-        zykaHxIu+d+8/0b2ksEoHLgKf3ObLpk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1666733419;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GsChx+MZJNG5dXDKs99vdVY/KWr9zZZnfSpLrLhebqA=;
-        b=nwqV8LR6vkXw2FIVIHBJT++eqLS73KWJjC5AoPKaZaV7rXbMGb3MU4ils8pyvbQaQQ5q8D
-        fS6HQAyGJbuC8JBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A3ADB13A64;
-        Tue, 25 Oct 2022 21:30:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kgFFFmhVWGOXIQAAMHmgww
-        (envelope-from <neilb@suse.de>); Tue, 25 Oct 2022 21:30:16 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Li zeming" <zeming@nfschina.com>
-Cc:     willy@infradead.org, jlayton@kernel.org, song@kernel.org,
-        bvanassche@acm.org, reiserfs-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Li zeming" <zeming@nfschina.com>
+        Tue, 25 Oct 2022 21:47:36 -0400
+Received: from mail.nfschina.com (unknown [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D6A1A8359;
+        Tue, 25 Oct 2022 18:47:35 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 340BF1E80C9B;
+        Wed, 26 Oct 2022 09:46:09 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id uhCTPFNFdbLS; Wed, 26 Oct 2022 09:46:06 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: zeming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 351C71E80C9A;
+        Wed, 26 Oct 2022 09:46:06 +0800 (CST)
+From:   Li zeming <zeming@nfschina.com>
+To:     neilb@suse.de
+Cc:     bvanassche@acm.org, jlayton@kernel.org,
+        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        song@kernel.org, willy@infradead.org
 Subject: Re: [PATCH] reiserfs: journal: Increase jl pointer check
-In-reply-to: <20221025084704.3922-1-zeming@nfschina.com>
-References: <20221025084704.3922-1-zeming@nfschina.com>
-Date:   Wed, 26 Oct 2022 08:30:13 +1100
-Message-id: <166673341340.7585.173987927705263434@noble.neil.brown.name>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Date:   Wed, 26 Oct 2022 09:47:26 +0800
+Message-Id: <20221026014727.3020-1-zeming@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+In-Reply-To: <166673341340.7585.173987927705263434@noble.neil.brown.name>
+References: <166673341340.7585.173987927705263434@noble.neil.brown.name>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Tue, 25 Oct 2022, Li zeming wrote:
-> If kzalloc fails to allocate the jl pointer, NULL is returned directly.
->=20
-> Signed-off-by: Li zeming <zeming@nfschina.com>
-> ---
->  fs/reiserfs/journal.c | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/fs/reiserfs/journal.c b/fs/reiserfs/journal.c
-> index 94addfcefede..d64e9de126c1 100644
-> --- a/fs/reiserfs/journal.c
-> +++ b/fs/reiserfs/journal.c
-> @@ -2569,6 +2569,9 @@ static struct reiserfs_journal_list *alloc_journal_li=
-st(struct super_block *s)
->  	struct reiserfs_journal_list *jl;
->  	jl =3D kzalloc(sizeof(struct reiserfs_journal_list),
->  		     GFP_NOFS | __GFP_NOFAIL);
-> +	if (!jl)
-> +		return NULL;
-> +
 
-What do you think the __GFP_NOFAIL flag might mean?
+I'm sorry, I think __GFP_NOFAIL should be like this:
 
-NeilBrown
+The __GFP_NOFAIL flag will cause memory to be allocated an infinite
+ number of times until the allocation is successful, but it is best to
+ use it only for very necessary code, and try not to use it.
 
+I'm not sure alloc_journal_list function is a very important function
+ here. If it is, this patch ignores it and does not consider it anymore
+ __GFP_NOFAIL allocatiIon problem.
 
-
->  	INIT_LIST_HEAD(&jl->j_list);
->  	INIT_LIST_HEAD(&jl->j_working_list);
->  	INIT_LIST_HEAD(&jl->j_tail_bh_list);
-> --=20
-> 2.18.2
->=20
->=20
