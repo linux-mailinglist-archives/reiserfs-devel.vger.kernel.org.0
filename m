@@ -2,199 +2,74 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A648B618B0F
-	for <lists+reiserfs-devel@lfdr.de>; Thu,  3 Nov 2022 23:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA2061DA2A
+	for <lists+reiserfs-devel@lfdr.de>; Sat,  5 Nov 2022 13:39:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbiKCWCt (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 3 Nov 2022 18:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
+        id S229885AbiKEMj0 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sat, 5 Nov 2022 08:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbiKCWCr (ORCPT
+        with ESMTP id S229811AbiKEMjN (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 3 Nov 2022 18:02:47 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F9A2252C
-        for <reiserfs-devel@vger.kernel.org>; Thu,  3 Nov 2022 15:02:45 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id d19-20020a056e020c1300b00300b5a12c44so2553157ile.15
-        for <reiserfs-devel@vger.kernel.org>; Thu, 03 Nov 2022 15:02:45 -0700 (PDT)
+        Sat, 5 Nov 2022 08:39:13 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7F218350
+        for <reiserfs-devel@vger.kernel.org>; Sat,  5 Nov 2022 05:39:09 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id q1so6551484pgl.11
+        for <reiserfs-devel@vger.kernel.org>; Sat, 05 Nov 2022 05:39:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
+        b=RIHC9n/dKVExSLG73bd8Y0TEFLCe8HTSL+2d7yE6D2NKhaBTGC77yJTmz2n+UQEoLn
+         jxE36/CP2zWRsxdrbl6Qipo/1wujKwbWTegmQtKA5KaKY5c5k0uls/46uPweryK1Q/70
+         p7KuiiXfJ0vih3FChZlrnOZ0SimajpgL+AXRNjZnSx1jbzFH5llJcPftmYgxT0KBp7aY
+         Nvw2mfIN1dkT84jofHnK9dh7XMfTMquPbJMMLMjB0Dp08MAIB2DxhF8xAtCfYFVwsPDo
+         kuNK/heTlVtwv9hHFhKrR/b4yxRwRja7vVsRsbB9inWGKh1FmpKXNdm91a1Uu/cF0CiR
+         QmBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GVARKb7zF83xm+IZ/oAc3ebiPFtdApDZn5ViNG7PZuU=;
-        b=Z8ZPz44BEZaov6fJiQ4DZDsdvXQiJ1F8ngImdGuN7uAtIpGZqYVssRzCIhZvi9OM6+
-         +6QPUk+R9Sm+OJ1XjyZjWnOZyNbz3paozlFn5TJyjDVhbB+Aw/3w+TyL41dXjOBPkdje
-         5w3ZmPSiDGmQltOrpLCG2Jq5HyvSMtfCxxsEJhxDf9T+620R+RKH+4LdE0y+2y74JJUK
-         pFRVCiNGQ9ezYZw2t9Z7xntUoVwPAhYFICDmiI2Qqg6GmekacZdiDiDgiP6xRV7E1lYQ
-         cT3q/o8e/ecn4DjhRv3UH4ifRrHA/zlcidhekbjV8CVkg+9YQY8MuNh/Q0vr5r4TiqXl
-         CbnA==
-X-Gm-Message-State: ACrzQf2ZErryknbJzVXwTDiGDWbUt0JwA3mpfNM58DeBqmdrq0TjPULq
-        lw+AY9inUzbVF2VVANBUGeDrUTyJFC3jZQfBlZmjxKr1Iaqk
-X-Google-Smtp-Source: AMsMyM5dk0ij5Ze9fjmvR02E92/3zeBKTNYXcghNYFbR+40i5JMZdsJ2Er+gkWH9V3w6OksQ6/Nmy32mtRdbJ6bnG0u8NZm+TcGK
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
+        b=iOGN5BrXKoqnxdHGo/t2DIsCsjxApta0dISDKagfIyExLS/xUwWJ50/jYTx0lgY8WD
+         ey5HS7YFX+k0K4WSLh1Lf+JbzU8C3HOTfsY5e8AbkooWVatT19J4K5GVRgrXoY89jxKh
+         TvhiIUnAQN4UpIw3HtsayIqcJ1B62vvfZMmAbQSwmYndLLpljAYOwa1K41c0hLIA36G5
+         +SF2uPjcP8wiyUhGUU9X+epi6T+i8tgRYzNthx7LCiYW9CZeQChDwBtBaw07v/xmQi/r
+         71nqWKisn1+yNcEQNBfgHQmqhlF3m+bqyJJCEPNtcnWvyjLHN3K722p2bSHZbGVRnEbn
+         45uA==
+X-Gm-Message-State: ACrzQf0ECnQSf3eOqj5okJVFQNPG9xylBE8IOHtxSe+IOjRUYFg9FRgQ
+        w3dWLooDBvkQD1MtX12hAlXkPDF4Vz67eyvAVY0=
+X-Google-Smtp-Source: AMsMyM7B0KgO1ePqgiznBJPxBFqW0p1QJVzP9XdnRybtCWEEA1+7r7SGcBMaZXE781qwVCHZ0F/UGDKN4buuMG8EUng=
+X-Received: by 2002:a63:8aca:0:b0:461:25fe:e7c5 with SMTP id
+ y193-20020a638aca000000b0046125fee7c5mr34958534pgd.395.1667651947704; Sat, 05
+ Nov 2022 05:39:07 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:378a:b0:6d3:a804:7912 with SMTP id
- be10-20020a056602378a00b006d3a8047912mr8757189iob.25.1667512965154; Thu, 03
- Nov 2022 15:02:45 -0700 (PDT)
-Date:   Thu, 03 Nov 2022 15:02:45 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f250a605ec981d41@google.com>
-Subject: [syzbot] possible deadlock in mnt_want_write_file
-From:   syzbot <syzbot+1047e42179f502f2b0a2@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+Received: by 2002:a05:7301:2e91:b0:83:922d:c616 with HTTP; Sat, 5 Nov 2022
+ 05:39:06 -0700 (PDT)
+Reply-To: stefanopessia755@hotmail.com
+From:   Stefano Pessina <wamathaibenard@gmail.com>
+Date:   Sat, 5 Nov 2022 15:39:06 +0300
+Message-ID: <CAN7bvZKFRi6jCy913fp9Nu5T=uorMfPGun5ibm5bYqhSVn2ZFA@mail.gmail.com>
+Subject: Geldspende
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    f2f32f8af2b0 Merge tag 'for-6.1-rc3-tag' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=164d52ca880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f7e100ed8aaa828e
-dashboard link: https://syzkaller.appspot.com/bug?extid=1047e42179f502f2b0a2
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ea126f52b953/disk-f2f32f8a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/815b36048854/vmlinux-f2f32f8a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b7d04bb936fd/bzImage-f2f32f8a.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1047e42179f502f2b0a2@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-rc3-syzkaller-00152-gf2f32f8af2b0 #0 Not tainted
-------------------------------------------------------
-syz-executor.3/17174 is trying to acquire lock:
-ffff88807eba6460 (sb_writers#30){.+.+}-{0:0}, at: mnt_want_write_file+0x5a/0x1f0 fs/namespace.c:437
-
-but task is already holding lock:
-ffff88804aba9090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (&sbi->lock){+.+.}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
-       reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
-       reiserfs_lookup+0x147/0x490 fs/reiserfs/namei.c:364
-       __lookup_hash+0x115/0x240 fs/namei.c:1601
-       filename_create+0x25f/0x4f0 fs/namei.c:3807
-       do_mkdirat+0xb5/0x550 fs/namei.c:4050
-       __do_sys_mkdirat fs/namei.c:4075 [inline]
-       __se_sys_mkdirat fs/namei.c:4073 [inline]
-       __x64_sys_mkdirat+0x85/0x90 fs/namei.c:4073
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #1 (&type->i_mutex_dir_key#21/1){+.+.}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       down_write_nested+0xa2/0x280 kernel/locking/rwsem.c:1672
-       inode_lock_nested include/linux/fs.h:791 [inline]
-       filename_create+0x22a/0x4f0 fs/namei.c:3806
-       do_mkdirat+0xb5/0x550 fs/namei.c:4050
-       __do_sys_mkdirat fs/namei.c:4075 [inline]
-       __se_sys_mkdirat fs/namei.c:4073 [inline]
-       __x64_sys_mkdirat+0x85/0x90 fs/namei.c:4073
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (sb_writers#30){.+.+}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
-       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1826 [inline]
-       sb_start_write+0x4d/0x1a0 include/linux/fs.h:1901
-       mnt_want_write_file+0x5a/0x1f0 fs/namespace.c:437
-       reiserfs_ioctl+0x16e/0x340 fs/reiserfs/ioctl.c:103
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
-Chain exists of:
-  sb_writers#30 --> &type->i_mutex_dir_key#21/1 --> &sbi->lock
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&sbi->lock);
-                               lock(&type->i_mutex_dir_key#21/1);
-                               lock(&sbi->lock);
-  lock(sb_writers#30);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor.3/17174:
- #0: ffff88804aba9090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
-
-stack backtrace:
-CPU: 0 PID: 17174 Comm: syz-executor.3 Not tainted 6.1.0-rc3-syzkaller-00152-gf2f32f8af2b0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
- __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
- lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
- percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
- __sb_start_write include/linux/fs.h:1826 [inline]
- sb_start_write+0x4d/0x1a0 include/linux/fs.h:1901
- mnt_want_write_file+0x5a/0x1f0 fs/namespace.c:437
- reiserfs_ioctl+0x16e/0x340 fs/reiserfs/ioctl.c:103
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f7f6ee8b5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f7f6e1de168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f7f6efac050 RCX: 00007f7f6ee8b5a9
-RDX: 0000000020000080 RSI: 0000000040087602 RDI: 0000000000000007
-RBP: 00007f7f6eee67b0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffdcec8c8df R14: 00007f7f6e1de300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--=20
+Die Summe von 500.000,00 =E2=82=AC wurde Ihnen von STEFANO PESSINA gespende=
+t.
+Bitte kontaktieren Sie uns f=C3=BCr weitere Informationen =C3=BCber
+stefanopessia755@hotmail.com
