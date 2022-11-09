@@ -2,98 +2,205 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E142962167C
-	for <lists+reiserfs-devel@lfdr.de>; Tue,  8 Nov 2022 15:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1EC6230FE
+	for <lists+reiserfs-devel@lfdr.de>; Wed,  9 Nov 2022 18:04:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234271AbiKHO1d (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 8 Nov 2022 09:27:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S231611AbiKIREJ (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 9 Nov 2022 12:04:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234513AbiKHO0y (ORCPT
+        with ESMTP id S231612AbiKIRDr (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:26:54 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A219725C75
-        for <reiserfs-devel@vger.kernel.org>; Tue,  8 Nov 2022 06:25:45 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so18052245pji.1
-        for <reiserfs-devel@vger.kernel.org>; Tue, 08 Nov 2022 06:25:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=frTjEIHTlXO6v5jJNflbe46il1dUjxah1hmkPCKJYy1/f6aaVZ96YwVNT21c8Mx+VL
-         R0PVu5F+awlay7dv8uEqG3mfQMZaN+xEIbVs3zUJk90rHuBTfTbUKI9ehW1dX10rlbxd
-         mQXXSvWli42inJrLM2g6PhN5xYN7/tmPsk29sFPQYGlAj5/CDrj8p18q2KOhwzU0yn1Z
-         U66f4vHTq4ebadAs2QjhqyxxvIbo8plXAHwfVczpBCyZj8AfWtsEsZzbPdDqwFqP6y9l
-         dnCncy0D5q5jmwTVNrSaXkMoaoWTcIIADYOaYowOD+gdgXtrIbBhvp2gXI2k+n6CIgmW
-         oJxg==
+        Wed, 9 Nov 2022 12:03:47 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627BCB69
+        for <reiserfs-devel@vger.kernel.org>; Wed,  9 Nov 2022 09:02:57 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id i6-20020a5d88c6000000b006d088a0e518so11588176iol.19
+        for <reiserfs-devel@vger.kernel.org>; Wed, 09 Nov 2022 09:02:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=sl8rjlFy0Jk37qw4oKIXF6mHyOBzTnnNUyBnQlG07GtQMDPcYu4VRZr8ytoE3ySSvI
-         TU/BAt5ftlnEowCSoE44YjEP9t6CSS1j2QpEitAykd7a6B+ICv84ZVfUhrM2YzfDDH95
-         okRXfjuzbWAY+PYIqvlgwB6Wg4vgHTYlP/tRqv4A/lGhe1Loi0PVF1E4sZivoMy/aKVu
-         PKyMkemgWqQskrpd+/OPtoIAi9U5Uta3yFajHJioCTlOL5sW3a7/E6ZPTmXEVZaNFhvX
-         6HbhIUraCDWqGsvE2uRhsVaL8x8lztiff1tZQ6vcH+jxBV3a5xrTMV2OVIirwnRC3/I/
-         xpDQ==
-X-Gm-Message-State: ACrzQf0377KwRvdRxOg9HrC/RyAN3b9MUVgmQ7MS2sXkmXOCd+dop8nN
-        aqu86156rslVb0/kL4RtsyTMsbSKwr0gIiZ4Bxk=
-X-Google-Smtp-Source: AMsMyM7i+ouk6KB7gDQcijSLT+5BFPLxz5mMKwdHu69kXLREkeFp6kif+v8n3IHurpTlIb3CZV20pcw+4UqMuGNpObo=
-X-Received: by 2002:a17:902:b581:b0:186:fb90:1151 with SMTP id
- a1-20020a170902b58100b00186fb901151mr56255957pls.43.1667917544943; Tue, 08
- Nov 2022 06:25:44 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BYKpzzDL3Cm1dNXSP8aW0qOYbhQreeE+PnHW9Us4/gE=;
+        b=UIZji2E3RFNhcnWtVMh2TmfrQyJdSxSQ79afTYe6iV0EpY0T0vFB5e3dftFsogqwMk
+         NIHYxDqzbVW9B7FOM1JC9ywI4rDVIMjLC9vACGc3EiZq2m/Z3pl/Ki4pQjM7MMNA1IhD
+         gvo2vmjaO+Vrjiy8LeR7UhFFYUpfTV1qFRstqSKNPmSUrYMYUWKKGu3gfRJE3Yk2iIFw
+         cBZcBT8Jz/8GRkbCKO5+8mgSp7fWMWLHC1T2qIKwS96u7PqiRouv5YkJo0uIvkWicRjs
+         J5WwSqMQXcyGAJncLmfjktBztMOIAdSC34gSRyN507eTfzUuchpou5k11CVswZQGigzn
+         FwzQ==
+X-Gm-Message-State: ACrzQf36wEuKQHNsiIwEBu7g4Ev7uKigYGOSOUGkM0IvBHWr14zZS9s4
+        /QFC7NG1Hsfi8IbAGc1IcQtv4i6kELwxmEDfZCHy17DIcRxv
+X-Google-Smtp-Source: AMsMyM5EKAZNkZu8zbsIBKx4a7ct9oPCnmagC9D1jZJjhHf7+lMozHYt8gmn9Iaxb36vtPI+VJAqQX1CO24T5BEmK6CG6fj9nHIm
 MIME-Version: 1.0
-Received: by 2002:a05:7300:5388:b0:85:81c6:896c with HTTP; Tue, 8 Nov 2022
- 06:25:44 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidkekeli11@gmail.com>
-Date:   Tue, 8 Nov 2022 14:25:44 +0000
-Message-ID: <CAPBO+FLJ4NDKP9BsZOPRz6jaWhgZgOACSy5HwxhJ-yxSoaUS2A@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
+X-Received: by 2002:a02:95e7:0:b0:363:ae32:346f with SMTP id
+ b94-20020a0295e7000000b00363ae32346fmr2130426jai.31.1668013376669; Wed, 09
+ Nov 2022 09:02:56 -0800 (PST)
+Date:   Wed, 09 Nov 2022 09:02:56 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cc15ee05ed0ca085@google.com>
+Subject: [syzbot] possible deadlock in filename_create
+From:   syzbot <syzbot+95cb07e3840546a4827b@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:102b listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4995]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidkekeli11[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidkekeli11[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    f141df371335 Merge tag 'audit-pr-20221107' of git://git.ke..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11802789880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=771b06c41e08f95b
+dashboard link: https://syzkaller.appspot.com/bug?extid=95cb07e3840546a4827b
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/25bd3ddd1720/disk-f141df37.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e2a12f518443/vmlinux-f141df37.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/09ba7134ea9d/bzImage-f141df37.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+95cb07e3840546a4827b@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-rc4-syzkaller-00015-gf141df371335 #0 Not tainted
+------------------------------------------------------
+syz-executor.3/25735 is trying to acquire lock:
+ffff88807a8a8090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
+
+but task is already holding lock:
+ffff8880361c0980 (&type->i_mutex_dir_key#19/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:791 [inline]
+ffff8880361c0980 (&type->i_mutex_dir_key#19/1){+.+.}-{3:3}, at: filename_create+0x22a/0x4f0 fs/namei.c:3806
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (&type->i_mutex_dir_key#19/1){+.+.}-{3:3}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       down_write_nested+0xa2/0x280 kernel/locking/rwsem.c:1672
+       inode_lock_nested include/linux/fs.h:791 [inline]
+       filename_create+0x22a/0x4f0 fs/namei.c:3806
+       do_symlinkat+0xe4/0x600 fs/namei.c:4419
+       __do_sys_symlinkat fs/namei.c:4446 [inline]
+       __se_sys_symlinkat fs/namei.c:4443 [inline]
+       __x64_sys_symlinkat+0x95/0xa0 fs/namei.c:4443
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #1 (sb_writers#28){.+.+}-{0:0}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1826 [inline]
+       sb_start_write+0x4d/0x1a0 include/linux/fs.h:1901
+       mnt_want_write_file+0x5a/0x1f0 fs/namespace.c:437
+       reiserfs_ioctl+0x16e/0x340 fs/reiserfs/ioctl.c:103
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&sbi->lock){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
+       reiserfs_lookup+0x147/0x490 fs/reiserfs/namei.c:364
+       __lookup_hash+0x115/0x240 fs/namei.c:1601
+       filename_create+0x25f/0x4f0 fs/namei.c:3807
+       do_symlinkat+0xe4/0x600 fs/namei.c:4419
+       __do_sys_symlinkat fs/namei.c:4446 [inline]
+       __se_sys_symlinkat fs/namei.c:4443 [inline]
+       __x64_sys_symlinkat+0x95/0xa0 fs/namei.c:4443
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+Chain exists of:
+  &sbi->lock --> sb_writers#28 --> &type->i_mutex_dir_key#19/1
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&type->i_mutex_dir_key#19/1);
+                               lock(sb_writers#28);
+                               lock(&type->i_mutex_dir_key#19/1);
+  lock(&sbi->lock);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor.3/25735:
+ #0: ffff888075a1e460 (sb_writers#28){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:393
+ #1: ffff8880361c0980 (&type->i_mutex_dir_key#19/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:791 [inline]
+ #1: ffff8880361c0980 (&type->i_mutex_dir_key#19/1){+.+.}-{3:3}, at: filename_create+0x22a/0x4f0 fs/namei.c:3806
+
+stack backtrace:
+CPU: 0 PID: 25735 Comm: syz-executor.3 Not tainted 6.1.0-rc4-syzkaller-00015-gf141df371335 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+ __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+ __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
+ reiserfs_lookup+0x147/0x490 fs/reiserfs/namei.c:364
+ __lookup_hash+0x115/0x240 fs/namei.c:1601
+ filename_create+0x25f/0x4f0 fs/namei.c:3807
+ do_symlinkat+0xe4/0x600 fs/namei.c:4419
+ __do_sys_symlinkat fs/namei.c:4446 [inline]
+ __se_sys_symlinkat fs/namei.c:4443 [inline]
+ __x64_sys_symlinkat+0x95/0xa0 fs/namei.c:4443
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fb4f468b639
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fb4f399c168 EFLAGS: 00000246 ORIG_RAX: 000000000000010a
+RAX: ffffffffffffffda RBX: 00007fb4f47ac2c0 RCX: 00007fb4f468b639
+RDX: 0000000020000980 RSI: 0000000000000007 RDI: 00000000200001c0
+RBP: 00007fb4f46e67e1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc2217a09f R14: 00007fb4f399c300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
