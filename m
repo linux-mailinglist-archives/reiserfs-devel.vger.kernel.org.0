@@ -2,81 +2,128 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E20C627447
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 14 Nov 2022 02:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB5F62CC2F
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 16 Nov 2022 22:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233909AbiKNBtl (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sun, 13 Nov 2022 20:49:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
+        id S239155AbiKPVGA (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 16 Nov 2022 16:06:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235376AbiKNBtj (ORCPT
+        with ESMTP id S239142AbiKPVFb (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sun, 13 Nov 2022 20:49:39 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355572610
-        for <reiserfs-devel@vger.kernel.org>; Sun, 13 Nov 2022 17:49:39 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id x21-20020a5d9455000000b006bc1172e639so5244631ior.18
-        for <reiserfs-devel@vger.kernel.org>; Sun, 13 Nov 2022 17:49:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0NIciGEMFs3GR0VxmcRj2FqKZjUa05yht5hU+xLHqL8=;
-        b=5GuSJe20IVyGv9V+ygdfkEF9ulJJZse7u609RN10h1ICsCygxs31kEH/pugp3L6CXd
-         D9lmCPeOd3OVbQ1GsEKAtwCG+KA02ho/HhXvEa1/Vt6Jvd/1iogDZYxBRj1Bd6PQimDw
-         Ve05Ugcdy74PkiXmVr5xsGLwSYZMueIzeqb3cQGLQ9+Jn+K59wdHwfzxqaYTgYvVDddY
-         h1tHv9ag8Lh2ZN0+atTL36iwAylSx1oZMvwd7ygPu1wHisjJDMcSctdXUlpy/tdFGEx7
-         ukUlJrs9He0W/1sLg8tqOBnKUyFu50GmAEy7WmXWSNOAiRFSZOKO/S/qUTyzbtt+iepn
-         fFXA==
-X-Gm-Message-State: ANoB5pkqImysz82aEydmrDnJldLvVR4mhlhL7DsR5Oa3K7e+p+FGo7z2
-        4XuXmW9UIuh9+XXI1ZrjhFEFF2jAzvRE/S97YXqzC8gS/QTj
-X-Google-Smtp-Source: AA0mqf4oSH+2L1giJjDUKiHTVQUltrz0Z1AwBwcVEqq+IVE588oskcYMuAffWmdXohdOr+bP5nkTCRoWMV6ijRU4lY/7rTO8ke0c
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1061:b0:300:d3e0:2492 with SMTP id
- q1-20020a056e02106100b00300d3e02492mr5288163ilj.148.1668390578548; Sun, 13
- Nov 2022 17:49:38 -0800 (PST)
-Date:   Sun, 13 Nov 2022 17:49:38 -0800
-In-Reply-To: <00000000000041665a05ed5c17db@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c7f9c605ed6473c8@google.com>
-Subject: Re: [syzbot] possible deadlock in vfs_fileattr_set
-From:   syzbot <syzbot+abe01a74653f00aabe3e@syzkaller.appspotmail.com>
-To:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-graphics-maintainer@vmware.com, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, sroland@vmware.com,
-        syzkaller-bugs@googlegroups.com, tzimmermann@suse.de,
-        zackr@vmware.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        Wed, 16 Nov 2022 16:05:31 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3139B45A02;
+        Wed, 16 Nov 2022 13:04:35 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AGKLQi0037116;
+        Wed, 16 Nov 2022 21:03:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=Hm6PNSbhq9LhjwmrseFl2/g4hvgBcTxn6rmb+SYDL5c=;
+ b=bNf/hxDYWOMp2O92YGnU7xVy3OwLgzGKpoVrHxy71bXWxTVCuL3T4OjnGMiRmoNWY5jc
+ 4neXymNU7N3SWSRlsGuvGqlLNTBzshBiwOpW/ti3Yeao0Y5IqkCjTqkJXa41qNSOpBs0
+ rFMtoeJgl7zqed+Ygvs9Z+93uf39ebgpUeCkvgGVQQg35HV7qvK2yRg8JHyOrk2joV2c
+ iPliU5nmIm9OCIWNTJpJOAu/vR436Y4qwsCFhDhGcoPRXohNoRqje2nfof3tHjpvWPPD
+ BTFQK24dmOHGygvTHBtfoETW2mlXR3yu9EBiJKpZR7UygS4xSvq9nGhybFtp0XqV6elX WA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kw6u08xt3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 21:03:51 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AGKT2Xv025076;
+        Wed, 16 Nov 2022 21:03:50 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kw6u08xsn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 21:03:50 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AGKpQCr014409;
+        Wed, 16 Nov 2022 21:03:49 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma02dal.us.ibm.com with ESMTP id 3kt34a43pj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Nov 2022 21:03:49 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com ([9.208.128.114])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AGL3mdB7143996
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 16 Nov 2022 21:03:48 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 327935805E;
+        Wed, 16 Nov 2022 21:03:48 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 182395805D;
+        Wed, 16 Nov 2022 21:03:46 +0000 (GMT)
+Received: from sig-9-77-134-48.ibm.com (unknown [9.77.134.48])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 16 Nov 2022 21:03:45 +0000 (GMT)
+Message-ID: <e46fb092970bd12a8461a513f1cf8b63e4f54714.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 1/5] reiserfs: Add missing calls to
+ reiserfs_security_free()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org, Jeff Mahoney <jeffm@suse.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Date:   Wed, 16 Nov 2022 16:03:45 -0500
+In-Reply-To: <20221110094639.3086409-2-roberto.sassu@huaweicloud.com>
+References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
+         <20221110094639.3086409-2-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 4WI5dW9j1NtENgHLvVqyis6bif4IMoub
+X-Proofpoint-ORIG-GUID: oHtKRpgB1VOFGdykFp3diWuPuAl-uBcg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-16_03,2022-11-16_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ bulkscore=0 malwarescore=0 spamscore=0 priorityscore=1501 mlxlogscore=316
+ suspectscore=0 clxscore=1011 impostorscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211160144
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-syzbot has bisected this issue to:
+On Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Commit 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes
+> during inode creation") defined reiserfs_security_free() to free the name
+> and value of a security xattr allocated by the active LSM through
+> security_old_inode_init_security(). However, this function is not called
+> in the reiserfs code.
+> 
+> Thus, add a call to reiserfs_security_free() whenever
+> reiserfs_security_init() is called, and initialize value to NULL, to avoid
+> to call kfree() on an uninitialized pointer.
+> 
+> Finally, remove the kfree() for the xattr name, as it is not allocated
+> anymore.
+> 
+> Fixes: 57fe60df6241 ("reiserfs: add atomic addition of selinux attributes during inode creation")
+> Cc: stable@vger.kernel.org
+> Cc: Jeff Mahoney <jeffm@suse.com>
+> Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Reported-by: Mimi Zohar <zohar@linux.ibm.com>
+> Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-commit 6dd6b7643e723b4779e59c8ad97bd5db6ff3bb12
-Author: Thomas Zimmermann <tzimmermann@suse.de>
-Date:   Mon Jan 18 13:14:19 2021 +0000
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-    drm/vmwgfx: Remove reference to struct drm_device.pdev
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1418e6a5880000
-start commit:   f8f60f322f06 Add linux-next specific files for 20221111
-git tree:       linux-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1618e6a5880000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1218e6a5880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=85ba52c07cd97289
-dashboard link: https://syzkaller.appspot.com/bug?extid=abe01a74653f00aabe3e
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=138b76ae880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ab1bfe880000
-
-Reported-by: syzbot+abe01a74653f00aabe3e@syzkaller.appspotmail.com
-Fixes: 6dd6b7643e72 ("drm/vmwgfx: Remove reference to struct drm_device.pdev")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
