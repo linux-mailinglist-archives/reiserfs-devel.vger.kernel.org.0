@@ -2,146 +2,140 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F096D62E3C6
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 17 Nov 2022 19:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45AA562F076
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 18 Nov 2022 10:05:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239456AbiKQSIE (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 17 Nov 2022 13:08:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47136 "EHLO
+        id S241438AbiKRJFS (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 18 Nov 2022 04:05:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239785AbiKQSID (ORCPT
+        with ESMTP id S231534AbiKRJFS (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 17 Nov 2022 13:08:03 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD90C6D48C;
-        Thu, 17 Nov 2022 10:08:02 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHGQna1028348;
-        Thu, 17 Nov 2022 18:07:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=DJWVbLBThfA4r5Xc8cljs2uNQs/ONt++ArGyQv7sJFw=;
- b=hgJNePoo0ERFfc7qezYZNPQsZGdxi/W430q6D8xfUhpQyKmRN00HwsfVOY3jq06eTysT
- Vyu3wXV8i7MdI1ba1BkH4o7BhEG59/HCB/jUhT03rCacX7Hm+xQlmz0oYFLA5O9CHUjs
- Muw3JYbdeKkgD8mjZ62Eb9/IXXsX69XBCVD2I+ZSFtfiIQ/VFg+EgRC9kTBic5jWBIfH
- wF2xrldJuoV056nfe4FAs49nU8+VI4vC5NYCNPOiygmf5ISq+MpxwH9rJJIS0TrLAhUM
- a+jwmFXrS7Lx4RTjoTRFyyCx1bdyp7ZcVsD4Ctj8Let14D6NdMSkbfXMh8QK+a5hqEmt 1w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kwrg1jk0k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 18:07:42 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AHHgIk8020406;
-        Thu, 17 Nov 2022 18:07:42 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kwrg1jk00-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 18:07:42 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AHI4s3I016666;
-        Thu, 17 Nov 2022 18:07:40 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma03wdc.us.ibm.com with ESMTP id 3kt34ajnqr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 18:07:40 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AHI7drE2687488
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Nov 2022 18:07:40 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B8C9858056;
-        Thu, 17 Nov 2022 18:07:39 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3A20A58045;
-        Thu, 17 Nov 2022 18:07:38 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.98.240])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 17 Nov 2022 18:07:38 +0000 (GMT)
-Message-ID: <5ef79a7ab559f46313f767d90b50662e003d62be.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 3/5] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org
+        Fri, 18 Nov 2022 04:05:18 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A671143;
+        Fri, 18 Nov 2022 01:05:15 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4ND9gq5qwgz9v7Z1;
+        Fri, 18 Nov 2022 16:59:03 +0800 (CST)
+Received: from [10.206.134.65] (unknown [10.206.134.65])
+        by APP1 (Coremail) with SMTP id LxC2BwBHMW6oSndjv7Z0AA--.22042S2;
+        Fri, 18 Nov 2022 10:04:51 +0100 (CET)
+Message-ID: <5758e5c4-9c8b-4492-3ecd-ba6607fc2899@huaweicloud.com>
+Date:   Fri, 18 Nov 2022 10:04:37 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v4 2/5] security: Rewrite
+ security_old_inode_init_security()
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com
 Cc:     linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
         reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
         keescook@chromium.org, nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 17 Nov 2022 13:07:37 -0500
-In-Reply-To: <66df8ebe-1ed2-c839-8a5f-cc0a26bad6c3@schaufler-ca.com>
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        ocfs2-devel@oss.oracle.com
 References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
-         <20221110094639.3086409-4-roberto.sassu@huaweicloud.com>
-         <4c1349f670dc3c23214a5a5036e43ddaa0a7bc89.camel@linux.ibm.com>
-         <026075fa-0b58-9041-0727-b75e19499356@schaufler-ca.com>
-         <6b4d47765a4ddcfdf07158f3ad0737fa3aa5823e.camel@linux.ibm.com>
-         <66df8ebe-1ed2-c839-8a5f-cc0a26bad6c3@schaufler-ca.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+ <20221110094639.3086409-3-roberto.sassu@huaweicloud.com>
+ <3dc4f389ead98972cb7d09ef285a0065decb0ad0.camel@linux.ibm.com>
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+In-Reply-To: <3dc4f389ead98972cb7d09ef285a0065decb0ad0.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: LuQseI_Vizjm-5HuCgvISdTcmcc66MfQ
-X-Proofpoint-GUID: TkHqQek4ect9eW5Fm4q3OEbG9UVsM1BT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- phishscore=0 spamscore=0 bulkscore=0 clxscore=1015 adultscore=0
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 suspectscore=0
- mlxlogscore=935 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211170131
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwBHMW6oSndjv7Z0AA--.22042S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCry7Xw15Zr18Zw4fWF17Jrb_yoW5Jw48pF
+        W2kF1DKrs8JF97CrZ7trnrWF4xKayrGrZrXws3Ary7ZFn8CFn7tr40yry3Ca43GrW8J34F
+        qw43Z343Zrn8Z3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAABF1jj4GVFAACs1
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Thu, 2022-11-17 at 09:40 -0800, Casey Schaufler wrote:
-> On 11/17/2022 9:24 AM, Mimi Zohar wrote:
-> > On Thu, 2022-11-17 at 09:18 -0800, Casey Schaufler wrote:
-> >> On 11/17/2022 8:05 AM, Mimi Zohar wrote:
-> >>> hOn Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
-> >>>> From: Roberto Sassu <roberto.sassu@huawei.com>
-> >>>>
-> >>>> Currently, security_inode_init_security() supports only one LSM providing
-> >>>> an xattr and EVM calculating the HMAC on that xattr, plus other inode
-> >>>> metadata.
-> >>>>
-> >>>> Allow all LSMs to provide one or multiple xattrs, by extending the security
-> >>>> blob reservation mechanism. Introduce the new lbs_xattr field of the
-> >>>> lsm_blob_sizes structure, so that each LSM can specify how many xattrs it
-> >>>> needs, and the LSM infrastructure knows how many xattr slots it should
-> >>>> allocate.
-> >>> Perhaps supporting per LSM multiple xattrs is a nice idea, but EVM
-> >>> doesn't currently support it.  The LSM xattrs are hard coded in
-> >>> evm_config_default_xattrnames[],  based on whether the LSM is
-> >>> configured.  Additional security xattrs may be included in the
-> >>> security.evm calculation, by extending the list via
-> >>> security/integrity/evm/evm_xattrs.
-> >> Smack uses multiple xattrs. All file system objects have a SMACK64
-> >> attribute, which is used for access control. A program file may have
-> >> a SMACK64EXEC attribute, which is the label the program will run with.
-> >> A library may have a SMACK64MMAP attribute to restrict loading. A
-> >> directory may have a SMACK64TRANSMUTE attribute, which modifies the
-> >> new object creation behavior.
-> >>
-> >> The point being that it may be more than a "nice idea" to support
-> >> multiple xattrs. It's not a hypothetical situation.
-> > And each of these addiitonal Smack xattrs are already defined in 
-> > evm_config_default_xattrnames[].
+On 11/17/2022 2:03 PM, Mimi Zohar wrote:
+> Hi Roberto,
 > 
-> Then I'm confused by the statement that "EVM doesn't currently support it".
+> On Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
+>> From: Roberto Sassu <roberto.sassu@huawei.com>
+>>
+>> Rewrite security_old_inode_init_security() to call
+>> security_inode_init_security() before making changes to support multiple
+>> LSMs providing xattrs. Do it so that the required changes are done only in
+>> one place.
+> 
+> Only security_inode_init_security() has support for EVM.   Making
+> security_old_inode_init_security() a wrapper for
+> security_inode_init_security() could result in security.evm extended
+> attributes being created that previously weren't created.
 
-My mistake.  As you pointed out, Smack is defining multiple security
-xattrs.
+Hi Mimi
 
-Mimi
+yes, I thought about this problem. In fact, it should not matter too 
+much. Since security_old_inode_init_security() supports setting only one 
+xattr: if there is an LSM xattr, that one will be set, and the EVM one 
+will be discarded; if there is no LSM xattr, EVM would not add one.
+
+> In fact ocfs2 defines ocfs2_init_security_get() as a wrapper for both
+> the old and new inode_init_security calls based on the caller's
+> preference.   Only mknod and symlink seem to use the old function.
+> Wondering why do they differentiate between callers?  (Cc'ing the ocfs2
+> mailing list as they're affected by this change.)
+> 
+> "[PATCH v4 1/5] reiserfs: Add missing calls to
+> reiserfs_security_free()"  fixed a memory leak.  I couldn't tell if
+> there was a similar memory leak in ocfs2, the only other user of
+> security_old_inode_init_security().
+
+Will look into it.
+
+> As ocfs2 already defines initxattrs, that leaves only reiserfs missing
+> initxattrs().  A better, cleaner solution would be to define one.
+
+Yes, great idea!
+
+Thanks
+
+Roberto
+
+> thanks,
+> 
+> Mimi
+> 
+>>
+>> Define the security_initxattrs() callback and pass it to
+>> security_inode_init_security() as argument, to obtain the first xattr
+>> provided by LSMs.
+>>
+>> This behavior is a bit different from the current one. Before this patch
+>> calling call_int_hook() could cause multiple LSMs to provide an xattr,
+>> since call_int_hook() does not stop when an LSM returns zero. The caller of
+>> security_old_inode_init_security() receives the last xattr set. The pointer
+>> of the xattr value of previous LSMs is lost, causing memory leaks.
+>>
+>> However, in practice, this scenario does not happen as the only in-tree
+>> LSMs providing an xattr at inode creation time are SELinux and Smack, which
+>> are mutually exclusive.
+>>
+>> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>b
 
