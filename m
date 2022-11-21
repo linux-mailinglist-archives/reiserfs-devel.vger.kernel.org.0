@@ -2,126 +2,153 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6402662FBAB
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 18 Nov 2022 18:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFCD631D24
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 21 Nov 2022 10:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241962AbiKRRbf (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 18 Nov 2022 12:31:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
+        id S230371AbiKUJqH (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 21 Nov 2022 04:46:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241968AbiKRRbY (ORCPT
+        with ESMTP id S230008AbiKUJqF (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 18 Nov 2022 12:31:24 -0500
-Received: from sonic310-30.consmr.mail.ne1.yahoo.com (sonic310-30.consmr.mail.ne1.yahoo.com [66.163.186.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345AA7617A
-        for <reiserfs-devel@vger.kernel.org>; Fri, 18 Nov 2022 09:31:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1668792682; bh=joM9FjX9yY0Ffp0i0RocKngYvfq9IvvZ9DctAz2LvYY=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=THyTTjjv1pap6ffUP+riZ1qy5rjk1Va7eCfmhW+2JZg8j4zgJDqFW/3sRqrX8HbfenwyMZ1d2k/ayr9zV8HskNnCR/2idHnno7Nl1fz6qjZP7MpwBBgWGs1GAwqOTdWl/Cx4LSyag+H6L44sml3iQzkgyS0zydACGFEP9dpSSB0TlGoh6GdSNxNwatLqQ16P50H+3p2qdIpLu2pMuZLcM6lwnqPobBr51FpHV5YSeK2CARpkGtzs8djmkb9JWNzQrRApc+c1ghi8sJEEN6TRqRfikCFK9rQAL8SmIeUZ5kiZ03BOW1J35r/9OCHyleArB4F2F/xw3q+KtB3Hw4hbNA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1668792682; bh=grKUV/PgsX9HfUEG+2QjWbqECZxacrViPcAVKUJNnJb=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=MkFHxOox9Qvluwuteq1abp79XYkIaO8gfw1GA3yAXp1WDVgYF+S172oVuuVF7wrGlORufR3nJDvyG5tOsdz/rdvpf++Ghgq9mBF4kuyKBIMHRDu9zR+i2yB0OpRrk+c8qoWyqrfqD+OlZZu68IhnS7UEvda9uaCB+fpBxnZbA5G8HLtcDaMeFK/x1VAWsDJFe3o8j1NAsODT5C2+L2+CyCaLi78uV2tBR9/cUG1S7uqB9AmR0PQKX5Ru2O/+ToimfOJDFq863vd7LnHVMMwx1P9e8MDc32kaLigVa63mGO1GStNvWRiCNszToKuw4kyuRMM/+XVuZC98p42QYhrVLQ==
-X-YMail-OSG: ujy22XEVM1kj5fkMsoI7MgmDAj3_xmtDSjGXHNrPgKteEMXDdIvWp_mCVutbTfQ
- Mn4lfsW_T7QTacyp_mYcbyFml.x8gsPGncB4tgsqCcFEuFacwgcwrF08ySdZzKkedAjxbEhbMRG7
- yuDsUKUORVfNWLfo3VokIhQLS00zYlu9Cn9tdmL.FKGRPILuEkZjap3NY.X.60DJySVYPFglIed5
- JF3H_sU21o11W1sVfQk8Jqc01k8R65pqdt.yygYNcNQKy33zRe12aw1cO1XVaswZ_3ICYS.fHiDS
- F.bGVYgTAK_KlyPrGg.mA4cX6XLMhm7P2.0sUsAo0v7kvavAqkfU079rYveFiRu.aSKhVYZa0Url
- Ov74LA1U_w8jrq4KYmVwLyWfO_3ENJFuhAm7Z6PMwwuKMc4WFO0xNSXAT.ydgMxE.3ZO7ztYqUKW
- LMyk7ofacY9O0vNh0KpBbKec3zi2rr0FXFcHR9shnq6AYI0.TOc6DFeYKV40qtHsMgKNQbZb1O_K
- 6KJM87DsAV6AcN5D2v3zZxI23RCNhQFyI0hpxKhXQRdnUbIPvmaH1zVuob6OgGqUPBc28IDst0JT
- qXmSctXu0adbAdap_7JoV561CwiaYza_vYKVhMk6JpOcwWcAnMJCJtTr5TERNjV3pLG_4MV7IZFk
- e5TsQuEzddMk1lpY7JVfDlWssh.iU2Rty9vGnueUFDT7pIywcOvUKlh0o2LJfk0Wkwjh1m5S7qWd
- zA36M7JAaQCC5dVK7uDw4VDH8gfrM48_73jIOnwEo29rqiIIbmWkz7kEuYvelbYSI4tPim6VPKCg
- FUckF0jQIi5ZBhEtrmclto2OPp66KmPlo7ePmu4IziqIDnvONaD0kL95_XYe4_vbktHuG862lRVC
- Dy2Sxwi.XtaSdbuaLmn1MaYTf1LSjVj3dIByyFEJ0of37kgA3zJB2EsUwrAmQQO1D8vU64trser5
- pj2H3.PQuwIxAWv5Zj.o4Fgf6_ai4cOzYtEa517PRu78gzsmv8WEJpxYg60VOCLCBrQWfK0tD_ve
- c3GtLYeSdRvGgCdcYVuoBxjGtNncbI0P5WbG2gorQBR1TK5uWRy0AeSQ0oEQ1USRV0SphEz56IJO
- 0kWwOlvb0QLN8GqhUlNx._C_YvQsM4mbzGGEaMRc.ZUZI8pMgS0OaWOjxV7o99RuY0AZFPO.Dvxb
- JuHhurN8U0ngNGLFjhzk0VujGpcl6uoGJRzQnL336o9V5YaoK8RbhavACSBOLglX.Y10XK79Gjmk
- 26p62Pocj5HtnJI9kKmp2LfGjyMVEC.nvWWl1dzWJfsLguNMaGF1G.xs1rP.ODFdTiTnVFLx_wM2
- wonDfoKSiqpGXU5VZCc0jl22yAe6tcv7a9Q0hRMjHVc6KGDKe_riVlQOWaXe5mdAKN7beX6mtQfE
- iZJuWE8LvGy8LlOufTgbyNfK9jiiiiEZFcBz4Oh1L18dCDXLwXSdzFqtM2fCtGFaaTQ9Z4i3HHI4
- oXGJOInmSP8QdseuS.OQT5gHO9fWjo_knfwXQUq8zCxxvcmfegEgzOvBjrlQlFnvi5On89rk2qrJ
- JogA59e.55OSOoApY1kAA0G.S3.17Qtx.y484UDaQrhOqj2aSYrnGHwW1UQLUspvFgZjHfqwaTmw
- I05higu4xLDXoQgQN51MmANpNO335zIB3pXo60Dx2lOQxFWth5FeFLaIe1Egs4Aon06GFKDnBZyK
- Eiy7EWA85gx6heotxM9ihGlKXc44mA53C_gXMXikl8aj_Lv7j6tAUHoG1Y0rGdSO1eSxGrpWWt8c
- 7SwoyqAcjamVwyNeYMhu9WrJ_rhQ9ORY0roe5feNtAFzIGhKzsTxKyatA8DFPtyyeYDcrOCNF3aG
- aXFOogzsuDfmQRfpkRqHEGkA1uk7Ggn29OAiN6CB_FVhRkCgMvq3QIxxAZ_OFWJwVMHKhG6SzUQr
- 3.EPqS8Pp.gWZy1ji4JEcLh8wO4AvOsEPlc9bl68Ub0chMWZgXHVrsXH8ErXzTxVGBENX5qK81B7
- V4hUan0cjvZjuaQEX8R1s5HL0KK_Lc7vcbPMpLCE6Aw2t.hFtQKKKfeCONsB.AirY7x1DEklKE22
- q2y8PSa0v.Ze0Iqey4JPIYq32tFpRELMEpLHo0L4Z2GDA4wA2HFzTgh7DRq3hNFVTc44VTczis7W
- ljLLksidGozkHFSFRqMwHC3pC1Cs8gKqZK4IPTjjZZEbP.WSvYFuksTtjPZLgPqgQYQBCK8nEQb.
- Azo1dwC3rLLSR86b.SOIH1oceTEvjPrm5NqLFpypO5b3Vawccrpu8oes2MTXfTIAUgVt3SUxLIqa
- GbmcSvYYAnHRvrntc
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Fri, 18 Nov 2022 17:31:22 +0000
-Received: by hermes--production-bf1-5878955b5f-gz9tn (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID dcd9318dc1733a2cfe89c5975364176f;
-          Fri, 18 Nov 2022 17:31:21 +0000 (UTC)
-Message-ID: <fb3f423a-a56e-b6ed-d1e7-476605d607f8@schaufler-ca.com>
-Date:   Fri, 18 Nov 2022 09:31:17 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 3/5] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org
+        Mon, 21 Nov 2022 04:46:05 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9492E13E08;
+        Mon, 21 Nov 2022 01:46:03 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NG2Ql5CVtz9xGKf;
+        Mon, 21 Nov 2022 17:39:11 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwCHcW65SHtjOoSBAA--.28097S2;
+        Mon, 21 Nov 2022 10:45:39 +0100 (CET)
+Message-ID: <aa5fa8c5f231115c58012352124df57d16a01e41.camel@huaweicloud.com>
+Subject: Re: [PATCH v4 2/5] security: Rewrite
+ security_old_inode_init_security()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com
 Cc:     linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
         reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
         keescook@chromium.org, nicolas.bouchinet@clip-os.org,
         Roberto Sassu <roberto.sassu@huawei.com>,
-        casey@schaufler-ca.com
+        ocfs2-devel@oss.oracle.com
+Date:   Mon, 21 Nov 2022 10:45:19 +0100
+In-Reply-To: <3dc4f389ead98972cb7d09ef285a0065decb0ad0.camel@linux.ibm.com>
 References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
- <20221110094639.3086409-4-roberto.sassu@huaweicloud.com>
- <4c1349f670dc3c23214a5a5036e43ddaa0a7bc89.camel@linux.ibm.com>
- <fe16a03a-102e-b3e1-cc3f-5bad3c28fad7@huaweicloud.com>
- <3ffb9bb4ab203b5e0459c3892ded4ae0cd80458b.camel@linux.ibm.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <3ffb9bb4ab203b5e0459c3892ded4ae0cd80458b.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
+         <20221110094639.3086409-3-roberto.sassu@huaweicloud.com>
+         <3dc4f389ead98972cb7d09ef285a0065decb0ad0.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20863 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwCHcW65SHtjOoSBAA--.28097S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCry7Xw1UCFyUJr1ruFWDCFg_yoW5Kr1Dpr
+        W3KF1UKrn8JF97CrWxJFnxWF4I93yfGFZrXrs5AryDAF1DCF1xtr10yry5u343JrWkJ34F
+        qw4xZ3sxZrn8Z3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgADBF1jj4GngwACsT
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On 11/18/2022 7:10 AM, Mimi Zohar wrote:
-> On Fri, 2022-11-18 at 10:14 +0100, Roberto Sassu wrote:
->>>> +static int security_check_compact_xattrs(struct xattr *xattrs,
->>>> +                                     int num_xattrs, int *checked_xattrs)
->>> Perhaps the variable naming is off, making it difficult to read.   So
->>> although this is a static function, which normally doesn't require a
->>> comment, it's definitely needs one.
->> Ok, will improve it.
->>
->>>> +{
->>>> +    int i;
->>>> +
->>>> +    for (i = *checked_xattrs; i < num_xattrs; i++) {
->>> If the number of "checked" xattrs was kept up to date, removing the
->>> empty xattr gaps wouldn't require a loop.  Is the purpose of this loop
->>> to support multiple per LSM xattrs?
->> An LSM might reserve one or more xattrs, but not set it/them (for 
->> example because it is not initialized). In this case, removing the gaps 
->> is needed for all subsequent LSMs.
-> Including this sort of info in the function description or as a comment
-> in the code would definitely simplify review.
->
-> security_check_compact_xattrs() is called in the loop after getting
-> each LSM's xattr(s).  Only the current LSMs xattrs need to be
-> compressed, yet the loop goes to the maximum number of xattrs each
-> time. Just wondering if there is a way of improving it.
+On Thu, 2022-11-17 at 08:03 -0500, Mimi Zohar wrote:
+> Hi Roberto,
+> 
+> On Thu, 2022-11-10 at 10:46 +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Rewrite security_old_inode_init_security() to call
+> > security_inode_init_security() before making changes to support multiple
+> > LSMs providing xattrs. Do it so that the required changes are done only in
+> > one place.
+> 
+> Only security_inode_init_security() has support for EVM.   Making
+> security_old_inode_init_security() a wrapper for
+> security_inode_init_security() could result in security.evm extended
+> attributes being created that previously weren't created.
+> 
+> In fact ocfs2 defines ocfs2_init_security_get() as a wrapper for both
+> the old and new inode_init_security calls based on the caller's
+> preference.   Only mknod and symlink seem to use the old function. 
+> Wondering why do they differentiate between callers?  (Cc'ing the ocfs2
+> mailing list as they're affected by this change.)
+> 
+> "[PATCH v4 1/5] reiserfs: Add missing calls to
+> reiserfs_security_free()"  fixed a memory leak.  I couldn't tell if
+> there was a similar memory leak in ocfs2, the only other user of
+> security_old_inode_init_security().
 
-At security module registration each module could identify how
-many xattrs it uses. That number could be used to limit the range
-of the loop. I have to do similar things for the forthcoming LSM
-syscalls and module stacking beyond that.
+From what I see, there is no memory leak there.
 
+> As ocfs2 already defines initxattrs, that leaves only reiserfs missing
+> initxattrs().  A better, cleaner solution would be to define one.
 
->
+If I understood why security_old_inode_init_security() is called
+instead of security_inode_init_security(), the reason seems that the
+filesystem code uses the length of the obtained xattr to make some
+calculations (e.g. reserve space). The xattr is written at a later
+time.
+
+Since for reiserfs there is a plan to deprecate it, it probably
+wouldn't be worth to support the creation of multiple xattrs. I would
+define a callback to take the first xattr and make a copy, so that
+calling security_inode_init_security() + reiserfs_initxattrs() is
+equivalent to calling security_old_inode_init_security().
+
+But then, this is what anyway I was doing with the
+security_initxattrs() callback, for all callers of security_old_inode_i
+nit_security().
+
+Also, security_old_inode_init_security() is exported to kernel modules.
+Maybe, it is used somewhere. So, unless we plan to remove it
+completely, it should be probably be fixed to avoid multiple LSMs
+successfully setting an xattr, and losing the memory of all except the
+last (which this patch fixes by calling security_inode_init_security())
+.
+
+If there is still the preference, I will implement the reiserfs
+callback and make a fix for security_old_inode_init_security().
+
+Thanks
+
+Roberto
+
+> thanks,
+> 
+> Mimi
+> 
+> > Define the security_initxattrs() callback and pass it to
+> > security_inode_init_security() as argument, to obtain the first xattr
+> > provided by LSMs.
+> > 
+> > This behavior is a bit different from the current one. Before this patch
+> > calling call_int_hook() could cause multiple LSMs to provide an xattr,
+> > since call_int_hook() does not stop when an LSM returns zero. The caller of
+> > security_old_inode_init_security() receives the last xattr set. The pointer
+> > of the xattr value of previous LSMs is lost, causing memory leaks.
+> > 
+> > However, in practice, this scenario does not happen as the only in-tree
+> > LSMs providing an xattr at inode creation time are SELinux and Smack, which
+> > are mutually exclusive.
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>b
+
