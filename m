@@ -2,157 +2,141 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C69632E47
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 21 Nov 2022 21:58:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A33633012
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 21 Nov 2022 23:58:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiKUU6a (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 21 Nov 2022 15:58:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
+        id S229687AbiKUW55 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 21 Nov 2022 17:57:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKUU62 (ORCPT
+        with ESMTP id S231936AbiKUW5y (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 21 Nov 2022 15:58:28 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58B4CEBAD;
-        Mon, 21 Nov 2022 12:58:27 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ALK3lao029070;
-        Mon, 21 Nov 2022 20:58:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=yYc1UjR/X0mjO1Si4MpoQ9ZWzXiCM44IGVCFBM9HksM=;
- b=fHjSzlbvKCNmzvyWRhEFoCgf2kFmVcWJXPbWqTecv0fMIK82bWxcZ9T60FGJ4Kge14LT
- uNry1lRdag0s7wKlV2WF8JJ5HfaS6Tu7xpFOUUp9cip3XNY8DxOw9oURAPFQrXK5lSo/
- AubsE6A5VF9XJHCbKC8vcmx3Ij0aAaqbNYx58HGVpy8NcLGrNeq3s3m5rFp7ldkSO1In
- 0kg4FW+6KBVcM0nfU2wi56MUsGg7jb/sDSBadvye/M5FUEgQM67EK7RJ7jjOMyh8vdP9
- iq58VqneeuRBHSqO6BAdBZwMAM3FEqTV41b7nF3zBAEzSLk4ukHsjyBRoONYc49L0yv5 3A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0cfxxfr1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 20:58:09 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ALKqsWC022894;
-        Mon, 21 Nov 2022 20:58:08 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0cfxxfqd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 20:58:08 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ALKp4Pi014694;
-        Mon, 21 Nov 2022 20:58:07 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma03wdc.us.ibm.com with ESMTP id 3kxps9fsdk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 20:58:07 +0000
-Received: from smtpav03.dal12v.mail.ibm.com ([9.208.128.129])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ALKw5FL34210120
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Nov 2022 20:58:05 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C7D958060;
-        Mon, 21 Nov 2022 20:58:06 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 96CF55803F;
-        Mon, 21 Nov 2022 20:58:05 +0000 (GMT)
-Received: from sig-9-65-226-3.ibm.com (unknown [9.65.226.3])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 21 Nov 2022 20:58:05 +0000 (GMT)
-Message-ID: <5e88d4bfae90d642fcf84a0c0937a9e4359ef4b2.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 3/5] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 21 Nov 2022 15:58:05 -0500
-In-Reply-To: <ad7bfa59a3a89ccad52574e2f9fb8965dbaa1620.camel@huaweicloud.com>
-References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
-         <20221110094639.3086409-4-roberto.sassu@huaweicloud.com>
-         <4c1349f670dc3c23214a5a5036e43ddaa0a7bc89.camel@linux.ibm.com>
-         <fe16a03a-102e-b3e1-cc3f-5bad3c28fad7@huaweicloud.com>
-         <3ffb9bb4ab203b5e0459c3892ded4ae0cd80458b.camel@linux.ibm.com>
-         <fb3f423a-a56e-b6ed-d1e7-476605d607f8@schaufler-ca.com>
-         <ad7bfa59a3a89ccad52574e2f9fb8965dbaa1620.camel@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: cw1OJWh_QF1SxB1kA5f_Qwm275_N0FeP
-X-Proofpoint-ORIG-GUID: o0KtNVBV0hgf2nWi3TrF-p_qik3UvULx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-21_16,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- clxscore=1015 malwarescore=0 impostorscore=0 suspectscore=0
- mlxlogscore=999 phishscore=0 adultscore=0 bulkscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211210155
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 21 Nov 2022 17:57:54 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6F619286
+        for <reiserfs-devel@vger.kernel.org>; Mon, 21 Nov 2022 14:57:41 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id h21-20020a05660224d500b006debd7dedccso2458752ioe.9
+        for <reiserfs-devel@vger.kernel.org>; Mon, 21 Nov 2022 14:57:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XLpjlYOpL38kGF9PGdFC21P0et3GA8VA5X/IkxZlIiQ=;
+        b=SDElE0yMn8jGvjRa44WaMsQWwVprWCb5WMfaQ86/OFG0hAFha4MtAt1C3wteRBcqds
+         5ptbae8gYfIM/+ynXUy0Q30/BZ8kS7hAuXPcj8zuIsQz33q6NXddeHv/Dw45p+1XQLkz
+         dw365OsYd8ohqFtiZJgw6JEXIxNBGM+QLV4QFVVf2Sy3rPrNnEJZ9YEdvE9CP80Bgz1e
+         iPzQmnC3CYvhY03MUHQol1CUa3pFtlJeGIvTMui6bjVsURMmzPAaXCsapRsj/yNtPb9D
+         cRUuRSS5RUSdUDn4u/wZA/j6FwBIzP5+C9kmV0FibiRv+iwGEaUq7K3/lhTpbdDr728o
+         j23w==
+X-Gm-Message-State: ANoB5pmvF/Y0bA91pSaP+Ym0veDikwxQC1aJ1UPKJwyqvKT3ijURF6Vo
+        A0wxKVcBAnLsC8GLcyQatpyUfteIjpyOvhJKpEIlKkGzJDCu
+X-Google-Smtp-Source: AA0mqf4Fbo6tItRMluhBMJbI6Ppx4UJTN2qHgecQXWtw1bikiqhga32Hurr/RUgf8ZBx22nUw+C5ljrpQymfq2bBkvM091eVwbLj
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:11a3:b0:302:a9a5:d608 with SMTP id
+ 3-20020a056e0211a300b00302a9a5d608mr1595386ilj.141.1669071460668; Mon, 21 Nov
+ 2022 14:57:40 -0800 (PST)
+Date:   Mon, 21 Nov 2022 14:57:40 -0800
+In-Reply-To: <00000000000022a65705ec7f923c@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000849c3e05ee02fb3e@google.com>
+Subject: Re: [syzbot] kernel BUG in do_journal_begin_r
+From:   syzbot <syzbot+2da5e132dd0268a9c0e4@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, axboe@kernel.dk, bvanassche@acm.org,
+        jack@suse.cz, jlayton@kernel.org, linux-kernel@vger.kernel.org,
+        neilb@suse.de, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org,
+        yi.zhang@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Mon, 2022-11-21 at 14:29 +0100, Roberto Sassu wrote:
-> On Fri, 2022-11-18 at 09:31 -0800, Casey Schaufler wrote:
-> > On 11/18/2022 7:10 AM, Mimi Zohar wrote:
-> > > On Fri, 2022-11-18 at 10:14 +0100, Roberto Sassu wrote:
-> > > > > > +static int security_check_compact_xattrs(struct xattr *xattrs,
-> > > > > > +                                     int num_xattrs, int *checked_xattrs)
-> > > > > Perhaps the variable naming is off, making it difficult to read.   So
-> > > > > although this is a static function, which normally doesn't require a
-> > > > > comment, it's definitely needs one.
-> > > > Ok, will improve it.
-> > > > 
-> > > > > > +{
-> > > > > > +    int i;
-> > > > > > +
-> > > > > > +    for (i = *checked_xattrs; i < num_xattrs; i++) {
-> > > > > If the number of "checked" xattrs was kept up to date, removing the
-> > > > > empty xattr gaps wouldn't require a loop.  Is the purpose of this loop
-> > > > > to support multiple per LSM xattrs?
-> > > > An LSM might reserve one or more xattrs, but not set it/them (for 
-> > > > example because it is not initialized). In this case, removing the gaps 
-> > > > is needed for all subsequent LSMs.
-> > > Including this sort of info in the function description or as a comment
-> > > in the code would definitely simplify review.
-> > > 
-> > > security_check_compact_xattrs() is called in the loop after getting
-> > > each LSM's xattr(s).  Only the current LSMs xattrs need to be
-> > > compressed, yet the loop goes to the maximum number of xattrs each
-> > > time. Just wondering if there is a way of improving it.
-> > 
-> > At security module registration each module could identify how
-> > many xattrs it uses. That number could be used to limit the range
-> > of the loop. I have to do similar things for the forthcoming LSM
-> > syscalls and module stacking beyond that.
-> 
-> Yes, blob_sizes.lbs_xattr contains the total number of xattrs requested
-> by LSMs. To stop the loop earlier, at the offset of the next LSM, we
-> would need to search the LSM's lsm_info, using the LSM name in
-> the security_hook_list structure. Although it is not optimal, not doing
-> it makes the code simpler. I could do that, if preferred.
+syzbot has found a reproducer for the following issue on:
 
-Either way is fine, as long as the code is readable.  At minimum add a
-comment.
+HEAD commit:    eb7081409f94 Linux 6.1-rc6
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11137619880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8cdf448d3b35234
+dashboard link: https://syzkaller.appspot.com/bug?extid=2da5e132dd0268a9c0e4
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15a83ed9880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=103fad21880000
 
--- 
-thanks,
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4a019f55c517/disk-eb708140.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/eb36e890aa8b/vmlinux-eb708140.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/feee2c23ec64/bzImage-eb708140.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/536f992f8112/mount_0.gz
 
-Mimi
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2da5e132dd0268a9c0e4@syzkaller.appspotmail.com
 
+REISERFS (device loop3): Using tea hash to sort names
+REISERFS (device loop3): Created .reiserfs_priv - reserved for xattr storage.
+------------[ cut here ]------------
+kernel BUG at fs/reiserfs/journal.c:3039!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 4827 Comm: syz-executor196 Not tainted 6.1.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:do_journal_begin_r+0x105b/0x1070 fs/reiserfs/journal.c:3039
+Code: ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 22 ff ff ff 48 89 df e8 a6 eb b2 ff e9 15 ff ff ff e8 bc d3 5e ff 0f 0b e8 b5 d3 5e ff <0f> 0b e8 2e 6f 6a 08 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 55
+RSP: 0018:ffffc900059375e0 EFLAGS: 00010293
+RAX: ffffffff822bc4bb RBX: 000000001100e4cd RCX: ffff888022068000
+RDX: 0000000000000000 RSI: 000000001100e4cd RDI: 0000000000000100
+RBP: ffffc90005937788 R08: ffffffff822bb592 R09: fffffbfff1d2f2de
+R10: fffffbfff1d2f2de R11: 1ffffffff1d2f2dd R12: ffff888020ee6678
+R13: ffffc90005db1214 R14: dffffc0000000000 R15: 0000000000000100
+FS:  00005555568fe3c0(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fce06f4e410 CR3: 000000007bce2000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ journal_begin+0x14b/0x350 fs/reiserfs/journal.c:3255
+ reiserfs_create+0x2c3/0x660 fs/reiserfs/namei.c:661
+ lookup_open fs/namei.c:3413 [inline]
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0x12d0/0x2df0 fs/namei.c:3710
+ do_filp_open+0x264/0x4f0 fs/namei.c:3740
+ do_sys_openat2+0x124/0x4e0 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_creat fs/open.c:1402 [inline]
+ __se_sys_creat fs/open.c:1396 [inline]
+ __x64_sys_creat+0x11f/0x160 fs/open.c:1396
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fce06ed4c39
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffdabc25c18 EFLAGS: 00000246 ORIG_RAX: 0000000000000055
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fce06ed4c39
+RDX: 00007fce06e8a733 RSI: 0000000000000000 RDI: 0000000020000380
+RBP: 0000000000000000 R08: 00000000000010f0 R09: 0000000000000003
+R10: 00007ffdabc25ae0 R11: 0000000000000246 R12: 00007ffdabc25c48
+R13: 00007ffdabc25c80 R14: 00007ffdabc25c60 R15: 0000000000000060
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:do_journal_begin_r+0x105b/0x1070 fs/reiserfs/journal.c:3039
+Code: ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 22 ff ff ff 48 89 df e8 a6 eb b2 ff e9 15 ff ff ff e8 bc d3 5e ff 0f 0b e8 b5 d3 5e ff <0f> 0b e8 2e 6f 6a 08 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 55
+RSP: 0018:ffffc900059375e0 EFLAGS: 00010293
 
-
+RAX: ffffffff822bc4bb RBX: 000000001100e4cd RCX: ffff888022068000
+RDX: 0000000000000000 RSI: 000000001100e4cd RDI: 0000000000000100
+RBP: ffffc90005937788 R08: ffffffff822bb592 R09: fffffbfff1d2f2de
+R10: fffffbfff1d2f2de R11: 1ffffffff1d2f2dd R12: ffff888020ee6678
+R13: ffffc90005db1214 R14: dffffc0000000000 R15: 0000000000000100
+FS:  00005555568fe3c0(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fce06f4e410 CR3: 000000007bce2000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
