@@ -2,136 +2,114 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC70631D5A
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 21 Nov 2022 10:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C38632385
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 21 Nov 2022 14:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbiKUJwr (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 21 Nov 2022 04:52:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
+        id S230297AbiKUNaU (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 21 Nov 2022 08:30:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbiKUJwP (ORCPT
+        with ESMTP id S229730AbiKUNaJ (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 21 Nov 2022 04:52:15 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE0B9A5D9
-        for <reiserfs-devel@vger.kernel.org>; Mon, 21 Nov 2022 01:51:49 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id x5-20020a6bda05000000b006db3112c1deso5125207iob.0
-        for <reiserfs-devel@vger.kernel.org>; Mon, 21 Nov 2022 01:51:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lgl2I3AcBjeXgLSgGpzk/+BfkAuQ8JNYy6p5v2Gm+bE=;
-        b=U2H5pMwMUiAg3WlXRXp+N4kNLK4RZjdNf9NjFiaMosSJZmJ8Tix9uZjWkaUaY1WoxA
-         9865a0sHlJywpcYE3aXhPW/4++v/fNUgcumhTNuEeUVOxcx39xxv+IwddeAcB4xmY836
-         Rm5eNNbKiLXK0ZkeL9l5HQHFkjX5MwqfVM5myaJ1LN8onT7xEb9yV2auKm7ftXaL/gA+
-         EMU29PIeV8/d0+90J3UkUDyKUZqX5GXLHrTMhuqWq+R0WOKSMWxpFhMkHuecsziu7DEq
-         lf6VugY911sG9uoyV+SYmkgq65073hfB4rXJO/E5cpLNdy8jfEI+kO5lxQ2TlHSdbFa3
-         4L6A==
-X-Gm-Message-State: ANoB5pkF0rrLeVY6BKftXIN5JqKzMFKtnFsWNIMrGmbHEVbVfHoNcZ1f
-        7QDLnsbzdSJSJONO1QqCUYwFyj8NuuJZn2/NW/CUApYYuDhs
-X-Google-Smtp-Source: AA0mqf5dSFgLBeL5qJboPPEyYYRGcJSGdZwzexKmG0dyeNYUJHranoGD9XoRCPCG5nKYJnidslHfKDVjjPlCoSM8Dacw4lJHPb5l
-MIME-Version: 1.0
-X-Received: by 2002:a05:6602:234b:b0:6db:6299:1144 with SMTP id
- r11-20020a056602234b00b006db62991144mr7622798iot.212.1669024309305; Mon, 21
- Nov 2022 01:51:49 -0800 (PST)
-Date:   Mon, 21 Nov 2022 01:51:49 -0800
-In-Reply-To: <00000000000022a65705ec7f923c@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000013eb0305edf801f8@google.com>
-Subject: Re: [syzbot] kernel BUG in do_journal_begin_r
-From:   syzbot <syzbot+2da5e132dd0268a9c0e4@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, bvanassche@acm.org, jack@suse.cz,
-        jlayton@kernel.org, linux-kernel@vger.kernel.org, neilb@suse.de,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        willy@infradead.org, yi.zhang@huawei.com
+        Mon, 21 Nov 2022 08:30:09 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7A6BEAF6;
+        Mon, 21 Nov 2022 05:30:04 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NG7PD32hrz9v7Yb;
+        Mon, 21 Nov 2022 21:23:12 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwC36fU6fXtjYTSBAA--.27697S2;
+        Mon, 21 Nov 2022 14:29:40 +0100 (CET)
+Message-ID: <ad7bfa59a3a89ccad52574e2f9fb8965dbaa1620.camel@huaweicloud.com>
+Subject: Re: [PATCH v4 3/5] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Mon, 21 Nov 2022 14:29:20 +0100
+In-Reply-To: <fb3f423a-a56e-b6ed-d1e7-476605d607f8@schaufler-ca.com>
+References: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
+         <20221110094639.3086409-4-roberto.sassu@huaweicloud.com>
+         <4c1349f670dc3c23214a5a5036e43ddaa0a7bc89.camel@linux.ibm.com>
+         <fe16a03a-102e-b3e1-cc3f-5bad3c28fad7@huaweicloud.com>
+         <3ffb9bb4ab203b5e0459c3892ded4ae0cd80458b.camel@linux.ibm.com>
+         <fb3f423a-a56e-b6ed-d1e7-476605d607f8@schaufler-ca.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwC36fU6fXtjYTSBAA--.27697S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AryrtF43Ww48ZF1UArWfuFg_yoW8Cw4fpF
+        WUA3Wj9F4kJr47A34Iqr4ruw4a9rWrGayDXFn8Gr1jyFs0qrn3ZrWSvFy5uFy7W395t3yv
+        qa1jva43Ar98AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgADBF1jj4GrBQACsZ
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Fri, 2022-11-18 at 09:31 -0800, Casey Schaufler wrote:
+> On 11/18/2022 7:10 AM, Mimi Zohar wrote:
+> > On Fri, 2022-11-18 at 10:14 +0100, Roberto Sassu wrote:
+> > > > > +static int security_check_compact_xattrs(struct xattr *xattrs,
+> > > > > +                                     int num_xattrs, int *checked_xattrs)
+> > > > Perhaps the variable naming is off, making it difficult to read.   So
+> > > > although this is a static function, which normally doesn't require a
+> > > > comment, it's definitely needs one.
+> > > Ok, will improve it.
+> > > 
+> > > > > +{
+> > > > > +    int i;
+> > > > > +
+> > > > > +    for (i = *checked_xattrs; i < num_xattrs; i++) {
+> > > > If the number of "checked" xattrs was kept up to date, removing the
+> > > > empty xattr gaps wouldn't require a loop.  Is the purpose of this loop
+> > > > to support multiple per LSM xattrs?
+> > > An LSM might reserve one or more xattrs, but not set it/them (for 
+> > > example because it is not initialized). In this case, removing the gaps 
+> > > is needed for all subsequent LSMs.
+> > Including this sort of info in the function description or as a comment
+> > in the code would definitely simplify review.
+> > 
+> > security_check_compact_xattrs() is called in the loop after getting
+> > each LSM's xattr(s).  Only the current LSMs xattrs need to be
+> > compressed, yet the loop goes to the maximum number of xattrs each
+> > time. Just wondering if there is a way of improving it.
+> 
+> At security module registration each module could identify how
+> many xattrs it uses. That number could be used to limit the range
+> of the loop. I have to do similar things for the forthcoming LSM
+> syscalls and module stacking beyond that.
 
-HEAD commit:    eb7081409f94 Linux 6.1-rc6
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=159feddd880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8cdf448d3b35234
-dashboard link: https://syzkaller.appspot.com/bug?extid=2da5e132dd0268a9c0e4
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15f2377d880000
+Yes, blob_sizes.lbs_xattr contains the total number of xattrs requested
+by LSMs. To stop the loop earlier, at the offset of the next LSM, we
+would need to search the LSM's lsm_info, using the LSM name in
+the security_hook_list structure. Although it is not optimal, not doing
+it makes the code simpler. I could do that, if preferred.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4a019f55c517/disk-eb708140.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/eb36e890aa8b/vmlinux-eb708140.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/feee2c23ec64/bzImage-eb708140.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/55ea49124c39/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2da5e132dd0268a9c0e4@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-kernel BUG at fs/reiserfs/journal.c:3039!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 4894 Comm: syz-executor.5 Not tainted 6.1.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:do_journal_begin_r+0x105b/0x1070 fs/reiserfs/journal.c:3039
-Code: ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 22 ff ff ff 48 89 df e8 a6 eb b2 ff e9 15 ff ff ff e8 bc d3 5e ff 0f 0b e8 b5 d3 5e ff <0f> 0b e8 2e 6f 6a 08 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 55
-RSP: 0018:ffffc90005b975c0 EFLAGS: 00010293
-RAX: ffffffff822bc4bb RBX: 000000001100e1a7 RCX: ffff88807355d7c0
-RDX: 0000000000000000 RSI: 000000001100e1a7 RDI: 0000000000000100
-RBP: ffffc90005b97768 R08: ffffffff822bb592 R09: fffffbfff1d2f2de
-R10: fffffbfff1d2f2de R11: 1ffffffff1d2f2dd R12: ffff888076148678
-R13: ffffc90005c6c214 R14: dffffc0000000000 R15: 0000000000000100
-FS:  0000555556636400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fafdd314709 CR3: 0000000076c6c000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- journal_begin+0x14b/0x350 fs/reiserfs/journal.c:3255
- reiserfs_create+0x2c3/0x660 fs/reiserfs/namei.c:661
- lookup_open fs/namei.c:3413 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x12d0/0x2df0 fs/namei.c:3710
- do_filp_open+0x264/0x4f0 fs/namei.c:3740
- do_sys_openat2+0x124/0x4e0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_open fs/open.c:1334 [inline]
- __se_sys_open fs/open.c:1330 [inline]
- __x64_sys_open+0x221/0x270 fs/open.c:1330
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fafdd28b639
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc58937bf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 00007fafdd3abf80 RCX: 00007fafdd28b639
-RDX: 0000000000000000 RSI: 0000000000163042 RDI: 0000000020000280
-RBP: 00007fafdd2e6ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fafdce01c58 R14: 00007fafdd3abf80 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:do_journal_begin_r+0x105b/0x1070 fs/reiserfs/journal.c:3039
-Code: ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 22 ff ff ff 48 89 df e8 a6 eb b2 ff e9 15 ff ff ff e8 bc d3 5e ff 0f 0b e8 b5 d3 5e ff <0f> 0b e8 2e 6f 6a 08 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 55
-RSP: 0018:ffffc90005b975c0 EFLAGS: 00010293
-RAX: ffffffff822bc4bb RBX: 000000001100e1a7 RCX: ffff88807355d7c0
-RDX: 0000000000000000 RSI: 000000001100e1a7 RDI: 0000000000000100
-RBP: ffffc90005b97768 R08: ffffffff822bb592 R09: fffffbfff1d2f2de
-R10: fffffbfff1d2f2de R11: 1ffffffff1d2f2dd R12: ffff888076148678
-R13: ffffc90005c6c214 R14: dffffc0000000000 R15: 0000000000000100
-FS:  0000555556636400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fafdd314709 CR3: 0000000076c6c000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Roberto
 
