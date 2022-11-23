@@ -2,195 +2,263 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49672634DEA
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 23 Nov 2022 03:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98DC3635895
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 23 Nov 2022 11:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235361AbiKWCdn (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 22 Nov 2022 21:33:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        id S237089AbiKWKBN (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 23 Nov 2022 05:01:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235093AbiKWCdm (ORCPT
+        with ESMTP id S237068AbiKWKAf (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 22 Nov 2022 21:33:42 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A394D5E3DA
-        for <reiserfs-devel@vger.kernel.org>; Tue, 22 Nov 2022 18:33:40 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id z15-20020a5e860f000000b006c09237cc06so8473699ioj.21
-        for <reiserfs-devel@vger.kernel.org>; Tue, 22 Nov 2022 18:33:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eIzFMM+Ikd/Q/BDGCMvL1j+zASrNppy03XUf3EFmi70=;
-        b=JQ2Y8LurzVMZMdRIK+ssguUQQgzj/rsTyh9MwQ+W1idCJr2s5VJVse/pATCzC+DXRt
-         thW/95ivB8u81CppFHxch4VqerrWLA1bfFDcmgLEEK0eqezhLEhUxv+8Pxxb2MWOJgRY
-         7Z5Fj+3lgxq7/2RNbJr4A4Lwi9xrum7cbyGH3zOKZB2yN1RthdL3EGec0Xo8/zrOKnWY
-         wm3XEgk3XTl8cBv+aY7jFEjk52GDa/YdIfPONws+r6OazLt+y/azXK/RvPKYVDHA01fZ
-         xjJ3DbYRJ0Swvs2/AzKKfiANi129oFF5xLm5Eb0zzebh051NAvxwJpY/AmV8RweDEDj7
-         TXig==
-X-Gm-Message-State: ANoB5pl930UgO29RmCT3/GGl6K5Z7MSP1i/zb9X82/z1VaNRRryEwRNO
-        VH221m+nS1WvbjUfI6AyoAG9y1aYINMPycf4qxy4j3OIwU1X
-X-Google-Smtp-Source: AA0mqf791VK/5bhSRC5/9sysxojq9e9UXTKOHH00DzoOstixBVPAL60butSF5O1zx6ligMd7/7fIIQzeGONXcPi/dgq2PrYsRpqZ
+        Wed, 23 Nov 2022 05:00:35 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBF815801;
+        Wed, 23 Nov 2022 01:52:51 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NHGTZ5Zttz9v7gP;
+        Wed, 23 Nov 2022 17:45:54 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwAH829J7X1jzDqKAA--.13162S2;
+        Wed, 23 Nov 2022 10:52:21 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com
+Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v5 0/6] evm: Prepare for moving to the LSM infrastructure
+Date:   Wed, 23 Nov 2022 10:51:56 +0100
+Message-Id: <20221123095202.599252-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:c5a4:0:b0:302:b27a:6f6f with SMTP id
- r4-20020a92c5a4000000b00302b27a6f6fmr3084942ilt.101.1669170819997; Tue, 22
- Nov 2022 18:33:39 -0800 (PST)
-Date:   Tue, 22 Nov 2022 18:33:39 -0800
-In-Reply-To: <000000000000f250a605ec981d41@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cba69705ee1a1d4e@google.com>
-Subject: Re: [syzbot] possible deadlock in mnt_want_write_file
-From:   syzbot <syzbot+1047e42179f502f2b0a2@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwAH829J7X1jzDqKAA--.13162S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3WF43ury7ury3Jr48Jw17trb_yoWfuF18pF
+        WagF15Krn8AF9rWrWfAa1xu3WSgrWrCrW7J393GryUZ3Z8Gr1Iqr40yr15uas8XrZ5JF92
+        qw42yw13urn8A37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvGb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
+        0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
+        F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
+        kC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7Cj
+        xVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa
+        73UjIFyTuYvjxUIa0PDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAFBF1jj4HGPQAEsM
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-HEAD commit:    eb7081409f94 Linux 6.1-rc6
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=155d6d45880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8cdf448d3b35234
-dashboard link: https://syzkaller.appspot.com/bug?extid=1047e42179f502f2b0a2
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1167648d880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1562d6c5880000
+One of the challenges that must be tackled to move IMA and EVM to the LSM
+infrastructure is to ensure that EVM is capable to correctly handle
+multiple stacked LSMs providing an xattr at file creation. At the moment,
+there are few issues that would prevent a correct integration. This patch
+set aims at solving them.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4a019f55c517/disk-eb708140.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/eb36e890aa8b/vmlinux-eb708140.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/feee2c23ec64/bzImage-eb708140.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/aa387a5f9eda/mount_0.gz
+From the LSM infrastructure side, the LSM stacking feature added the
+possibility of registering multiple implementations of the security hooks,
+that are called sequentially whenever someone calls the corresponding
+security hook. However, security_inode_init_security() is currently limited
+to support one xattr provided by LSM and one by EVM. It is ready to support
+multiple xattrs, as it can call the initxattrs() callback provided by
+filesystems. security_old_inode_init_security() can only support one xattr
+due to its API.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1047e42179f502f2b0a2@syzkaller.appspotmail.com
+In addition, using the call_int_hook() macro causes some issues. According
+to the documentation in include/linux/lsm_hooks.h, it is a legitimate case
+that an LSM returns -EOPNOTSUPP when it does not want to provide an xattr.
+However, the loop defined in the macro would stop calling subsequent LSMs
+if that happens. In the case of security_old_inode_init_security(), using
+the macro would also cause a memory leak due to replacing the *value
+pointer, if multiple LSMs provide an xattr.
 
-REISERFS (device loop0): Using tea hash to sort names
-REISERFS (device loop0): Created .reiserfs_priv - reserved for xattr storage.
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-rc6-syzkaller #0 Not tainted
-------------------------------------------------------
-syz-executor139/3633 is trying to acquire lock:
-ffff888026b18460 (sb_writers#9){.+.+}-{0:0}, at: mnt_want_write_file+0x5a/0x1f0 fs/namespace.c:437
+From EVM side, the first operation to be done is to change the definition
+of evm_inode_init_security() to be compatible with the security hook
+definition. Unfortunately, the current definition does not provide enough
+information for EVM, as it must have visibility of all xattrs provided by
+LSMs to correctly calculate the HMAC. This patch set changes the security
+hook definition by replacing the name, value and len triple with the xattr
+array allocated by security_inode_init_security().
 
-but task is already holding lock:
-ffff88801f89c090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
+Secondly, given that the place where EVM can fill an xattr is not provided
+anymore with the changed definition, EVM must know how many elements are in
+the xattr array. EVM can rely on the fact that the xattr array must be
+terminated with an element with name field set to NULL. If EVM is moved to
+the LSM infrastructure, the infrastructure will provide additional
+information.
 
-which lock already depends on the new lock.
+Casey suggested to use the reservation mechanism currently implemented for
+other security blobs, for xattrs. In this way,
+security_inode_init_security() can know after LSM initialization how many
+slots for xattrs should be allocated, and LSMs know the offset in the
+array from where they can start writing xattrs.
 
+One of the problem was that LSMs can decide at run-time, although they
+reserved a slot, to not use it (for example because they were not
+initialized). Given that the initxattrs() method implemented by filesystems
+expect that the array elements are contiguous, they would miss the slots
+after the one not being initialized. security_check_compact_filled_xattrs()
+has been introduced to overcome this problem and also to check the
+correctness of the xattrs provided by the LSMs.
 
-the existing dependency chain (in reverse order) is:
+Filesystems calling security_inode_init_security() are already able to set
+multiple xattrs. Those which were using security_old_inode_init_security(),
+ocfs2 and reiserfs, were converted to using security_inode_init_security()
+and security_old_inode_init_security() was removed. However, they are still
+limited to setting only one xattr despite more are available, as their code
+is not ready to set multiple xattrs at inode creation time. Support for it
+can be added by those filesystems later.
 
--> #2 (&sbi->lock){+.+.}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
-       reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
-       reiserfs_lookup+0x147/0x490 fs/reiserfs/namei.c:364
-       __lookup_slow+0x266/0x3a0 fs/namei.c:1685
-       lookup_one_len+0x430/0x690 fs/namei.c:2711
-       reiserfs_lookup_privroot+0x85/0x1e0 fs/reiserfs/xattr.c:973
-       reiserfs_fill_super+0x2071/0x24a0 fs/reiserfs/super.c:2174
-       mount_bdev+0x26c/0x3a0 fs/super.c:1401
-       legacy_get_tree+0xea/0x180 fs/fs_context.c:610
-       vfs_get_tree+0x88/0x270 fs/super.c:1531
-       do_new_mount+0x289/0xad0 fs/namespace.c:3040
-       do_mount fs/namespace.c:3383 [inline]
-       __do_sys_mount fs/namespace.c:3591 [inline]
-       __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+This patch set has been tested by introducing several instances of a
+TestLSM (some providing an xattr, some not, one with a wrong implementation
+to see how the LSM infrastructure handles it, one providing multiple xattrs
+and another providing an xattr but in a disabled state). The patch is not
+included in this set but it is available here:
 
--> #1 (&type->i_mutex_dir_key#6){+.+.}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       down_write+0x9c/0x270 kernel/locking/rwsem.c:1562
-       inode_lock include/linux/fs.h:756 [inline]
-       open_last_lookups fs/namei.c:3478 [inline]
-       path_openat+0x7b9/0x2df0 fs/namei.c:3710
-       do_filp_open+0x264/0x4f0 fs/namei.c:3740
-       do_sys_openat2+0x124/0x4e0 fs/open.c:1310
-       do_sys_open fs/open.c:1326 [inline]
-       __do_sys_creat fs/open.c:1402 [inline]
-       __se_sys_creat fs/open.c:1396 [inline]
-       __x64_sys_creat+0x11f/0x160 fs/open.c:1396
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+https://github.com/robertosassu/linux/commit/e13a03236df0c399dccb73df5fe4cfceb4bb1d89
 
--> #0 (sb_writers#9){.+.+}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
-       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1826 [inline]
-       sb_start_write+0x4d/0x1a0 include/linux/fs.h:1901
-       mnt_want_write_file+0x5a/0x1f0 fs/namespace.c:437
-       reiserfs_ioctl+0x16e/0x340 fs/reiserfs/ioctl.c:103
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+The test, added to ima-evm-utils, is available here:
 
-other info that might help us debug this:
+https://github.com/robertosassu/ima-evm-utils/blob/evm-multiple-lsms-v5-devel-v3/tests/evm_multiple_lsms.test
 
-Chain exists of:
-  sb_writers#9 --> &type->i_mutex_dir_key#6 --> &sbi->lock
+The test takes a UML kernel built by Github Actions and launches it several
+times, each time with a different combination of LSMs and filesystems (ext4,
+reiserfs, ocfs2). After boot, it first checks that there is an xattr for each
+LSM providing it (for reiserfs and ocfs2 just the first LSM), and then (for
+ext4) calculates the HMAC in user space and compares it with the HMAC
+calculated by EVM in kernel space.
 
- Possible unsafe locking scenario:
+A test report can be obtained here:
 
-       CPU0                    CPU1
-       ----                    ----
-  lock(&sbi->lock);
-                               lock(&type->i_mutex_dir_key#6);
-                               lock(&sbi->lock);
-  lock(sb_writers#9);
+https://github.com/robertosassu/ima-evm-utils/actions/runs/3525619568/jobs/5912560168
 
- *** DEADLOCK ***
+The patch set has been tested with both the SElinux and Smack test suites.
+Below, there is the summary of the test results:
 
-1 lock held by syz-executor139/3633:
- #0: ffff88801f89c090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
+SELinux Test Suite result (without patches):
+Files=73, Tests=1346, 225 wallclock secs ( 0.43 usr  0.23 sys +  6.11 cusr 58.70 csys = 65.47 CPU)
+Result: FAIL
+Failed 4/73 test programs. 13/1346 subtests failed.
 
-stack backtrace:
-CPU: 1 PID: 3633 Comm: syz-executor139 Not tainted 6.1.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
- __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
- lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
- percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
- __sb_start_write include/linux/fs.h:1826 [inline]
- sb_start_write+0x4d/0x1a0 include/linux/fs.h:1901
- mnt_want_write_file+0x5a/0x1f0 fs/namespace.c:437
- reiserfs_ioctl+0x16e/0x340 fs/reiserfs/ioctl.c:103
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f9c2c672829
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffffe9d1ea8 EFLAGS:
+SELinux Test Suite result (with patches):
+Files=73, Tests=1346, 225 wallclock secs ( 0.44 usr  0.22 sys +  6.15 cusr 59.94 csys = 66.75 CPU)
+Result: FAIL
+Failed 4/73 test programs. 13/1346 subtests failed.
+
+Smack Test Suite result (without patches):
+95 Passed, 0 Failed, 100% Success rate
+
+Smack Test Suite result (with patches):
+95 Passed, 0 Failed, 100% Success rate
+
+The patch set has also been successfully tested with a WIP branch where
+IMA/EVM have been moved to the LSM infrastructure. It is available here:
+
+https://github.com/robertosassu/linux/commits/ima-evm-lsms-v1-devel-v9-test
+
+This is the patch that moves EVM to the LSM infrastructure:
+
+https://github.com/robertosassu/linux/commit/a1e0682ef75cc8087327e6f446f586c02dd87c60
+
+The only trivial changes, after this patch set, would be to allocate one
+element less in the xattr array (because EVM will reserve its own xattr),
+and to simply remove the call to evm_inode_init_security().
+
+The test report when IMA and EVM are moved to the LSM infrastructure is
+available here:
+
+https://github.com/robertosassu/ima-evm-utils/actions/runs/3525750217/jobs/5912853636
+
+Changelog
+
+v4:
+- Remove patch to call reiserfs_security_free(), already queued
+- Switch ocfs2 and reiserfs to security_inode_init_security() (suggested by
+  Mimi)
+- Remove security_old_inode_init_security() (suggested by Paul)
+- Rename security_check_compact_xattrs() to
+  security_check_compact_filled_xattrs() and add function description
+  (suggested by Mimi)
+- Rename checked_xattrs parameter of security_check_compact_filled_xattrs()
+  to num_filled_xattrs (suggested by Mimi)
+- Rename cur_xattrs variable in security_inode_init_security() to
+  num_filled_xattrs (suggested by Mimi)
+
+v3:
+- Don't free the xattr name in reiserfs_security_free()
+- Don't include fs_data parameter in inode_init_security hook
+- Don't change evm_inode_init_security(), as it will be removed if EVM is
+  stacked
+- Fix inode_init_security hook documentation
+- Drop lsm_find_xattr_slot(), use simple xattr reservation mechanism and
+  introduce security_check_compact_xattrs() to compact the xattr array
+- Don't allocate xattr array if LSMs didn't reserve any xattr
+- Return zero if initxattrs() is not provided to
+  security_inode_init_security(), -EOPNOTSUPP if value is not provided to
+  security_old_inode_init_security()
+- Request LSMs to fill xattrs if only value (not the triple) is provided to
+  security_old_inode_init_security(), to avoid unnecessary memory
+  allocation
+
+v2:
+- rewrite selinux_old_inode_init_security() to use
+  security_inode_init_security()
+- add lbs_xattr field to lsm_blob_sizes structure, to give the ability to
+  LSMs to reserve slots in the xattr array (suggested by Casey)
+- add new parameter base_slot to inode_init_security hook definition
+
+v1:
+- add calls to reiserfs_security_free() and initialize sec->value to NULL
+  (suggested by Tetsuo and Mimi)
+- change definition of inode_init_security hook, replace the name, value
+  and len triple with the xattr array (suggested by Casey)
+- introduce lsm_find_xattr_slot() helper for LSMs to find an unused slot in
+  the passed xattr array
+
+Roberto Sassu (6):
+  reiserfs: Switch to security_inode_init_security()
+  ocfs2: Switch to security_inode_init_security()
+  security: Remove security_old_inode_init_security()
+  security: Allow all LSMs to provide xattrs for inode_init_security
+    hook
+  evm: Align evm_inode_init_security() definition with LSM
+    infrastructure
+  evm: Support multiple LSMs providing an xattr
+
+ fs/ocfs2/namei.c                    |  18 ++---
+ fs/ocfs2/xattr.c                    |  30 +++++++-
+ fs/reiserfs/xattr_security.c        |  23 ++++--
+ include/linux/evm.h                 |  12 +--
+ include/linux/lsm_hook_defs.h       |   3 +-
+ include/linux/lsm_hooks.h           |  17 ++--
+ include/linux/security.h            |  12 ---
+ security/integrity/evm/evm.h        |   2 +
+ security/integrity/evm/evm_crypto.c |   9 ++-
+ security/integrity/evm/evm_main.c   |  28 +++++--
+ security/security.c                 | 115 +++++++++++++++++++++-------
+ security/selinux/hooks.c            |  19 +++--
+ security/smack/smack_lsm.c          |  26 ++++---
+ 13 files changed, 213 insertions(+), 101 deletions(-)
+
+-- 
+2.25.1
 
