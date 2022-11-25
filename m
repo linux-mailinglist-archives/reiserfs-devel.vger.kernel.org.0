@@ -2,175 +2,169 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8146373C2
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 24 Nov 2022 09:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A65C6386AB
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 25 Nov 2022 10:49:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbiKXITV (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 24 Nov 2022 03:19:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41726 "EHLO
+        id S230116AbiKYJte (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 25 Nov 2022 04:49:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiKXITF (ORCPT
+        with ESMTP id S229910AbiKYJsP (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:19:05 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2533101DB;
-        Thu, 24 Nov 2022 00:18:34 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NHrLL4Zc5z9xFVr;
-        Thu, 24 Nov 2022 16:11:38 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwB3Y3CzKH9jAWuOAA--.29469S2;
-        Thu, 24 Nov 2022 09:18:06 +0100 (CET)
-Message-ID: <bb63eba9a9f24558f4a1acd9bf012b59b5c6e98e.camel@huaweicloud.com>
-Subject: Re: [PATCH v6 4/6] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, mark@fasheh.com,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com
-Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 24 Nov 2022 09:17:51 +0100
-In-Reply-To: <13350b79f708cb089e2ff2ee5cead52bafb10982.camel@linux.ibm.com>
-References: <20221123154712.752074-1-roberto.sassu@huaweicloud.com>
-         <20221123154712.752074-5-roberto.sassu@huaweicloud.com>
-         <13350b79f708cb089e2ff2ee5cead52bafb10982.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Fri, 25 Nov 2022 04:48:15 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936A32DAB9
+        for <reiserfs-devel@vger.kernel.org>; Fri, 25 Nov 2022 01:46:34 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id d19-20020a056e020c1300b00300b5a12c44so2601668ile.15
+        for <reiserfs-devel@vger.kernel.org>; Fri, 25 Nov 2022 01:46:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=O4DGcGV2JrRZXaUOixoskVdfBL3gOdPW1qweVO1zLOI=;
+        b=yLYKoJmbwbSUSiSowerKrRLz9SKkdIOGbk4pAdpoziAAI7L6MSqHbHHZLcDph8FVKe
+         DWan9/ePdIj0jDzomxbjC6oNkO6frmG5sNMQooyU8k5iSNw6M2Hd/5TopmuYVevVOdvJ
+         rhJCaNaiRdgTA+Gne4bv7MnPtZav4+GND/rEyyGF3FX1z2E5x7vm3vjXRCJao5ptEZf/
+         bndHw3YPbwnSHz4derm/5ZctCLmixksW8HwG7mf6syAfVILHTJT5Nt4b9QpbYwPKa5Tl
+         UiMhdcbXj5yM2DU9S9+HH2zQWmm3JRtN4FeHlGIGMkW8Q7/wprsFk8hOD2Dp3+xik78r
+         nh3g==
+X-Gm-Message-State: ANoB5pmeJQrjhFeRKDG4sRkrHFYDeq6/p5+c9sLfqCqVS4cdaz5lvPWb
+        p1YaKl9q5gFDxJlH7reVH7ZiOCKacxQl1mDuFwW4jV4lRLB3
+X-Google-Smtp-Source: AA0mqf7808ABF7EIhF6nXmCUmPVEc5WHZs0bQ9RSwxD1mSx4dwq+7GUluNRc+oQA/XXuwAnN7okq06jL2PQIaHmOgXpbGR9/xLb9
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwB3Y3CzKH9jAWuOAA--.29469S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWF4rKw17Ar4UKF18JryxXwb_yoW5AF1rpF
-        W8t3WDuF15JFyUWryFvr4Y9w4SkFy5GrWDG3srGFy2yFyDCrn3tryavF1Yka98ZrWkJr1v
-        vayjyr1DWwn8J37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUo0eHDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAGBF1jj4XQZgABsA
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:c48a:0:b0:375:9796:17c1 with SMTP id
+ t10-20020a02c48a000000b00375979617c1mr15850021jam.18.1669369593982; Fri, 25
+ Nov 2022 01:46:33 -0800 (PST)
+Date:   Fri, 25 Nov 2022 01:46:33 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a5f23f05ee4865cf@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in set_de_name_and_namelen
+From:   syzbot <syzbot+3969ffae9388a369bab8@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Wed, 2022-11-23 at 20:14 -0500, Mimi Zohar wrote:
-> Hi Roberto,
-> 
-> On Wed, 2022-11-23 at 16:47 +0100, Roberto Sassu wrote:
-> >  int security_inode_init_security(struct inode *inode, struct inode *dir,
-> >                                  const struct qstr *qstr,
-> >                                  const initxattrs initxattrs, void *fs_data)
-> >  {
-> > -       struct xattr new_xattrs[MAX_LSM_EVM_XATTR + 1];
-> > -       struct xattr *lsm_xattr, *evm_xattr, *xattr;
-> > -       int ret;
-> > +       struct security_hook_list *P;
-> > +       struct xattr *new_xattrs;
-> > +       struct xattr *xattr;
-> > +       int ret = -EOPNOTSUPP, num_filled_xattrs = 0;
-> >  
-> >         if (unlikely(IS_PRIVATE(inode)))
-> >                 return 0;
-> >  
-> > +       if (!blob_sizes.lbs_xattr)
-> > +               return 0;
-> > +
-> >         if (!initxattrs)
-> >                 return call_int_hook(inode_init_security, -EOPNOTSUPP, inode,
-> > -                                    dir, qstr, NULL, NULL, NULL);
-> > -       memset(new_xattrs, 0, sizeof(new_xattrs));
-> > -       lsm_xattr = new_xattrs;
-> > -       ret = call_int_hook(inode_init_security, -EOPNOTSUPP, inode, dir, qstr,
-> > -                                               &lsm_xattr->name,
-> > -                                               &lsm_xattr->value,
-> > -                                               &lsm_xattr->value_len);
-> > -       if (ret)
-> > +                                   dir, qstr, NULL);
-> > +       /* Allocate +1 for EVM and +1 as terminator. */
-> > +       new_xattrs = kcalloc(blob_sizes.lbs_xattr + 2, sizeof(*new_xattrs),
-> > +                            GFP_NOFS);
-> > +       if (!new_xattrs)
-> > +               return -ENOMEM;
-> > +
-> > +       hlist_for_each_entry(P, &security_hook_heads.inode_init_security,
-> > +                            list) {
-> > +               ret = P->hook.inode_init_security(inode, dir, qstr, new_xattrs);
-> > +               if (ret && ret != -EOPNOTSUPP)
-> > +                       goto out;
-> > +               if (ret == -EOPNOTSUPP)
-> > +                       continue;
-> 
-> In this context, -EOPNOTSUPP originally signified that the filesystem
-> does not support writing xattrs.  Writing any xattr would fail. 
-> Returning -ENODATA for no LSM xattr(s) data would seem to be more
-> appropriate than -EOPNOTSUPP.
+Hello,
 
-Hi Mimi
+syzbot found the following issue on:
 
-I thought about adding new return values. Currently only -EOPNOTSUPP
-and -ENOMEM are expected as errors.
+HEAD commit:    c3eb11fbb826 Merge tag 'pci-v6.1-fixes-3' of git://git.ker..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15a7e1c9880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
+dashboard link: https://syzkaller.appspot.com/bug?extid=3969ffae9388a369bab8
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1615d7e5880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15f20981880000
 
-However, changing the conventions would mean revisiting the LSMs code
-and ensuring that they follow the new conventions.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d81ac029767f/disk-c3eb11fb.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b68346b5b73c/vmlinux-c3eb11fb.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/410a61724587/bzImage-c3eb11fb.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/0b4c696f5585/mount_0.gz
 
-I would be more in favor of not touching it.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3969ffae9388a369bab8@syzkaller.appspotmail.com
 
-Thanks
+REISERFS (device loop0): Using r5 hash to sort names
+REISERFS (device loop0): Created .reiserfs_priv - reserved for xattr storage.
+==================================================================
+BUG: KASAN: use-after-free in strlen+0x56/0x60 lib/string.c:495
+Read of size 1 at addr ffff8880700f09cc by task syz-executor399/3632
 
-Roberto
+CPU: 0 PID: 3632 Comm: syz-executor399 Not tainted 6.1.0-rc6-syzkaller-00015-gc3eb11fbb826 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ print_address_description+0x74/0x340 mm/kasan/report.c:284
+ print_report+0x107/0x1f0 mm/kasan/report.c:395
+ kasan_report+0xcd/0x100 mm/kasan/report.c:495
+ strlen+0x56/0x60 lib/string.c:495
+ _Z16__fortify_strlenPKcU17pass_object_size1 include/linux/fortify-string.h:196 [inline]
+ set_de_name_and_namelen+0x378/0x5c0 fs/reiserfs/namei.c:82
+ search_by_entry_key+0x6ca/0xd20 fs/reiserfs/namei.c:172
+ reiserfs_readdir_inode+0x235/0x1410 fs/reiserfs/dir.c:98
+ iterate_dir+0x257/0x5f0
+ __do_sys_getdents64 fs/readdir.c:369 [inline]
+ __se_sys_getdents64+0x1db/0x4c0 fs/readdir.c:354
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fb4f3debec9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffed0b87788 EFLAGS: 00000246 ORIG_RAX: 00000000000000d9
+RAX: ffffffffffffffda RBX: 00007fb4f3e5bed0 RCX: 00007fb4f3debec9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
+RBP: 00007ffed0b87798 R08: 0000000000000001 R09: 0000000000000001
+R10: 00000000000010e3 R11: 0000000000000246 R12: 00007ffed0b877c0
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
-> thanks,
-> 
-> Mimi
-> 
-> > +               /*
-> > +                * As the number of xattrs reserved by LSMs is not directly
-> > +                * available, directly use the total number blob_sizes.lbs_xattr
-> > +                * to keep the code simple, while being not the most efficient
-> > +                * way.
-> > +                */
-> > +               ret = security_check_compact_filled_xattrs(new_xattrs,
-> > +                                                          blob_sizes.lbs_xattr,
-> > +                                                          &num_filled_xattrs);
-> > +               if (ret < 0) {
-> > +                       ret = -ENOMEM;
-> > +                       goto out;
-> > +               }
-> > +       }
-> > +
-> > +       if (!num_filled_xattrs)
-> >                 goto out;
-> >  
-> > -       evm_xattr = lsm_xattr + 1;
-> > -       ret = evm_inode_init_security(inode, lsm_xattr, evm_xattr);
-> > +       ret = evm_inode_init_security(inode, new_xattrs,
-> > +                                     new_xattrs + num_filled_xattrs);
-> >         if (ret)
-> >                 goto out;
-> >         ret = initxattrs(inode, new_xattrs, fs_data);
-> >  out:
-> >         for (xattr = new_xattrs; xattr->value != NULL; xattr++)
-> >                 kfree(xattr->value);
-> > +       kfree(new_xattrs);
-> >         return (ret == -EOPNOTSUPP) ? 0 : ret;
-> >  }
-> b
+The buggy address belongs to the physical page:
+page:ffffea0001c03c00 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x700f0
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000000 ffffea0001c03c48 ffffea0001c03bc8 0000000000000000
+raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as freed
+page last allocated via order 0, migratetype Movable, gfp_mask 0x8(__GFP_MOVABLE), pid 1, tgid 1 (swapper/0), ts 10266546633, free_ts 11631552401
+ split_map_pages+0x25b/0x540 mm/compaction.c:97
+ isolate_freepages_range+0x4ac/0x510 mm/compaction.c:735
+ alloc_contig_range+0x6a9/0x980 mm/page_alloc.c:9371
+ __alloc_contig_pages mm/page_alloc.c:9394 [inline]
+ alloc_contig_pages+0x3c8/0x4e0 mm/page_alloc.c:9471
+ debug_vm_pgtable_alloc_huge_page+0xcd/0x11e mm/debug_vm_pgtable.c:1098
+ init_args+0xa3a/0xdba mm/debug_vm_pgtable.c:1221
+ debug_vm_pgtable+0x9a/0x4a6 mm/debug_vm_pgtable.c:1259
+ do_one_initcall+0x1c9/0x400 init/main.c:1303
+ do_initcall_level+0x168/0x218 init/main.c:1376
+ do_initcalls+0x4b/0x8c init/main.c:1392
+ kernel_init_freeable+0x428/0x5d5 init/main.c:1631
+ kernel_init+0x19/0x2b0 init/main.c:1519
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1459 [inline]
+ free_pcp_prepare+0x80c/0x8f0 mm/page_alloc.c:1509
+ free_unref_page_prepare mm/page_alloc.c:3387 [inline]
+ free_unref_page+0x7d/0x5f0 mm/page_alloc.c:3483
+ free_contig_range+0xa3/0x160 mm/page_alloc.c:9493
+ destroy_args+0xfe/0x935 mm/debug_vm_pgtable.c:1031
+ debug_vm_pgtable+0x44d/0x4a6 mm/debug_vm_pgtable.c:1354
+ do_one_initcall+0x1c9/0x400 init/main.c:1303
+ do_initcall_level+0x168/0x218 init/main.c:1376
+ do_initcalls+0x4b/0x8c init/main.c:1392
+ kernel_init_freeable+0x428/0x5d5 init/main.c:1631
+ kernel_init+0x19/0x2b0 init/main.c:1519
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
 
+Memory state around the buggy address:
+ ffff8880700f0880: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8880700f0900: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>ffff8880700f0980: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                                              ^
+ ffff8880700f0a00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8880700f0a80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
