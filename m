@@ -2,70 +2,126 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFECD63C92E
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 29 Nov 2022 21:19:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1F863DA1A
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 30 Nov 2022 16:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233743AbiK2UTx (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 29 Nov 2022 15:19:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
+        id S229612AbiK3P7i (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 30 Nov 2022 10:59:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235210AbiK2UTw (ORCPT
+        with ESMTP id S230097AbiK3P7i (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 29 Nov 2022 15:19:52 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5B22662
-        for <reiserfs-devel@vger.kernel.org>; Tue, 29 Nov 2022 12:19:51 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id r12so23846006lfp.1
-        for <reiserfs-devel@vger.kernel.org>; Tue, 29 Nov 2022 12:19:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=AqQSb1g9vJ9ibp0rLrs1bP8KmPiIRzl6Sv7Ib9/3DfXLnf6h2m0aFVCHKfn++fDZWW
-         o/VZoLt/Swg+3Aw/tpKm+bFIOa51DkuC2YZ47E9w58m39iyh0geBo3tLpcQ4GVO/pX9e
-         qlayjZMpPIXed9gjiigK24JDpzNBelF8DpWQMjuqdk+DK0NM/a46ahOjwgGOiqWkXIPX
-         oqRXHoYPBKVEDJ3CVLFUApWXytPfo+XV+fRC9oPjMcyt2LGW/LZA0hX0xZj5ejEGzkzt
-         xht+Oz88NJqGGEuGqqGkW6L8+Y3v1/YIGY8Vr8yP107NuRkEJU0AhASONohvxiNnuw6p
-         cOmg==
+        Wed, 30 Nov 2022 10:59:38 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4802D76C
+        for <reiserfs-devel@vger.kernel.org>; Wed, 30 Nov 2022 07:59:37 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id y5-20020a056602120500b006cf628c14ddso11523773iot.15
+        for <reiserfs-devel@vger.kernel.org>; Wed, 30 Nov 2022 07:59:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=SatPLJUY6vcZtVO/Yu7kz2FGAi7z+1KDfGNmLRN+ph+FzgM8UFpfqbs+d5aJzf93x3
-         lRW9WFJoOpAnuWqd3Y7TsksvGRgT5P/Zhxk2AL0aMaLnRXruLeSQ5/Xf5SeI5VjRNWgF
-         nP7A3LBOKRtpIUZ16hTwcKZdnP6Frcb0Bcx0/OfcEm5oOvR5IGHEBcuo+bDO7Iqkpdcg
-         YSDnhT8Spfpui8tSQO4X3g674u6GRjAdoS+BeSsSLZ9oEbgYYk9/CkE2DaOicX2jKDfO
-         XOZf7G6bwvq0nFjDe/4t0Selfp07a0TTBG59sQMYpn3kqrHgm9PgE3YHwXC2N0gBTBcJ
-         dVAw==
-X-Gm-Message-State: ANoB5pkjTIh+fKcg51bF5g17G7300jPmvRk2TZ+7E9yGRoMnx7ypQhyX
-        fyedp4w71JZctAvgQv4jNr7hLy8Yp9vXS0axmpI=
-X-Google-Smtp-Source: AA0mqf6wsDlYvhHi0J07TEMd57XL3BA8Q5E5wvUsFujVHgMq526DpezlAgyoM9bAQnQmfsImlo8LUj7A749VbPJuoh8=
-X-Received: by 2002:ac2:5fb0:0:b0:4b0:65b0:7f30 with SMTP id
- s16-20020ac25fb0000000b004b065b07f30mr13760827lfe.385.1669753189099; Tue, 29
- Nov 2022 12:19:49 -0800 (PST)
+        bh=31oMlGVxdTNvE3N0DrgczjpMQQxH9AHS0L7H6mJK5k8=;
+        b=cD8nTNmHjdP4fk44m1+hXIQxxdohXiFUOijjIAPDHw3egP44LqdDSTirTcRDWKf4n7
+         9Ti8+sOXX0tzHBoa1Bd6w3IOace2VycTvQM9z0ifm3zsZip4eF4UM4+XaXNaRTsGOMoW
+         F9wEC4p7HDh7kqN6V8qrAu89cfKOBeHLWKoDr4ON+YhsWE7Zsq2dM0U0RyaOXpEkisCM
+         a6oNgkRKMDAAVG1XTMhBU/ZfVXwN8yzpE7dnGpx0jBBDvFFHaUiq6nuixmnwInfuZLXh
+         3I0EHuSJbLv2goBk+3J7OumdeJXKbaf7PGWx/MlEhAqX/4eWDpqkQKbyI9WOnH7NyhOI
+         lfLQ==
+X-Gm-Message-State: ANoB5plPk+Cp7uvoGOj65ZVLDC1TwWR1e5Ttc7dWsiWWPDd9Sk2reJju
+        nD0VDTajI9nw9OTp3VOriZU+nBtBt85/5E/AGmHT8zvFkZXt
+X-Google-Smtp-Source: AA0mqf5BjNiEaWx5JmVfaBMvIGNaWf35nkooGqwNsv0860gyBP48maw+yT9Ajj01swyjvd44SXcKgpmYmZ3Z+sQ2tsDabcfoG6ld
 MIME-Version: 1.0
-Received: by 2002:a05:6520:1d6:b0:22e:e610:6979 with HTTP; Tue, 29 Nov 2022
- 12:19:48 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <chiogb002@gmail.com>
-Date:   Tue, 29 Nov 2022 20:19:48 +0000
-Message-ID: <CAHoLJnkVKAmjXzjRF9_qDs5ab+ddz92ttMF+tU=dTX+qE_o5yA@mail.gmail.com>
-Subject: hi
-To:     undisclosed-recipients:;
+X-Received: by 2002:a5d:860b:0:b0:6da:46b4:85f6 with SMTP id
+ f11-20020a5d860b000000b006da46b485f6mr19898813iol.147.1669823976659; Wed, 30
+ Nov 2022 07:59:36 -0800 (PST)
+Date:   Wed, 30 Nov 2022 07:59:36 -0800
+In-Reply-To: <00000000000034d16305e50acc8d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f7610f05eeb23004@google.com>
+Subject: Re: [syzbot] KASAN: null-ptr-deref Read in do_journal_end (2)
+From:   syzbot <syzbot+845cd8e5c47f2a125683@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, axboe@kernel.dk, bvanassche@acm.org,
+        damien.lemoal@opensource.wdc.com, jack@suse.cz, jlayton@kernel.org,
+        linux-kernel@vger.kernel.org, neilb@suse.de,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        willy@infradead.org, yi.zhang@huawei.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+syzbot has found a reproducer for the following issue on:
+
+HEAD commit:    01f856ae6d0c Merge tag 'net-6.1-rc8-2' of git://git.kernel..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1461a85b880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
+dashboard link: https://syzkaller.appspot.com/bug?extid=845cd8e5c47f2a125683
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=109da15b880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11639425880000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/5428d604f56a/disk-01f856ae.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e953d290d254/vmlinux-01f856ae.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3f71610a4904/bzImage-01f856ae.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/2ea230629718/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+845cd8e5c47f2a125683@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:72 [inline]
+BUG: KASAN: null-ptr-deref in _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
+BUG: KASAN: null-ptr-deref in set_buffer_uptodate include/linux/buffer_head.h:148 [inline]
+BUG: KASAN: null-ptr-deref in do_journal_end+0x155f/0x4a30 fs/reiserfs/journal.c:4081
+Read of size 8 at addr 0000000000000000 by task syz-executor603/3632
+
+CPU: 0 PID: 3632 Comm: syz-executor603 Not tainted 6.1.0-rc7-syzkaller-00101-g01f856ae6d0c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ print_report+0xed/0x1f0 mm/kasan/report.c:398
+ kasan_report+0xcd/0x100 mm/kasan/report.c:495
+ kasan_check_range+0x2a7/0x2e0 mm/kasan/generic.c:189
+ instrument_atomic_read include/linux/instrumented.h:72 [inline]
+ _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
+ set_buffer_uptodate include/linux/buffer_head.h:148 [inline]
+ do_journal_end+0x155f/0x4a30 fs/reiserfs/journal.c:4081
+ reiserfs_sync_fs+0xbb/0x130 fs/reiserfs/super.c:78
+ sync_filesystem+0xe8/0x220 fs/sync.c:56
+ generic_shutdown_super+0x6b/0x310 fs/super.c:474
+ kill_block_super+0x79/0xd0 fs/super.c:1428
+ deactivate_locked_super+0xa7/0xf0 fs/super.c:332
+ cleanup_mnt+0x494/0x520 fs/namespace.c:1186
+ task_work_run+0x243/0x300 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0x664/0x2070 kernel/exit.c:820
+ do_group_exit+0x1fd/0x2b0 kernel/exit.c:950
+ __do_sys_exit_group kernel/exit.c:961 [inline]
+ __se_sys_exit_group kernel/exit.c:959 [inline]
+ __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:959
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f745e18eac9
+Code: Unable to access opcode bytes at 0x7f745e18ea9f.
+RSP: 002b:00007ffd72d53218 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f745e205350 RCX: 00007f745e18eac9
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000001
+RBP: 0000000000000001 R08: ffffffffffffffc0 R09: 00007f745e1ffe40
+R10: 000080001d00c0d0 R11: 0000000000000246 R12: 00007f745e205350
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
+==================================================================
+
