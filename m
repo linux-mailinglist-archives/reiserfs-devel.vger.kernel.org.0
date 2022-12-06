@@ -2,117 +2,76 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8437E6423D5
-	for <lists+reiserfs-devel@lfdr.de>; Mon,  5 Dec 2022 08:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B014E643F45
+	for <lists+reiserfs-devel@lfdr.de>; Tue,  6 Dec 2022 10:04:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbiLEHuq (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 5 Dec 2022 02:50:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47234 "EHLO
+        id S231964AbiLFJEl (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 6 Dec 2022 04:04:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbiLEHup (ORCPT
+        with ESMTP id S234492AbiLFJEk (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 5 Dec 2022 02:50:45 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378BDFD14
-        for <reiserfs-devel@vger.kernel.org>; Sun,  4 Dec 2022 23:50:44 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id l13-20020a056e021c0d00b003034e24b866so4424102ilh.22
-        for <reiserfs-devel@vger.kernel.org>; Sun, 04 Dec 2022 23:50:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X645BEII1asY6zC+hjv9Nr6aAK/eNxcGjS43KogC8dc=;
-        b=KqNZoAAxseghc4DpRaJg/+FW1SDB3/emhZlkGAuBKoL70wORmQQcRAB7fGR0u5M3AW
-         +ytDqyw/GsqUdgCI4IkgKTbWp9VPl4WkZLXx8A9rXsQWGptqWQ1Apyd5xHHubGPd1sdR
-         96YgFqAH+m/Lip4c7pl0f0pE9JVfA3Z0UFuNuNgv32SzOpuzv6/Pmk9JGu+1QdrYQoUO
-         Z0cRYB08UoKgP0GvmvAhLH+Vl8tvU0ZWy0vMnwBpfwueUceXJ5F9zsJwnE/b4IrxL4vj
-         cDqTQuMcIxFJ0FcjDtwt2vlCS0waoBvj5GuI76tc3T9qgN4M1WIkGaRsthAU0B4mxtm3
-         HrSA==
-X-Gm-Message-State: ANoB5pnml7yAKVe1UQ9JReqs3sWqhDEnDYLmk+ETCzFki0FFD7MrpOaj
-        nk4peR+Y+jJmBNWLTf14yj14u2/O7JENE5dHQmHtBj7wRIa5
-X-Google-Smtp-Source: AA0mqf4q9a05AHftIuwxagLPu4qAxUcH2egM6upl3o+6wEj40jj2vID/18ZXCxGjL/FW81bWKINzwh345DmmzKWxLPfJb/0JWPtd
+        Tue, 6 Dec 2022 04:04:40 -0500
+X-Greylist: delayed 513 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 06 Dec 2022 01:04:36 PST
+Received: from mail.dufert24.com (mail.dufert24.com [38.242.205.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7666BBFE
+        for <reiserfs-devel@vger.kernel.org>; Tue,  6 Dec 2022 01:04:36 -0800 (PST)
+Received: by mail.dufert24.com (Postfix, from userid 1001)
+        id 98C004116C; Tue,  6 Dec 2022 09:55:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dufert24.com; s=mail;
+        t=1670316959; bh=oIICWKo9u1D1jW6PXE1Xkws2aZgemRr9S/HRdzov8s4=;
+        h=Date:From:To:Subject:From;
+        b=U/BKTc+kCzsuE8Z98u++IQSElCO4+Arh0bxP4a1kBjhvG256gDUuRYn/THk5RjmFS
+         mQrxOf/H+deDZ1FR1nto16F4Yt8g0QiQrQRXkYpHzLDdmKNGHAZIrwNBXOwYtNGjTD
+         Sr2ltvnei1+EZD6kBTiCleiIkadHwXOr6kPWywY8K/sNvknHduri51DZwBahxuCakt
+         Zp5kHMKkCX/qfOi9wEnPz/Vyu7ez3Z9yjotxTmuLNm8n5Q2tZgDuU49i6ZIO00WRdZ
+         +9pyyumBWHu1oXkMGQdOBZX8wRysqIDlW74K4zz9KVLPYD8r1HvHctiWXGtFAovyJO
+         nxyV79QyoG6eA==
+Received: by mail.dufert24.com for <reiserfs-devel@vger.kernel.org>; Tue,  6 Dec 2022 08:55:59 GMT
+Message-ID: <20221206084500-0.1.m.1d6h.0.9v8brbufm6@dufert24.com>
+Date:   Tue,  6 Dec 2022 08:55:59 GMT
+From:   "Nikolaus Mazal" <nikolaus.mazal@dufert24.com>
+To:     <reiserfs-devel@vger.kernel.org>
+Subject: Prodej rolet - dropshipping
+X-Mailer: mail.dufert24.com
 MIME-Version: 1.0
-X-Received: by 2002:a5e:8806:0:b0:6d2:4c85:c7b2 with SMTP id
- l6-20020a5e8806000000b006d24c85c7b2mr28076565ioj.32.1670226643534; Sun, 04
- Dec 2022 23:50:43 -0800 (PST)
-Date:   Sun, 04 Dec 2022 23:50:43 -0800
-In-Reply-To: <00000000000043463e05ee9c4277@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c84ac205ef0ff19f@google.com>
-Subject: Re: [syzbot] WARNING in journal_end
-From:   syzbot <syzbot+d43f346675e449548021@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, axboe@kernel.dk, bvanassche@acm.org,
-        damien.lemoal@opensource.wdc.com, jlayton@kernel.org,
-        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        song@kernel.org, syzkaller-bugs@googlegroups.com,
-        willy@infradead.org, yi.zhang@huawei.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,MIXED_ES,
+        SPF_HELO_NONE,SPF_PASS,URIBL_DBL_SPAM autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Dobr=C3=A9 r=C3=A1no,
 
-HEAD commit:    0ba09b173387 Revert "mm: align larger anonymous mappings o..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1779c10f880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
-dashboard link: https://syzkaller.appspot.com/bug?extid=d43f346675e449548021
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13b00acb880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1396ef7b880000
+Prost=C5=99ednictv=C3=ADm syst=C3=A9mu dropshippingov=C3=A9ho prodeje pod=
+porujeme podnikatele ji=C5=BE 20 let.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/9758ec2c06f4/disk-0ba09b17.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/06781dbfd581/vmlinux-0ba09b17.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3d44a22d15fa/bzImage-0ba09b17.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/e9d1a791a8cb/mount_0.gz
+Hled=C3=A1me partnery pro spolupr=C3=A1ci zam=C4=9B=C5=99enou na konkr=C3=
+=A9tn=C3=AD zisky z prodeje modern=C3=ADch produkt=C5=AF na platform=C4=9B=
+ Amazon nebo jin=C3=A9m tr=C5=BEi=C5=A1ti =E2=80=93 bez nutnosti m=C3=ADt=
+ sklad, nakupovat zbo=C5=BE=C3=AD na sklad a p=C5=99ipravovat z=C3=A1silk=
+y pro z=C3=A1kazn=C3=ADky.
+=20
+Vyr=C3=A1b=C3=ADme na zak=C3=A1zku rolety, obrazy, tapety a dal=C5=A1=C3=AD=
+ ti=C5=A1t=C4=9Bn=C3=A9 dekora=C4=8Dn=C3=AD prvky, kter=C3=A9 jsou mezi o=
+bdarovan=C3=BDmi velmi obl=C3=ADben=C3=A9. Za pouh=C3=BD m=C4=9Bs=C3=ADc =
+=C4=8Dinil prodej rolet na n=C4=9Bmeck=C3=A9m trhu Amazon 12 500 000 EUR.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d43f346675e449548021@syzkaller.appspotmail.com
+Poskytujeme produkty nejvy=C5=A1=C5=A1=C3=AD kvality, neomezen=C3=A9 skla=
+dov=C3=A9 z=C3=A1soby, spr=C3=A1vn=C4=9B organizovanou logistiku po cel=C3=
+=A9 Evrop=C4=9B, prodejn=C3=AD materi=C3=A1ly a podporu supervizora p=C5=99=
+i spolupr=C3=A1ci.
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3658 at fs/reiserfs/journal.c:3395 journal_end+0x210/0x2d0
-Modules linked in:
-CPU: 0 PID: 3658 Comm: syz-executor289 Not tainted 6.1.0-rc7-syzkaller-00211-g0ba09b173387 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:journal_end+0x210/0x2d0 fs/reiserfs/journal.c:3395
-Code: 89 f6 e8 a3 f5 b2 ff 48 b8 00 00 00 00 00 fc ff df 41 8a 04 07 84 c0 0f 85 a0 00 00 00 c7 03 00 00 00 00 eb 30 e8 a0 ce 5e ff <0f> 0b b8 fb ff ff ff eb 24 e8 92 ce 5e ff 4c 89 f7 31 f6 48 83 c4
-RSP: 0018:ffffc90003cefa38 EFLAGS: 00010293
-RAX: ffffffff822bcb90 RBX: 0000000000000000 RCX: ffff888019f31d40
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffffc90003cefaf4 R08: ffffffff822bca8b R09: ffffc90003cefae8
-R10: fffff5200079df63 R11: 1ffff9200079df5d R12: ffff888019f32f18
-R13: 1ffff110033e65e3 R14: ffffc90003cefae0 R15: 1ffff9200079df5e
-FS:  00007f92d6306700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f92ce2e5718 CR3: 0000000028214000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- reiserfs_truncate_file+0x47c/0x790 fs/reiserfs/inode.c:2311
- reiserfs_setattr+0xc4d/0x11a0 fs/reiserfs/inode.c:3395
- notify_change+0xe38/0x10f0 fs/attr.c:420
- do_truncate+0x1fb/0x2e0 fs/open.c:65
- do_sys_ftruncate+0x2eb/0x380 fs/open.c:193
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f92d635b2b9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 31 16 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f92d63062f8 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
-RAX: ffffffffffffffda RBX: 00007f92d63e7540 RCX: 00007f92d635b2b9
-RDX: 00007f92d635b2b9 RSI: 0000000000000000 RDI: 0000000000000004
-RBP: 00007f92d63ae2f8 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0030656c69662f2e
-R13: 7366726573696572 R14: 0031656c69662f2e R15: 00007f92d63e7548
- </TASK>
+M=C3=A1te z=C3=A1jem diskutovat o mo=C5=BEnosti nav=C3=A1z=C3=A1n=C3=AD s=
+polupr=C3=A1ce?
 
+
+Pozdravy
+Nikolaus Mazal
