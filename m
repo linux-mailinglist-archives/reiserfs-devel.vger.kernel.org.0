@@ -2,78 +2,217 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C95644C01
-	for <lists+reiserfs-devel@lfdr.de>; Tue,  6 Dec 2022 19:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 262C3649924
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 12 Dec 2022 08:03:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiLFSs1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 6 Dec 2022 13:48:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
+        id S231390AbiLLHDG (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 12 Dec 2022 02:03:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiLFSs0 (ORCPT
+        with ESMTP id S231340AbiLLHDF (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 6 Dec 2022 13:48:26 -0500
-X-Greylist: delayed 603 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 06 Dec 2022 10:48:24 PST
-Received: from mail2.poltra.pl (mm66.poltra.pl [89.231.24.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8AD93AC02
-        for <reiserfs-devel@vger.kernel.org>; Tue,  6 Dec 2022 10:48:24 -0800 (PST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail2.poltra.pl (Postfix) with ESMTP id 57B491DC63F4
-        for <reiserfs-devel@vger.kernel.org>; Tue,  6 Dec 2022 19:30:11 +0100 (CET)
-Received: from mail2.poltra.pl ([127.0.0.1])
-        by localhost (mail2.poltra.pl [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Po6FeRHQBRDH for <reiserfs-devel@vger.kernel.org>;
-        Tue,  6 Dec 2022 19:30:03 +0100 (CET)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail2.poltra.pl (Postfix) with ESMTP id F2FCF1DC63E8
-        for <reiserfs-devel@vger.kernel.org>; Tue,  6 Dec 2022 19:30:02 +0100 (CET)
-X-Virus-Scanned: amavisd-new at poltra.pl
-Received: from mail2.poltra.pl ([127.0.0.1])
-        by localhost (mail2.poltra.pl [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id uAQ1Nz7N9OKs for <reiserfs-devel@vger.kernel.org>;
-        Tue,  6 Dec 2022 19:30:02 +0100 (CET)
-Received: from shinzuyo.jp (ec2-54-211-86-81.compute-1.amazonaws.com [54.211.86.81])
-        by mail2.poltra.pl (Postfix) with ESMTPSA id 131661DC63F1
-        for <reiserfs-devel@vger.kernel.org>; Tue,  6 Dec 2022 19:30:01 +0100 (CET)
-Reply-To: kent.yoshitaka@shinzuyo.com
-From:   SHINZUYO Metal Industry Limited <accounts1@shinzuyo.jp>
-To:     reiserfs-devel@vger.kernel.org
-Subject: We have an Offer for a North American REP.
-Date:   06 Dec 2022 18:30:00 +0000
-Message-ID: <20221206155302.81E46DF5B13E9E5D@shinzuyo.jp>
+        Mon, 12 Dec 2022 02:03:05 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156B52A0
+        for <reiserfs-devel@vger.kernel.org>; Sun, 11 Dec 2022 23:03:04 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id a13-20020a056e0208ad00b003034c36b8b5so4597440ilt.9
+        for <reiserfs-devel@vger.kernel.org>; Sun, 11 Dec 2022 23:03:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UPQdXpVEAh8N9SIBSH1a9NivfmH8puJf79PnbNA5xFA=;
+        b=OF9XPn4FYhs+lP+J79RAgeaWWGNfLWRR8MxrmO7TfsAQ7d8PJr3fbWQdKKgpNrwyPj
+         P2giBMZyOWMUtJ4huOk3QufQDHKPQ/pwup4PaDW62/ZdnA5Esfm6nVrIZTEUruDNSUdA
+         3izm4TSGt6s7ZSLH/abc1UKg9sxYmrFsZHh0LjiuO0QLAxmwLy6of27iGx88z1temSdv
+         kh151ugYUpJJGWsJ6tpP3KcsaRF+vHoRpSR5ZIAKfRq4QZTr93aushejlGQURYnCxw0x
+         BWU3RXkR+dpZCkSM0R0wpiXW9eGgTlB+j0swwOrJqRev4ToDih15DVlLDytKQNaWLRQ9
+         wmyw==
+X-Gm-Message-State: ANoB5pmjoDfl7fsAiyUtv2yekR1nc95KVArIHZbAn4NjemIsqVikjbHV
+        dSy1CiXa8RH8/WMxVN6JQherJC7zs77v06feTacC8xycNNBV
+X-Google-Smtp-Source: AA0mqf6M4+hAsfwkGkeQy5bBbmjtlI0ER5S96MF/TVSIP/yqJ8dE086xsT30fb4XVoMffLacBrqqWNwwo9w3+yV02kxzQdgd2EgO
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_99,BAYES_999,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+X-Received: by 2002:a05:6638:3470:b0:389:c976:846e with SMTP id
+ q48-20020a056638347000b00389c976846emr27282866jav.246.1670828583441; Sun, 11
+ Dec 2022 23:03:03 -0800 (PST)
+Date:   Sun, 11 Dec 2022 23:03:03 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000032654605ef9c1846@google.com>
+Subject: [syzbot] possible deadlock in do_page_mkwrite
+From:   syzbot <syzbot+ff866d16791d4984b3c7@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Dear reiserfs-devel
-Compliments of the season, our company needs a representative in 
-the United States of America, will you be interested in being our 
-rep. if yes, do return back so we can share more details for your 
-consideration.
+Hello,
 
-All expenses shall be borne by us; therefore, you are not 
-expected to contribute a dime while working with us. Also, all 
-our transactions are absolutely legal.
+syzbot found the following issue on:
 
-Your reply shall be well acknowledged.
+HEAD commit:    296a7b7eb792 Merge tag 'for-linus' of git://git.armlinux.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17a4643f880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d58e7fe7f9cf5e24
+dashboard link: https://syzkaller.appspot.com/bug?extid=ff866d16791d4984b3c7
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Kent Yoshitaka
-Consultant
-SHINZUYO Metal Industry Co., Ltd
-(Trading as-Shintoyo Metal Industry Co)
-Email: kent.yoshitaka@shinzuyo.com
-www. shinzuyo.jp
-Intepr. Email: grahamsbell2020@126.com
-ADD: 1-5-8 Hirano, Kawanishi City, 
-Hyogo Prefecture 666-0121 Japan
+Unfortunately, I don't have any reproducer for this issue yet.
 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e884bd14818f/disk-296a7b7e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9d1ad945db61/vmlinux-296a7b7e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1295336774a6/bzImage-296a7b7e.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ff866d16791d4984b3c7@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-rc8-syzkaller-00154-g296a7b7eb792 #0 Not tainted
+------------------------------------------------------
+syz-executor.4/7705 is trying to acquire lock:
+ffff88807ba26090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
+
+but task is already holding lock:
+ffff88807b57c558 (sb_pagefaults#3){.+.+}-{0:0}, at: do_page_mkwrite+0x19e/0x5e0 mm/memory.c:2977
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (sb_pagefaults#3){.+.+}-{0:0}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1826 [inline]
+       sb_start_pagefault include/linux/fs.h:1930 [inline]
+       filemap_page_mkwrite+0x15c/0x7a0 mm/filemap.c:3420
+       do_page_mkwrite+0x19e/0x5e0 mm/memory.c:2977
+       do_shared_fault mm/memory.c:4618 [inline]
+       do_fault mm/memory.c:4686 [inline]
+       handle_pte_fault mm/memory.c:4954 [inline]
+       __handle_mm_fault mm/memory.c:5096 [inline]
+       handle_mm_fault+0x1c63/0x3630 mm/memory.c:5217
+       do_user_addr_fault+0x69b/0xcb0 arch/x86/mm/fault.c:1428
+       handle_page_fault arch/x86/mm/fault.c:1519 [inline]
+       exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
+       asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
+
+-> #1 (&mm->mmap_lock#2){++++}-{3:3}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __might_fault+0xb2/0x110 mm/memory.c:5645
+       reiserfs_ioctl+0x11c/0x340 fs/reiserfs/ioctl.c:96
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&sbi->lock){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
+       reiserfs_dirty_inode+0xdf/0x230 fs/reiserfs/super.c:704
+       __mark_inode_dirty+0x1e7/0x600 fs/fs-writeback.c:2408
+       generic_update_time fs/inode.c:1859 [inline]
+       inode_update_time fs/inode.c:1872 [inline]
+       __file_update_time fs/inode.c:2088 [inline]
+       file_update_time+0x551/0x5d0 fs/inode.c:2119
+       filemap_page_mkwrite+0x248/0x7a0 mm/filemap.c:3421
+       do_page_mkwrite+0x19e/0x5e0 mm/memory.c:2977
+       wp_page_shared+0x15e/0x380 mm/memory.c:3323
+       handle_pte_fault mm/memory.c:4972 [inline]
+       __handle_mm_fault mm/memory.c:5096 [inline]
+       handle_mm_fault+0x1e72/0x3630 mm/memory.c:5217
+       do_user_addr_fault+0x69b/0xcb0 arch/x86/mm/fault.c:1428
+       handle_page_fault arch/x86/mm/fault.c:1519 [inline]
+       exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
+       asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
+
+other info that might help us debug this:
+
+Chain exists of:
+  &sbi->lock --> &mm->mmap_lock#2 --> sb_pagefaults#3
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(sb_pagefaults#3);
+                               lock(&mm->mmap_lock#2);
+                               lock(sb_pagefaults#3);
+  lock(&sbi->lock);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor.4/7705:
+ #0: ffff888017d7f558 (&mm->mmap_lock#2){++++}-{3:3}, at: mmap_read_trylock include/linux/mmap_lock.h:136 [inline]
+ #0: ffff888017d7f558 (&mm->mmap_lock#2){++++}-{3:3}, at: do_user_addr_fault+0x2e2/0xcb0 arch/x86/mm/fault.c:1369
+ #1: ffff88807b57c558 (sb_pagefaults#3){.+.+}-{0:0}, at: do_page_mkwrite+0x19e/0x5e0 mm/memory.c:2977
+
+stack backtrace:
+CPU: 0 PID: 7705 Comm: syz-executor.4 Not tainted 6.1.0-rc8-syzkaller-00154-g296a7b7eb792 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+ __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+ __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
+ reiserfs_dirty_inode+0xdf/0x230 fs/reiserfs/super.c:704
+ __mark_inode_dirty+0x1e7/0x600 fs/fs-writeback.c:2408
+ generic_update_time fs/inode.c:1859 [inline]
+ inode_update_time fs/inode.c:1872 [inline]
+ __file_update_time fs/inode.c:2088 [inline]
+ file_update_time+0x551/0x5d0 fs/inode.c:2119
+ filemap_page_mkwrite+0x248/0x7a0 mm/filemap.c:3421
+ do_page_mkwrite+0x19e/0x5e0 mm/memory.c:2977
+ wp_page_shared+0x15e/0x380 mm/memory.c:3323
+ handle_pte_fault mm/memory.c:4972 [inline]
+ __handle_mm_fault mm/memory.c:5096 [inline]
+ handle_mm_fault+0x1e72/0x3630 mm/memory.c:5217
+ do_user_addr_fault+0x69b/0xcb0 arch/x86/mm/fault.c:1428
+ handle_page_fault arch/x86/mm/fault.c:1519 [inline]
+ exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
+ asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
+RIP: 0033:0x7f2f83486b3f
+Code: d0 eb 0b 0f 1f 84 00 00 00 00 00 48 89 f8 48 83 fa 10 0f 82 da 00 00 00 48 83 fa 20 0f 87 1f 01 00 00 0f 10 06 0f 10 4c 16 f0 <0f> 11 07 0f 11 4c 17 f0 c3 0f 1f 84 00 00 00 00 00 48 39 d1 0f 82
+RSP: 002b:00007ffd6e289b38 EFLAGS: 00010287
+RAX: 0000000020000080 RBX: 0000000000000000 RCX: 00007f2f83000000
+RDX: 0000000000000013 RSI: 00007f2f83001548 RDI: 0000000020000080
+RBP: 00007ffd6e289bf8 R08: 00007f2f83400000 R09: 00007f2f83000000
+R10: 00007f2f83001530 R11: 0000000000000246 R12: 000000000004b63d
+R13: 00007ffd6e289c20 R14: 00007f2f835abf80 R15: 0000000000000032
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
