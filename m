@@ -2,217 +2,287 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262C3649924
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 12 Dec 2022 08:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34EB564B0C5
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 13 Dec 2022 09:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbiLLHDG (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 12 Dec 2022 02:03:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
+        id S234630AbiLMIGz (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 13 Dec 2022 03:06:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbiLLHDF (ORCPT
+        with ESMTP id S234636AbiLMIGm (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 12 Dec 2022 02:03:05 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156B52A0
-        for <reiserfs-devel@vger.kernel.org>; Sun, 11 Dec 2022 23:03:04 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id a13-20020a056e0208ad00b003034c36b8b5so4597440ilt.9
-        for <reiserfs-devel@vger.kernel.org>; Sun, 11 Dec 2022 23:03:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UPQdXpVEAh8N9SIBSH1a9NivfmH8puJf79PnbNA5xFA=;
-        b=OF9XPn4FYhs+lP+J79RAgeaWWGNfLWRR8MxrmO7TfsAQ7d8PJr3fbWQdKKgpNrwyPj
-         P2giBMZyOWMUtJ4huOk3QufQDHKPQ/pwup4PaDW62/ZdnA5Esfm6nVrIZTEUruDNSUdA
-         3izm4TSGt6s7ZSLH/abc1UKg9sxYmrFsZHh0LjiuO0QLAxmwLy6of27iGx88z1temSdv
-         kh151ugYUpJJGWsJ6tpP3KcsaRF+vHoRpSR5ZIAKfRq4QZTr93aushejlGQURYnCxw0x
-         BWU3RXkR+dpZCkSM0R0wpiXW9eGgTlB+j0swwOrJqRev4ToDih15DVlLDytKQNaWLRQ9
-         wmyw==
-X-Gm-Message-State: ANoB5pmjoDfl7fsAiyUtv2yekR1nc95KVArIHZbAn4NjemIsqVikjbHV
-        dSy1CiXa8RH8/WMxVN6JQherJC7zs77v06feTacC8xycNNBV
-X-Google-Smtp-Source: AA0mqf6M4+hAsfwkGkeQy5bBbmjtlI0ER5S96MF/TVSIP/yqJ8dE086xsT30fb4XVoMffLacBrqqWNwwo9w3+yV02kxzQdgd2EgO
-MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3470:b0:389:c976:846e with SMTP id
- q48-20020a056638347000b00389c976846emr27282866jav.246.1670828583441; Sun, 11
- Dec 2022 23:03:03 -0800 (PST)
-Date:   Sun, 11 Dec 2022 23:03:03 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000032654605ef9c1846@google.com>
-Subject: [syzbot] possible deadlock in do_page_mkwrite
-From:   syzbot <syzbot+ff866d16791d4984b3c7@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+        Tue, 13 Dec 2022 03:06:42 -0500
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24866B1D2;
+        Tue, 13 Dec 2022 00:06:40 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NWW9t1sshz9v7cH;
+        Tue, 13 Dec 2022 15:59:46 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwBnog1oMphjjUcMAA--.22467S2;
+        Tue, 13 Dec 2022 09:06:11 +0100 (CET)
+Message-ID: <bf05aa8c3161a799fae84a4acfc46dc54499b271.camel@huaweicloud.com>
+Subject: Re: [PATCH v5 2/6] ocfs2: Switch to security_inode_init_security()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, mark@fasheh.com,
+        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, Casey Schaufler <casey@schaufler-ca.com>
+Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Tue, 13 Dec 2022 09:05:55 +0100
+In-Reply-To: <8ca5be2f5ac0f5690a9025e5eec9fc93e8613842.camel@linux.ibm.com>
+References: <20221123095202.599252-1-roberto.sassu@huaweicloud.com>
+         <20221123095202.599252-3-roberto.sassu@huaweicloud.com>
+         <052d91687e813110cc1e1d762ea086cc8085114a.camel@linux.ibm.com>
+         <44de9254c7abf1c836142cf3262450de1912bbc0.camel@huaweicloud.com>
+         <8ca5be2f5ac0f5690a9025e5eec9fc93e8613842.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwBnog1oMphjjUcMAA--.22467S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Ww4xZF1UAr1rurWrtw1UWrg_yoW3ur48pF
+        W8KF1jkr4rJFyUWrWSqanI9an29rWrGrZrXrs3G347ZF1qkrn7tr10yr15ua4rJrW8JF10
+        qw4UArsxuwn8A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAFBF1jj4KTJgAAsF
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+On Tue, 2022-11-29 at 08:14 -0500, Mimi Zohar wrote:
+> On Thu, 2022-11-24 at 09:11 +0100, Roberto Sassu wrote:
+> > On Wed, 2022-11-23 at 12:46 -0500, Mimi Zohar wrote:
+> > > On Wed, 2022-11-23 at 10:51 +0100, Roberto Sassu wrote:
+> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > 
+> > > > In preparation for removing security_old_inode_init_security(), switch to
+> > > > security_inode_init_security().
+> > > > 
+> > > > Extend the existing ocfs2_initxattrs() to take the
+> > > > ocfs2_security_xattr_info structure from fs_info, and populate the
+> > > > name/value/len triple with the first xattr provided by LSMs. Supporting
+> > > > multiple xattrs is not currently supported, as it requires non-trivial
+> > > > changes that can be done at a later time.
+> > > 
+> > > ocfs2 already defines ocfs2_init_security_get() as a wrapper around
+> > > calling either security_old_inode_init_security() or
+> > > security_inode_init_security().  Based on "si" one or the other hook is
+> > > called.  ocfs2_initxattrs is already defined.
+> > > 
+> > >         struct ocfs2_security_xattr_info si = {
+> > >                 .name = NULL,
+> > >                 .enable = 1,
+> > >         };
+> > > 
+> > > The main difference between calling security_old_inode_init_security or
+> > > security_inode_init_security() is whether or not security.evm is
+> > > calculated and written.
+> > 
+> > Uhm, it seems unfortunately more complicated.
+> > 
+> > Calling security_old_inode_init_security() allows filesystems to get
+> > the xattr, do some calculations (e.g. for reservation) and then write
+> > the xattr.
+> > 
+> > The initxattrs() callback to be passed to
+> > security_inode_init_security() is meant to let filesystems provide a
+> > filesystem-specific way of writing the xattrs, just after LSMs provided
+> > them. This seems incompatible with the old behavior, as a filesystem
+> > might need to do the calculations in the middle before writing the
+> > xattrs.
+> > 
+> > The initxattrs() callback, when security_old_inode_init_security() was
+> > used, is just a way of emulating the old behavior, i.e. returning the
+> > xattr to the caller.
+> > 
+> > It should be possible, I guess, to handle more xattrs but if the code
+> > was designed to handle one, it would be better if the filesystem
+> > maintainers add support for it.
+> 
+> Hi Mark, Joel, Joseph,
+> 
+> Commit 9d8f13ba3f48 ("security: new security_inode_init_security API
+> adds function callback") introduced security_old_inode_init_security()
+> to support reiserfs and ocfs2 a long time ago.  It was suppose to be a
+> temporary fix until they moved to the new
+> security_inode_init_security() hook.  ocsf2 partially migrated to
+> security_inode_init_security(), but not completely.
+> 
+> security_old_inode_init_security() is finally going away.  Instead of
+> migrating the remaining old usage to the new
+> security_inode_init_security() properly, this patch simulates the
+> existing usage.
+> 
+> Can we get some Reviewed-by, Tested-by tags or comments?
 
-syzbot found the following issue on:
+Ping.
 
-HEAD commit:    296a7b7eb792 Merge tag 'for-linus' of git://git.armlinux.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17a4643f880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d58e7fe7f9cf5e24
-dashboard link: https://syzkaller.appspot.com/bug?extid=ff866d16791d4984b3c7
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+Thanks
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Roberto
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e884bd14818f/disk-296a7b7e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9d1ad945db61/vmlinux-296a7b7e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1295336774a6/bzImage-296a7b7e.xz
+> thanks,
+> 
+> Mimi
+> 
+> > > Perhaps it is time to remove the call to
+> > > security_old_inode_init_security() in ocfs2_init_security_get().  We
+> > > need to hear back from the ocfs2 community.  Mark?  Joel?
+> > > 
+> > > As noted previously this change affects mknod and symlinks.
+> > > 
+> > > 
+> > > > As fs_info was not used before, ocfs2_initxattrs() can now handle the case
+> > > > of replicating the behavior of security_old_inode_init_security(), i.e.
+> > > > just obtaining the xattr, in addition to setting all xattrs provided by
+> > > > LSMs.
+> > > > 
+> > > > Finally, modify the handling of the return value from
+> > > > ocfs2_init_security_get(). As security_inode_init_security() does not
+> > > > return -EOPNOTSUPP, remove this case and directly handle the error if the
+> > > > return value is not zero.
+> > > > 
+> > > > However, the previous case of receiving -EOPNOTSUPP should be still
+> > > > taken into account, as security_inode_init_security() could return zero
+> > > > without setting xattrs and ocfs2 would consider it as if the xattr was set.
+> > > > 
+> > > > Instead, if security_inode_init_security() returned zero, look at the xattr
+> > > > if it was set, and behave accordingly, i.e. set si->enable to zero to
+> > > > notify to the functions following ocfs2_init_security_get() that the xattr
+> > > > is not available (same as if security_old_inode_init_security() returned
+> > > > -EOPNOTSUPP).
+> > > > 
+> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > ---
+> > > >  fs/ocfs2/namei.c | 18 ++++++------------
+> > > >  fs/ocfs2/xattr.c | 30 ++++++++++++++++++++++++++----
+> > > >  2 files changed, 32 insertions(+), 16 deletions(-)
+> > > > 
+> > > > diff --git a/fs/ocfs2/namei.c b/fs/ocfs2/namei.c
+> > > > index 05f32989bad6..55fba81cd2d1 100644
+> > > > --- a/fs/ocfs2/namei.c
+> > > > +++ b/fs/ocfs2/namei.c
+> > > > @@ -242,6 +242,7 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
+> > > >  	int want_meta = 0;
+> > > >  	int xattr_credits = 0;
+> > > >  	struct ocfs2_security_xattr_info si = {
+> > > > +		.name = NULL,
+> > > >  		.enable = 1,
+> > > >  	};
+> > > >  	int did_quota_inode = 0;
+> > > > @@ -315,12 +316,8 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
+> > > >  	/* get security xattr */
+> > > >  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
+> > > >  	if (status) {
+> > > > -		if (status == -EOPNOTSUPP)
+> > > > -			si.enable = 0;
+> > > > -		else {
+> > > > -			mlog_errno(status);
+> > > > -			goto leave;
+> > > > -		}
+> > > > +		mlog_errno(status);
+> > > > +		goto leave;
+> > > >  	}
+> > > >  
+> > > >  	/* calculate meta data/clusters for setting security and acl xattr */
+> > > > @@ -1805,6 +1802,7 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
+> > > >  	int want_clusters = 0;
+> > > >  	int xattr_credits = 0;
+> > > >  	struct ocfs2_security_xattr_info si = {
+> > > > +		.name = NULL,
+> > > >  		.enable = 1,
+> > > >  	};
+> > > >  	int did_quota = 0, did_quota_inode = 0;
+> > > > @@ -1875,12 +1873,8 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
+> > > >  	/* get security xattr */
+> > > >  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
+> > > >  	if (status) {
+> > > > -		if (status == -EOPNOTSUPP)
+> > > > -			si.enable = 0;
+> > > > -		else {
+> > > > -			mlog_errno(status);
+> > > > -			goto bail;
+> > > > -		}
+> > > > +		mlog_errno(status);
+> > > > +		goto bail;
+> > > >  	}
+> > > >  
+> > > >  	/* calculate meta data/clusters for setting security xattr */
+> > > > diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
+> > > > index 95d0611c5fc7..55699c573541 100644
+> > > > --- a/fs/ocfs2/xattr.c
+> > > > +++ b/fs/ocfs2/xattr.c
+> > > > @@ -7259,9 +7259,21 @@ static int ocfs2_xattr_security_set(const struct xattr_handler *handler,
+> > > >  static int ocfs2_initxattrs(struct inode *inode, const struct xattr *xattr_array,
+> > > >  		     void *fs_info)
+> > > >  {
+> > > > +	struct ocfs2_security_xattr_info *si = fs_info;
+> > > >  	const struct xattr *xattr;
+> > > >  	int err = 0;
+> > > >  
+> > > > +	if (si) {
+> > > > +		si->value = kmemdup(xattr_array->value, xattr_array->value_len,
+> > > > +				    GFP_KERNEL);
+> > > > +		if (!si->value)
+> > > > +			return -ENOMEM;
+> > > > +
+> > > > +		si->name = xattr_array->name;
+> > > > +		si->value_len = xattr_array->value_len;
+> > > > +		return 0;
+> > > > +	}
+> > > > +
+> > > >  	for (xattr = xattr_array; xattr->name != NULL; xattr++) {
+> > > >  		err = ocfs2_xattr_set(inode, OCFS2_XATTR_INDEX_SECURITY,
+> > > >  				      xattr->name, xattr->value,
+> > > > @@ -7277,13 +7289,23 @@ int ocfs2_init_security_get(struct inode *inode,
+> > > >  			    const struct qstr *qstr,
+> > > >  			    struct ocfs2_security_xattr_info *si)
+> > > >  {
+> > > > +	int ret;
+> > > > +
+> > > >  	/* check whether ocfs2 support feature xattr */
+> > > >  	if (!ocfs2_supports_xattr(OCFS2_SB(dir->i_sb)))
+> > > >  		return -EOPNOTSUPP;
+> > > > -	if (si)
+> > > > -		return security_old_inode_init_security(inode, dir, qstr,
+> > > > -							&si->name, &si->value,
+> > > > -							&si->value_len);
+> > > > +	if (si) {
+> > > > +		ret = security_inode_init_security(inode, dir, qstr,
+> > > > +						   &ocfs2_initxattrs, si);
+> > > > +		/*
+> > > > +		 * security_inode_init_security() does not return -EOPNOTSUPP,
+> > > > +		 * we have to check the xattr ourselves.
+> > > > +		 */
+> > > > +		if (!ret && !si->name)
+> > > > +			si->enable = 0;
+> > > > +
+> > > > +		return ret;
+> > > > +	}
+> > > >  
+> > > >  	return security_inode_init_security(inode, dir, qstr,
+> > > >  					    &ocfs2_initxattrs, NULL);
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ff866d16791d4984b3c7@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-rc8-syzkaller-00154-g296a7b7eb792 #0 Not tainted
-------------------------------------------------------
-syz-executor.4/7705 is trying to acquire lock:
-ffff88807ba26090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
-
-but task is already holding lock:
-ffff88807b57c558 (sb_pagefaults#3){.+.+}-{0:0}, at: do_page_mkwrite+0x19e/0x5e0 mm/memory.c:2977
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (sb_pagefaults#3){.+.+}-{0:0}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1826 [inline]
-       sb_start_pagefault include/linux/fs.h:1930 [inline]
-       filemap_page_mkwrite+0x15c/0x7a0 mm/filemap.c:3420
-       do_page_mkwrite+0x19e/0x5e0 mm/memory.c:2977
-       do_shared_fault mm/memory.c:4618 [inline]
-       do_fault mm/memory.c:4686 [inline]
-       handle_pte_fault mm/memory.c:4954 [inline]
-       __handle_mm_fault mm/memory.c:5096 [inline]
-       handle_mm_fault+0x1c63/0x3630 mm/memory.c:5217
-       do_user_addr_fault+0x69b/0xcb0 arch/x86/mm/fault.c:1428
-       handle_page_fault arch/x86/mm/fault.c:1519 [inline]
-       exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
-       asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
-
--> #1 (&mm->mmap_lock#2){++++}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __might_fault+0xb2/0x110 mm/memory.c:5645
-       reiserfs_ioctl+0x11c/0x340 fs/reiserfs/ioctl.c:96
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (&sbi->lock){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
-       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
-       reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
-       reiserfs_dirty_inode+0xdf/0x230 fs/reiserfs/super.c:704
-       __mark_inode_dirty+0x1e7/0x600 fs/fs-writeback.c:2408
-       generic_update_time fs/inode.c:1859 [inline]
-       inode_update_time fs/inode.c:1872 [inline]
-       __file_update_time fs/inode.c:2088 [inline]
-       file_update_time+0x551/0x5d0 fs/inode.c:2119
-       filemap_page_mkwrite+0x248/0x7a0 mm/filemap.c:3421
-       do_page_mkwrite+0x19e/0x5e0 mm/memory.c:2977
-       wp_page_shared+0x15e/0x380 mm/memory.c:3323
-       handle_pte_fault mm/memory.c:4972 [inline]
-       __handle_mm_fault mm/memory.c:5096 [inline]
-       handle_mm_fault+0x1e72/0x3630 mm/memory.c:5217
-       do_user_addr_fault+0x69b/0xcb0 arch/x86/mm/fault.c:1428
-       handle_page_fault arch/x86/mm/fault.c:1519 [inline]
-       exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
-       asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
-
-other info that might help us debug this:
-
-Chain exists of:
-  &sbi->lock --> &mm->mmap_lock#2 --> sb_pagefaults#3
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(sb_pagefaults#3);
-                               lock(&mm->mmap_lock#2);
-                               lock(sb_pagefaults#3);
-  lock(&sbi->lock);
-
- *** DEADLOCK ***
-
-2 locks held by syz-executor.4/7705:
- #0: ffff888017d7f558 (&mm->mmap_lock#2){++++}-{3:3}, at: mmap_read_trylock include/linux/mmap_lock.h:136 [inline]
- #0: ffff888017d7f558 (&mm->mmap_lock#2){++++}-{3:3}, at: do_user_addr_fault+0x2e2/0xcb0 arch/x86/mm/fault.c:1369
- #1: ffff88807b57c558 (sb_pagefaults#3){.+.+}-{0:0}, at: do_page_mkwrite+0x19e/0x5e0 mm/memory.c:2977
-
-stack backtrace:
-CPU: 0 PID: 7705 Comm: syz-executor.4 Not tainted 6.1.0-rc8-syzkaller-00154-g296a7b7eb792 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
- __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
- lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
- __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
- reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
- reiserfs_dirty_inode+0xdf/0x230 fs/reiserfs/super.c:704
- __mark_inode_dirty+0x1e7/0x600 fs/fs-writeback.c:2408
- generic_update_time fs/inode.c:1859 [inline]
- inode_update_time fs/inode.c:1872 [inline]
- __file_update_time fs/inode.c:2088 [inline]
- file_update_time+0x551/0x5d0 fs/inode.c:2119
- filemap_page_mkwrite+0x248/0x7a0 mm/filemap.c:3421
- do_page_mkwrite+0x19e/0x5e0 mm/memory.c:2977
- wp_page_shared+0x15e/0x380 mm/memory.c:3323
- handle_pte_fault mm/memory.c:4972 [inline]
- __handle_mm_fault mm/memory.c:5096 [inline]
- handle_mm_fault+0x1e72/0x3630 mm/memory.c:5217
- do_user_addr_fault+0x69b/0xcb0 arch/x86/mm/fault.c:1428
- handle_page_fault arch/x86/mm/fault.c:1519 [inline]
- exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
- asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
-RIP: 0033:0x7f2f83486b3f
-Code: d0 eb 0b 0f 1f 84 00 00 00 00 00 48 89 f8 48 83 fa 10 0f 82 da 00 00 00 48 83 fa 20 0f 87 1f 01 00 00 0f 10 06 0f 10 4c 16 f0 <0f> 11 07 0f 11 4c 17 f0 c3 0f 1f 84 00 00 00 00 00 48 39 d1 0f 82
-RSP: 002b:00007ffd6e289b38 EFLAGS: 00010287
-RAX: 0000000020000080 RBX: 0000000000000000 RCX: 00007f2f83000000
-RDX: 0000000000000013 RSI: 00007f2f83001548 RDI: 0000000020000080
-RBP: 00007ffd6e289bf8 R08: 00007f2f83400000 R09: 00007f2f83000000
-R10: 00007f2f83001530 R11: 0000000000000246 R12: 000000000004b63d
-R13: 00007ffd6e289c20 R14: 00007f2f835abf80 R15: 0000000000000032
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
