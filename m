@@ -2,94 +2,115 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DB464DE9E
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 15 Dec 2022 17:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6208864E7F9
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 16 Dec 2022 09:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiLOQ26 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 15 Dec 2022 11:28:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
+        id S229624AbiLPIAo (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 16 Dec 2022 03:00:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiLOQ2R (ORCPT
+        with ESMTP id S229453AbiLPIAl (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 15 Dec 2022 11:28:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A4313D2D;
-        Thu, 15 Dec 2022 08:28:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DA6A61E58;
-        Thu, 15 Dec 2022 16:28:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9524AC433D2;
-        Thu, 15 Dec 2022 16:28:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671121688;
-        bh=Ftx0VJqQ/+fSyw2rH/KASxALEE3T+b2McIeIvddmZzA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=e0XBV1r0zWcJu0n2d4qSajU11xPT3DE71JiEWFEu4b/m4lw3lld4W/tWSp7TgqTx0
-         EKHDZ4+qVSIVTVW+CSt5NXSK75KIuRoHK84h+EARII30o2IpXn4OC4OV+vNPEfNP/j
-         F5QWLQcwyymCwiPIoonCw5ZWUUiiiLPeiXeMpG9yYXbK9JWLtKfGnVk6LE2BLVIDSZ
-         rY82j+5PzzxWt7YR2dICth28bJXNhtsyO7DIo1BfGZStwWH2WZnVabADCwyiqRDx1Q
-         vpG2w9ZRlj2BiS+Z+kVGvM7f2pG0sXtF/G/hc2PLj5JGavJy7juUTNEypuIxXnND7M
-         nCsEA3U2/B7pw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     reiserfs-devel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH] reiserfs: avoid objtool warning after panic
-Date:   Thu, 15 Dec 2022 17:27:53 +0100
-Message-Id: <20221215162759.3883282-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 16 Dec 2022 03:00:41 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041C0DBE;
+        Fri, 16 Dec 2022 00:00:39 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 52DE93200906;
+        Fri, 16 Dec 2022 03:00:37 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 16 Dec 2022 03:00:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1671177636; x=1671264036; bh=5gJEzTEVlD
+        vy8Tq4Os1u/SyKmtOlFe98ZaBLVtWSjLo=; b=mpPkOVZpl8rf1pwDwWPS4bqcU0
+        VndnE7TSqW4XXlPbyMN44J+1DRleuFK3oNGVJ/cFtbOWbyyPtlJZaGanI5CK7jdL
+        Jci/x9KgM20GTcHGynN7GCCdYfpf82wus43jLCkMGDqXiKbdImyukuo+P7EwtuBi
+        XWUhFjwXbxzggkRA+wfHitPY4/A8lw+dZFZuN2HHD8JVBxKa3949pb89p3aDbprw
+        HB7EYcf1IGbm+HTp7XJhzgOx5TfTWA+EfBH9AqYfB7PPqAZ3vJ5jnKkstW2taB+V
+        PgPdQ0rhGXqVIj3ASh2qqhMTGgb26AUA8RayfuF/lMfkjYRuTDpM4U4kTetQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1671177636; x=1671264036; bh=5gJEzTEVlDvy8Tq4Os1u/SyKmtOl
+        Fe98ZaBLVtWSjLo=; b=cQyLeyayy261CDcbjVHQ+p4UD5lwwMTO22x2L90jU/n4
+        lyFK0Y9RMZb6CtTPoiweojIUfogCrY6hhbiduYD1efsvnZpa2rrL93JuRApuXnKE
+        7wiq4/2z+mlc70LkIyIE08rNdqsZSAwUGsaeUGRerJ0Fhv64CFiNoasBUlrkcUR8
+        pQw6MPnQNL8N3EE+KDOUofR+vSqHLnNuidyfrUU8jMY5BSZiunsf6wPhCyssDl6I
+        tcBvgDSiE5FUMuhJQ/UgdeEubHDlg3JAi3ws0scPifQjoB/doolLipqndn80kkx/
+        yDlLcFRRD8YEA0ZbA2RyYL3YrwQGAGRt9JxhrhKxnw==
+X-ME-Sender: <xms:pCWcY70WpATPd3k_REhSyBXYV1spxwKgibZGybQZo_BA2zMWPFyi4A>
+    <xme:pCWcY6GYfYoTJLY2M9GLL92yIHBY1vw30K5Y3bCv3cviyYhIsJVbLNq8FN7B91hf9
+    Etbofz2Z0qaIpDNq-Y>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeigdduuddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvvefutgesth
+    dtredtreertdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnuges
+    rghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpeffheeugeetiefhgeethfejgfdtue
+    fggeejleehjeeutefhfeeggefhkedtkeetffenucevlhhushhtvghrufhiiigvpedtnecu
+    rfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:pCWcY776ZhiXpOx9HkTnz2_hrZ8ob1ILPrgn7sjkYsFqrhYjYdWerg>
+    <xmx:pCWcYw3jKhlqRPMoM-cynhC-EteKV3WNCG2B6qy0A-6beKl0Is4tkQ>
+    <xmx:pCWcY-EegBEpzWP3PZ5hjb9l2wbRoTX55i-7luqJNQGdCbZKXeZ0Mg>
+    <xmx:pCWcYzTHAcdNY89Ag62Wl0NeSvkg5ptt30dz71fwN3xcXV5RJSLuTA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 8BF00B60086; Fri, 16 Dec 2022 03:00:36 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <9355f758-9d06-4de8-85f7-e6ad870e784b@app.fastmail.com>
+In-Reply-To: <202212160636.H31oByti-lkp@intel.com>
+References: <20221215162759.3883282-1-arnd@kernel.org>
+ <202212160636.H31oByti-lkp@intel.com>
+Date:   Fri, 16 Dec 2022 09:00:16 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "kernel test robot" <lkp@intel.com>,
+        "Arnd Bergmann" <arnd@kernel.org>, reiserfs-devel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] reiserfs: avoid objtool warning after panic
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Dec 15, 2022, at 23:31, kernel test robot wrote:
+> Hi Arnd,
+>
+> I love your patch! Perhaps something to improve:
+>
+> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+> reproduce (this is a W=1 build):
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+>>> fs/reiserfs/namei.o: warning: objtool: reiserfs_rename+0x212: unreachable instruction
+> --
+>>> fs/reiserfs/ibalance.o: warning: objtool: balance_internal_when_delete+0x44c: unreachable instruction
+> --
+>>> fs/reiserfs/stree.o: warning: objtool: reiserfs_cut_from_item+0x17a: unreachable instruction
+> --
+>>> fs/reiserfs/journal.o: warning: objtool: do_journal_end+0x4af: unreachable instruction
+> --
+>>> fs/reiserfs/item_ops.o: warning: objtool: direntry_check_left+0x65: unreachable instruction
 
-Calling reiserfs_panic() leaves the calling function in an
-undefined state that objtool complains about, because of the
-__noreturn attribute:
+Ok, I'll have to revisit this one. I think I tried something similar
+before and ran into the same problem but I though I had figured
+it out this time.
 
-fs/reiserfs/do_balan.o: warning: objtool: balance_leaf+0x109fb: stack state mismatch: cfa1=4+576 cfa2=4+584
-fs/reiserfs/ibalance.o: warning: objtool: balance_internal+0x6099: stack state mismatch: cfa1=4+512 cfa2=4+536
-fs/reiserfs/ibalance.o: warning: objtool: internal_insert_key+0xa1c: stack state mismatch: cfa1=4+224 cfa2=4+216
+The problem apparently is that the patch to shut up the objtool
+warning with clang in turn adds a different objtool warning with
+gcc...
 
-Avoid that by removing the attribute, at the possible cost of
-a few extra cycles. Mark the panic and error functions as __cold
-instead to at least give the compiler a hint that this is not
-the fast path.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- fs/reiserfs/reiserfs.h | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/fs/reiserfs/reiserfs.h b/fs/reiserfs/reiserfs.h
-index 3aa928ec527a..1c22f48235c2 100644
---- a/fs/reiserfs/reiserfs.h
-+++ b/fs/reiserfs/reiserfs.h
-@@ -3185,12 +3185,11 @@ int fix_nodes(int n_op_mode, struct tree_balance *tb,
- void unfix_nodes(struct tree_balance *);
- 
- /* prints.c */
--void __reiserfs_panic(struct super_block *s, const char *id,
--		      const char *function, const char *fmt, ...)
--    __attribute__ ((noreturn));
-+void __cold __reiserfs_panic(struct super_block *s, const char *id,
-+		      const char *function, const char *fmt, ...);
- #define reiserfs_panic(s, id, fmt, args...) \
- 	__reiserfs_panic(s, id, __func__, fmt, ##args)
--void __reiserfs_error(struct super_block *s, const char *id,
-+void __cold __reiserfs_error(struct super_block *s, const char *id,
- 		      const char *function, const char *fmt, ...);
- #define reiserfs_error(s, id, fmt, args...) \
- 	 __reiserfs_error(s, id, __func__, fmt, ##args)
--- 
-2.35.1
-
+    Arnd
