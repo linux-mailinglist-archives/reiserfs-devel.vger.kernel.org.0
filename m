@@ -2,167 +2,111 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16DCE64FF60
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 18 Dec 2022 16:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E9EF65044C
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 18 Dec 2022 19:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiLRP6r (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sun, 18 Dec 2022 10:58:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
+        id S231197AbiLRS3e (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 18 Dec 2022 13:29:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiLRP6q (ORCPT
+        with ESMTP id S231190AbiLRS3K (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sun, 18 Dec 2022 10:58:46 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CAEA465
-        for <reiserfs-devel@vger.kernel.org>; Sun, 18 Dec 2022 07:58:45 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id o15-20020a6bf80f000000b006de313e5cfeso2972941ioh.6
-        for <reiserfs-devel@vger.kernel.org>; Sun, 18 Dec 2022 07:58:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v/LBx6WtV+CqZBaLfApw7W0yygAGxOitTY/dU8TCFyk=;
-        b=xFL/4LfMPPnOFKZb0S8qElfTCK0LHFBJqOWJuVjv1N0B+ENZ94tHvu4SNpYv/fq1z0
-         Rt2M8DYZAlv9Wi2zG8CP1ykbhSGqXn+PNU47cX4vcP+5mbg6sxJwVyzTN1051sYd7dfk
-         TzNnNBfGtpRQ1yl1MauX4d8HT/3G/G/t/WoY+ndOKatEW4RIN7fKViTHRgDCqWATVusT
-         4rW+zwd31ihxUxkNHup8XxWVsmPjv8x2Zao7YJ1YMC7/u2fQBKJxny1XuHJ/assCoDxi
-         kbuZxTFMaEEvw3qczuExh+EIbJ8zwqz7Ycn7Lz2CBqukDfOFiP60nDQShZJVMietgXR7
-         ZScw==
-X-Gm-Message-State: ANoB5plA2r0soNc/kalf0QxrFuIJCY5KlVNAkqfaHW24HDHBoWd9vI+3
-        LAU6x73zqyvUxVie4LUrBxmmUM+4FkTJewz2Rf50FRXK5B5n
-X-Google-Smtp-Source: AA0mqf6FDphjEyc8exfNPOTnCLkIAP3v3cDp+/X6PeqHy8THNmkayrYOB2dTSpI57ni2U9IQEZAwtDZU7lj2kb/sqXzKeBdgZ8Mk
+        Sun, 18 Dec 2022 13:29:10 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6D8BE0D;
+        Sun, 18 Dec 2022 09:59:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QHxCpl9hSA5ThyPhmLxPcSgWkJDOiughbSZ1LxLOjvI=; b=AM8b4Z0OmheYiQi/balspbtUoJ
+        rWuu21SuCIrDlcx9M/kqYV5qKjdtE6AXTcKV6ggklkGyPuCmHYOvNP28lnrODtOMgqutkAjhMQUWv
+        Ux/p1Hx1Bs50324WDHQRCiBzXye9eP/EtNl4xeMhZkr1J1cTPmQlByN/9k12x7F0ujlPs4lpyBJCV
+        VUU608eRX/Ghdpy5Y8UqL97cpfoVt4kc+PLpGvsCLHZBplQ5R6ZCieEYlTj8fsH5HyqHAO4oyJ5f4
+        F58mRmz3w3hgOreF5sDBWTRjp4Jerir8XSsZXwk+chV51daZfv78mDrTwSiKZ7Iq3VfGALbcbOv7l
+        YSo6AnFg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p6xwn-00006Q-Ci; Sun, 18 Dec 2022 17:59:37 +0000
+Date:   Sun, 18 Dec 2022 17:59:37 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>, reiserfs-devel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 0/8] Convert reiserfs from b_page to b_folio
+Message-ID: <Y59VCfAXmg1jow2o@casper.infradead.org>
+References: <20221216205348.3781217-1-willy@infradead.org>
+ <11295613.F0gNSz5aLb@suse>
+ <Y55TTKG2tgWL7UsQ@iweiny-mobl>
+ <3515948.LM0AJKV5NW@suse>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:223:b0:38a:4fbd:45da with SMTP id
- f3-20020a056638022300b0038a4fbd45damr10836755jaq.47.1671379124938; Sun, 18
- Dec 2022 07:58:44 -0800 (PST)
-Date:   Sun, 18 Dec 2022 07:58:44 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000006ee3605f01c47bc@google.com>
-Subject: [syzbot] divide error in flush_commit_list
-From:   syzbot <syzbot+32134c00ff57e0343b6b@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, bvanassche@acm.org,
-        damien.lemoal@opensource.wdc.com, jlayton@kernel.org,
-        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org,
-        yi.zhang@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3515948.LM0AJKV5NW@suse>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+On Sun, Dec 18, 2022 at 09:09:56AM +0100, Fabio M. De Francesco wrote:
+> It all started when months ago I saw a patch from Matthew about the conversion 
+> from kmap_local_page() to kmap_local_folio() in ext2_get_page().
+> 
+> Here I wanted to comment on the xfstests failures but, when I read patch 2/8 
+> of this series and saw kmap() converted to kmap_local_folio(), I thought to 
+> also use this opportunity to ask about why and when kmap_local_folio() should 
+> be preferred over kmap_local_page().
+> 
+> Obviously, I have nothing against these conversions. I would only like to 
+> understand what are the reasons behind the preference for the folio function.
 
-syzbot found the following issue on:
+I should probably update this, but here's a good start on folio vs page:
+https://lore.kernel.org/linux-fsdevel/YvV1KTyzZ+Jrtj9x@casper.infradead.org/
 
-HEAD commit:    e2ca6ba6ba01 Merge tag 'mm-stable-2022-12-13' of git://git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=158718d7880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=276eb8ff64eb2c27
-dashboard link: https://syzkaller.appspot.com/bug?extid=32134c00ff57e0343b6b
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> Mine is a general question about design, necessity, opportunity: what were the 
+> reasons why, in the above-mentioned cases, the use of kmap_local_folio() has 
+> been preferred over kmap_local_page()? 
+> 
+> I saw that this series is about converting from b_page to b_folio, therefore 
+> kmap_local_folio() is the obvious choice here.
+> 
+> But my mind went back again to ext2_get_page :-)
+> 
+> It looks to me that ext2_get_page() was working properly with 
+> kmap_local_page() (since you made the conversion from kmap()). Therefore I 
+> could not understand why it is preferred to call read_mapping_folio() to get a 
+> folio and then map a page of that folio with kmap_local_folio(). 
+> 
+> I used to think that read_mapping_page() + kmap_local_page() was all we 
+> needed. ATM I have not enough knowledge of VFS/filesystems to understand on my 
+> own what we gain from the other way to local map pages.    
 
-Unfortunately, I don't have any reproducer for this issue yet.
+read_mapping_page() is scheduled for removal.  All callers need to be
+converted to read_mapping_folio() (or another variant if preferable).
+I don't mind following along behind your conversions to kmap_local_page()
+and converting them to kmap_local_folio(), but if I can go straight from
+kmap() / kmap_atomic() to kmap_local_folio(), then I'll do that.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8aad47431ccd/disk-e2ca6ba6.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/382636835ba9/vmlinux-e2ca6ba6.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ac62c9f6a7cf/bzImage-e2ca6ba6.xz
+Eventually, kmap_local_page() will _probably_ disappear.  ext2_get_page()
+is really only partially converted, and you can see that by the way it
+calls ext2_check_page() instead of ext2_check_folio().  I have a design
+in place for ext2_check_folio() that handles mapping large folios,
+but it isn't on the top of my pile right now.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+32134c00ff57e0343b6b@syzkaller.appspotmail.com
+> I'd really like to work on converting fs/ufs to folios but you know that I'll 
+> have enough time to work on other projects only starting by the end of 
+> January. 
+> 
+> AFAIK this task has mainly got to do with the conversions of the address space 
+> operations (correct?). I know too little to be able to estimate how much time 
+> it takes but I'm pretty sure it needs more than I currently can set aside.
+> 
+> Instead I could easily devolve the time it is needed for making the  
+> memcpy_{to|from}_folio() helpers you talked about in a patch of this series, 
+> unless you or Matthew prefer to do yourselves. Please let me know.
 
-divide error: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 5334 Comm: syz-executor.0 Not tainted 6.1.0-syzkaller-09941-ge2ca6ba6ba01 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:flush_commit_list+0x971/0x1bb0 fs/reiserfs/journal.c:1051
-Code: 30 84 c0 4c 8b 6c 24 78 0f 85 c7 01 00 00 48 89 e8 48 c1 e8 03 0f b6 04 30 84 c0 0f 85 da 01 00 00 41 8b 0c 24 4c 89 f0 31 d2 <48> f7 f1 48 89 d3 49 83 c7 18 4c 89 f8 48 c1 e8 03 80 3c 30 00 74
-RSP: 0018:ffffc90003c3f788 EFLAGS: 00010246
-RAX: 000000000000003d RBX: ffff88802ded300c RCX: 0000000000000000
-RDX: 0000000000000000 RSI: dffffc0000000000 RDI: ffff88807664bb40
-RBP: ffff88802ded3017 R08: dffffc0000000000 R09: ffffed100ecc9769
-R10: ffffed100ecc9769 R11: 1ffff1100ecc9768 R12: ffff88802ded3014
-R13: ffff888075848018 R14: 000000000000003d R15: ffff888075c33000
-FS:  0000555556d5d400(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f82d3460000 CR3: 0000000047a19000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- do_journal_end+0x3858/0x4a30 fs/reiserfs/journal.c:4302
- do_journal_release+0x15f/0x4c0 fs/reiserfs/journal.c:1917
- journal_release+0x1b/0x30 fs/reiserfs/journal.c:1971
- reiserfs_put_super+0x245/0x4e0 fs/reiserfs/super.c:616
- generic_shutdown_super+0x130/0x310 fs/super.c:492
- kill_block_super+0x79/0xd0 fs/super.c:1386
- deactivate_locked_super+0xa7/0xf0 fs/super.c:332
- cleanup_mnt+0x494/0x520 fs/namespace.c:1291
- task_work_run+0x243/0x300 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:171
- exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:296
- do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fb24988d547
-Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffef1d23d28 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007fb24988d547
-RDX: 00007ffef1d23dfa RSI: 000000000000000a RDI: 00007ffef1d23df0
-RBP: 00007ffef1d23df0 R08: 00000000ffffffff R09: 00007ffef1d23bc0
-R10: 0000555556d5e873 R11: 0000000000000246 R12: 00007fb2498e6b24
-R13: 00007ffef1d24eb0 R14: 0000555556d5e810 R15: 00007ffef1d24ef0
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:flush_commit_list+0x971/0x1bb0 fs/reiserfs/journal.c:1051
-Code: 30 84 c0 4c 8b 6c 24 78 0f 85 c7 01 00 00 48 89 e8 48 c1 e8 03 0f b6 04 30 84 c0 0f 85 da 01 00 00 41 8b 0c 24 4c 89 f0 31 d2 <48> f7 f1 48 89 d3 49 83 c7 18 4c 89 f8 48 c1 e8 03 80 3c 30 00 74
-RSP: 0018:ffffc90003c3f788 EFLAGS: 00010246
-RAX: 000000000000003d RBX: ffff88802ded300c RCX: 0000000000000000
-RDX: 0000000000000000 RSI: dffffc0000000000 RDI: ffff88807664bb40
-RBP: ffff88802ded3017 R08: dffffc0000000000 R09: ffffed100ecc9769
-R10: ffffed100ecc9769 R11: 1ffff1100ecc9768 R12: ffff88802ded3014
-R13: ffff888075848018 R14: 000000000000003d R15: ffff888075c33000
-FS:  0000555556d5d400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f50d71fe000 CR3: 0000000047a19000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	30 84 c0 4c 8b 6c 24 	xor    %al,0x246c8b4c(%rax,%rax,8)
-   7:	78 0f                	js     0x18
-   9:	85 c7                	test   %eax,%edi
-   b:	01 00                	add    %eax,(%rax)
-   d:	00 48 89             	add    %cl,-0x77(%rax)
-  10:	e8 48 c1 e8 03       	callq  0x3e8c15d
-  15:	0f b6 04 30          	movzbl (%rax,%rsi,1),%eax
-  19:	84 c0                	test   %al,%al
-  1b:	0f 85 da 01 00 00    	jne    0x1fb
-  21:	41 8b 0c 24          	mov    (%r12),%ecx
-  25:	4c 89 f0             	mov    %r14,%rax
-  28:	31 d2                	xor    %edx,%edx
-* 2a:	48 f7 f1             	div    %rcx <-- trapping instruction
-  2d:	48 89 d3             	mov    %rdx,%rbx
-  30:	49 83 c7 18          	add    $0x18,%r15
-  34:	4c 89 f8             	mov    %r15,%rax
-  37:	48 c1 e8 03          	shr    $0x3,%rax
-  3b:	80 3c 30 00          	cmpb   $0x0,(%rax,%rsi,1)
-  3f:	74                   	.byte 0x74
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+I've been wondering about a memcpy_(to|from)_folio() helper too, but I
+haven't read Ira's message about it yet.  I'll comment over there.
