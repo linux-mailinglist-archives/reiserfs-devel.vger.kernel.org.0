@@ -2,251 +2,648 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8A3652A11
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 21 Dec 2022 00:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD8D653170
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 21 Dec 2022 14:12:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233993AbiLTX7z (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 20 Dec 2022 18:59:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
+        id S229728AbiLUNMl (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 21 Dec 2022 08:12:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiLTX7x (ORCPT
+        with ESMTP id S229558AbiLUNMj (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 20 Dec 2022 18:59:53 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7801EAE9;
-        Tue, 20 Dec 2022 15:59:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671580792; x=1703116792;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=ec4f5IFKTUREx8aRfG8i8QDuiFk7WX5XgaBTdN8GbD4=;
-  b=iKlD1kunp7STr0mVCIgSJGkdplwaliQn27HbPQESh6sModtie22Dgaah
-   B2+zUEePuAFdbI1e5IGAiG+R1sNS3kOsdjJn2F5A3p9+yZl5f5WgKxsad
-   mbxGawKMKzGbVwh9kPXT47090AyujUT+tj3mkGgKu9QtlDqglrDefhZwd
-   Xn2TvZ4xP3Qp8C0cYVjkGewlxt+apoQAP1hBSm3jNmVDFX817ORg0VU4+
-   jIUskNy2cyqzn0zk1TYbMdYD+xFHVENdAEzxxx32rFilbvTt6LJ8/s+5R
-   YC0+GE3fuaOARcZX1BZ0SyyryTE9LJhgGDyxSsj3gd3bfgmJ4PlJ24f82
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="319802055"
-X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
-   d="scan'208";a="319802055"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 15:59:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="739952341"
-X-IronPort-AV: E=Sophos;i="5.96,259,1665471600"; 
-   d="scan'208";a="739952341"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Dec 2022 15:59:51 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 20 Dec 2022 15:59:47 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 20 Dec 2022 15:59:47 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.176)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 20 Dec 2022 15:59:46 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TGCg4bwyxfii1prv3BsBrJdVsokDxz5oAp6Ko6LhLWzA8LB3jqh5upEvoQy5DdqG7pOIbW7unhnkrXGZ/9NrU5i1Im0vp4q5RJsTyMU+sm0Ym+NIeS8aQRrwrkyjZI1R2uPRQ77UkYWNdsyahlNDD/ngHxggpmiLXD+5CR63SLyonf1Ywel0hcyljceRadGTuPJ+K+gXhZe62H0eSDrPcFPIDhJeUiQMqXezyjscI2rjLI3H99BqnX29EYVU9tsoET4lvgPHy4obLPBEdkbcWoGJLyoVZR13Kt7S3PzUpNSgfME9AsV22ztLHZefEIso0wLhvv23oWIicTqaqbUUJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mmTCyNUqjPS+r/10+iQrzVWL0GF2XtmzlpTMGZvU9d8=;
- b=dV5xpOE2170gl8XG7PaZQyk55K6R5igBpdCzH/nCVu/WL04j1SzIUJHXfKH7TaGeFs/4ZfdK6iLt2x6g9QA9yIg8DeThs7TiCBW9bqERk6lsIkGP3/utLVQtZApme0zAY6kXSRcKLDr4rNVc7qAoFCgAhaRFVyJ/get/RgCg1j6yDZldJHmkStR/6DQr3dy8zn1DB5r/arWKuhsKD1sIYd7He0jbYEV5exBW9536kIJlmWycmG0xdnP2Ch7//PG7OqXR57Aq0OX7dAyG0PM5T0cWD9eK4Mfm74K+d839SGijnCMJqJSH+XmMRjD7mz0rATrDhCdJA1RbBXO0s6LHDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by CO6PR11MB5571.namprd11.prod.outlook.com (2603:10b6:5:35f::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Tue, 20 Dec
- 2022 23:59:44 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::288d:5cae:2f30:828b]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::288d:5cae:2f30:828b%6]) with mapi id 15.20.5924.016; Tue, 20 Dec 2022
- 23:59:44 +0000
-Date:   Tue, 20 Dec 2022 15:59:39 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     Jan Kara <jack@suse.cz>, <reiserfs-devel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: Re: [PATCH 5/8] reiserfs: Convert do_journal_end() to use
- kmap_local_folio()
-Message-ID: <Y6JMazsjbPRJ7oMM@iweiny-desk3>
-References: <20221216205348.3781217-1-willy@infradead.org>
- <20221216205348.3781217-6-willy@infradead.org>
- <Y55WUrzblTsw6FfQ@iweiny-mobl>
- <Y6GB75HMEKfcGcsO@casper.infradead.org>
- <20221220111801.jhukawk3lbuonxs3@quack3>
- <Y6HpzAFNA33jQ3bl@iweiny-desk3>
- <Y6IAUetp7nihz9Qu@casper.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y6IAUetp7nihz9Qu@casper.infradead.org>
-X-ClientProxiedBy: SJ0PR05CA0192.namprd05.prod.outlook.com
- (2603:10b6:a03:330::17) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+        Wed, 21 Dec 2022 08:12:39 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54256F7D
+        for <reiserfs-devel@vger.kernel.org>; Wed, 21 Dec 2022 05:12:37 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id a14-20020a6b660e000000b006bd37975cdfso6762918ioc.10
+        for <reiserfs-devel@vger.kernel.org>; Wed, 21 Dec 2022 05:12:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E3KzDwTKvvtB1byU+u7yE9rT5IKKlEhqY016hDUceD0=;
+        b=f09s9AAteS3PzIrQL5QlNPwrFVBRTFO6mK7qCSqHwGeIHwezVuOt4tals8GVIMKxzj
+         nvqqsTKVmdznGMYnMuOzCnOqClSO/TwWtIv3Dj2AcFnUCkBCELufY8KX3a1EAL4+rI22
+         /8vAcq25yg95uIVuYhx8QxA+LFiIgI1SSLgzxJfwapQ97Dm2xQOxuU7+EROYCKvkjJ48
+         IutDmzD/HDqL5k41/Oj5uXEGvXZJDMs7BWzRU30xIeYtlSmHnBbZa7rujYHVK4AWPRcd
+         wrPPisEADZAOXIm+5FKlfFtQpr87Yf8iEDGmJ+17623e1Hc5VE+XJjlMvCbyvKalRcMC
+         gkTg==
+X-Gm-Message-State: AFqh2kpeXnBGOnmJzlb656QjtR13tFsEzviaANQl2W0MwLqAi5vUAF+Y
+        Cxv7h/59duZI7EF4l9iKIPNriuSvQx+VXtawjGuBkiWJPF+C
+X-Google-Smtp-Source: AMrXdXsH1XUX30n4swbgXk5Q7LiZ4AQ7JqrJO+OxVhfXJFdjUNdyWmpMyzZsLmhzaAy3pLqjAw29XsaE9f8j+fcqjsZb7af9uARJ
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|CO6PR11MB5571:EE_
-X-MS-Office365-Filtering-Correlation-Id: e2fc09aa-6625-46fc-3ca7-08dae2e6447b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kkBD1aAe7nsgpixdI7SonTMehHHcmSRthbHYqFxzWjH4q7FRhvmpgMvhvoyOgGg2xfRUQqyNfk8C3o+Z90hFyIyxnQrUeuhlRp1PGt8HmBD07/pO3ssh99Tm2jAWoZQbyFVggD7rBq+XnpRN4nlQSBxgpZihX0hAu+dJCpuBZxB5OiwikJoHY3TfXkOmpCt/9xgFrznDYV82Ly6n8eJksc7UHTJ0mKGAqwsDTVBlN58xBaZnGGMDpbfgU5vvZHpUYUu3sFlJOq4mlzqaj8YO6OppwLSqohEidKHpiI0zRYxiW7meOd3VB5QWkmNIYkHGdp+UEZq5mCHLv4SUVsDqoHabCnZxmFTWv/qRcAXGKlMkRBFksX9nNOH/hcbdRzwMwhRIXADfyuABmAcAv8FCivHVA9oD92F7u5IEhh3ETVvMT/AffPMLA/pS9Yi0AWybePAvEHIRXg3sbqfRq1UPOHBFmOVEVlrSjaV61I2Qzrd5034OaWl5VYy5yCLhdsSScU7NIRzKxS0THE36H8TIW1LlwCdbfqiN2ylPhlcoALtofnt1miB4HC02nm/Av/4VKd/xjA0TTkUho9H9g3pV++DUSscqhVaexjPd9wMJVAyGewcM7WWhVNfBZWVrZZgEqD0LkuZ1Dk4Nv0FUXwL591G8Wm1JIrAuoQf8bkNTbd0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(346002)(136003)(376002)(366004)(396003)(451199015)(54906003)(6916009)(316002)(2906002)(44832011)(6486002)(478600001)(83380400001)(6666004)(86362001)(6506007)(6512007)(9686003)(966005)(186003)(26005)(8936002)(82960400001)(38100700002)(41300700001)(33716001)(5660300002)(66946007)(66476007)(4326008)(66556008)(8676002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qVW+jajq37ip0+Sfgm5Z9I769RqGNGaG660HW6uzCgUpWDjxvB5Um5qD5XWd?=
- =?us-ascii?Q?8rED9G5xpDCzqRMrxv1A1lM6cKI00CGDrDVz1t4TEmdMF23I00r3GNT+G9GZ?=
- =?us-ascii?Q?LBKLL2VMBh+uImthHQsOFwlVEhE7BeznaaIxXnkemmhoL/UG8DjjMHgrIp8H?=
- =?us-ascii?Q?gAaehc/7QUNcCo+rcii1AlVJxI4B4an/S6hl87YHN9D4ZDoUC+05uaqiliZC?=
- =?us-ascii?Q?hD6RALK1dHGFNwIRpAYLSjdScHIWYLjxvNRBuy9ZcAiTHQMAa/rpi92SE4lB?=
- =?us-ascii?Q?+YlUqBCbtAvYeT+QdAmK/vwcaIwNT1YS5oNXufendTSNDPcwWVwrMo/eSvxo?=
- =?us-ascii?Q?+fzIXrrtvhIi6u9dLajHRlcUL85HND+AZDwa/gxFYmN2h3/8/IgyE8YXtI4d?=
- =?us-ascii?Q?v3wQs4MXHja8rU3sEVMyk7sGU+Hr6UlNqgSiBmp6a9ua59Yobmj3cSF1AbAQ?=
- =?us-ascii?Q?7FtlrL/lU68HfREDxJmbaczkMQECDkia5H3BJpRbuC1WS2266EQCRrqQgpQ6?=
- =?us-ascii?Q?g+hMv1+WxG6NUOmUDhBLxjxvd93nTGuf7B/56jj72CBJ3e88S5uAbx3d4pap?=
- =?us-ascii?Q?6PpLqlES6E3ZTNSj/+v3Ljmr9KYvUVUUyTFoFOYXEXXU+twOn0+Z3p+zZd2F?=
- =?us-ascii?Q?tS1/tbmzxDLieoj+B7LPJSenTts0MTsnTvaWWHeDdTnzKz4G3R5ZuZAzfk53?=
- =?us-ascii?Q?JaRw41TgUatAs+8hldFF+RPzyqzfXia3QCURofXYSIjssNZiGa6kWj+sGFoU?=
- =?us-ascii?Q?QZzmdzEa8LfbPNP9vser3Mlwr7rYLCO7fEiYpBSGyeIhBgFQfU+eSiqAgMPY?=
- =?us-ascii?Q?XmU+0302O4FEGrqFYEQblcMsNyixnxyh3egfBxhEA8i26NPM3gBQmByfuQrH?=
- =?us-ascii?Q?kSxR6V6sx40BzZ+L9qXymo+brHXO8dHfcGsZAp9G7N5OAZZSlFuWWOBl8jcM?=
- =?us-ascii?Q?xoNH3iHZKnyaU/2KJ00hgFD/6p2pHGYrVitSOzWmL5YDg2pjWADeY2ht4WsG?=
- =?us-ascii?Q?bZdcza4I6ABC6FJ5JxsH0LfGpBoksI3Ww/TGqR6CNyCIIbusjNew8/8SC9VE?=
- =?us-ascii?Q?IpACnWDMDtgfoQE9UV5YDSMJfE1cGbypzSSikzqS5riPMb+e+iqUtGTKtRr8?=
- =?us-ascii?Q?3RFvQXoWsysVVHpU3oQt/K6PrfqY28jwLadS8LVp7VQQlmXA8LREQwNls8E3?=
- =?us-ascii?Q?8+pozk+V1rC6pVH3LmrC26iZuGRiKSP5DZ5Nm4PzejhzdGKmL6ye+mV7E3Od?=
- =?us-ascii?Q?pMkbvWfgBjEWkq2wOtYBExsrq+bk9XYRF4xJzskovE8xCsPtqP+iCgv5EADN?=
- =?us-ascii?Q?EZUvGNTKEksSqhpyJO1qL7weh8yG7fxpJu2/v0LhBlgGvvot4yn/97wVDGRY?=
- =?us-ascii?Q?LBOLNynhqrHDRy6crt0al1NHMbDhHTPnop0Hqe8GGe91LaWNg7zpg6rpDEvl?=
- =?us-ascii?Q?gOb5PMkOfe/V57dvYcWNIP5GOSS+1c9ly0tw+Ku4lgHmLxeXzpZD/epFZorA?=
- =?us-ascii?Q?RksR8g7JXGewKJpeLDTIOcXQa9qZ6Gf/7vXAKayKFK4kFH0+bVgw5vUqzOjV?=
- =?us-ascii?Q?XTHDfMpgeXYl7s9837PrqMzt9J53TqjJoAqItTMX?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e2fc09aa-6625-46fc-3ca7-08dae2e6447b
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2022 23:59:44.7035
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: y1GfwZihWeOcFxSCfGX79e9qPv6JEWQvRsscadx7lW7aonHP2OIYkbYHg1r2dCvC5kV7gLZLGPCAsGEX0d32fw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR11MB5571
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:b899:0:b0:38a:fdf:fad4 with SMTP id
+ p25-20020a02b899000000b0038a0fdffad4mr108012jam.186.1671628356651; Wed, 21
+ Dec 2022 05:12:36 -0800 (PST)
+Date:   Wed, 21 Dec 2022 05:12:36 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000065139305f0564e37@google.com>
+Subject: [syzbot] [reiserfs?] INFO: task hung in reiserfs_sync_fs
+From:   syzbot <syzbot+4dadbee41d087d9c6234@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 06:34:57PM +0000, Matthew Wilcox wrote:
-> On Tue, Dec 20, 2022 at 08:58:52AM -0800, Ira Weiny wrote:
-> > On Tue, Dec 20, 2022 at 12:18:01PM +0100, Jan Kara wrote:
-> > > On Tue 20-12-22 09:35:43, Matthew Wilcox wrote:
-> > > > But that doesn't solve the "What about fs block size > PAGE_SIZE"
-> > > > problem that we also want to solve.  Here's a concrete example:
-> > > > 
-> > > >  static __u32 jbd2_checksum_data(__u32 crc32_sum, struct buffer_head *bh)
-> > > >  {
-> > > > -       struct page *page = bh->b_page;
-> > > > +       struct folio *folio = bh->b_folio;
-> > > >         char *addr;
-> > > >         __u32 checksum;
-> > > >  
-> > > > -       addr = kmap_atomic(page);
-> > > > -       checksum = crc32_be(crc32_sum,
-> > > > -               (void *)(addr + offset_in_page(bh->b_data)), bh->b_size);
-> > > > -       kunmap_atomic(addr);
-> > > > +       BUG_ON(IS_ENABLED(CONFIG_HIGHMEM) && bh->b_size > PAGE_SIZE);
-> > > > +
-> > > > +       addr = kmap_local_folio(folio, offset_in_folio(folio, bh->b_data));
-> > > > +       checksum = crc32_be(crc32_sum, addr, bh->b_size);
-> > > > +       kunmap_local(addr);
-> > > >  
-> > > >         return checksum;
-> > > >  }
-> > > > 
-> > > > I don't want to add a lot of complexity to handle the case of b_size >
-> > > > PAGE_SIZE on a HIGHMEM machine since that's not going to benefit terribly
-> > > > many people.  I'd rather have the assertion that we don't support it.
-> > > > But if there's a good higher-level abstraction I'm missing here ...
-> > > 
-> > > Just out of curiosity: So far I was thinking folio is physically contiguous
-> > > chunk of memory. And if it is, then it does not seem as a huge overkill if
-> > > kmap_local_folio() just maps the whole folio?
-> > 
-> > Willy proposed that previously but we could not come to a consensus on how to
-> > do it.
-> > 
-> > https://lore.kernel.org/all/Yv2VouJb2pNbP59m@iweiny-desk3/
-> > 
-> > FWIW I still think increasing the entries to cover any foreseeable need would
-> > be sufficient because HIGHMEM does not need to be optimized.  Couldn't we hide
-> > the entry count into some config option which is only set if a FS needs a
-> > larger block size on a HIGHMEM system?
-> 
-> "any foreseeable need"?  I mean ... I'd like to support 2MB folios,
-> even on HIGHMEM machines, and that's 512 entries.  If we're doing
-> memcpy_to_folio(), we know that's only one mapping, but still, 512
-> entries is _a lot_ of address space to be reserving on a 32-bit machine.
+Hello,
 
-I'm confused.  A memcpy_to_folio() could loop to map the pages as needed
-depending on the amount of data to copy.  Or just map/unmap in a loop.
+syzbot found the following issue on:
 
-This seems like an argument to have a memcpy_to_folio() to hide such nastiness
-on HIGHMEM from the user.
+HEAD commit:    77856d911a8c Merge tag 'arm64-fixes' of git://git.kernel.o..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=159ff477880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=334a10f27a9ee2e0
+dashboard link: https://syzkaller.appspot.com/bug?extid=4dadbee41d087d9c6234
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1262b2e7880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11e552b7880000
 
-> I don't know exactly what the address space layout is on x86-PAE or
-> ARM-PAE these days, but as I recall, the low 3GB is user and the high
-> 1GB is divided between LOWMEM and VMAP space; something like 800MB of
-> LOWMEM and 200MB of vmap/kmap/PCI iomem/...
-> 
-> Where I think we can absolutely get away with this reasoning is having
-> a kmap_local_buffer().  It's perfectly reasonable to restrict fs block
-> size to 64kB (after all, we've been limiting it to 4kB on x86 for thirty
-> years), and having a __kmap_local_pfns(pfn, n, prot) doesn't seem like
-> a terribly bad idea to me.
-> 
-> So ... is this our path forward:
-> 
->  - Introduce a complex memcpy_to/from_folio() in highmem.c that mirrors
->    zero_user_segments()
->  - Have a simple memcpy_to/from_folio() in highmem.h that mirrors
->    zero_user_segments()
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c104bd9fd890/disk-77856d91.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3ab4bff3f176/vmlinux-77856d91.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/207eba05f0ef/bzImage-77856d91.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/b0b4c97d530b/mount_0.gz
 
-I'm confused again.  What is the difference between the complex/simple other
-than inline vs not?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4dadbee41d087d9c6234@syzkaller.appspotmail.com
 
->  - Convert __kmap_local_pfn_prot() to __kmap_local_pfns()
+INFO: task kworker/0:0:7 blocked for more than 143 seconds.
+      Not tainted 6.1.0-syzkaller-13031-g77856d911a8c #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/0:0     state:D stack:27608 pid:7     ppid:2      flags:0x00004000
+Workqueue: events_long flush_old_commits
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0xb8a/0x5450 kernel/sched/core.c:6555
+ schedule+0xde/0x1b0 kernel/sched/core.c:6631
+ schedule_preempt_disabled+0x13/0x20 kernel/sched/core.c:6690
+ __mutex_lock_common kernel/locking/mutex.c:679 [inline]
+ __mutex_lock+0xa48/0x1360 kernel/locking/mutex.c:747
+ reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+ reiserfs_sync_fs+0x81/0x130 fs/reiserfs/super.c:76
+ flush_old_commits+0xfb/0x200 fs/reiserfs/super.c:111
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2436
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+INFO: task kworker/1:0:22 blocked for more than 143 seconds.
+      Not tainted 6.1.0-syzkaller-13031-g77856d911a8c #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/1:0     state:D stack:28264 pid:22    ppid:2      flags:0x00004000
+Workqueue: events_long flush_old_commits
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0xb8a/0x5450 kernel/sched/core.c:6555
+ schedule+0xde/0x1b0 kernel/sched/core.c:6631
+ schedule_preempt_disabled+0x13/0x20 kernel/sched/core.c:6690
+ __mutex_lock_common kernel/locking/mutex.c:679 [inline]
+ __mutex_lock+0xa48/0x1360 kernel/locking/mutex.c:747
+ reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+ reiserfs_sync_fs+0x81/0x130 fs/reiserfs/super.c:76
+ flush_old_commits+0xfb/0x200 fs/reiserfs/super.c:111
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2436
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+INFO: task kworker/1:1:26 blocked for more than 143 seconds.
+      Not tainted 6.1.0-syzkaller-13031-g77856d911a8c #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/1:1     state:D stack:28512 pid:26    ppid:2      flags:0x00004000
+Workqueue: events_long flush_old_commits
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0xb8a/0x5450 kernel/sched/core.c:6555
+ schedule+0xde/0x1b0 kernel/sched/core.c:6631
+ schedule_preempt_disabled+0x13/0x20 kernel/sched/core.c:6690
+ __mutex_lock_common kernel/locking/mutex.c:679 [inline]
+ __mutex_lock+0xa48/0x1360 kernel/locking/mutex.c:747
+ reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+ reiserfs_sync_fs+0x81/0x130 fs/reiserfs/super.c:76
+ flush_old_commits+0xfb/0x200 fs/reiserfs/super.c:111
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2436
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+INFO: task kworker/1:3:2689 blocked for more than 144 seconds.
+      Not tainted 6.1.0-syzkaller-13031-g77856d911a8c #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/1:3     state:D stack:28888 pid:2689  ppid:2      flags:0x00004000
+Workqueue: events_long flush_old_commits
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0xb8a/0x5450 kernel/sched/core.c:6555
+ schedule+0xde/0x1b0 kernel/sched/core.c:6631
+ schedule_preempt_disabled+0x13/0x20 kernel/sched/core.c:6690
+ __mutex_lock_common kernel/locking/mutex.c:679 [inline]
+ __mutex_lock+0xa48/0x1360 kernel/locking/mutex.c:747
+ reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+ reiserfs_sync_fs+0x81/0x130 fs/reiserfs/super.c:76
+ flush_old_commits+0xfb/0x200 fs/reiserfs/super.c:111
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2436
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+INFO: task syz-executor214:5087 blocked for more than 144 seconds.
+      Not tainted 6.1.0-syzkaller-13031-g77856d911a8c #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor214 state:D stack:24592 pid:5087  ppid:5071   flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0xb8a/0x5450 kernel/sched/core.c:6555
+ schedule+0xde/0x1b0 kernel/sched/core.c:6631
+ rwsem_down_write_slowpath+0x600/0x12e0 kernel/locking/rwsem.c:1190
+ __down_write_common kernel/locking/rwsem.c:1305 [inline]
+ __down_write_common kernel/locking/rwsem.c:1302 [inline]
+ __down_write kernel/locking/rwsem.c:1314 [inline]
+ down_write+0x1e8/0x220 kernel/locking/rwsem.c:1563
+ inode_lock include/linux/fs.h:756 [inline]
+ reiserfs_sync_file+0xab/0x320 fs/reiserfs/file.c:155
+ vfs_fsync_range+0x13e/0x230 fs/sync.c:188
+ generic_write_sync include/linux/fs.h:2882 [inline]
+ generic_file_write_iter+0x25a/0x350 mm/filemap.c:3936
+ call_write_iter include/linux/fs.h:2186 [inline]
+ do_iter_readv_writev+0x20b/0x3b0 fs/read_write.c:735
+ do_iter_write+0x182/0x700 fs/read_write.c:861
+ vfs_iter_write+0x74/0xa0 fs/read_write.c:902
+ iter_file_splice_write+0x745/0xc90 fs/splice.c:686
+ do_splice_from fs/splice.c:764 [inline]
+ direct_splice_actor+0x114/0x180 fs/splice.c:931
+ splice_direct_to_actor+0x335/0x8a0 fs/splice.c:886
+ do_splice_direct+0x1ab/0x280 fs/splice.c:974
+ do_sendfile+0xb19/0x1270 fs/read_write.c:1255
+ __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+ __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe8fc345669
+RSP: 002b:00007fe8fc2f12f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 00007fe8fc3cb7a0 RCX: 00007fe8fc345669
+RDX: 0000000000000000 RSI: 0000000000000005 RDI: 0000000000000004
+RBP: 00007fe8fc3981b8 R08: 0000000000000000 R09: 0000000000000000
+R10: 000080001d00c0d0 R11: 0000000000000246 R12: 0030656c69662f2e
+R13: 7366726573696572 R14: 65732f636f72702f R15: 00007fe8fc3cb7a8
+ </TASK>
+INFO: task syz-executor214:5098 blocked for more than 144 seconds.
+      Not tainted 6.1.0-syzkaller-13031-g77856d911a8c #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor214 state:D stack:23488 pid:5098  ppid:5071   flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0xb8a/0x5450 kernel/sched/core.c:6555
+ schedule+0xde/0x1b0 kernel/sched/core.c:6631
+ schedule_preempt_disabled+0x13/0x20 kernel/sched/core.c:6690
+ __mutex_lock_common kernel/locking/mutex.c:679 [inline]
+ __mutex_lock+0xa48/0x1360 kernel/locking/mutex.c:747
+ reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+ reiserfs_get_block+0x1f6/0x4150 fs/reiserfs/inode.c:680
+ do_mpage_readpage+0x765/0x19e0 fs/mpage.c:208
+ mpage_readahead+0x344/0x580 fs/mpage.c:361
+ read_pages+0x1a2/0xd40 mm/readahead.c:161
+ page_cache_ra_unbounded+0x477/0x5e0 mm/readahead.c:270
+ do_page_cache_ra mm/readahead.c:300 [inline]
+ page_cache_ra_order+0x6ec/0xa00 mm/readahead.c:560
+ ondemand_readahead+0x6b3/0x1000 mm/readahead.c:682
+ page_cache_sync_ra+0x1c9/0x200 mm/readahead.c:709
+ page_cache_sync_readahead include/linux/pagemap.h:1210 [inline]
+ filemap_get_pages+0x2ca/0x16b0 mm/filemap.c:2600
+ filemap_read+0x315/0xc00 mm/filemap.c:2694
+ generic_file_read_iter+0x3ad/0x5b0 mm/filemap.c:2840
+ __kernel_read+0x2ca/0x7c0 fs/read_write.c:428
+ integrity_kernel_read+0x7f/0xb0 security/integrity/iint.c:199
+ ima_calc_file_hash_tfm+0x2aa/0x3b0 security/integrity/ima/ima_crypto.c:485
+ ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
+ ima_calc_file_hash+0x195/0x4a0 security/integrity/ima/ima_crypto.c:573
+ ima_collect_measurement+0x642/0x7b0 security/integrity/ima/ima_api.c:292
+ process_measurement+0xd23/0x18b0 security/integrity/ima/ima_main.c:339
+ ima_file_check+0xb0/0x100 security/integrity/ima/ima_main.c:519
+ do_open fs/namei.c:3559 [inline]
+ path_openat+0x15f1/0x2a50 fs/namei.c:3714
+ do_filp_open+0x1ba/0x410 fs/namei.c:3741
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_open fs/open.c:1334 [inline]
+ __se_sys_open fs/open.c:1330 [inline]
+ __x64_sys_open+0x11d/0x1c0 fs/open.c:1330
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe8fc345669
+RSP: 002b:00007fe8f42d02f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00007fe8fc3cb7b0 RCX: 00007fe8fc345669
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000200
+RBP: 00007fe8fc3981b8 R08: 00007fe8f42d0700 R09: 0000000000000000
+R10: 00007fe8f42d0700 R11: 0000000000000246 R12: 0030656c69662f2e
+R13: 7366726573696572 R14: 65732f636f72702f R15: 00007fe8fc3cb7b8
+ </TASK>
+INFO: task syz-executor214:5103 blocked for more than 145 seconds.
+      Not tainted 6.1.0-syzkaller-13031-g77856d911a8c #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor214 state:D stack:28648 pid:5103  ppid:5071   flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0xb8a/0x5450 kernel/sched/core.c:6555
+ schedule+0xde/0x1b0 kernel/sched/core.c:6631
+ io_schedule+0xbe/0x130 kernel/sched/core.c:8811
+ folio_wait_bit_common+0x394/0x9b0 mm/filemap.c:1297
+ __folio_lock mm/filemap.c:1660 [inline]
+ folio_lock include/linux/pagemap.h:938 [inline]
+ folio_lock include/linux/pagemap.h:934 [inline]
+ __filemap_get_folio+0xb71/0xd80 mm/filemap.c:1932
+ pagecache_get_page+0x2e/0x280 mm/folio-compat.c:98
+ find_or_create_page include/linux/pagemap.h:612 [inline]
+ grab_cache_page include/linux/pagemap.h:742 [inline]
+ grab_tail_page fs/reiserfs/inode.c:2201 [inline]
+ reiserfs_truncate_file+0x5bb/0x1070 fs/reiserfs/inode.c:2269
+ reiserfs_setattr+0xed3/0x1460 fs/reiserfs/inode.c:3395
+ notify_change+0xca7/0x1420 fs/attr.c:482
+ do_truncate+0x143/0x200 fs/open.c:65
+ vfs_truncate+0x3c2/0x490 fs/open.c:111
+ do_sys_truncate.part.0+0x11e/0x140 fs/open.c:134
+ do_sys_truncate fs/open.c:128 [inline]
+ __do_sys_truncate fs/open.c:146 [inline]
+ __se_sys_truncate fs/open.c:144 [inline]
+ __x64_sys_truncate+0x6d/0xa0 fs/open.c:144
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe8fc345669
+RSP: 002b:00007fe8f42af2f8 EFLAGS: 00000246 ORIG_RAX: 000000000000004c
+RAX: ffffffffffffffda RBX: 00007fe8fc3cb7c0 RCX: 00007fe8fc345669
+RDX: 00007fe8f42af700 RSI: 0000000000000006 RDI: 00000000200001c0
+RBP: 00007fe8fc3981b8 R08: 00007fe8f42af700 R09: 0000000000000000
+R10: 00007fe8f42af700 R11: 0000000000000246 R12: 0030656c69662f2e
+R13: 7366726573696572 R14: 65732f636f72702f R15: 00007fe8fc3cb7c8
+ </TASK>
+INFO: task syz-executor214:5120 blocked for more than 145 seconds.
+      Not tainted 6.1.0-syzkaller-13031-g77856d911a8c #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor214 state:D stack:24376 pid:5120  ppid:5069   flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0xb8a/0x5450 kernel/sched/core.c:6555
+ schedule+0xde/0x1b0 kernel/sched/core.c:6631
+ rwsem_down_write_slowpath+0x600/0x12e0 kernel/locking/rwsem.c:1190
+ __down_write_common kernel/locking/rwsem.c:1305 [inline]
+ __down_write_common kernel/locking/rwsem.c:1302 [inline]
+ __down_write kernel/locking/rwsem.c:1314 [inline]
+ down_write+0x1e8/0x220 kernel/locking/rwsem.c:1563
+ inode_lock include/linux/fs.h:756 [inline]
+ generic_file_write_iter+0x92/0x350 mm/filemap.c:3929
+ call_write_iter include/linux/fs.h:2186 [inline]
+ do_iter_readv_writev+0x20b/0x3b0 fs/read_write.c:735
+ do_iter_write+0x182/0x700 fs/read_write.c:861
+ vfs_iter_write+0x74/0xa0 fs/read_write.c:902
+ iter_file_splice_write+0x745/0xc90 fs/splice.c:686
+ do_splice_from fs/splice.c:764 [inline]
+ direct_splice_actor+0x114/0x180 fs/splice.c:931
+ splice_direct_to_actor+0x335/0x8a0 fs/splice.c:886
+ do_splice_direct+0x1ab/0x280 fs/splice.c:974
+ do_sendfile+0xb19/0x1270 fs/read_write.c:1255
+ __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+ __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe8fc345669
+RSP: 002b:00007fe8fc2f12f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 00007fe8fc3cb7a0 RCX: 00007fe8fc345669
+RDX: 0000000000000000 RSI: 0000000000000005 RDI: 0000000000000004
+RBP: 00007fe8fc3981b8 R08: 0000000000000000 R09: 0000000000000000
+R10: 000080001d00c0d0 R11: 0000000000000246 R12: 0030656c69662f2e
+R13: 7366726573696572 R14: 65732f636f72702f R15: 00007fe8fc3cb7a8
+ </TASK>
+INFO: task syz-executor214:5127 blocked for more than 146 seconds.
+      Not tainted 6.1.0-syzkaller-13031-g77856d911a8c #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor214 state:D stack:23752 pid:5127  ppid:5069   flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0xb8a/0x5450 kernel/sched/core.c:6555
+ schedule+0xde/0x1b0 kernel/sched/core.c:6631
+ schedule_preempt_disabled+0x13/0x20 kernel/sched/core.c:6690
+ __mutex_lock_common kernel/locking/mutex.c:679 [inline]
+ __mutex_lock+0xa48/0x1360 kernel/locking/mutex.c:747
+ reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+ reiserfs_get_block+0x1f6/0x4150 fs/reiserfs/inode.c:680
+ do_mpage_readpage+0x765/0x19e0 fs/mpage.c:208
+ mpage_readahead+0x344/0x580 fs/mpage.c:361
+ read_pages+0x1a2/0xd40 mm/readahead.c:161
+ page_cache_ra_unbounded+0x477/0x5e0 mm/readahead.c:270
+ do_page_cache_ra mm/readahead.c:300 [inline]
+ page_cache_ra_order+0x6ec/0xa00 mm/readahead.c:560
+ ondemand_readahead+0x6b3/0x1000 mm/readahead.c:682
+ page_cache_sync_ra+0x1c9/0x200 mm/readahead.c:709
+ page_cache_sync_readahead include/linux/pagemap.h:1210 [inline]
+ filemap_get_pages+0x2ca/0x16b0 mm/filemap.c:2600
+ filemap_read+0x315/0xc00 mm/filemap.c:2694
+ generic_file_read_iter+0x3ad/0x5b0 mm/filemap.c:2840
+ __kernel_read+0x2ca/0x7c0 fs/read_write.c:428
+ integrity_kernel_read+0x7f/0xb0 security/integrity/iint.c:199
+ ima_calc_file_hash_tfm+0x2aa/0x3b0 security/integrity/ima/ima_crypto.c:485
+ ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
+ ima_calc_file_hash+0x195/0x4a0 security/integrity/ima/ima_crypto.c:573
+ ima_collect_measurement+0x642/0x7b0 security/integrity/ima/ima_api.c:292
+ process_measurement+0xd23/0x18b0 security/integrity/ima/ima_main.c:339
+ ima_file_check+0xb0/0x100 security/integrity/ima/ima_main.c:519
+ do_open fs/namei.c:3559 [inline]
+ path_openat+0x15f1/0x2a50 fs/namei.c:3714
+ do_filp_open+0x1ba/0x410 fs/namei.c:3741
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_open fs/open.c:1334 [inline]
+ __se_sys_open fs/open.c:1330 [inline]
+ __x64_sys_open+0x11d/0x1c0 fs/open.c:1330
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe8fc345669
+RSP: 002b:00007fe8f42d02f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00007fe8fc3cb7b0 RCX: 00007fe8fc345669
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000200
+RBP: 00007fe8fc3981b8 R08: 00007fe8f42d0700 R09: 0000000000000000
+R10: 00007fe8f42d0700 R11: 0000000000000246 R12: 0030656c69662f2e
+R13: 7366726573696572 R14: 65732f636f72702f R15: 00007fe8fc3cb7b8
+ </TASK>
+INFO: task syz-executor214:5129 blocked for more than 146 seconds.
+      Not tainted 6.1.0-syzkaller-13031-g77856d911a8c #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor214 state:D stack:28984 pid:5129  ppid:5069   flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0xb8a/0x5450 kernel/sched/core.c:6555
+ schedule+0xde/0x1b0 kernel/sched/core.c:6631
+ io_schedule+0xbe/0x130 kernel/sched/core.c:8811
+ folio_wait_bit_common+0x394/0x9b0 mm/filemap.c:1297
+ __folio_lock mm/filemap.c:1660 [inline]
+ folio_lock include/linux/pagemap.h:938 [inline]
+ folio_lock include/linux/pagemap.h:934 [inline]
+ __filemap_get_folio+0xb71/0xd80 mm/filemap.c:1932
+ pagecache_get_page+0x2e/0x280 mm/folio-compat.c:98
+ find_or_create_page include/linux/pagemap.h:612 [inline]
+ grab_cache_page include/linux/pagemap.h:742 [inline]
+ grab_tail_page fs/reiserfs/inode.c:2201 [inline]
+ reiserfs_truncate_file+0x5bb/0x1070 fs/reiserfs/inode.c:2269
+ reiserfs_setattr+0xed3/0x1460 fs/reiserfs/inode.c:3395
+ notify_change+0xca7/0x1420 fs/attr.c:482
+ do_truncate+0x143/0x200 fs/open.c:65
+ vfs_truncate+0x3c2/0x490 fs/open.c:111
+ do_sys_truncate.part.0+0x11e/0x140 fs/open.c:134
+ do_sys_truncate fs/open.c:128 [inline]
+ __do_sys_truncate fs/open.c:146 [inline]
+ __se_sys_truncate fs/open.c:144 [inline]
+ __x64_sys_truncate+0x6d/0xa0 fs/open.c:144
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe8fc345669
+RSP: 002b:00007fe8f42af2f8 EFLAGS: 00000246 ORIG_RAX: 000000000000004c
+RAX: ffffffffffffffda RBX: 00007fe8fc3cb7c0 RCX: 00007fe8fc345669
+RDX: 00007fe8f42af700 RSI: 0000000000000006 RDI: 00000000200001c0
+RBP: 00007fe8fc3981b8 R08: 00007fe8f42af700 R09: 0000000000000000
+R10: 00007fe8f42af700 R11: 0000000000000246 R12: 0030656c69662f2e
+R13: 7366726573696572 R14: 65732f636f72702f R15: 00007fe8fc3cb7c8
+ </TASK>
 
-I'm not sure I follow this need but I think you are speaking of having the
-mapping of multiple pages in a tight loop in the preemption disabled region?
+Showing all locks held in the system:
+4 locks held by kworker/0:0/7:
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: process_one_work+0x86d/0x1710 kernel/workqueue.c:2260
+ #1: ffffc900000c7da8 ((work_completion)(&(&sbi->old_work)->work)){+.+.}-{0:0}, at: process_one_work+0x8a1/0x1710 kernel/workqueue.c:2264
+ #2: ffff8880212dc0e0 (&type->s_umount_key#41){++++}-{3:3}, at: flush_old_commits+0x7c/0x200 fs/reiserfs/super.c:97
+ #3: ffff88801dc65090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+1 lock held by rcu_tasks_kthre/12:
+ #0: ffffffff8c590b70 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x26/0xc70 kernel/rcu/tasks.h:507
+1 lock held by rcu_tasks_trace/13:
+ #0: ffffffff8c590870 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x26/0xc70 kernel/rcu/tasks.h:507
+4 locks held by kworker/1:0/22:
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: process_one_work+0x86d/0x1710 kernel/workqueue.c:2260
+ #1: ffffc900001c7da8
+ ((work_completion)(&(&sbi->old_work)->work)
+){+.+.}-{0:0}
+, at: process_one_work+0x8a1/0x1710 kernel/workqueue.c:2264
+ #2: 
+ffff88807d9740e0 (&type->s_umount_key#41){++++}-{3:3}, at: flush_old_commits+0x7c/0x200 fs/reiserfs/super.c:97
+ #3: ffff8881452ea090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+4 locks held by kworker/1:1/26:
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: process_one_work+0x86d/0x1710 kernel/workqueue.c:2260
+ #1: ffffc90000a1fda8 ((work_completion)(&(&sbi->old_work)->work)){+.+.}-{0:0}, at: process_one_work+0x8a1/0x1710 kernel/workqueue.c:2264
+ #2: ffff88807c5be0e0 (&type->s_umount_key#41){++++}-{3:3}, at: flush_old_commits+0x7c/0x200 fs/reiserfs/super.c:97
+ #3: 
+ffff8880203d8090
+ (
+&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+1 lock held by khungtaskd/28:
+ #0: ffffffff8c5916c0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x57/0x264 kernel/locking/lockdep.c:6494
+5 locks held by kworker/u4:2/41:
+4 locks held by kworker/1:3/2689:
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: process_one_work+0x86d/0x1710 kernel/workqueue.c:2260
+ #1: ffffc9000aff7da8 ((work_completion)(&(&sbi->old_work)->work)){+.+.}-{0:0}, at: process_one_work+0x8a1/0x1710 kernel/workqueue.c:2264
+ #2: ffff88802abe20e0 (&type->s_umount_key#41){++++}-{3:3}, at: flush_old_commits+0x7c/0x200 fs/reiserfs/super.c:97
+ #3: ffff8880177a3090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+1 lock held by klogd/4419:
+ #0: ffff8880b9a3b598 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2f/0x120 kernel/sched/core.c:537
+2 locks held by getty/4746:
+ #0: ffff88802b03b098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x26/0x80 drivers/tty/tty_ldisc.c:244
+ #1: ffffc900015802f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xef4/0x13e0 drivers/tty/n_tty.c:2177
+2 locks held by syz-executor214/5087:
+ #0: ffff8880212dc460 (sb_writers#9){.+.+}-{0:0}, at: __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ #0: ffff8880212dc460 (sb_writers#9){.+.+}-{0:0}, at: __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+ #0: ffff8880212dc460 (sb_writers#9){.+.+}-{0:0}, at: __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
+ #1: ffff88807355be80 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #1: ffff88807355be80 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: reiserfs_sync_file+0xab/0x320 fs/reiserfs/file.c:155
+3 locks held by syz-executor214/5098:
+ #0: ffff88801ba6faa0 (&iint->mutex){+.+.}-{3:3}, at: process_measurement+0x3ab/0x18b0 security/integrity/ima/ima_main.c:260
+ #1: ffff88807355c020 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
+ #1: ffff88807355c020 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: page_cache_ra_unbounded+0x153/0x5e0 mm/readahead.c:226
+ #2: ffff88801dc65090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+4 locks held by syz-executor214/5103:
+ #0: ffff8880212dc460 (sb_writers#9){.+.+}-{0:0}, at: vfs_truncate+0xee/0x490 fs/open.c:84
+ #1: ffff88807355be80 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #1: ffff88807355be80 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: do_truncate+0x131/0x200 fs/open.c:63
+ #2: ffff88807355bc58 (&ei->tailpack){+.+.}-{3:3}, at: reiserfs_setattr+0xe9d/0x1460 fs/reiserfs/inode.c:3393
+ #3: ffff88801dc65090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+2 locks held by syz-executor214/5120:
+ #0: ffff88807c5be460 (sb_writers#9){.+.+}-{0:0}, at: __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ #0: ffff88807c5be460 (sb_writers#9){.+.+}-{0:0}, at: __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+ #0: ffff88807c5be460 (sb_writers#9){.+.+}-{0:0}, at: __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
+ #1: ffff88807363d260 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #1: ffff88807363d260 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: generic_file_write_iter+0x92/0x350 mm/filemap.c:3929
+3 locks held by syz-executor214/5127:
+ #0: ffff888027ac4860 (&iint->mutex){+.+.}-{3:3}, at: process_measurement+0x3ab/0x18b0 security/integrity/ima/ima_main.c:260
+ #1: ffff88807363d400 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
+ #1: ffff88807363d400 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: page_cache_ra_unbounded+0x153/0x5e0 mm/readahead.c:226
+ #2: ffff8880203d8090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+4 locks held by syz-executor214/5129:
+ #0: ffff88807c5be460 (sb_writers#9){.+.+}-{0:0}, at: vfs_truncate+0xee/0x490 fs/open.c:84
+ #1: 
+ffff88807363d260 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ffff88807363d260 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: do_truncate+0x131/0x200 fs/open.c:63
+ #2: ffff88807363d038 (&ei->tailpack){+.+.}-{3:3}, at: reiserfs_setattr+0xe9d/0x1460 fs/reiserfs/inode.c:3393
+ #3: ffff8880203d8090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+4 locks held by kworker/0:4/5174:
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff888012065538 ((wq_completion)events_long){+.+.}-{0:0}, at: process_one_work+0x86d/0x1710 kernel/workqueue.c:2260
+ #1: ffffc900047c7da8 ((work_completion)(&(&sbi->old_work)->work)){+.+.}-{0:0}, at: process_one_work+0x8a1/0x1710 kernel/workqueue.c:2264
+ #2: ffff88807d3a80e0 (&type->s_umount_key#41){++++}-{3:3}, at: flush_old_commits+0x7c/0x200 fs/reiserfs/super.c:97
+ #3: ffff88801bc5f090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+2 locks held by syz-executor214/5267:
+ #0: ffff88807d974460 (sb_writers#9){.+.+}-{0:0}, at: __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ #0: ffff88807d974460 (sb_writers#9){.+.+}-{0:0}, at: __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+ #0: ffff88807d974460 (sb_writers#9){.+.+}-{0:0}, at: __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
+ #1: ffff88806e877a20 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #1: ffff88806e877a20 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: generic_file_write_iter+0x92/0x350 mm/filemap.c:3929
+3 locks held by syz-executor214/5274:
+ #0: ffff888078d08ce0 (&iint->mutex){+.+.}-{3:3}, at: process_measurement+0x3ab/0x18b0 security/integrity/ima/ima_main.c:260
+ #1: ffff88806e877bc0 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
+ #1: ffff88806e877bc0 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: page_cache_ra_unbounded+0x153/0x5e0 mm/readahead.c:226
+ #2: ffff8881452ea090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+4 locks held by syz-executor214/5276:
+ #0: ffff88807d974460 (sb_writers#9){.+.+}-{0:0}, at: vfs_truncate+0xee/0x490 fs/open.c:84
+ #1: ffff88806e877a20 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #1: ffff88806e877a20 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: do_truncate+0x131/0x200 fs/open.c:63
+ #2: ffff88806e8777f8 (&ei->tailpack){+.+.}-{3:3}, at: reiserfs_setattr+0xe9d/0x1460 fs/reiserfs/inode.c:3393
+ #3: ffff8881452ea090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+2 locks held by syz-executor214/5281:
+ #0: ffff88802abe2460 (sb_writers#9){.+.+}-{0:0}, at: __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ #0: ffff88802abe2460 (sb_writers#9){.+.+}-{0:0}, at: __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+ #0: ffff88802abe2460 (sb_writers#9){.+.+}-{0:0}, at: __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
+ #1: ffff888073781d60 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #1: ffff888073781d60 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: generic_file_write_iter+0x92/0x350 mm/filemap.c:3929
+3 locks held by syz-executor214/5289:
+ #0: ffff88801ba6fe00 (&iint->mutex){+.+.}-{3:3}, at: process_measurement+0x3ab/0x18b0 security/integrity/ima/ima_main.c:260
+ #1: ffff888073781f00 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
+ #1: ffff888073781f00 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: page_cache_ra_unbounded+0x153/0x5e0 mm/readahead.c:226
+ #2: ffff8880177a3090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+4 locks held by syz-executor214/5290:
+ #0: ffff88802abe2460 (sb_writers#9){.+.+}-{0:0}, at: vfs_truncate+0xee/0x490 fs/open.c:84
+ #1: ffff888073781d60 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #1: ffff888073781d60 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: do_truncate+0x131/0x200 fs/open.c:63
+ #2: ffff888073781b38 (&ei->tailpack){+.+.}-{3:3}, at: reiserfs_setattr+0xe9d/0x1460 fs/reiserfs/inode.c:3393
+ #3: ffff8880177a3090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+2 locks held by syz-executor214/5309:
+ #0: ffff88807d3a8460 (sb_writers#9){.+.+}-{0:0}, at: __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ #0: ffff88807d3a8460 (sb_writers#9){.+.+}-{0:0}, at: __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+ #0: ffff88807d3a8460 (sb_writers#9){.+.+}-{0:0}, at: __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
+ #1: ffff88807363ece0 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #1: ffff88807363ece0 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: reiserfs_sync_file+0xab/0x320 fs/reiserfs/file.c:155
+3 locks held by syz-executor214/5313:
+ #0: ffff88801ca5de00 (&iint->mutex){+.+.}-{3:3}, at: process_measurement+0x3ab/0x18b0 security/integrity/ima/ima_main.c:260
+ #1: ffff88807363ee80 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
+ #1: ffff88807363ee80 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: page_cache_ra_unbounded+0x153/0x5e0 mm/readahead.c:226
+ #2: ffff88801bc5f090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+4 locks held by syz-executor214/5314:
+ #0: ffff88807d3a8460 (sb_writers#9){.+.+}-{0:0}, at: vfs_truncate+0xee/0x490 fs/open.c:84
+ #1: ffff88807363ece0 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #1: ffff88807363ece0 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: do_truncate+0x131/0x200 fs/open.c:63
+ #2: ffff88807363eab8 (&ei->tailpack){+.+.}-{3:3}, at: reiserfs_setattr+0xe9d/0x1460 fs/reiserfs/inode.c:3393
+ #3: ffff88801bc5f090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+2 locks held by kworker/1:4/5335:
+ #0: ffff888012066538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888012066538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888012066538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888012066538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff888012066538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff888012066538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: process_one_work+0x86d/0x1710 kernel/workqueue.c:2260
+ #1: ffffc900058b7da8 ((work_completion)(&rew->rew_work)){+.+.}-{0:0}, at: process_one_work+0x8a1/0x1710 kernel/workqueue.c:2264
 
-Frankly, I think this is an over optimization for HIGHMEM.  Just loop calling
-kmap_local_page() (either with or without an unmap depending on the details.)
+=============================================
 
->  - Add kmap_local_buffer() that can handle buffer_heads up to, say, 16x
->    PAGE_SIZE
+NMI backtrace for cpu 0
+CPU: 0 PID: 28 Comm: khungtaskd Not tainted 6.1.0-syzkaller-13031-g77856d911a8c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ nmi_cpu_backtrace.cold+0x24/0x18a lib/nmi_backtrace.c:111
+ nmi_trigger_cpumask_backtrace+0x333/0x3c0 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:220 [inline]
+ watchdog+0xc75/0xfc0 kernel/hung_task.c:377
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.1.0-syzkaller-13031-g77856d911a8c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:lockdep_hardirqs_on_prepare kernel/locking/lockdep.c:4302 [inline]
+RIP: 0010:lockdep_hardirqs_on_prepare+0x19a/0x410 kernel/locking/lockdep.c:4273
+Code: 01 00 00 48 c7 c7 e0 4d 2c 8a e8 01 00 96 08 b8 ff ff ff ff 65 0f c1 05 7c 00 9f 7e 83 f8 01 0f 85 ff 00 00 00 5b 5d c3 9c 58 <f6> c4 02 0f 85 59 01 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 da
+RSP: 0018:ffffc90000177db8 EFLAGS: 00000046
+RAX: 0000000000000046 RBX: ffffffff919f6a00 RCX: 1ffffffff1ca59b5
+RDX: 0000000000000004 RSI: 0000000000000000 RDI: 0000000000000001
+RBP: ffffffff8174faee R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff8fd53057 R11: 0000000000000001 R12: 0000000000000001
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffc4c528ff8 CR3: 000000000c28e000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ trace_hardirqs_on+0x31/0x180 kernel/trace/trace_preemptirq.c:49
+ tick_nohz_idle_enter+0x19e/0x250 kernel/time/tick-sched.c:1162
+ do_idle+0x9a/0x590 kernel/sched/idle.c:277
+ cpu_startup_entry+0x18/0x20 kernel/sched/idle.c:400
+ start_secondary+0x256/0x300 arch/x86/kernel/smpboot.c:264
+ secondary_startup_64_no_verify+0xce/0xdb
+ </TASK>
 
-I really just don't know the details of the various file systems.[*]  Is this
-something which could be hidden in Kconfig magic and just call this
-kmap_local_folio()?
 
-My gut says that HIGHMEM systems don't need large block size FS's.  So could
-large block size FS's be limited to !HIGHMEM configs?
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Ira
-
-[*] I only play a file system developer on TV.  ;-)
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
