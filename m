@@ -2,190 +2,152 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB466536CD
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 21 Dec 2022 20:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DFDF6539DB
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 22 Dec 2022 00:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234491AbiLUTED (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 21 Dec 2022 14:04:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
+        id S230134AbiLUXjx (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 21 Dec 2022 18:39:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiLUTEA (ORCPT
+        with ESMTP id S229647AbiLUXjw (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 21 Dec 2022 14:04:00 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E93A23E9F;
-        Wed, 21 Dec 2022 11:03:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1EaAEVRpfZISdwMc1aLC3alNH8vvsLi8U0NKwKj+Wkk=; b=SwizxruY+dHp/KiljsE2YRzrhM
-        dTqCcjfK4s7CMc/J895hWRErI6g+mLHCYt90hgXw1S/53PD2MauntrrJPG38AJN3+MgQ8ynq7anXq
-        8q3oT8+JJQ52sxeSHwbOpJMyIrzASYx+zL2bNulXMuBeeuP/cJHSPS+C1bpwYw8pXH9SHDb96m458
-        m+8PYJa17TPXGO7CIVftewe0/eiAmZDqRfrLrd7p5hmA9dHpN2gO3AKCbGRz3h3Ew5P3rn3IoOHn3
-        f5GGj4vSp24Fw0mezudP+0OH1YgN5GfAxMs2vCoA7YKSJGKOF/CR3KffK7A6vVBuSd7/wZEei3pZo
-        LYK2V3OQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p84Nm-0030Ha-Q6; Wed, 21 Dec 2022 19:04:02 +0000
-Date:   Wed, 21 Dec 2022 19:04:02 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Jan Kara <jack@suse.cz>, reiserfs-devel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: Re: [PATCH 5/8] reiserfs: Convert do_journal_end() to use
- kmap_local_folio()
-Message-ID: <Y6NYonXNGL58+rV8@casper.infradead.org>
-References: <20221216205348.3781217-1-willy@infradead.org>
- <20221216205348.3781217-6-willy@infradead.org>
- <Y55WUrzblTsw6FfQ@iweiny-mobl>
- <Y6GB75HMEKfcGcsO@casper.infradead.org>
- <20221220111801.jhukawk3lbuonxs3@quack3>
- <Y6HpzAFNA33jQ3bl@iweiny-desk3>
- <Y6IAUetp7nihz9Qu@casper.infradead.org>
- <Y6JMazsjbPRJ7oMM@iweiny-desk3>
+        Wed, 21 Dec 2022 18:39:52 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7286013E11
+        for <reiserfs-devel@vger.kernel.org>; Wed, 21 Dec 2022 15:39:50 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id h21-20020a05660224d500b006debd7dedccso146536ioe.9
+        for <reiserfs-devel@vger.kernel.org>; Wed, 21 Dec 2022 15:39:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uHpvaUfrEU++wP4ELFI7Hl+4NNhuPCye2i9zyl2wNwo=;
+        b=u7C6l0rUQUW91IxOB060FIoPhES+75szRrwBVt84/BUCHO7CUDRLaz7VnM86fEy5JG
+         uq/WokstAw/7iq5x6x4W9p04KFxB8vcpxh0mzwCGA7wIvkgS421c7wWT+csgeljROKxA
+         29Iv9eOLMFSPTC9FNAaubO0GFCqq3AVCeenemSTzbzQzmgUemOTgwerImA36usuYraTw
+         b60r7VfjnUmN3DoHotvPsJwtEblIuwLQs3eiAFKqUbrnfLTG9k/dut/sbkWSjGXMnIvE
+         RYzw1JmlWAW+PUZHc3W3AGng5Erh7WP7rLxapC0MWP8+S6cMUpiODXVg/g1syxAwXRLB
+         8oIw==
+X-Gm-Message-State: AFqh2koN8coGYR4E7AWPFS0+0V+Y6daolkkho1nxEnbZKRyk80hH6iMu
+        t0IhG+lucivfr2caYkokSn/wqTtQ4pcA8YcL/unkQiOFOhs6
+X-Google-Smtp-Source: AMrXdXtvuMV4FGVZm95j4ClgTRkpm8iUgtN64NLN0HWzuzwbRmmo2aiBzS+5s2QEZ/yB89JOCrKiToqpxSgpJrsVGFXDhg3SYuIa
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6JMazsjbPRJ7oMM@iweiny-desk3>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:4a04:0:b0:6ed:1e9c:f64 with SMTP id
+ w4-20020a6b4a04000000b006ed1e9c0f64mr302789iob.11.1671665989839; Wed, 21 Dec
+ 2022 15:39:49 -0800 (PST)
+Date:   Wed, 21 Dec 2022 15:39:49 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000081f1a405f05f111f@google.com>
+Subject: [syzbot] [reiserfs?] kernel BUG in reiserfs_update_sd_size
+From:   syzbot <syzbot+7d78ccda251bc1bdbaed@syzkaller.appspotmail.com>
+To:     jack@suse.cz, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        yijiangshan@kylinos.cn
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 03:59:39PM -0800, Ira Weiny wrote:
-> On Tue, Dec 20, 2022 at 06:34:57PM +0000, Matthew Wilcox wrote:
-> > On Tue, Dec 20, 2022 at 08:58:52AM -0800, Ira Weiny wrote:
-> > > On Tue, Dec 20, 2022 at 12:18:01PM +0100, Jan Kara wrote:
-> > > > On Tue 20-12-22 09:35:43, Matthew Wilcox wrote:
-> > > > > But that doesn't solve the "What about fs block size > PAGE_SIZE"
-> > > > > problem that we also want to solve.  Here's a concrete example:
-> > > > > 
-> > > > >  static __u32 jbd2_checksum_data(__u32 crc32_sum, struct buffer_head *bh)
-> > > > >  {
-> > > > > -       struct page *page = bh->b_page;
-> > > > > +       struct folio *folio = bh->b_folio;
-> > > > >         char *addr;
-> > > > >         __u32 checksum;
-> > > > >  
-> > > > > -       addr = kmap_atomic(page);
-> > > > > -       checksum = crc32_be(crc32_sum,
-> > > > > -               (void *)(addr + offset_in_page(bh->b_data)), bh->b_size);
-> > > > > -       kunmap_atomic(addr);
-> > > > > +       BUG_ON(IS_ENABLED(CONFIG_HIGHMEM) && bh->b_size > PAGE_SIZE);
-> > > > > +
-> > > > > +       addr = kmap_local_folio(folio, offset_in_folio(folio, bh->b_data));
-> > > > > +       checksum = crc32_be(crc32_sum, addr, bh->b_size);
-> > > > > +       kunmap_local(addr);
-> > > > >  
-> > > > >         return checksum;
-> > > > >  }
-> > > > > 
-> > > > > I don't want to add a lot of complexity to handle the case of b_size >
-> > > > > PAGE_SIZE on a HIGHMEM machine since that's not going to benefit terribly
-> > > > > many people.  I'd rather have the assertion that we don't support it.
-> > > > > But if there's a good higher-level abstraction I'm missing here ...
-> > > > 
-> > > > Just out of curiosity: So far I was thinking folio is physically contiguous
-> > > > chunk of memory. And if it is, then it does not seem as a huge overkill if
-> > > > kmap_local_folio() just maps the whole folio?
-> > > 
-> > > Willy proposed that previously but we could not come to a consensus on how to
-> > > do it.
-> > > 
-> > > https://lore.kernel.org/all/Yv2VouJb2pNbP59m@iweiny-desk3/
-> > > 
-> > > FWIW I still think increasing the entries to cover any foreseeable need would
-> > > be sufficient because HIGHMEM does not need to be optimized.  Couldn't we hide
-> > > the entry count into some config option which is only set if a FS needs a
-> > > larger block size on a HIGHMEM system?
-> > 
-> > "any foreseeable need"?  I mean ... I'd like to support 2MB folios,
-> > even on HIGHMEM machines, and that's 512 entries.  If we're doing
-> > memcpy_to_folio(), we know that's only one mapping, but still, 512
-> > entries is _a lot_ of address space to be reserving on a 32-bit machine.
-> 
-> I'm confused.  A memcpy_to_folio() could loop to map the pages as needed
-> depending on the amount of data to copy.  Or just map/unmap in a loop.
-> 
-> This seems like an argument to have a memcpy_to_folio() to hide such nastiness
-> on HIGHMEM from the user.
+Hello,
 
-I see that you are confused.  What I'm not quite sure of is how I confused
-you, so I'm just going to try again in different words.
+syzbot found the following issue on:
 
-Given the desire to support 2MB folios on x86/ARM PAE systems, we can't
-have a kmap_local_entire_folio() because that would take up too much
-address space.
+HEAD commit:    77856d911a8c Merge tag 'arm64-fixes' of git://git.kernel.o..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=112c5f1b880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f967143badd2fa39
+dashboard link: https://syzkaller.appspot.com/bug?extid=7d78ccda251bc1bdbaed
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=167d9af7880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13d01e1f880000
 
-But we can have a kmap_local_buffer() / kummap_local_buffer().  We can
-restrict the maximum fs block size (== buffer->b-size) to a reasonably
-small multiple of PAGE_SIZE, eg 16.  That will let us kmap the entire
-buffer, after making some of the changes described below.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4b424d9203f5/disk-77856d91.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/47fd68051834/vmlinux-77856d91.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d3091f087a86/bzImage-77856d91.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/4a056ff389fd/mount_0.gz
 
-That solves the jbd2_checksum_data() problem above, but isn't necessarily
-the best solution for every filesystem "need to copy to a folio" problem.
-So I think we do want memcpy_to/from_folio(), split out like the current
-zero_user_segments().
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7d78ccda251bc1bdbaed@syzkaller.appspotmail.com
 
-I also think we want a copy_folio_from_iter_atomic().  Right now
-iomap_write_iter() is a bit of a mess; it retrieves a multi-page folio
-from the page cache multiple times instead of copying as much as it can
-from userspace to the folio.  There are some interesting issues to deal
-with here, but putting it in iov_iter.c is better than hiding it in the
-iomap code.
+REISERFS (device loop0): Using r5 hash to sort names
+REISERFS panic (device loop0): vs-13065 update_stat_data: key [1 2 0x0 DIRECT], found item *3.6* [1 2 0x0 DIRECT], item_len 44, item_location 4052, free_space(entry_count) 0
+------------[ cut here ]------------
+kernel BUG at fs/reiserfs/prints.c:390!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 5067 Comm: syz-executor406 Not tainted 6.1.0-syzkaller-13031-g77856d911a8c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:__reiserfs_panic+0x12f/0x140 fs/reiserfs/prints.c:390
+Code: 80 4d 03 8b 48 0f 44 c8 48 0f 44 d8 48 c7 c7 40 4e 03 8b 4c 89 fe 48 89 da 4d 89 f0 49 c7 c1 40 d6 15 92 31 c0 e8 41 3e 72 08 <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 55 48 89 e5 41
+RSP: 0018:ffffc90003b1f560 EFLAGS: 00010246
+RAX: 00000000000000ad RBX: ffffffff8b02f3a0 RCX: 13eb6dc0ca851900
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: ffffc90003b1f650 R08: ffffffff816f29ad R09: fffff52000763e25
+R10: fffff52000763e25 R11: 1ffff92000763e24 R12: ffffffff8b02f3c0
+R13: ffffc90003b1f580 R14: ffffffff8cc6e3d9 R15: ffff88802b39a6a8
+FS:  0000555555d45300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fd11fff5a70 CR3: 000000007d5eb000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ update_stat_data fs/reiserfs/inode.c:1424 [inline]
+ reiserfs_update_sd_size+0xfc6/0x10a0 fs/reiserfs/inode.c:1497
+ reiserfs_update_sd fs/reiserfs/reiserfs.h:3099 [inline]
+ reiserfs_mkdir+0x723/0x8c0 fs/reiserfs/namei.c:877
+ xattr_mkdir fs/reiserfs/xattr.c:76 [inline]
+ create_privroot fs/reiserfs/xattr.c:882 [inline]
+ reiserfs_xattr_init+0x34b/0x730 fs/reiserfs/xattr.c:1005
+ reiserfs_fill_super+0x20b5/0x24a0 fs/reiserfs/super.c:2175
+ mount_bdev+0x26c/0x3a0 fs/super.c:1359
+ legacy_get_tree+0xea/0x180 fs/fs_context.c:610
+ vfs_get_tree+0x88/0x270 fs/super.c:1489
+ do_new_mount+0x289/0xad0 fs/namespace.c:3145
+ do_mount fs/namespace.c:3488 [inline]
+ __do_sys_mount fs/namespace.c:3697 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3674
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f13e308daea
+Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe033aa0a8 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f13e308daea
+RDX: 0000000020000000 RSI: 0000000020000040 RDI: 00007ffe033aa0c0
+RBP: 00007ffe033aa0c0 R08: 00007ffe033aa100 R09: 0000000000001105
+R10: 0000000000208000 R11: 0000000000000286 R12: 0000000000000004
+R13: 0000555555d452c0 R14: 0000000000208000 R15: 00007ffe033aa100
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__reiserfs_panic+0x12f/0x140 fs/reiserfs/prints.c:390
+Code: 80 4d 03 8b 48 0f 44 c8 48 0f 44 d8 48 c7 c7 40 4e 03 8b 4c 89 fe 48 89 da 4d 89 f0 49 c7 c1 40 d6 15 92 31 c0 e8 41 3e 72 08 <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 55 48 89 e5 41
+RSP: 0018:ffffc90003b1f560 EFLAGS: 00010246
+RAX: 00000000000000ad RBX: ffffffff8b02f3a0 RCX: 13eb6dc0ca851900
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: ffffc90003b1f650 R08: ffffffff816f29ad R09: fffff52000763e25
+R10: fffff52000763e25 R11: 1ffff92000763e24 R12: ffffffff8b02f3c0
+R13: ffffc90003b1f580 R14: ffffffff8cc6e3d9 R15: ffff88802b39a6a8
+FS:  0000555555d45300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055ce843f1078 CR3: 000000007d5eb000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-> > I don't know exactly what the address space layout is on x86-PAE or
-> > ARM-PAE these days, but as I recall, the low 3GB is user and the high
-> > 1GB is divided between LOWMEM and VMAP space; something like 800MB of
-> > LOWMEM and 200MB of vmap/kmap/PCI iomem/...
-> > 
-> > Where I think we can absolutely get away with this reasoning is having
-> > a kmap_local_buffer().  It's perfectly reasonable to restrict fs block
-> > size to 64kB (after all, we've been limiting it to 4kB on x86 for thirty
-> > years), and having a __kmap_local_pfns(pfn, n, prot) doesn't seem like
-> > a terribly bad idea to me.
-> > 
-> > So ... is this our path forward:
-> > 
-> >  - Introduce a complex memcpy_to/from_folio() in highmem.c that mirrors
-> >    zero_user_segments()
-> >  - Have a simple memcpy_to/from_folio() in highmem.h that mirrors
-> >    zero_user_segments()
-> 
-> I'm confused again.  What is the difference between the complex/simple other
-> than inline vs not?
-> 
-> >  - Convert __kmap_local_pfn_prot() to __kmap_local_pfns()
-> 
-> I'm not sure I follow this need but I think you are speaking of having the
-> mapping of multiple pages in a tight loop in the preemption disabled region?
-> 
-> Frankly, I think this is an over optimization for HIGHMEM.  Just loop calling
-> kmap_local_page() (either with or without an unmap depending on the details.)
 
-See the jbd2_checksum_data() example at the top, and design me a better
-API that doesn't involve putting complexity into jbd2 ;-)
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> >  - Add kmap_local_buffer() that can handle buffer_heads up to, say, 16x
-> >    PAGE_SIZE
-> 
-> I really just don't know the details of the various file systems.[*]  Is this
-> something which could be hidden in Kconfig magic and just call this
-> kmap_local_folio()?
-> 
-> My gut says that HIGHMEM systems don't need large block size FS's.  So could
-> large block size FS's be limited to !HIGHMEM configs?
-
-They could, and that's the current approach, but it does seem plausible
-that we could support HIGHMEM systems with fs-block-size > PAGE_SIZE
-with only a little extra work.
-
-> [*] I only play a file system developer on TV.  ;-)
-
-That's OK, I'm only pretending to be an MM developer.  Keep quiet, and
-I think we can get away with this.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
