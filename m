@@ -2,166 +2,158 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93A8653E63
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 22 Dec 2022 11:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A8A654B1E
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 23 Dec 2022 03:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235300AbiLVKhP (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 22 Dec 2022 05:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
+        id S229783AbiLWCeh (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 22 Dec 2022 21:34:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235241AbiLVKhM (ORCPT
+        with ESMTP id S229582AbiLWCeg (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 22 Dec 2022 05:37:12 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A10AE63;
-        Thu, 22 Dec 2022 02:37:07 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D966823B54;
-        Thu, 22 Dec 2022 10:37:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1671705425; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yo4+JtMNWgimMUFjJc8zNYW9/ztT5sGqCS8xZ/+rDNE=;
-        b=yQ9Owk3mPeS97kyxEIDBOmPQwvae4qE5xjuDHw+1MjR4aULPnMJ3wQoVHl6NjW/amthkBr
-        S/zIs3dEzU5g7HJmGvzKAPKxNAzZEQZVqzyo7wJ0YbOL1eCa8coCt+Knitv/lHacK4sFfe
-        BCQ2Qd/IOPHHSsF7r/xb47vplV0VbOc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1671705425;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yo4+JtMNWgimMUFjJc8zNYW9/ztT5sGqCS8xZ/+rDNE=;
-        b=vgqDeCKfT6jrpgJwRU87O6bhd83Z6sMy5qtIJikIJsHglVpG3JH4tMjPGyKq1tKW3QD5lV
-        K4HX37uRixDHARAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C3FF413918;
-        Thu, 22 Dec 2022 10:37:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hOfML1EzpGPfYwAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 22 Dec 2022 10:37:05 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 3B42FA0732; Thu, 22 Dec 2022 11:37:05 +0100 (CET)
-Date:   Thu, 22 Dec 2022 11:37:05 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        reiserfs-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: Re: [PATCH 5/8] reiserfs: Convert do_journal_end() to use
- kmap_local_folio()
-Message-ID: <20221222103705.f2s7bpwv2g7x2bwt@quack3>
-References: <20221216205348.3781217-1-willy@infradead.org>
- <20221216205348.3781217-6-willy@infradead.org>
- <Y55WUrzblTsw6FfQ@iweiny-mobl>
- <Y6GB75HMEKfcGcsO@casper.infradead.org>
- <20221220111801.jhukawk3lbuonxs3@quack3>
- <Y6HpzAFNA33jQ3bl@iweiny-desk3>
- <Y6IAUetp7nihz9Qu@casper.infradead.org>
- <Y6JMazsjbPRJ7oMM@iweiny-desk3>
- <Y6NYonXNGL58+rV8@casper.infradead.org>
+        Thu, 22 Dec 2022 21:34:36 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0D615814
+        for <reiserfs-devel@vger.kernel.org>; Thu, 22 Dec 2022 18:34:35 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id r25-20020a6bfc19000000b006e002cb217fso1431030ioh.2
+        for <reiserfs-devel@vger.kernel.org>; Thu, 22 Dec 2022 18:34:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=l06fwy6JsDLjyC/xnL6GsbLE0AfCddjpOW4hS1TjxTI=;
+        b=j/ZjYzCbxaJ22C5s7P8sTQ4vOkMKhXOoTnTFftBwnSB6vOawN3LBXiykAmFNVJOuWR
+         LWK+uLoPlIOXxoioR3ACPXhUL4iCCjt15OtYRd4oNT5h/DIVPgP/v+kAxI3BWey5hZA0
+         M/vbQQYA6b/BNJJOyfF/oktaVVaYQGulYfrEN1LO74e1sqv9XyI+G4GWpZ7GBGV5b3xm
+         +zbM+x/27zYvI5e4lIl6ty8r7yn+iBCvldrjfUqcNXqGuLFB5w/VnaBrS1XWSNfVot2X
+         NrDSMTxCwjw2Ul/m0B6Nm+4cMLLd8hR/nwH+yMpwsBh6RZ/8Za+MRvJHWDDVy2omcq92
+         KnyQ==
+X-Gm-Message-State: AFqh2kp/K58IIrmGHzlLDhnibQQgKdg2N/AnfBCxK52a3l5JkipW82OH
+        D2th6nG6uw5TsopFMBOBJCq+VsagcAYHyK/p3I91WblRQQ+V
+X-Google-Smtp-Source: AMrXdXuQeH/mYIb2I8idE3iOaKNjUawgvv5EHfPChxi0418GPQHs5AF8EculVLcYH80Vv8lmPQ2UGhBPh3EB3nNN/H2UL7P4a/co
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6NYonXNGL58+rV8@casper.infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:dc10:0:b0:6e0:2b9e:b1c4 with SMTP id
+ s16-20020a6bdc10000000b006e02b9eb1c4mr574624ioc.186.1671762875122; Thu, 22
+ Dec 2022 18:34:35 -0800 (PST)
+Date:   Thu, 22 Dec 2022 18:34:35 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000520d3405f075a026@google.com>
+Subject: [syzbot] [reiserfs?] divide error in do_journal_end (3)
+From:   syzbot <syzbot+74b838cfa47fc9554471@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, bvanassche@acm.org, jlayton@kernel.org,
+        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        song@kernel.org, syzkaller-bugs@googlegroups.com,
+        willy@infradead.org, yi.zhang@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Wed 21-12-22 19:04:02, Matthew Wilcox wrote:
-> On Tue, Dec 20, 2022 at 03:59:39PM -0800, Ira Weiny wrote:
-> > On Tue, Dec 20, 2022 at 06:34:57PM +0000, Matthew Wilcox wrote:
-> > > On Tue, Dec 20, 2022 at 08:58:52AM -0800, Ira Weiny wrote:
-> > > > On Tue, Dec 20, 2022 at 12:18:01PM +0100, Jan Kara wrote:
-> > > > > On Tue 20-12-22 09:35:43, Matthew Wilcox wrote:
-> > > > > > But that doesn't solve the "What about fs block size > PAGE_SIZE"
-> > > > > > problem that we also want to solve.  Here's a concrete example:
-> > > > > > 
-> > > > > >  static __u32 jbd2_checksum_data(__u32 crc32_sum, struct buffer_head *bh)
-> > > > > >  {
-> > > > > > -       struct page *page = bh->b_page;
-> > > > > > +       struct folio *folio = bh->b_folio;
-> > > > > >         char *addr;
-> > > > > >         __u32 checksum;
-> > > > > >  
-> > > > > > -       addr = kmap_atomic(page);
-> > > > > > -       checksum = crc32_be(crc32_sum,
-> > > > > > -               (void *)(addr + offset_in_page(bh->b_data)), bh->b_size);
-> > > > > > -       kunmap_atomic(addr);
-> > > > > > +       BUG_ON(IS_ENABLED(CONFIG_HIGHMEM) && bh->b_size > PAGE_SIZE);
-> > > > > > +
-> > > > > > +       addr = kmap_local_folio(folio, offset_in_folio(folio, bh->b_data));
-> > > > > > +       checksum = crc32_be(crc32_sum, addr, bh->b_size);
-> > > > > > +       kunmap_local(addr);
-> > > > > >  
-> > > > > >         return checksum;
-> > > > > >  }
-> > > > > > 
-> > > > > > I don't want to add a lot of complexity to handle the case of b_size >
-> > > > > > PAGE_SIZE on a HIGHMEM machine since that's not going to benefit terribly
-> > > > > > many people.  I'd rather have the assertion that we don't support it.
-> > > > > > But if there's a good higher-level abstraction I'm missing here ...
-> > > > > 
-> > > > > Just out of curiosity: So far I was thinking folio is physically contiguous
-> > > > > chunk of memory. And if it is, then it does not seem as a huge overkill if
-> > > > > kmap_local_folio() just maps the whole folio?
-> > > > 
-> > > > Willy proposed that previously but we could not come to a consensus on how to
-> > > > do it.
-> > > > 
-> > > > https://lore.kernel.org/all/Yv2VouJb2pNbP59m@iweiny-desk3/
-> > > > 
-> > > > FWIW I still think increasing the entries to cover any foreseeable need would
-> > > > be sufficient because HIGHMEM does not need to be optimized.  Couldn't we hide
-> > > > the entry count into some config option which is only set if a FS needs a
-> > > > larger block size on a HIGHMEM system?
-> > > 
-> > > "any foreseeable need"?  I mean ... I'd like to support 2MB folios,
-> > > even on HIGHMEM machines, and that's 512 entries.  If we're doing
-> > > memcpy_to_folio(), we know that's only one mapping, but still, 512
-> > > entries is _a lot_ of address space to be reserving on a 32-bit machine.
-> > 
-> > I'm confused.  A memcpy_to_folio() could loop to map the pages as needed
-> > depending on the amount of data to copy.  Or just map/unmap in a loop.
-> > 
-> > This seems like an argument to have a memcpy_to_folio() to hide such nastiness
-> > on HIGHMEM from the user.
-> 
-> I see that you are confused.  What I'm not quite sure of is how I confused
-> you, so I'm just going to try again in different words.
-> 
-> Given the desire to support 2MB folios on x86/ARM PAE systems, we can't
-> have a kmap_local_entire_folio() because that would take up too much
-> address space.
+Hello,
 
-Is that really a problem? I mean sure 2MB is noticeable in 32-bit address
-space but these mappings are very shortlived due to their nature (and the
-API kind of enforces that) so there'd hardly be more than a handful of them
-existing in parallel on a system. Or is my expectation wrong?
+syzbot found the following issue on:
 
-But I agree the solution with memcpy_to/from_folio() works as well.
+HEAD commit:    f9ff5644bcc0 Merge tag 'hsi-for-6.2' of git://git.kernel.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13ee69e7880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c163713cf9186fe7
+dashboard link: https://syzkaller.appspot.com/bug?extid=74b838cfa47fc9554471
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-> > [*] I only play a file system developer on TV.  ;-)
-> 
-> That's OK, I'm only pretending to be an MM developer.  Keep quiet, and
-> I think we can get away with this.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-"All the world's a stage, and all the men and women merely players." :)
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/95eb66f6b569/disk-f9ff5644.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fb05e1a5a9de/vmlinux-f9ff5644.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e2f1f698973a/bzImage-f9ff5644.xz
 
-								Honza
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+74b838cfa47fc9554471@syzkaller.appspotmail.com
 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+divide error: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 8065 Comm: syz-executor.4 Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:do_journal_end+0x1822/0x4a30 fs/reiserfs/journal.c:4091
+Code: 04 28 84 c0 0f 85 f7 2b 00 00 4a 8d 5c 33 01 4c 89 e0 48 c1 e8 03 42 8a 04 28 84 c0 0f 85 ff 2b 00 00 41 8b 0f 48 89 d8 31 d2 <48> f7 f1 48 89 d3 48 03 5c 24 20 48 8b 84 24 d8 00 00 00 42 80 3c
+RSP: 0018:ffffc90003c5fae0 EFLAGS: 00010246
+RAX: 0000000000000003 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888026c42000
+RBP: ffffc90003c5fd50 R08: dffffc0000000000 R09: ffff888026c42000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff888037308017
+R13: dffffc0000000000 R14: 0000000000000002 R15: ffff888037308014
+FS:  00007f623dd00700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000002012d000 CR3: 0000000018049000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ reiserfs_sync_fs+0xbb/0x130 fs/reiserfs/super.c:78
+ iterate_supers+0x137/0x1f0 fs/super.c:724
+ ksys_sync+0xc6/0x1c0 fs/sync.c:103
+ __do_sys_sync+0xa/0x10 fs/sync.c:113
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f623d08c0d9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f623dd00168 EFLAGS: 00000246 ORIG_RAX: 00000000000000a2
+RAX: ffffffffffffffda RBX: 00007f623d1abf80 RCX: 00007f623d08c0d9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 00007f623d0e7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fffa3f7577f R14: 00007f623dd00300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:do_journal_end+0x1822/0x4a30 fs/reiserfs/journal.c:4091
+Code: 04 28 84 c0 0f 85 f7 2b 00 00 4a 8d 5c 33 01 4c 89 e0 48 c1 e8 03 42 8a 04 28 84 c0 0f 85 ff 2b 00 00 41 8b 0f 48 89 d8 31 d2 <48> f7 f1 48 89 d3 48 03 5c 24 20 48 8b 84 24 d8 00 00 00 42 80 3c
+RSP: 0018:ffffc90003c5fae0 EFLAGS: 00010246
+RAX: 0000000000000003 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888026c42000
+RBP: ffffc90003c5fd50 R08: dffffc0000000000 R09: ffff888026c42000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff888037308017
+R13: dffffc0000000000 R14: 0000000000000002 R15: ffff888037308014
+FS:  00007f623dd00700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000021000000 CR3: 0000000018049000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	04 28                	add    $0x28,%al
+   2:	84 c0                	test   %al,%al
+   4:	0f 85 f7 2b 00 00    	jne    0x2c01
+   a:	4a 8d 5c 33 01       	lea    0x1(%rbx,%r14,1),%rbx
+   f:	4c 89 e0             	mov    %r12,%rax
+  12:	48 c1 e8 03          	shr    $0x3,%rax
+  16:	42 8a 04 28          	mov    (%rax,%r13,1),%al
+  1a:	84 c0                	test   %al,%al
+  1c:	0f 85 ff 2b 00 00    	jne    0x2c21
+  22:	41 8b 0f             	mov    (%r15),%ecx
+  25:	48 89 d8             	mov    %rbx,%rax
+  28:	31 d2                	xor    %edx,%edx
+* 2a:	48 f7 f1             	div    %rcx <-- trapping instruction
+  2d:	48 89 d3             	mov    %rdx,%rbx
+  30:	48 03 5c 24 20       	add    0x20(%rsp),%rbx
+  35:	48 8b 84 24 d8 00 00 	mov    0xd8(%rsp),%rax
+  3c:	00
+  3d:	42                   	rex.X
+  3e:	80                   	.byte 0x80
+  3f:	3c                   	.byte 0x3c
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
