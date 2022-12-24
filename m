@@ -2,45 +2,45 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 325B9655290
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 23 Dec 2022 17:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A89C5655A16
+	for <lists+reiserfs-devel@lfdr.de>; Sat, 24 Dec 2022 13:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbiLWQNp (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 23 Dec 2022 11:13:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
+        id S230353AbiLXMOp (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sat, 24 Dec 2022 07:14:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230406AbiLWQNo (ORCPT
+        with ESMTP id S229485AbiLXMOo (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 23 Dec 2022 11:13:44 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D52A461
-        for <reiserfs-devel@vger.kernel.org>; Fri, 23 Dec 2022 08:13:42 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id h26-20020a5e841a000000b006e408c1d2a1so2065543ioj.1
-        for <reiserfs-devel@vger.kernel.org>; Fri, 23 Dec 2022 08:13:42 -0800 (PST)
+        Sat, 24 Dec 2022 07:14:44 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E72F599
+        for <reiserfs-devel@vger.kernel.org>; Sat, 24 Dec 2022 04:14:43 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id x10-20020a056e021bca00b00302b6c0a683so4131442ilv.23
+        for <reiserfs-devel@vger.kernel.org>; Sat, 24 Dec 2022 04:14:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=G2fxcvjHeOeT+c321+0jWOGOEOFvL9aqKt045Mip7XY=;
-        b=f6e959rH0dVQA1/ukxOTrdQV7aXUTdT9alpS+RUFSbXfm2kYDZ548Rtn+AnDuMbT3u
-         ZAXNH74MwCLreI2yXr2PiIM7zFrI2Z98z44NlC7KhsA2KaPtUaPksAyy19LU/noBgEyL
-         IqOp5XaJp8YVOuOj0Q8joB4HG78TiUu9p4tIPrzY9KerEPacloixGwAThO5TZZrBgtNZ
-         cHz6uagMi1PQZshRkTunlRF/xKZNnA3LZ2x6pf9ZehTSoINWPpuWH8zfgiFjf//NbwA8
-         MKilABBEZXBM/SD3Wxe6z/VejurBQSFz4vKJVUHRtQhy7D6xRS0GR9ci2BAOimLvABcF
-         YC1g==
-X-Gm-Message-State: AFqh2krcdhtKM0nPIhOiA1yAMRdy8fCC60elHUZs4yn+0VYxXy2oDn1D
-        E7P2ZKjsqPZuzzuLVsW+Q6n67hexd5Hsh1+09pDBEi8WyIim
-X-Google-Smtp-Source: AMrXdXsXvCv6acTdARziEUMn7or1vrDCcN7leK4AUlZHFBUc0kKxWkYbXvrnuVv35BTQt0TsBf1Sl5gm6uPJgqgTkhNvSUIK/CTh
+        bh=vqc9f9Vxv70dQk8xOQ5SSQ0P940FUSAHcOuYAro0kSo=;
+        b=32+PHQqFRR7WqJS4F0mh5bcBAjuzeGrTZlbUeT+H5/7eBNISxyQotwSf4mBLGzjmVr
+         +4PCe/vMy2Zl48l5RvlziNkxx41mUKAXZJjQXG6Am/fwLYUuLMHly0CTmhrFHqcs59C0
+         5NER7uIrednKxTUa4T0c9SSBmxziDOO77D6XaAQbfT2wAkHhnY/Zq2MPzVuG0i92Kdra
+         oILK+h04L1adnC2hvOIhP3CpM3dfbniSLN3wVYBdSkxbVrTbigBuYfqRXE/zZg76QK33
+         uSPt4bZOaG7QDwX5ry8n5gh0e18MeQG81JFOUB718GVyJc33ig9iEXiSkeWCFLVcjnAA
+         sxJw==
+X-Gm-Message-State: AFqh2kom4Ecrgu0AN1fhIYhawSozAzqSWT+oh9K2JMPTGMK/fbGJYPP7
+        1hc2f/84UQGd5y4LAnJFdl+d89GoG5hG7Fyk4MO9WuULcCAt
+X-Google-Smtp-Source: AMrXdXs1Fd25NFn5XSnYwA3RHO7oTMCDkicCx3NpaO6GG0Q0ZWmwTsBDgDdY0cCzL0qPesNPVhRneUzr+5Qb9xO/3sPB56gwCavD
 MIME-Version: 1.0
-X-Received: by 2002:a5d:81d9:0:b0:6df:bcf7:d86 with SMTP id
- t25-20020a5d81d9000000b006dfbcf70d86mr776856iol.188.1671812021829; Fri, 23
- Dec 2022 08:13:41 -0800 (PST)
-Date:   Fri, 23 Dec 2022 08:13:41 -0800
+X-Received: by 2002:a02:cb10:0:b0:363:b3c4:5c47 with SMTP id
+ j16-20020a02cb10000000b00363b3c45c47mr1015182jap.237.1671884082422; Sat, 24
+ Dec 2022 04:14:42 -0800 (PST)
+Date:   Sat, 24 Dec 2022 04:14:42 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b145f905f081118e@google.com>
-Subject: [syzbot] [reiserfs?] possible deadlock in reiserfs_get_block
-From:   syzbot <syzbot+8a4c84020c63609f15ec@syzkaller.appspotmail.com>
+Message-ID: <000000000000d6ae9205f091d8d7@google.com>
+Subject: [syzbot] [reiserfs?] possible deadlock in iterate_dir
+From:   syzbot <syzbot+435320768a3c52aa94b6@syzkaller.appspotmail.com>
 To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
@@ -57,144 +57,136 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    f9ff5644bcc0 Merge tag 'hsi-for-6.2' of git://git.kernel.o..
+HEAD commit:    6feb57c2fd7c Merge tag 'kbuild-v6.2' of git://git.kernel.o..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1246ddbf880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c163713cf9186fe7
-dashboard link: https://syzkaller.appspot.com/bug?extid=8a4c84020c63609f15ec
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+console output: https://syzkaller.appspot.com/x/log.txt?x=1012ba27880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8ca07260bb631fb4
+dashboard link: https://syzkaller.appspot.com/bug?extid=435320768a3c52aa94b6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/95eb66f6b569/disk-f9ff5644.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fb05e1a5a9de/vmlinux-f9ff5644.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e2f1f698973a/bzImage-f9ff5644.xz
+disk image: https://storage.googleapis.com/syzbot-assets/9ebad0b8683b/disk-6feb57c2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/18fd8f90d2d6/vmlinux-6feb57c2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/841ab00c6df1/bzImage-6feb57c2.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8a4c84020c63609f15ec@syzkaller.appspotmail.com
+Reported-by: syzbot+435320768a3c52aa94b6@syzkaller.appspotmail.com
 
-REISERFS (device loop2): Created .reiserfs_priv - reserved for xattr storage.
+REISERFS (device loop4): Using r5 hash to sort names
+REISERFS (device loop4): Created .reiserfs_priv - reserved for xattr storage.
 ======================================================
 WARNING: possible circular locking dependency detected
-6.1.0-syzkaller-13139-gf9ff5644bcc0 #0 Not tainted
+6.1.0-syzkaller-13822-g6feb57c2fd7c #0 Not tainted
 ------------------------------------------------------
-syz-executor.2/16192 is trying to acquire lock:
-ffff8880220f5018 (&mm->mmap_lock#2){++++}-{3:3}, at: __might_fault+0x8f/0x110 mm/memory.c:5646
+syz-executor.4/9537 is trying to acquire lock:
+ffff8880767ab090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
 
 but task is already holding lock:
-ffff88801f15e090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
+ffff88801d266460 (sb_writers#19){.+.+}-{0:0}, at: file_accessed include/linux/fs.h:2516 [inline]
+ffff88801d266460 (sb_writers#19){.+.+}-{0:0}, at: iterate_dir+0x45d/0x6f0 fs/readdir.c:70
 
 which lock already depends on the new lock.
 
 
 the existing dependency chain (in reverse order) is:
 
--> #2 (&sbi->lock){+.+.}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
-       reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
-       reiserfs_get_block+0x24e/0x5180 fs/reiserfs/inode.c:680
-       do_mpage_readpage+0x970/0x1c50 fs/mpage.c:208
-       mpage_readahead+0x210/0x380 fs/mpage.c:361
-       read_pages+0x169/0x9c0 mm/readahead.c:161
-       page_cache_ra_unbounded+0x194/0x820 mm/readahead.c:242
-       page_cache_sync_readahead include/linux/pagemap.h:1210 [inline]
-       filemap_get_pages+0x465/0x10d0 mm/filemap.c:2600
-       filemap_read+0x3cf/0xea0 mm/filemap.c:2694
-       call_read_iter include/linux/fs.h:2180 [inline]
-       generic_file_splice_read+0x1ff/0x5d0 fs/splice.c:309
-       do_splice_to fs/splice.c:793 [inline]
-       splice_direct_to_actor+0x41b/0xc00 fs/splice.c:865
-       do_splice_direct+0x279/0x3d0 fs/splice.c:974
-       do_sendfile+0x5fb/0xf80 fs/read_write.c:1255
-       __do_sys_sendfile64 fs/read_write.c:1323 [inline]
-       __se_sys_sendfile64+0x14f/0x1b0 fs/read_write.c:1309
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #1 (mapping.invalidate_lock#7){.+.+}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       down_read+0x39/0x50 kernel/locking/rwsem.c:1509
-       filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
-       filemap_fault+0x2fb/0x1060 mm/filemap.c:3146
-       __do_fault+0x136/0x4f0 mm/memory.c:4163
-       do_shared_fault mm/memory.c:4569 [inline]
-       do_fault mm/memory.c:4647 [inline]
-       handle_pte_fault mm/memory.c:4931 [inline]
-       __handle_mm_fault mm/memory.c:5073 [inline]
-       handle_mm_fault+0x17fa/0x2640 mm/memory.c:5219
-       do_user_addr_fault+0x69b/0xcb0 arch/x86/mm/fault.c:1428
-       handle_page_fault arch/x86/mm/fault.c:1519 [inline]
-       exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
-       asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
-
--> #0 (&mm->mmap_lock#2){++++}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
-       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __might_fault+0xb2/0x110 mm/memory.c:5647
-       reiserfs_ioctl+0x11c/0x340 fs/reiserfs/ioctl.c:96
+-> #1 (sb_writers#19){.+.+}-{0:0}:
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1811 [inline]
+       sb_start_write include/linux/fs.h:1886 [inline]
+       mnt_want_write_file+0x92/0x590 fs/namespace.c:552
+       reiserfs_ioctl+0x1a2/0x330 fs/reiserfs/ioctl.c:103
        vfs_ioctl fs/ioctl.c:51 [inline]
        __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
        do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&sbi->lock){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain kernel/locking/lockdep.c:3831 [inline]
+       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
+       lock_acquire kernel/locking/lockdep.c:5668 [inline]
+       lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock+0x12f/0x1360 kernel/locking/mutex.c:747
+       reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+       reiserfs_dirty_inode+0xd2/0x260 fs/reiserfs/super.c:704
+       __mark_inode_dirty+0x247/0x11e0 fs/fs-writeback.c:2419
+       generic_update_time fs/inode.c:1859 [inline]
+       inode_update_time fs/inode.c:1872 [inline]
+       touch_atime+0x641/0x700 fs/inode.c:1944
+       file_accessed include/linux/fs.h:2516 [inline]
+       iterate_dir+0x45d/0x6f0 fs/readdir.c:70
+       __do_sys_getdents fs/readdir.c:286 [inline]
+       __se_sys_getdents fs/readdir.c:271 [inline]
+       __x64_sys_getdents+0x13e/0x2c0 fs/readdir.c:271
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
        entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
 other info that might help us debug this:
-
-Chain exists of:
-  &mm->mmap_lock#2 --> mapping.invalidate_lock#7 --> &sbi->lock
 
  Possible unsafe locking scenario:
 
        CPU0                    CPU1
        ----                    ----
-  lock(&sbi->lock);
-                               lock(mapping.invalidate_lock#7);
+  lock(sb_writers#19);
                                lock(&sbi->lock);
-  lock(&mm->mmap_lock#2);
+                               lock(sb_writers#19);
+  lock(&sbi->lock);
 
  *** DEADLOCK ***
 
-1 lock held by syz-executor.2/16192:
- #0: ffff88801f15e090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
+3 locks held by syz-executor.4/9537:
+ #0: ffff88801d6b6fe8 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe7/0x100 fs/file.c:1046
+ #1: ffff888031b80980 (&type->i_mutex_dir_key#13){++++}-{3:3}, at: iterate_dir+0xd1/0x6f0 fs/readdir.c:55
+ #2: ffff88801d266460 (sb_writers#19){.+.+}-{0:0}, at: file_accessed include/linux/fs.h:2516 [inline]
+ #2: ffff88801d266460 (sb_writers#19){.+.+}-{0:0}, at: iterate_dir+0x45d/0x6f0 fs/readdir.c:70
 
 stack backtrace:
-CPU: 0 PID: 16192 Comm: syz-executor.2 Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
+CPU: 0 PID: 9537 Comm: syz-executor.4 Not tainted 6.1.0-syzkaller-13822-g6feb57c2fd7c #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
 Call Trace:
  <TASK>
  __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
- check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2177
  check_prev_add kernel/locking/lockdep.c:3097 [inline]
  check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
- __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
- lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
- __might_fault+0xb2/0x110 mm/memory.c:5647
- reiserfs_ioctl+0x11c/0x340 fs/reiserfs/ioctl.c:96
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+ validate_chain kernel/locking/lockdep.c:3831 [inline]
+ __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
+ lock_acquire kernel/locking/lockdep.c:5668 [inline]
+ lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+ __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+ __mutex_lock+0x12f/0x1360 kernel/locking/mutex.c:747
+ reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+ reiserfs_dirty_inode+0xd2/0x260 fs/reiserfs/super.c:704
+ __mark_inode_dirty+0x247/0x11e0 fs/fs-writeback.c:2419
+ generic_update_time fs/inode.c:1859 [inline]
+ inode_update_time fs/inode.c:1872 [inline]
+ touch_atime+0x641/0x700 fs/inode.c:1944
+ file_accessed include/linux/fs.h:2516 [inline]
+ iterate_dir+0x45d/0x6f0 fs/readdir.c:70
+ __do_sys_getdents fs/readdir.c:286 [inline]
+ __se_sys_getdents fs/readdir.c:271 [inline]
+ __x64_sys_getdents+0x13e/0x2c0 fs/readdir.c:271
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f5a8b88c0d9
+RIP: 0033:0x7f93e5e8c0d9
 Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f5a8c578168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f5a8b9abf80 RCX: 00007f5a8b88c0d9
-RDX: 00000000200000c0 RSI: 0000000080087601 RDI: 0000000000000004
-RBP: 00007f5a8b8e7ae9 R08: 0000000000000000 R09: 0000000000000000
+RSP: 002b:00007f93e6baa168 EFLAGS: 00000246 ORIG_RAX: 000000000000004e
+RAX: ffffffffffffffda RBX: 00007f93e5fabf80 RCX: 00007f93e5e8c0d9
+RDX: 0000000000000072 RSI: 0000000020000000 RDI: 0000000000000004
+RBP: 00007f93e5ee7ae9 R08: 0000000000000000 R09: 0000000000000000
 R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff6e17e56f R14: 00007f5a8c578300 R15: 0000000000022000
+R13: 00007fff02abfe4f R14: 00007f93e6baa300 R15: 0000000000022000
  </TASK>
 
 
