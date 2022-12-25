@@ -2,51 +2,54 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89C5655A16
-	for <lists+reiserfs-devel@lfdr.de>; Sat, 24 Dec 2022 13:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75124655C7C
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 25 Dec 2022 07:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiLXMOp (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sat, 24 Dec 2022 07:14:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
+        id S229441AbiLYGPw (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 25 Dec 2022 01:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiLXMOo (ORCPT
+        with ESMTP id S229445AbiLYGPu (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sat, 24 Dec 2022 07:14:44 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E72F599
-        for <reiserfs-devel@vger.kernel.org>; Sat, 24 Dec 2022 04:14:43 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id x10-20020a056e021bca00b00302b6c0a683so4131442ilv.23
-        for <reiserfs-devel@vger.kernel.org>; Sat, 24 Dec 2022 04:14:43 -0800 (PST)
+        Sun, 25 Dec 2022 01:15:50 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9ADB26E1
+        for <reiserfs-devel@vger.kernel.org>; Sat, 24 Dec 2022 22:15:48 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id a10-20020a056e02180a00b0030bc09c6b94so5139386ilv.6
+        for <reiserfs-devel@vger.kernel.org>; Sat, 24 Dec 2022 22:15:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vqc9f9Vxv70dQk8xOQ5SSQ0P940FUSAHcOuYAro0kSo=;
-        b=32+PHQqFRR7WqJS4F0mh5bcBAjuzeGrTZlbUeT+H5/7eBNISxyQotwSf4mBLGzjmVr
-         +4PCe/vMy2Zl48l5RvlziNkxx41mUKAXZJjQXG6Am/fwLYUuLMHly0CTmhrFHqcs59C0
-         5NER7uIrednKxTUa4T0c9SSBmxziDOO77D6XaAQbfT2wAkHhnY/Zq2MPzVuG0i92Kdra
-         oILK+h04L1adnC2hvOIhP3CpM3dfbniSLN3wVYBdSkxbVrTbigBuYfqRXE/zZg76QK33
-         uSPt4bZOaG7QDwX5ry8n5gh0e18MeQG81JFOUB718GVyJc33ig9iEXiSkeWCFLVcjnAA
-         sxJw==
-X-Gm-Message-State: AFqh2kom4Ecrgu0AN1fhIYhawSozAzqSWT+oh9K2JMPTGMK/fbGJYPP7
-        1hc2f/84UQGd5y4LAnJFdl+d89GoG5hG7Fyk4MO9WuULcCAt
-X-Google-Smtp-Source: AMrXdXs1Fd25NFn5XSnYwA3RHO7oTMCDkicCx3NpaO6GG0Q0ZWmwTsBDgDdY0cCzL0qPesNPVhRneUzr+5Qb9xO/3sPB56gwCavD
+        bh=wenFkqPjw7gK2ZhQV8BfuxTS0alFC3hXazndC6Vrpjc=;
+        b=0khfiHNxo1QVlKA3hkPGSZJkBB8jLuFuwl1k3jtQ1XaPOwy/ZVyEj902CV+mXmpeKv
+         ApXDWM+qUfMbbCEvAIh+knXvKcVaZ++l8Le02r/wwPggBtAc31fWPcEAU+AThjLTp1fB
+         mkoZTbL0F0gh8BrVfXt55XidR/CGFbtFHXeMPb/Va8BImDwGeb9bwzS1WTBo0iXsIYuL
+         0IrWauwQs38DANQOay0dHFqtHmEJGu6q6eNXLy7KLh9YtSvyARtALboJSJ0EhnqMUfqn
+         u5OaEerVQytNqDSYIPY4AiVVv/fCenxbRRVaPo7JMjwnccaKodl4jtEY2RS6UkcT0Niu
+         cBow==
+X-Gm-Message-State: AFqh2kpDh+B49piVPoDhk7WO4qgnuloBSn9yYo/I+2EqBCMTciFZH4nB
+        fqGIofYPT93QTTc83Z0lfoq7RLtE8PUIdwsPyOB3+1cXb/pH
+X-Google-Smtp-Source: AMrXdXv1hgcYvuabyXnF21iISGy08dSVNe7K2Jx4eHGTnsARNPqZqXhX9qXczInvHlcQfSI7CF+EuTOY5w4Tid8qwApKfJ2Q7Nhc
 MIME-Version: 1.0
-X-Received: by 2002:a02:cb10:0:b0:363:b3c4:5c47 with SMTP id
- j16-20020a02cb10000000b00363b3c45c47mr1015182jap.237.1671884082422; Sat, 24
- Dec 2022 04:14:42 -0800 (PST)
-Date:   Sat, 24 Dec 2022 04:14:42 -0800
+X-Received: by 2002:a02:6f04:0:b0:38a:8910:44c6 with SMTP id
+ x4-20020a026f04000000b0038a891044c6mr1243643jab.251.1671948948234; Sat, 24
+ Dec 2022 22:15:48 -0800 (PST)
+Date:   Sat, 24 Dec 2022 22:15:48 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d6ae9205f091d8d7@google.com>
-Subject: [syzbot] [reiserfs?] possible deadlock in iterate_dir
-From:   syzbot <syzbot+435320768a3c52aa94b6@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <000000000000246aa905f0a0f394@google.com>
+Subject: [syzbot] [reiserfs?] INFO: task hung in __bread_gfp (4)
+From:   syzbot <syzbot+9053a1cf1723c8bcce6c@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, bvanassche@acm.org, jack@suse.cz,
+        linux-kernel@vger.kernel.org, muchun.song@linux.dev,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        yi.zhang@huawei.com, yijiangshan@kylinos.cn
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,137 +60,137 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    6feb57c2fd7c Merge tag 'kbuild-v6.2' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1012ba27880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8ca07260bb631fb4
-dashboard link: https://syzkaller.appspot.com/bug?extid=435320768a3c52aa94b6
+HEAD commit:    e45fb347b630 Add linux-next specific files for 20221220
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=10a3ff6f880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8ae91cba504b4da8
+dashboard link: https://syzkaller.appspot.com/bug?extid=9053a1cf1723c8bcce6c
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12a346e8480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12c2914f880000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/9ebad0b8683b/disk-6feb57c2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/18fd8f90d2d6/vmlinux-6feb57c2.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/841ab00c6df1/bzImage-6feb57c2.xz
+disk image: https://storage.googleapis.com/syzbot-assets/1ae2b280f860/disk-e45fb347.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/253fc221144a/vmlinux-e45fb347.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e2695a52406f/bzImage-e45fb347.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+435320768a3c52aa94b6@syzkaller.appspotmail.com
+Reported-by: syzbot+9053a1cf1723c8bcce6c@syzkaller.appspotmail.com
 
-REISERFS (device loop4): Using r5 hash to sort names
-REISERFS (device loop4): Created .reiserfs_priv - reserved for xattr storage.
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-syzkaller-13822-g6feb57c2fd7c #0 Not tainted
-------------------------------------------------------
-syz-executor.4/9537 is trying to acquire lock:
-ffff8880767ab090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
+INFO: task syz-executor106:5074 blocked for more than 143 seconds.
+      Not tainted 6.1.0-next-20221220-syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor106 state:D stack:25776 pid:5074  ppid:5073   flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0x2544/0x53f0 kernel/sched/core.c:6555
+ schedule+0xde/0x1b0 kernel/sched/core.c:6631
+ io_schedule+0xbe/0x130 kernel/sched/core.c:8811
+ bit_wait_io+0x16/0xe0 kernel/sched/wait_bit.c:209
+ __wait_on_bit+0x64/0x180 kernel/sched/wait_bit.c:49
+ out_of_line_wait_on_bit+0xd9/0x110 kernel/sched/wait_bit.c:64
+ wait_on_bit_io include/linux/wait_bit.h:101 [inline]
+ __wait_on_buffer fs/buffer.c:122 [inline]
+ wait_on_buffer include/linux/buffer_head.h:388 [inline]
+ __bread_slow fs/buffer.c:1178 [inline]
+ __bread_gfp+0x29e/0x330 fs/buffer.c:1370
+ sb_bread include/linux/buffer_head.h:341 [inline]
+ read_super_block+0x83/0x930 fs/reiserfs/super.c:1604
+ reiserfs_fill_super+0x75a/0x2e90 fs/reiserfs/super.c:1959
+ mount_bdev+0x351/0x410 fs/super.c:1359
+ legacy_get_tree+0x109/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x8d/0x2f0 fs/super.c:1489
+ do_new_mount fs/namespace.c:3145 [inline]
+ path_mount+0x132a/0x1e20 fs/namespace.c:3475
+ do_mount fs/namespace.c:3488 [inline]
+ __do_sys_mount fs/namespace.c:3697 [inline]
+ __se_sys_mount fs/namespace.c:3674 [inline]
+ __x64_sys_mount+0x283/0x300 fs/namespace.c:3674
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f11845f03d9
+RSP: 002b:00007ffd28d7b748 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f11845f03d9
+RDX: 00000000200003c0 RSI: 0000000020000380 RDI: 0000000020000340
+RBP: 0000000000000000 R08: 0000000000000000 R09: 00007ffd28d7b8e8
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f11845af6f0
+R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
-but task is already holding lock:
-ffff88801d266460 (sb_writers#19){.+.+}-{0:0}, at: file_accessed include/linux/fs.h:2516 [inline]
-ffff88801d266460 (sb_writers#19){.+.+}-{0:0}, at: iterate_dir+0x45d/0x6f0 fs/readdir.c:70
+Showing all locks held in the system:
+1 lock held by rcu_tasks_kthre/12:
+ #0: ffffffff8c791cf0 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x26/0xc70 kernel/rcu/tasks.h:507
+1 lock held by rcu_tasks_trace/13:
+ #0: ffffffff8c7919f0 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x26/0xc70 kernel/rcu/tasks.h:507
+1 lock held by khungtaskd/28:
+ #0: ffffffff8c792840 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x57/0x2c2 kernel/locking/lockdep.c:6494
+2 locks held by getty/4754:
+ #0: ffff88802783c098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x26/0x80 drivers/tty/tty_ldisc.c:244
+ #1: ffffc900015a02f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xef4/0x13e0 drivers/tty/n_tty.c:2177
+1 lock held by syz-executor106/5074:
+ #0: ffff888079c100e0 (&type->s_umount_key#24/1){+.+.}-{3:3}, at: alloc_super+0x22e/0xb60 fs/super.c:228
 
-which lock already depends on the new lock.
+=============================================
 
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (sb_writers#19){.+.+}-{0:0}:
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1811 [inline]
-       sb_start_write include/linux/fs.h:1886 [inline]
-       mnt_want_write_file+0x92/0x590 fs/namespace.c:552
-       reiserfs_ioctl+0x1a2/0x330 fs/reiserfs/ioctl.c:103
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl fs/ioctl.c:856 [inline]
-       __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (&sbi->lock){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain kernel/locking/lockdep.c:3831 [inline]
-       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
-       lock_acquire kernel/locking/lockdep.c:5668 [inline]
-       lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
-       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
-       __mutex_lock+0x12f/0x1360 kernel/locking/mutex.c:747
-       reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
-       reiserfs_dirty_inode+0xd2/0x260 fs/reiserfs/super.c:704
-       __mark_inode_dirty+0x247/0x11e0 fs/fs-writeback.c:2419
-       generic_update_time fs/inode.c:1859 [inline]
-       inode_update_time fs/inode.c:1872 [inline]
-       touch_atime+0x641/0x700 fs/inode.c:1944
-       file_accessed include/linux/fs.h:2516 [inline]
-       iterate_dir+0x45d/0x6f0 fs/readdir.c:70
-       __do_sys_getdents fs/readdir.c:286 [inline]
-       __se_sys_getdents fs/readdir.c:271 [inline]
-       __x64_sys_getdents+0x13e/0x2c0 fs/readdir.c:271
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(sb_writers#19);
-                               lock(&sbi->lock);
-                               lock(sb_writers#19);
-  lock(&sbi->lock);
-
- *** DEADLOCK ***
-
-3 locks held by syz-executor.4/9537:
- #0: ffff88801d6b6fe8 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe7/0x100 fs/file.c:1046
- #1: ffff888031b80980 (&type->i_mutex_dir_key#13){++++}-{3:3}, at: iterate_dir+0xd1/0x6f0 fs/readdir.c:55
- #2: ffff88801d266460 (sb_writers#19){.+.+}-{0:0}, at: file_accessed include/linux/fs.h:2516 [inline]
- #2: ffff88801d266460 (sb_writers#19){.+.+}-{0:0}, at: iterate_dir+0x45d/0x6f0 fs/readdir.c:70
-
-stack backtrace:
-CPU: 0 PID: 9537 Comm: syz-executor.4 Not tainted 6.1.0-syzkaller-13822-g6feb57c2fd7c #0
+NMI backtrace for cpu 1
+CPU: 1 PID: 28 Comm: khungtaskd Not tainted 6.1.0-next-20221220-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
 Call Trace:
  <TASK>
  __dump_stack lib/dump_stack.c:88 [inline]
  dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain kernel/locking/lockdep.c:3831 [inline]
- __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
- lock_acquire kernel/locking/lockdep.c:5668 [inline]
- lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
- __mutex_lock_common kernel/locking/mutex.c:603 [inline]
- __mutex_lock+0x12f/0x1360 kernel/locking/mutex.c:747
- reiserfs_write_lock+0x79/0x100 fs/reiserfs/lock.c:27
- reiserfs_dirty_inode+0xd2/0x260 fs/reiserfs/super.c:704
- __mark_inode_dirty+0x247/0x11e0 fs/fs-writeback.c:2419
- generic_update_time fs/inode.c:1859 [inline]
- inode_update_time fs/inode.c:1872 [inline]
- touch_atime+0x641/0x700 fs/inode.c:1944
- file_accessed include/linux/fs.h:2516 [inline]
- iterate_dir+0x45d/0x6f0 fs/readdir.c:70
- __do_sys_getdents fs/readdir.c:286 [inline]
- __se_sys_getdents fs/readdir.c:271 [inline]
- __x64_sys_getdents+0x13e/0x2c0 fs/readdir.c:271
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f93e5e8c0d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f93e6baa168 EFLAGS: 00000246 ORIG_RAX: 000000000000004e
-RAX: ffffffffffffffda RBX: 00007f93e5fabf80 RCX: 00007f93e5e8c0d9
-RDX: 0000000000000072 RSI: 0000000020000000 RDI: 0000000000000004
-RBP: 00007f93e5ee7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff02abfe4f R14: 00007f93e6baa300 R15: 0000000000022000
+ nmi_cpu_backtrace.cold+0x24/0x18a lib/nmi_backtrace.c:111
+ nmi_trigger_cpumask_backtrace+0x32f/0x3c0 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:220 [inline]
+ watchdog+0xc75/0xfc0 kernel/hung_task.c:377
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
  </TASK>
+Sending NMI from CPU 1 to CPUs 0:
+NMI backtrace for cpu 0
+CPU: 0 PID: 9 Comm: kworker/u4:0 Not tainted 6.1.0-next-20221220-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Workqueue: events_unbound toggle_allocation_gate
+RIP: 0010:__bitmap_and+0x182/0x210 lib/bitmap.c:252
+Code: 48 89 eb 48 c1 ea 03 48 21 c3 48 b8 00 00 00 00 00 fc ff df 80 3c 02 00 75 6a 48 09 1c 24 49 89 1f e8 32 2e 79 fd 48 8b 1c 24 <31> ff 48 89 de e8 f4 2a 79 fd 48 85 db 0f 95 c0 48 83 c4 30 5b 5d
+RSP: 0018:ffffc900000e7910 EFLAGS: 00000293
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: ffff88813fe30000 RSI: ffffffff840826ae RDI: 0000000000000005
+RBP: 0000000000000003 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000002 R11: 0000000000000000 R12: ffffffff8e72fad0
+R13: 0000000000000000 R14: 0000000000000002 R15: ffff8880b983c6c8
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055cdf528d680 CR3: 000000000c48e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ bitmap_and include/linux/bitmap.h:325 [inline]
+ cpumask_and include/linux/cpumask.h:525 [inline]
+ smp_call_function_many_cond+0x778/0x1090 kernel/smp.c:927
+ on_each_cpu_cond_mask+0x5a/0xa0 kernel/smp.c:1155
+ on_each_cpu include/linux/smp.h:71 [inline]
+ text_poke_sync arch/x86/kernel/alternative.c:1772 [inline]
+ text_poke_bp_batch+0x3f1/0x6b0 arch/x86/kernel/alternative.c:2016
+ text_poke_flush arch/x86/kernel/alternative.c:2131 [inline]
+ text_poke_flush arch/x86/kernel/alternative.c:2128 [inline]
+ text_poke_finish+0x1a/0x30 arch/x86/kernel/alternative.c:2138
+ arch_jump_label_transform_apply+0x17/0x30 arch/x86/kernel/jump_label.c:146
+ jump_label_update+0x32f/0x410 kernel/jump_label.c:829
+ static_key_disable_cpuslocked+0x156/0x1b0 kernel/jump_label.c:235
+ static_key_disable+0x1a/0x20 kernel/jump_label.c:243
+ toggle_allocation_gate mm/kfence/core.c:804 [inline]
+ toggle_allocation_gate+0x143/0x230 mm/kfence/core.c:791
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2436
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+INFO: NMI handler (nmi_cpu_backtrace_handler) took too long to run: 1.148 msecs
 
 
 ---
@@ -197,3 +200,5 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
