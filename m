@@ -2,152 +2,71 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA0F65CE30
-	for <lists+reiserfs-devel@lfdr.de>; Wed,  4 Jan 2023 09:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC3665D3F0
+	for <lists+reiserfs-devel@lfdr.de>; Wed,  4 Jan 2023 14:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbjADIWO (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 4 Jan 2023 03:22:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
+        id S239344AbjADNPC (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 4 Jan 2023 08:15:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233864AbjADIVt (ORCPT
+        with ESMTP id S239356AbjADNOp (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 4 Jan 2023 03:21:49 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8D0186E9
-        for <reiserfs-devel@vger.kernel.org>; Wed,  4 Jan 2023 00:21:48 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id h26-20020a5e841a000000b006e408c1d2a1so9343777ioj.1
-        for <reiserfs-devel@vger.kernel.org>; Wed, 04 Jan 2023 00:21:48 -0800 (PST)
+        Wed, 4 Jan 2023 08:14:45 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EBC3CABD
+        for <reiserfs-devel@vger.kernel.org>; Wed,  4 Jan 2023 05:13:03 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-150debe2b7cso4060330fac.0
+        for <reiserfs-devel@vger.kernel.org>; Wed, 04 Jan 2023 05:13:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
+        b=lCgU019qWlB6hc5H8dIPyQQQlSDDv4nOSqdCGEm7oGvRPZIUsDzDb+jIsy5XJY0lqa
+         NVZ3rPCxoCBQN+ZB0g8WtTnLObQUirCGXiqBTwyW8lojaLPj/XKYHs7+7kpPgkK/Xyh3
+         mBoWvUhKe5KAX5Iiq6RX5nEXTqx5mHZnYwGSAMiNFyhgTnzp5ms688RTQCngK5IOgmD1
+         wZm/uSF8C6aphgRs1oLkjeoKbzDL6tdMbOEnrOEyKXW+Dk5Zk7cGuJHQyiiDfe0BnhbM
+         hy2fLTP7y4pga9NskOGhWsRDRJ+ajoAxeUxrq+SMgu5hDrYjhyn0DBWUTnP9hOjVJAjs
+         zIvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HXbR2+fKvKsdvVQtEdbtQLGQsbd8QtK8TTQZTG1eVD4=;
-        b=cWvmnMPCuvWybeGXR14fhT69N83EnUHcIq+4ifZ1qrfazMZomtn44Vvzs+OavN8feO
-         cMFiMVQlpsSxDLE1uDdRLnifs65hQJ0MGF8NDgRYctNUyhI/SJxQiIlTGSzRi5c72Q2M
-         AY86275AaumS2GNWwUxo+vRhnXQoOH8yAEj1TXDjusi9ALAhzWBmwEQ1g3r7Bpe16alr
-         ySOMsy99GhUG+RhyWmCsS/X4Fq8JQWESzmu7alkUtuI1Wbgzk7fwMZuJ3qCe51qx89f+
-         IiAQLqgUhulbNm7vdyY5zQdz7tSxQ1d5jHLunFeRyz5UJ7NNp3hCyRZqQmjaUdHwDdDz
-         lEGg==
-X-Gm-Message-State: AFqh2kqTWrK+hElypCNYfzOnJim3EziyUkzticmS8bKNqYAvJI2W2llH
-        Flj0QpC/q7zc3NPFZu/veyWjyhd5zVouqJMAHBCZh1ugYIyI
-X-Google-Smtp-Source: AMrXdXur0gZLwICjYKlb0OIBgeIISg4XDscytUChdO4BUs3blpMKxuGg1xU/LSq/RegTHJUB/Bvro9kdboTpdqyUsn98QkWPkwyx
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
+        b=7t7ebvckKfChGgIVl0KYVe5MYgvOV6mAyNhJauH4ZLiLmy5HqOzOULRq463GMJJLWt
+         zlRl/TyUQE/Gvo0Zpg4Eyyyw0qvdmXPOmLaBHAXgMMZhO5bHSFbWQm9dQN8hfvuuKRx8
+         k+8tbfNHF4noKMjA3H8zj58njUmNUDHjuO6XhVSfgzikMkTyh8jl/gbSTgsYutwCE5P7
+         QdQsGqP74OANuEpMXVnueTLfWexMUmsWbeskD7d6A4yfEbeta7SLuljNb4d5Yd7Pewbc
+         W5dkV7wBAt+cECDq7whyHbTLCoxE3ASyRjtLYiudU6IRP/XbnOzQ1ebZx5WgXR5gu6/X
+         Xgxg==
+X-Gm-Message-State: AFqh2kr1ZYKMdSxPst8SXkCz+BmDskZahct1+Ju+YaQ1q7tf+p6OHkz5
+        u4lx1dz7Dh9LREoXXzn/XLMV8UjG6/V6RqUEvkQ=
+X-Google-Smtp-Source: AMrXdXu2Le1lxXunQLAXwd/vevpJ+1+n+0Zh5sfIyw8J7/AQp7sqEktVL/FBalayfY/Ogu8RcvMPBR4VcvoXZ6420uU=
+X-Received: by 2002:a05:6870:b38a:b0:150:dd30:9b96 with SMTP id
+ w10-20020a056870b38a00b00150dd309b96mr395097oap.188.1672837982668; Wed, 04
+ Jan 2023 05:13:02 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:627:b0:38a:cb77:d5e7 with SMTP id
- h7-20020a056638062700b0038acb77d5e7mr3441846jar.39.1672820507453; Wed, 04 Jan
- 2023 00:21:47 -0800 (PST)
-Date:   Wed, 04 Jan 2023 00:21:47 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001eae4605f16be009@google.com>
-Subject: [syzbot] [reiserfs?] kernel BUG in balance_leaf
-From:   syzbot <syzbot+6a0877ace12bfad107fc@syzkaller.appspotmail.com>
-To:     jack@suse.cz, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        yijiangshan@kylinos.cn
+Received: by 2002:a05:6358:6584:b0:df:e24f:9756 with HTTP; Wed, 4 Jan 2023
+ 05:13:01 -0800 (PST)
+Reply-To: Gregdenzell9@gmail.com
+From:   Greg Denzell <anahenary@gmail.com>
+Date:   Wed, 4 Jan 2023 13:13:01 +0000
+Message-ID: <CALciK_uuEQom3dK3mdU_vxQS8i+DQ2PkYhCND2iwO1T+9mo6Og@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+Seasons Greetings!
 
-syzbot found the following issue on:
-
-HEAD commit:    88603b6dc419 Linux 6.2-rc2
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=156f88b8480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9babfdc3dd4772d0
-dashboard link: https://syzkaller.appspot.com/bug?extid=6a0877ace12bfad107fc
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12bdb82a480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=108acc94480000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/a44a84e5e4e6/disk-88603b6d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/df723f71c09d/vmlinux-88603b6d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3db040a6ceef/bzImage-88603b6d.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/5c2f508ccf3c/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6a0877ace12bfad107fc@syzkaller.appspotmail.com
-
-REISERFS (device loop0): Using r5 hash to sort names
-REISERFS (device loop0): Created .reiserfs_priv - reserved for xattr storage.
-REISERFS panic (device loop0): vs-12195 balance_leaf: CFR not initialized
-------------[ cut here ]------------
-kernel BUG at fs/reiserfs/prints.c:390!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 5070 Comm: syz-executor245 Not tainted 6.2.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:__reiserfs_panic+0x12f/0x140 fs/reiserfs/prints.c:390
-Code: c0 50 03 8b 48 0f 44 c8 48 0f 44 d8 48 c7 c7 80 51 03 8b 4c 89 fe 48 89 da 4d 89 f0 49 c7 c1 40 46 16 92 31 c0 e8 01 ec 82 08 <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 55 48 89 e5 41
-RSP: 0018:ffffc90003d5e7e0 EFLAGS: 00010246
-RAX: 0000000000000049 RBX: ffffffff8b02e520 RCX: 37780e38b943e200
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc90003d5e8d0 R08: ffffffff816f2c9d R09: fffff520007abcb5
-R10: fffff520007abcb5 R11: 1ffff920007abcb4 R12: ffffffff8b02e540
-R13: ffffc90003d5e800 R14: ffffffff8cc70ec0 R15: ffff888028b806a8
-FS:  00007fd74c6aa700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd744689718 CR3: 0000000079f45000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- balance_leaf+0x109eb/0x123a0 fs/reiserfs/do_balan.c:1439
- do_balance+0x2d6/0x8d0 fs/reiserfs/do_balan.c:1888
- reiserfs_insert_item+0xb54/0xcb0 fs/reiserfs/stree.c:2261
- reiserfs_new_inode+0x11c7/0x1cd0 fs/reiserfs/inode.c:2054
- reiserfs_create+0x3a6/0x660 fs/reiserfs/namei.c:668
- lookup_open fs/namei.c:3413 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x12ac/0x2dd0 fs/namei.c:3711
- do_filp_open+0x264/0x4f0 fs/namei.c:3741
- do_sys_openat2+0x124/0x4e0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_openat fs/open.c:1342 [inline]
- __se_sys_openat fs/open.c:1337 [inline]
- __x64_sys_openat+0x243/0x290 fs/open.c:1337
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fd74c6fe559
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fd74c6aa2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 00007fd74c7847a0 RCX: 00007fd74c6fe559
-RDX: 0000000000000241 RSI: 0000000020000000 RDI: 00000000ffffff9c
-RBP: 00007fd74c7512b0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fd74c7511b8
-R13: 0030656c69662f2e R14: 7366726573696572 R15: 00007fd74c7847a8
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__reiserfs_panic+0x12f/0x140 fs/reiserfs/prints.c:390
-Code: c0 50 03 8b 48 0f 44 c8 48 0f 44 d8 48 c7 c7 80 51 03 8b 4c 89 fe 48 89 da 4d 89 f0 49 c7 c1 40 46 16 92 31 c0 e8 01 ec 82 08 <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 55 48 89 e5 41
-RSP: 0018:ffffc90003d5e7e0 EFLAGS: 00010246
-RAX: 0000000000000049 RBX: ffffffff8b02e520 RCX: 37780e38b943e200
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc90003d5e8d0 R08: ffffffff816f2c9d R09: fffff520007abcb5
-R10: fffff520007abcb5 R11: 1ffff920007abcb4 R12: ffffffff8b02e540
-R13: ffffc90003d5e800 R14: ffffffff8cc70ec0 R15: ffff888028b806a8
-FS:  00007fd74c6aa700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd744689718 CR3: 0000000079f45000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+This will remind you again that I have not yet received your reply to
+my last message to you.
