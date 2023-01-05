@@ -2,71 +2,158 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC3665D3F0
-	for <lists+reiserfs-devel@lfdr.de>; Wed,  4 Jan 2023 14:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D379965F421
+	for <lists+reiserfs-devel@lfdr.de>; Thu,  5 Jan 2023 20:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239344AbjADNPC (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 4 Jan 2023 08:15:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52860 "EHLO
+        id S234777AbjAETM7 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 5 Jan 2023 14:12:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239356AbjADNOp (ORCPT
+        with ESMTP id S230089AbjAETM5 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 4 Jan 2023 08:14:45 -0500
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EBC3CABD
-        for <reiserfs-devel@vger.kernel.org>; Wed,  4 Jan 2023 05:13:03 -0800 (PST)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-150debe2b7cso4060330fac.0
-        for <reiserfs-devel@vger.kernel.org>; Wed, 04 Jan 2023 05:13:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
-        b=lCgU019qWlB6hc5H8dIPyQQQlSDDv4nOSqdCGEm7oGvRPZIUsDzDb+jIsy5XJY0lqa
-         NVZ3rPCxoCBQN+ZB0g8WtTnLObQUirCGXiqBTwyW8lojaLPj/XKYHs7+7kpPgkK/Xyh3
-         mBoWvUhKe5KAX5Iiq6RX5nEXTqx5mHZnYwGSAMiNFyhgTnzp5ms688RTQCngK5IOgmD1
-         wZm/uSF8C6aphgRs1oLkjeoKbzDL6tdMbOEnrOEyKXW+Dk5Zk7cGuJHQyiiDfe0BnhbM
-         hy2fLTP7y4pga9NskOGhWsRDRJ+ajoAxeUxrq+SMgu5hDrYjhyn0DBWUTnP9hOjVJAjs
-         zIvQ==
+        Thu, 5 Jan 2023 14:12:57 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1F160CD0
+        for <reiserfs-devel@vger.kernel.org>; Thu,  5 Jan 2023 11:12:56 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id i14-20020a056e020d8e00b003034b93bd07so23434291ilj.14
+        for <reiserfs-devel@vger.kernel.org>; Thu, 05 Jan 2023 11:12:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
-        b=7t7ebvckKfChGgIVl0KYVe5MYgvOV6mAyNhJauH4ZLiLmy5HqOzOULRq463GMJJLWt
-         zlRl/TyUQE/Gvo0Zpg4Eyyyw0qvdmXPOmLaBHAXgMMZhO5bHSFbWQm9dQN8hfvuuKRx8
-         k+8tbfNHF4noKMjA3H8zj58njUmNUDHjuO6XhVSfgzikMkTyh8jl/gbSTgsYutwCE5P7
-         QdQsGqP74OANuEpMXVnueTLfWexMUmsWbeskD7d6A4yfEbeta7SLuljNb4d5Yd7Pewbc
-         W5dkV7wBAt+cECDq7whyHbTLCoxE3ASyRjtLYiudU6IRP/XbnOzQ1ebZx5WgXR5gu6/X
-         Xgxg==
-X-Gm-Message-State: AFqh2kr1ZYKMdSxPst8SXkCz+BmDskZahct1+Ju+YaQ1q7tf+p6OHkz5
-        u4lx1dz7Dh9LREoXXzn/XLMV8UjG6/V6RqUEvkQ=
-X-Google-Smtp-Source: AMrXdXu2Le1lxXunQLAXwd/vevpJ+1+n+0Zh5sfIyw8J7/AQp7sqEktVL/FBalayfY/Ogu8RcvMPBR4VcvoXZ6420uU=
-X-Received: by 2002:a05:6870:b38a:b0:150:dd30:9b96 with SMTP id
- w10-20020a056870b38a00b00150dd309b96mr395097oap.188.1672837982668; Wed, 04
- Jan 2023 05:13:02 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=piCnIGXhXOnYV1hmjsRPMyKFWfqmILLLm5+CjusFvYg=;
+        b=nUrXVyWvcaFLW8SCyyDGjO4omYC5UiGvZSx/aDB+U0j6o79pPwA0Qi3s8irXr1G2mS
+         D1V0GeMiv7TTJo4qlwEB4s5v/+jg2VusUf9ktkBlv+xdqYpeKnDox5FvGWB4dKZxXBs4
+         R7ot5ZifsAd54emoLyjjNfIITg6j3wG1rSXDxPyziUiJZWEWn1TKayDuTfLzjCXv3JBq
+         ISu4koxHSDMjVJwYbPcu047fkUR7h7xbxZzpBMp05SOalQ4O9zCu8PPavYpQ+f3vK1da
+         A1KWF/87GV+61rYGWVvgKy7IF1L98DerQnOoimhB4xs+KhLVj0/POg2F/at4r/2WZ3Ve
+         UjUA==
+X-Gm-Message-State: AFqh2kqoLucNFc4FqLmmfyYMrBJvyUAaff1UvKi0S1VsngXm+TdUu9JP
+        gFB2dh5S2pU+wRnUSIsAptp2bDW1wFTZ/f+8wAHesZmUawaa
+X-Google-Smtp-Source: AMrXdXtYjImq2UDlySiZ+1mq7rYAR8WXEtlmn2w932wLCzvukrwRtb+QpcE3YxGOG1UJBFvedvoSlEae34BEBwbWl8hjCyZSlKk8
 MIME-Version: 1.0
-Received: by 2002:a05:6358:6584:b0:df:e24f:9756 with HTTP; Wed, 4 Jan 2023
- 05:13:01 -0800 (PST)
-Reply-To: Gregdenzell9@gmail.com
-From:   Greg Denzell <anahenary@gmail.com>
-Date:   Wed, 4 Jan 2023 13:13:01 +0000
-Message-ID: <CALciK_uuEQom3dK3mdU_vxQS8i+DQ2PkYhCND2iwO1T+9mo6Og@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+X-Received: by 2002:a02:b608:0:b0:39e:536f:e5db with SMTP id
+ h8-20020a02b608000000b0039e536fe5dbmr192883jam.50.1672945976178; Thu, 05 Jan
+ 2023 11:12:56 -0800 (PST)
+Date:   Thu, 05 Jan 2023 11:12:56 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a3818b05f18916e0@google.com>
+Subject: [syzbot] [reiserfs?] [jfs?] BUG: unable to handle kernel paging
+ request in reiserfs_readdir_inode
+From:   syzbot <syzbot+3f6ef04b7cf85153b528@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, shaggy@kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Seasons Greetings!
+Hello,
 
-This will remind you again that I have not yet received your reply to
-my last message to you.
+syzbot found the following issue on:
+
+HEAD commit:    247f34f7b803 Linux 6.1-rc2
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=15de909a480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fa9bed8d6a8992a0
+dashboard link: https://syzkaller.appspot.com/bug?extid=3f6ef04b7cf85153b528
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=100896ec480000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/05f9a7fca332/disk-247f34f7.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ec50c3ad7d48/vmlinux-247f34f7.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1446f94b11ed/Image-247f34f7.gz.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/b331beed692c/mount_0.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/980b2ce32188/mount_1.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3f6ef04b7cf85153b528@syzkaller.appspotmail.com
+
+REISERFS (device loop0): Using rupasov hash to sort names
+REISERFS warning (device loop0): jdm-20006 create_privroot: xattrs/ACLs enabled and couldn't find/create .reiserfs_priv. Failing mount.
+loop0: detected capacity change from 0 to 32768
+Unable to handle kernel paging request at virtual address ffff00001a06e183
+Mem abort info:
+  ESR = 0x0000000096000021
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x21: alignment fault
+Data abort info:
+  ISV = 0, ISS = 0x00000021
+  CM = 0, WnR = 0
+swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000001c54db000
+[ffff00001a06e183] pgd=180000023fff8003, p4d=180000023fff8003, pud=180000023fff7003, pmd=180000023ff26003, pte=006800005a06e707
+Internal error: Oops: 0000000096000021 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 3121 Comm: syz-executor.0 Not tainted 6.1.0-rc2-syzkaller-154433-g247f34f7b803 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __lse__cmpxchg_case_mb_64 arch/arm64/include/asm/atomic_lse.h:287 [inline]
+pc : __cmpxchg_case_mb_64 arch/arm64/include/asm/cmpxchg.h:130 [inline]
+pc : __cmpxchg_mb arch/arm64/include/asm/cmpxchg.h:175 [inline]
+pc : osq_lock+0x110/0x1f8 kernel/locking/osq_lock.c:162
+lr : osq_lock+0x38/0x1f8 kernel/locking/osq_lock.c:94
+sp : ffff80001305b980
+x29: ffff80001305b980 x28: ffff80000eec9000 x27: ffff80000cbb6d47
+x26: 0000000000000000 x25: ffff800008774160 x24: ffff0000cbd3ce90
+x23: ffff80000879e1b8 x22: ffff80000d2e2c40 x21: ffff00001a06e183
+x20: ffff0001fefd0c40 x19: ffff0000cbd3ce70 x18: 0000000000000000
+x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+x11: 0000000000000000 x10: ffff0001fefd0c50 x9 : 0000000000000002
+x8 : ffff0001fefd0c40 x7 : 0000000000000000 x6 : ffff80000879e1b8
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : ffff0001fefd0c40 x0 : ffff00001a06e183
+Call trace:
+ __lse__cmpxchg_case_mb_64 arch/arm64/include/asm/atomic_lse.h:287 [inline]
+ __cmpxchg_case_mb_64 arch/arm64/include/asm/cmpxchg.h:130 [inline]
+ __cmpxchg_mb arch/arm64/include/asm/cmpxchg.h:175 [inline]
+ osq_lock+0x110/0x1f8 kernel/locking/osq_lock.c:162
+ mutex_optimistic_spin+0x1dc/0x254 kernel/locking/mutex.c:460
+ __mutex_lock_common+0x1b4/0xca8 kernel/locking/mutex.c:607
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ reiserfs_write_lock+0x3c/0x64 fs/reiserfs/lock.c:27
+ reiserfs_readdir_inode+0x9c/0x684 fs/reiserfs/dir.c:79
+ reiserfs_readdir+0x28/0x38 fs/reiserfs/dir.c:274
+ iterate_dir+0x114/0x28c
+ __do_sys_getdents64 fs/readdir.c:369 [inline]
+ __se_sys_getdents64 fs/readdir.c:354 [inline]
+ __arm64_sys_getdents64+0x80/0x204 fs/readdir.c:354
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+Code: aa1503e0 aa1403e1 aa1f03e2 aa0103e8 (c8e8fea2) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	aa1503e0 	mov	x0, x21
+   4:	aa1403e1 	mov	x1, x20
+   8:	aa1f03e2 	mov	x2, xzr
+   c:	aa0103e8 	mov	x8, x1
+* 10:	c8e8fea2 	casal	x8, x2, [x21] <-- trapping instruction
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
