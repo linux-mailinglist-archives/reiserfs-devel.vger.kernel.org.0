@@ -2,53 +2,54 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D379965F421
-	for <lists+reiserfs-devel@lfdr.de>; Thu,  5 Jan 2023 20:13:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9FA66051B
+	for <lists+reiserfs-devel@lfdr.de>; Fri,  6 Jan 2023 17:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234777AbjAETM7 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 5 Jan 2023 14:12:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41582 "EHLO
+        id S230082AbjAFQwx (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 6 Jan 2023 11:52:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjAETM5 (ORCPT
+        with ESMTP id S231132AbjAFQww (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 5 Jan 2023 14:12:57 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1F160CD0
-        for <reiserfs-devel@vger.kernel.org>; Thu,  5 Jan 2023 11:12:56 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id i14-20020a056e020d8e00b003034b93bd07so23434291ilj.14
-        for <reiserfs-devel@vger.kernel.org>; Thu, 05 Jan 2023 11:12:56 -0800 (PST)
+        Fri, 6 Jan 2023 11:52:52 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C5168C80
+        for <reiserfs-devel@vger.kernel.org>; Fri,  6 Jan 2023 08:52:51 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id h11-20020a6b7a0b000000b006e0004fc167so1078945iom.5
+        for <reiserfs-devel@vger.kernel.org>; Fri, 06 Jan 2023 08:52:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=piCnIGXhXOnYV1hmjsRPMyKFWfqmILLLm5+CjusFvYg=;
-        b=nUrXVyWvcaFLW8SCyyDGjO4omYC5UiGvZSx/aDB+U0j6o79pPwA0Qi3s8irXr1G2mS
-         D1V0GeMiv7TTJo4qlwEB4s5v/+jg2VusUf9ktkBlv+xdqYpeKnDox5FvGWB4dKZxXBs4
-         R7ot5ZifsAd54emoLyjjNfIITg6j3wG1rSXDxPyziUiJZWEWn1TKayDuTfLzjCXv3JBq
-         ISu4koxHSDMjVJwYbPcu047fkUR7h7xbxZzpBMp05SOalQ4O9zCu8PPavYpQ+f3vK1da
-         A1KWF/87GV+61rYGWVvgKy7IF1L98DerQnOoimhB4xs+KhLVj0/POg2F/at4r/2WZ3Ve
-         UjUA==
-X-Gm-Message-State: AFqh2kqoLucNFc4FqLmmfyYMrBJvyUAaff1UvKi0S1VsngXm+TdUu9JP
-        gFB2dh5S2pU+wRnUSIsAptp2bDW1wFTZ/f+8wAHesZmUawaa
-X-Google-Smtp-Source: AMrXdXtYjImq2UDlySiZ+1mq7rYAR8WXEtlmn2w932wLCzvukrwRtb+QpcE3YxGOG1UJBFvedvoSlEae34BEBwbWl8hjCyZSlKk8
+        bh=FyxM3kMT1/pG6kJ8IILzOaKDmeRAHlbtjq9desIhVzw=;
+        b=8Mk+llcQG85uu+zWcSZ8G0zduiYeiDhlT7xtQoXUtbJw+I0e7I5dlVNTHkDPSwRYCa
+         VBc0dBGtrQeOgJysKYfkCJYxvxaQHL0NKCF7zc+n9uZbKubYd1XOFJLHOI6YJf4kJgWr
+         dq4rt11ml9qGvjE25Dkmkz38Kc2bYzYNNLMoOFhN3znzGV8oob+MKgj2Y8hpZI773IwG
+         Uwh2xaTyv7o+w9oDByziUGUYoa8xYrm9wijAuFvwErbZM2bAXZC3HstECNdrBuZWaloB
+         0W9XHOwlmtgVeHKgAFhTtKcvEb6iuf3b8bFyDDhXh6xOyYHgBQNy41rK4BloiGYNRY4R
+         SnAw==
+X-Gm-Message-State: AFqh2kqVsTbz1da4QNyGlZNzIyTWcibEDvWAa8LMB7eCMobEfecF4dDL
+        yvkH7k50H/HGBqyMXcqBqrTDtZ/ThpvT8jQpGIkW/sK03c+q
+X-Google-Smtp-Source: AMrXdXv2f19J2K++sJWf65GgF6eu+Zs5rhQYQ6Djg0s+Bm7d78Msjw+dnHBhD/4VuyS5kl3hCGXqdqZlviXjLfJq5iilyUlNOaDI
 MIME-Version: 1.0
-X-Received: by 2002:a02:b608:0:b0:39e:536f:e5db with SMTP id
- h8-20020a02b608000000b0039e536fe5dbmr192883jam.50.1672945976178; Thu, 05 Jan
- 2023 11:12:56 -0800 (PST)
-Date:   Thu, 05 Jan 2023 11:12:56 -0800
+X-Received: by 2002:a05:6638:144b:b0:39e:5dc6:ebb2 with SMTP id
+ l11-20020a056638144b00b0039e5dc6ebb2mr337560jad.71.1673023970415; Fri, 06 Jan
+ 2023 08:52:50 -0800 (PST)
+Date:   Fri, 06 Jan 2023 08:52:50 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a3818b05f18916e0@google.com>
-Subject: [syzbot] [reiserfs?] [jfs?] BUG: unable to handle kernel paging
- request in reiserfs_readdir_inode
-From:   syzbot <syzbot+3f6ef04b7cf85153b528@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, shaggy@kernel.org,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <000000000000751c0305f19b3faa@google.com>
+Subject: [syzbot] [reiserfs?] general protection fault in prepare_for_delete_or_cut
+From:   syzbot <syzbot+e621a445f96fd0e94be4@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, axboe@kernel.dk, bvanassche@acm.org,
+        jack@suse.cz, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, song@kernel.org,
+        syzkaller-bugs@googlegroups.com, yi.zhang@huawei.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,93 +60,113 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    247f34f7b803 Linux 6.1-rc2
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=15de909a480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fa9bed8d6a8992a0
-dashboard link: https://syzkaller.appspot.com/bug?extid=3f6ef04b7cf85153b528
+HEAD commit:    41c03ba9beea Merge tag 'for_linus' of git://git.kernel.org..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=11f9c594480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9babfdc3dd4772d0
+dashboard link: https://syzkaller.appspot.com/bug?extid=e621a445f96fd0e94be4
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=100896ec480000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13d8628a480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=159d6c4e480000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/05f9a7fca332/disk-247f34f7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ec50c3ad7d48/vmlinux-247f34f7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1446f94b11ed/Image-247f34f7.gz.xz
-mounted in repro #1: https://storage.googleapis.com/syzbot-assets/b331beed692c/mount_0.gz
-mounted in repro #2: https://storage.googleapis.com/syzbot-assets/980b2ce32188/mount_1.gz
+disk image: https://storage.googleapis.com/syzbot-assets/041403c21ee3/disk-41c03ba9.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/579dec11b65a/vmlinux-41c03ba9.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/dcb6cfc03c78/bzImage-41c03ba9.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/014b8184a95e/mount_0.gz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3f6ef04b7cf85153b528@syzkaller.appspotmail.com
+Reported-by: syzbot+e621a445f96fd0e94be4@syzkaller.appspotmail.com
 
-REISERFS (device loop0): Using rupasov hash to sort names
-REISERFS warning (device loop0): jdm-20006 create_privroot: xattrs/ACLs enabled and couldn't find/create .reiserfs_priv. Failing mount.
-loop0: detected capacity change from 0 to 32768
-Unable to handle kernel paging request at virtual address ffff00001a06e183
-Mem abort info:
-  ESR = 0x0000000096000021
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x21: alignment fault
-Data abort info:
-  ISV = 0, ISS = 0x00000021
-  CM = 0, WnR = 0
-swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000001c54db000
-[ffff00001a06e183] pgd=180000023fff8003, p4d=180000023fff8003, pud=180000023fff7003, pmd=180000023ff26003, pte=006800005a06e707
-Internal error: Oops: 0000000096000021 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 3121 Comm: syz-executor.0 Not tainted 6.1.0-rc2-syzkaller-154433-g247f34f7b803 #0
+REISERFS error (device loop0): vs-5150 search_by_key: invalid format found in block 532. Fsck?
+REISERFS (device loop0): Remounting filesystem read-only
+REISERFS error (device loop0): vs-13050 reiserfs_update_sd_size: i/o failure occurred trying to update [2 2 0x0 SD] stat data
+REISERFS warning: reiserfs-5093 is_leaf: item entry count seems wrong *3.5*[2 1 0(1) DIR], item_len 35, item_location 4029, free_space(entry_count) 2
+REISERFS error (device loop0): vs-5150 search_by_key: invalid format found in block 532. Fsck?
+general protection fault, probably for non-canonical address 0xdffffc0000000005: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
+CPU: 0 PID: 5067 Comm: syz-executor356 Not tainted 6.2.0-rc2-syzkaller-00057-g41c03ba9beea #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __lse__cmpxchg_case_mb_64 arch/arm64/include/asm/atomic_lse.h:287 [inline]
-pc : __cmpxchg_case_mb_64 arch/arm64/include/asm/cmpxchg.h:130 [inline]
-pc : __cmpxchg_mb arch/arm64/include/asm/cmpxchg.h:175 [inline]
-pc : osq_lock+0x110/0x1f8 kernel/locking/osq_lock.c:162
-lr : osq_lock+0x38/0x1f8 kernel/locking/osq_lock.c:94
-sp : ffff80001305b980
-x29: ffff80001305b980 x28: ffff80000eec9000 x27: ffff80000cbb6d47
-x26: 0000000000000000 x25: ffff800008774160 x24: ffff0000cbd3ce90
-x23: ffff80000879e1b8 x22: ffff80000d2e2c40 x21: ffff00001a06e183
-x20: ffff0001fefd0c40 x19: ffff0000cbd3ce70 x18: 0000000000000000
-x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
-x11: 0000000000000000 x10: ffff0001fefd0c50 x9 : 0000000000000002
-x8 : ffff0001fefd0c40 x7 : 0000000000000000 x6 : ffff80000879e1b8
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : ffff0001fefd0c40 x0 : ffff00001a06e183
-Call trace:
- __lse__cmpxchg_case_mb_64 arch/arm64/include/asm/atomic_lse.h:287 [inline]
- __cmpxchg_case_mb_64 arch/arm64/include/asm/cmpxchg.h:130 [inline]
- __cmpxchg_mb arch/arm64/include/asm/cmpxchg.h:175 [inline]
- osq_lock+0x110/0x1f8 kernel/locking/osq_lock.c:162
- mutex_optimistic_spin+0x1dc/0x254 kernel/locking/mutex.c:460
- __mutex_lock_common+0x1b4/0xca8 kernel/locking/mutex.c:607
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
- reiserfs_write_lock+0x3c/0x64 fs/reiserfs/lock.c:27
- reiserfs_readdir_inode+0x9c/0x684 fs/reiserfs/dir.c:79
- reiserfs_readdir+0x28/0x38 fs/reiserfs/dir.c:274
- iterate_dir+0x114/0x28c
- __do_sys_getdents64 fs/readdir.c:369 [inline]
- __se_sys_getdents64 fs/readdir.c:354 [inline]
- __arm64_sys_getdents64+0x80/0x204 fs/readdir.c:354
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-Code: aa1503e0 aa1403e1 aa1f03e2 aa0103e8 (c8e8fea2) 
+RIP: 0010:reiserfs_node_data fs/reiserfs/reiserfs.h:2184 [inline]
+RIP: 0010:item_head fs/reiserfs/reiserfs.h:2200 [inline]
+RIP: 0010:tp_item_head fs/reiserfs/reiserfs.h:2226 [inline]
+RIP: 0010:prepare_for_delete_or_cut+0x182/0x21a0 fs/reiserfs/stree.c:1050
+Code: 89 d8 48 c1 e8 03 49 bc 00 00 00 00 00 fc ff df 42 8a 04 20 84 c0 0f 85 f2 17 00 00 4c 63 3b 49 83 c6 28 4c 89 f0 48 c1 e8 03 <42> 80 3c 20 00 74 08 4c 89 f7 e8 ef 41 b3 ff 4d 8b 36 48 b8 00 00
+RSP: 0018:ffffc90003bff100 EFLAGS: 00010206
+RAX: 0000000000000005 RBX: ffffc90003bff8c0 RCX: dffffc0000000000
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000008
+RBP: ffffc90003bff268 R08: ffffffff822e42d9 R09: ffffc90003bff730
+R10: 0000000000000002 R11: ffff888023991d40 R12: dffffc0000000000
+R13: 0000000000000000 R14: 0000000000000028 R15: 0000000000000000
+FS:  0000555556956300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055f656836c18 CR3: 000000007aa25000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ reiserfs_cut_from_item+0x38c/0x25b0 fs/reiserfs/stree.c:1682
+ reiserfs_do_truncate+0x9d6/0x15a0 fs/reiserfs/stree.c:1973
+ reiserfs_truncate_file+0x471/0x790 fs/reiserfs/inode.c:2310
+ reiserfs_file_release+0x887/0xa30 fs/reiserfs/file.c:109
+ __fput+0x3ba/0x880 fs/file_table.c:320
+ task_work_run+0x243/0x300 kernel/task_work.c:179
+ ptrace_notify+0x29a/0x340 kernel/signal.c:2354
+ ptrace_report_syscall include/linux/ptrace.h:411 [inline]
+ ptrace_report_syscall_exit include/linux/ptrace.h:473 [inline]
+ syscall_exit_work+0x8c/0xe0 kernel/entry/common.c:251
+ syscall_exit_to_user_mode_prepare+0x63/0xc0 kernel/entry/common.c:278
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0xa/0x60 kernel/entry/common.c:296
+ do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f3739c112f3
+Code: c7 c2 c0 ff ff ff f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb ba 0f 1f 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8
+RSP: 002b:00007ffcb18bf408 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000005 RCX: 00007f3739c112f3
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
+RBP: 00007ffcb18bf418 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffcb18bf420
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
 ---[ end trace 0000000000000000 ]---
+RIP: 0010:reiserfs_node_data fs/reiserfs/reiserfs.h:2184 [inline]
+RIP: 0010:item_head fs/reiserfs/reiserfs.h:2200 [inline]
+RIP: 0010:tp_item_head fs/reiserfs/reiserfs.h:2226 [inline]
+RIP: 0010:prepare_for_delete_or_cut+0x182/0x21a0 fs/reiserfs/stree.c:1050
+Code: 89 d8 48 c1 e8 03 49 bc 00 00 00 00 00 fc ff df 42 8a 04 20 84 c0 0f 85 f2 17 00 00 4c 63 3b 49 83 c6 28 4c 89 f0 48 c1 e8 03 <42> 80 3c 20 00 74 08 4c 89 f7 e8 ef 41 b3 ff 4d 8b 36 48 b8 00 00
+RSP: 0018:ffffc90003bff100 EFLAGS: 00010206
+RAX: 0000000000000005 RBX: ffffc90003bff8c0 RCX: dffffc0000000000
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000008
+RBP: ffffc90003bff268 R08: ffffffff822e42d9 R09: ffffc90003bff730
+R10: 0000000000000002 R11: ffff888023991d40 R12: dffffc0000000000
+R13: 0000000000000000 R14: 0000000000000028 R15: 0000000000000000
+FS:  0000555556956300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055f656836c18 CR3: 000000007aa25000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 ----------------
 Code disassembly (best guess):
-   0:	aa1503e0 	mov	x0, x21
-   4:	aa1403e1 	mov	x1, x20
-   8:	aa1f03e2 	mov	x2, xzr
-   c:	aa0103e8 	mov	x8, x1
-* 10:	c8e8fea2 	casal	x8, x2, [x21] <-- trapping instruction
+   0:	89 d8                	mov    %ebx,%eax
+   2:	48 c1 e8 03          	shr    $0x3,%rax
+   6:	49 bc 00 00 00 00 00 	movabs $0xdffffc0000000000,%r12
+   d:	fc ff df
+  10:	42 8a 04 20          	mov    (%rax,%r12,1),%al
+  14:	84 c0                	test   %al,%al
+  16:	0f 85 f2 17 00 00    	jne    0x180e
+  1c:	4c 63 3b             	movslq (%rbx),%r15
+  1f:	49 83 c6 28          	add    $0x28,%r14
+  23:	4c 89 f0             	mov    %r14,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 20 00       	cmpb   $0x0,(%rax,%r12,1) <-- trapping instruction
+  2f:	74 08                	je     0x39
+  31:	4c 89 f7             	mov    %r14,%rdi
+  34:	e8 ef 41 b3 ff       	callq  0xffb34228
+  39:	4d 8b 36             	mov    (%r14),%r14
+  3c:	48                   	rex.W
+  3d:	b8                   	.byte 0xb8
 
 
 ---
