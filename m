@@ -2,135 +2,105 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F19866139B
-	for <lists+reiserfs-devel@lfdr.de>; Sun,  8 Jan 2023 05:51:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E84D661621
+	for <lists+reiserfs-devel@lfdr.de>; Sun,  8 Jan 2023 16:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbjAHEvo (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sat, 7 Jan 2023 23:51:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
+        id S231272AbjAHPUp (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 8 Jan 2023 10:20:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbjAHEvk (ORCPT
+        with ESMTP id S229822AbjAHPUp (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sat, 7 Jan 2023 23:51:40 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2EA1A23D
-        for <reiserfs-devel@vger.kernel.org>; Sat,  7 Jan 2023 20:51:39 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id l13-20020a056e021c0d00b003034e24b866so3662177ilh.22
-        for <reiserfs-devel@vger.kernel.org>; Sat, 07 Jan 2023 20:51:39 -0800 (PST)
+        Sun, 8 Jan 2023 10:20:45 -0500
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B20F55AD
+        for <reiserfs-devel@vger.kernel.org>; Sun,  8 Jan 2023 07:20:44 -0800 (PST)
+Received: by mail-ej1-x642.google.com with SMTP id vm8so14343607ejc.2
+        for <reiserfs-devel@vger.kernel.org>; Sun, 08 Jan 2023 07:20:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HcpM41K3Tg/Gq2Sy2fOw39ukTQf5X/VzmfsS+yU67xU=;
+        b=esjWSR9wpBGUJ4k9LqVdq64dk5gfUxlVBbY363Wy4HbKgnhQXp+acXbuHug04tFocZ
+         ME3jdnFLhzUGOTBEIAQURweTEZlPhs19AeIUcJxiITk09Zoot10hL2wH5j0i+spaBoym
+         o0bNwEh9h65Q4dVkQlnYvOmCBY0pFpGtkkNet8Q6aVdtkrOFFRd1KA08Ln9+5im6QcL8
+         TFf9JGrE2HX3JSc9GDbdVMVkpytSOeM3VcVIiA/XGpAoNMkhgJg1tMPr0b2uVcS4YooH
+         aSn8OX2HJbp5yMNRf62S7s729eUEi+70cW3xULbtAZT7f5TBYjkCWYBJkJOhCjecdFKH
+         IBmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AbFd39ngrFpRMqyekThyz3zElZJUT2Ew/ay9zgHXVA8=;
-        b=spDadX6TkF1Gyy8SQXta08+wvzP1B92foWqxJIURspAqX40H8n9Hzux3Ig/gC9rgeq
-         Q0LXWXX/e85GCOnjGvNcXk1/x3NIBQKyPWho4dhnbJO0/pwQ/uJUF8lJIQbsP1BKglgy
-         Z3W6IqyQDxaDQ0PqG41kHiAK6TaJOWZlTH8osfEq5JF/Ug41sy8ADATYLz9p3D/QTvVt
-         nwGBBoPgR5nZho2gAnIYEBreJOrx2DP1LkFPqFy15P/dRvYkn71OFDu7ISvKgGdqCZwk
-         VwMpTA+0qOk/wslyFKuY8gn1SwyXf196mdLDzROp+ngj25DNAQfsYkmGgT+Vl89oVI7x
-         lsow==
-X-Gm-Message-State: AFqh2krZbFIPWE8AMWReO4VLvWbW6c4Wt0Q8+/E6wYYOFj8bmfnxdF+Q
-        2K76tZqJX72hYjuTljSHZvoyiMkqubYNx9n/voVLwnA+QWgR
-X-Google-Smtp-Source: AMrXdXszQvO80kN+MXUAMYHImEwu3N8KRoM9cwX8fB5ZM3jcqcsJAcGvihkyaQhnX+FNbVTmMXSlnT7cAIkhCb62aMQvNQWLOULM
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HcpM41K3Tg/Gq2Sy2fOw39ukTQf5X/VzmfsS+yU67xU=;
+        b=AnxtTi9/72uawyKnAzF3xzALEuiun4y4e1vQMiV3QwOAutvB76NRvhWD8NFo0LMgf+
+         /X8RASxHpnlEW+ucucTp3/7kKBLHyVf4G8dNXP86xiezm38ojRzYcQv7bYzhvO17AoY8
+         zdaP/3utYxSrgjjqD6eXfreDYXzu5nTDBHVQuL6MUeWDYaTXaYqMhp6crR7BKpGrkvQf
+         JoGXLshKrUoG8h5oW0gSU16M88m3TqcsJV8GhEsHAcvZhQCpLytCGvM/fxP4W8H10zuP
+         rWa0Lqz4jf9BUbJoqCH4qRXzlX8P4ZoTnQe1sPfZTh7vQtYNKYzFzjhMteGScfAe99ut
+         3tzw==
+X-Gm-Message-State: AFqh2krF5BrdH3fJkpycago9zN1PQRY+JIOAEykNxZ32T+Nbfz5CynbL
+        JGRAhPgudLZY7dQu1XWC6DgZz5tD7UTltBvQRIU=
+X-Google-Smtp-Source: AMrXdXuicgxXDzAKMVbxscxfTUytxu5AhPZt9mmug2KHfqwI3nxxWZcAA4CDhLYXVpL4k0T3aFuPSun9udIWzORRuzY=
+X-Received: by 2002:a17:906:6801:b0:84d:390c:46fa with SMTP id
+ k1-20020a170906680100b0084d390c46famr198470ejr.275.1673191242714; Sun, 08 Jan
+ 2023 07:20:42 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:441a:b0:38a:b1dd:85e9 with SMTP id
- bp26-20020a056638441a00b0038ab1dd85e9mr3555033jab.25.1673153498757; Sat, 07
- Jan 2023 20:51:38 -0800 (PST)
-Date:   Sat, 07 Jan 2023 20:51:38 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f2c33c05f1b967dc@google.com>
-Subject: [syzbot] [reiserfs?] WARNING: locking bug in lockref_put_or_lock
-From:   syzbot <syzbot+12a2ecec8db1d853fc33@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
+Received: by 2002:a05:640c:2a51:b0:186:b673:2e36 with HTTP; Sun, 8 Jan 2023
+ 07:20:42 -0800 (PST)
+Reply-To: muhammadabdulrahma999@gmail.com
+From:   muhammad <agnieszka66books@gmail.com>
+Date:   Sun, 8 Jan 2023 07:20:42 -0800
+Message-ID: <CAEbk9CwKJ3+qR2ikwYat8KPBaESgKVDjsmMnMvBf6e60XoCkzA@mail.gmail.com>
+Subject: Re:Urgent supply to Qatar
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DEAR_SOMETHING,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:642 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5004]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [agnieszka66books[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [muhammadabdulrahma999[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  2.0 DEAR_SOMETHING BODY: Contains 'Dear (something)'
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+Dear Sir/Madam,
 
-syzbot found the following issue on:
+An open Tender for the supply of your company products to (Doha,
+Qatar). Urgently furnish us in full details about the standard of your
+product. We will appreciate it more if you give us with Details:
+Specification and Catalogs or Price list via Email.To avoid making a
+wrong choice of products before placing an order for it.
 
-HEAD commit:    69b41ac87e4a Merge tag 'for-6.2-rc2-tag' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1386ac9a480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9babfdc3dd4772d0
-dashboard link: https://syzkaller.appspot.com/bug?extid=12a2ecec8db1d853fc33
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10256734480000
+Terms of payment:An upfront payment of 80% (T/T) will be made to your
+account for production,While 20% will be paid before shipment.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d3aac1573b20/disk-69b41ac8.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/31f5a860f3b3/vmlinux-69b41ac8.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/d4a7091814ba/bzImage-69b41ac8.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/d2780fe6fae0/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+12a2ecec8db1d853fc33@syzkaller.appspotmail.com
-
-REISERFS (device loop5): Created .reiserfs_priv - reserved for xattr storage.
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(1)
-WARNING: CPU: 0 PID: 5314 at kernel/locking/lockdep.c:231 check_wait_context kernel/locking/lockdep.c:4729 [inline]
-WARNING: CPU: 0 PID: 5314 at kernel/locking/lockdep.c:231 __lock_acquire+0xac2/0x1f60 kernel/locking/lockdep.c:5005
-Modules linked in:
-CPU: 0 PID: 5314 Comm: syz-executor.5 Not tainted 6.2.0-rc2-syzkaller-00010-g69b41ac87e4a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:hlock_class kernel/locking/lockdep.c:231 [inline]
-RIP: 0010:check_wait_context kernel/locking/lockdep.c:4729 [inline]
-RIP: 0010:__lock_acquire+0xac2/0x1f60 kernel/locking/lockdep.c:5005
-Code: 2b 0d 00 0f 85 2b fa ff ff 31 db 48 c7 c7 80 ba ed 8a 48 c7 c6 20 bd ed 8a 31 c0 e8 08 b0 e7 ff 48 ba 00 00 00 00 00 fc ff df <0f> 0b e9 25 fa ff ff e8 12 f2 cf 02 85 c0 0f 84 b1 06 00 00 48 c7
-RSP: 0018:ffffc900058a7628 EFLAGS: 00010046
-RAX: 3bc84842428cc400 RBX: 0000000000000000 RCX: ffff888027ef0000
-RDX: dffffc0000000000 RSI: 0000000080000001 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffff816f2c9d R09: ffffed1017304f5b
-R10: ffffed1017304f5b R11: 1ffff11017304f5a R12: 0000000000040000
-R13: ffff888027ef0000 R14: 0000000000041770 R15: ffff888027ef0a80
-FS:  00007f1c2429f700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000280 CR3: 000000002195c000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:350 [inline]
- lockref_put_or_lock+0x22/0xb0 lib/lockref.c:148
- fast_dput fs/dcache.c:775 [inline]
- dput+0x20e/0x410 fs/dcache.c:900
- path_put fs/namei.c:558 [inline]
- terminate_walk+0x1b1/0x5d0 fs/namei.c:680
- path_openat+0x24c9/0x2dd0 fs/namei.c:3715
- do_filp_open+0x264/0x4f0 fs/namei.c:3741
- do_sys_openat2+0x124/0x4e0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_openat fs/open.c:1342 [inline]
- __se_sys_openat fs/open.c:1337 [inline]
- __x64_sys_openat+0x243/0x290 fs/open.c:1337
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1c2348c0a9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f1c2429f168 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 00007f1c235abf80 RCX: 00007f1c2348c0a9
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Thanks and Regards
