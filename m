@@ -2,55 +2,51 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727F8661EC0
-	for <lists+reiserfs-devel@lfdr.de>; Mon,  9 Jan 2023 07:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55846662A6D
+	for <lists+reiserfs-devel@lfdr.de>; Mon,  9 Jan 2023 16:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234276AbjAIGim (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 9 Jan 2023 01:38:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48002 "EHLO
+        id S233422AbjAIPsO (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 9 Jan 2023 10:48:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234155AbjAIGij (ORCPT
+        with ESMTP id S233666AbjAIPrp (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 9 Jan 2023 01:38:39 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6DCFAC8
-        for <reiserfs-devel@vger.kernel.org>; Sun,  8 Jan 2023 22:38:36 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id w18-20020a5d9cd2000000b006e32359d7fcso4322283iow.15
-        for <reiserfs-devel@vger.kernel.org>; Sun, 08 Jan 2023 22:38:36 -0800 (PST)
+        Mon, 9 Jan 2023 10:47:45 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3C51A077
+        for <reiserfs-devel@vger.kernel.org>; Mon,  9 Jan 2023 07:47:38 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id h4-20020a056e021b8400b0030d901a84d9so5354697ili.6
+        for <reiserfs-devel@vger.kernel.org>; Mon, 09 Jan 2023 07:47:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+WchuXFZ0SQsQCqgwOOtdfVnilckMyDAJW8PIyYrDzs=;
-        b=oxu7zQRvoZzVNah0w/mQMzgjhrdShr0f0zU9osl5iGErNpTg17Sla5kYMYY+Mq24+v
-         6323npAxs5q2Nzvb7BFor/i2dy8v/DLX+XkEuWOV+jiyP0x7K8/kSeLkAz7Ir+78UvGv
-         vEz++D/v47ljS0L0DrsYvhFm/OG3ozG44HQQc74c57L8PVSZrP3baqadCPUgOa1/JSJi
-         HM9pBhqNBDx3jZKW0+bJZhfgUxjrKM3QKhCKWOul5rGuTwnjxFmvnSJVeY10ZPuKe12Z
-         Hbw/Dk2WboY0heA9tMenBtra6CCa7LvRthChHiCYZGFVgz7om2nkTMqAMd8eXNIZ6BLH
-         3h8A==
-X-Gm-Message-State: AFqh2kpb5m+he43i0zdIPuysuiQ6j4DaKlynWI20ZDlDuOOS4XqQXSqH
-        ZrULx1zjdWO/A2AAtAUriOWnPINrpUyms0imqNq8rdt1x0Zn
-X-Google-Smtp-Source: AMrXdXvKhbdjyyyeleItiVrrdGXee4Ei7n54iJZ9ainN6qO63RUZW8bvwl5feLiVHz28tZJogc9SBJgstTkokuCA3lJOZAIvs+pS
+        bh=DUwZds0wjLkQnBIYbIWoN/PPnQGOvTGLK3WZZ9CM4pQ=;
+        b=ooy8+WwglclSvIoi4V9MqpMAtgga+G1MZJaULrIBrBsoqm6VQEoBh/lInXO3RsdAmo
+         xbMQYyl6PF+fxfg717DxibSg0iXYLEVAkcUv2jCvOKq+LIwqqVPULGnoEgYoHz8APY3y
+         EvMhtLwNfeor5VSFaWcg3kLWrHduso03YqaVZn9aNQF4FlQ5NCddKRoBDEr1Q5eh1L1x
+         bBMg12PWNWVnwe5BfbXeZYurOQntsUD5QxqOSBGblNCUemrRlm0dht7mZoWi7259F97o
+         y3WVzkBL/BQn7L2tYSsKoOwzIDhBOGv85cTAUgnDxrOB3CnGPZsus5inHQVJFo0sZC4f
+         Sa6Q==
+X-Gm-Message-State: AFqh2kqf5f7rNxKoq5CyTqisHemv04cC4F6LLchmfKN2VFovfdCWvX3v
+        4du5LgvZObShC8Su4ut2jGR9sChs5gF1nLdFAZOn8+Y/A/La
+X-Google-Smtp-Source: AMrXdXuBHqH78nVaV84wwbLsXQ7Y5s6G9Lb6PRlp7Xhzk5VFoOYq6TNp9zYUmoJldNh/EjXY5JXxqwyMujbzdzPa2h5p6rUHCc8+
 MIME-Version: 1.0
-X-Received: by 2002:a02:665f:0:b0:376:1ab0:7bd5 with SMTP id
- l31-20020a02665f000000b003761ab07bd5mr6254341jaf.8.1673246315636; Sun, 08 Jan
- 2023 22:38:35 -0800 (PST)
-Date:   Sun, 08 Jan 2023 22:38:35 -0800
+X-Received: by 2002:a02:7352:0:b0:375:bc14:b202 with SMTP id
+ a18-20020a027352000000b00375bc14b202mr4230956jae.244.1673279257349; Mon, 09
+ Jan 2023 07:47:37 -0800 (PST)
+Date:   Mon, 09 Jan 2023 07:47:37 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000043eebd05f1cf04a7@google.com>
-Subject: [syzbot] [reiserfs?] general protection fault in reiserfs_get_block
-From:   syzbot <syzbot+ebfdcf89bfa9a9a37e0c@syzkaller.appspotmail.com>
-To:     brauner@kernel.org, damien.lemoal@opensource.wdc.com,
-        edward.shishkin@gmail.com, jack@suse.cz,
-        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        sforshee@digitalocean.com, syzkaller-bugs@googlegroups.com,
-        willy@infradead.org
+Message-ID: <000000000000be991505f1d6afb3@google.com>
+Subject: [syzbot] [reiserfs?] BUG: unable to handle kernel paging request in reiserfs_lookup
+From:   syzbot <syzbot+a99186f624245fd88b94@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,112 +57,91 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    41c03ba9beea Merge tag 'for_linus' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16aa7006480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9babfdc3dd4772d0
-dashboard link: https://syzkaller.appspot.com/bug?extid=ebfdcf89bfa9a9a37e0c
+HEAD commit:    247f34f7b803 Linux 6.1-rc2
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=1619246e480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fa9bed8d6a8992a0
+dashboard link: https://syzkaller.appspot.com/bug?extid=a99186f624245fd88b94
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/041403c21ee3/disk-41c03ba9.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/579dec11b65a/vmlinux-41c03ba9.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/dcb6cfc03c78/bzImage-41c03ba9.xz
+disk image: https://storage.googleapis.com/syzbot-assets/05f9a7fca332/disk-247f34f7.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ec50c3ad7d48/vmlinux-247f34f7.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1446f94b11ed/Image-247f34f7.gz.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ebfdcf89bfa9a9a37e0c@syzkaller.appspotmail.com
+Reported-by: syzbot+a99186f624245fd88b94@syzkaller.appspotmail.com
 
-REISERFS (device loop5): Created .reiserfs_priv - reserved for xattr storage.
-overlayfs: upper fs needs to support d_type.
-overlayfs: upper fs does not support tmpfile.
-overlayfs: upper fs does not support RENAME_WHITEOUT.
-general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-CPU: 0 PID: 14704 Comm: syz-executor.5 Not tainted 6.2.0-rc2-syzkaller-00057-g41c03ba9beea #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:reiserfs_get_block+0x1afe/0x5180 fs/reiserfs/inode.c:1052
-Code: 00 00 00 fc ff df 48 8b 44 24 58 42 0f b6 04 38 84 c0 0f 85 74 11 00 00 8b 94 24 20 04 00 00 4b 8d 1c ae 48 89 d8 48 c1 e8 03 <42> 0f b6 04 38 84 c0 0f 85 7d 11 00 00 4c 89 74 24 28 48 89 54 24
-RSP: 0018:ffffc9000a966c20 EFLAGS: 00010203
-RAX: 0000000000000001 RBX: 000000000000000c RCX: ffffc9000a967003
-RDX: 0000000000000217 RSI: 00000000000003f4 RDI: 0000000000000000
-RBP: ffffc9000a967270 R08: ffffffff822832cb R09: ffffed100565982c
-R10: ffffed100565982c R11: 1ffff1100565982b R12: 0000000000000000
-R13: ffffffffffffffff R14: 0000000000000010 R15: dffffc0000000000
-FS:  00007f1f6b9fe700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000c017dafef7 CR3: 000000002bab4000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __block_write_begin_int+0x54c/0x1a80 fs/buffer.c:1991
- __reiserfs_write_begin+0x21a/0x460 fs/reiserfs/inode.c:2835
- reiserfs_xattr_set_handle+0x394/0xec0 fs/reiserfs/xattr.c:571
- reiserfs_xattr_set+0x417/0x530 fs/reiserfs/xattr.c:633
- __vfs_setxattr+0x485/0x4c0 fs/xattr.c:202
- __vfs_setxattr_noperm+0x128/0x5d0 fs/xattr.c:236
- vfs_setxattr+0x228/0x450 fs/xattr.c:323
- ovl_do_setxattr fs/overlayfs/overlayfs.h:254 [inline]
- ovl_setxattr fs/overlayfs/overlayfs.h:266 [inline]
- ovl_verify_set_fh+0x1c7/0x430 fs/overlayfs/namei.c:473
- ovl_verify_upper fs/overlayfs/overlayfs.h:565 [inline]
- ovl_get_indexdir+0x519/0x680 fs/overlayfs/super.c:1503
- ovl_fill_super+0x195b/0x2790 fs/overlayfs/super.c:2025
- mount_nodev+0x52/0xe0 fs/super.c:1405
- legacy_get_tree+0xea/0x180 fs/fs_context.c:610
- vfs_get_tree+0x88/0x270 fs/super.c:1489
- do_new_mount+0x289/0xad0 fs/namespace.c:3145
- do_mount fs/namespace.c:3488 [inline]
- __do_sys_mount fs/namespace.c:3697 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3674
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1f6ce8c0c9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f1f6b9fe168 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007f1f6cfabf80 RCX: 00007f1f6ce8c0c9
-RDX: 0000000020000080 RSI: 0000000020000040 RDI: 0000000000000000
-RBP: 00007f1f6cee7ae9 R08: 0000000020000280 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd914fe18f R14: 00007f1f6b9fe300 R15: 0000000000022000
- </TASK>
+Unable to handle kernel paging request at virtual address ffff80000d2e2c80
+Mem abort info:
+  ESR = 0x0000000096000047
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x07: level 3 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000047
+  CM = 0, WnR = 1
+swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000001c54db000
+[ffff80000d2e2c80] pgd=100000023ffff003, p4d=100000023ffff003, pud=100000023fffe003, pmd=100000023fffa003, pte=0000000000000000
+Internal error: Oops: 0000000096000047 [#1] PREEMPT SMP
 Modules linked in:
+CPU: 1 PID: 21788 Comm: syz-executor.3 Not tainted 6.1.0-rc2-syzkaller-154433-g247f34f7b803 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+pstate: 00400005 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : queued_spin_lock_slowpath+0x198/0x394 kernel/locking/qspinlock.c:474
+lr : queued_spin_lock_slowpath+0x114/0x394 kernel/locking/qspinlock.c:405
+sp : ffff80001400b850
+x29: ffff80001400b850 x28: ffff80000eec9000 x27: ffff80000cbb6d47
+x26: 0000000000000000 x25: 0000000000000000 x24: ffff0001fefefc80
+x23: 0000000000000000 x22: ffff80000d37d050 x21: ffff80000d2e2c80
+x20: 0000000000000001 x19: ffff00011e189430 x18: 0000000000000000
+x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000001fb8 x12: 0000000000000000
+x11: ffff80000d2e2c80 x10: 0000000000080000 x9 : ffff0001fefefc88
+x8 : ffff0001fefefc80 x7 : 0000000000000000 x6 : ffff80000c08f3c8
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000001 x1 : ffff80000ce889e3 x0 : 0000000000000001
+Call trace:
+ decode_tail kernel/locking/qspinlock.c:131 [inline]
+ queued_spin_lock_slowpath+0x198/0x394 kernel/locking/qspinlock.c:471
+ queued_spin_lock include/asm-generic/qspinlock.h:114 [inline]
+ do_raw_spin_lock+0x10c/0x110 kernel/locking/spinlock_debug.c:115
+ __raw_spin_lock include/linux/spinlock_api_smp.h:134 [inline]
+ _raw_spin_lock+0x5c/0x6c kernel/locking/spinlock.c:154
+ __mutex_lock_common+0x2a4/0xca8 kernel/locking/mutex.c:617
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ reiserfs_write_lock+0x3c/0x64 fs/reiserfs/lock.c:27
+ reiserfs_lookup+0xa4/0x1c4 fs/reiserfs/namei.c:364
+ lookup_open fs/namei.c:3391 [inline]
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0x738/0x11c4 fs/namei.c:3710
+ do_filp_open+0xdc/0x1b8 fs/namei.c:3740
+ do_sys_openat2+0xb8/0x22c fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_openat fs/open.c:1342 [inline]
+ __se_sys_openat fs/open.c:1337 [inline]
+ __arm64_sys_openat+0xb0/0xe0 fs/open.c:1337
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+Code: 8b2c4ecc f85f818c 1200056b 8b2b52ab (f82b6988) 
 ---[ end trace 0000000000000000 ]---
-RIP: 0010:reiserfs_get_block+0x1afe/0x5180 fs/reiserfs/inode.c:1052
-Code: 00 00 00 fc ff df 48 8b 44 24 58 42 0f b6 04 38 84 c0 0f 85 74 11 00 00 8b 94 24 20 04 00 00 4b 8d 1c ae 48 89 d8 48 c1 e8 03 <42> 0f b6 04 38 84 c0 0f 85 7d 11 00 00 4c 89 74 24 28 48 89 54 24
-RSP: 0018:ffffc9000a966c20 EFLAGS: 00010203
-RAX: 0000000000000001 RBX: 000000000000000c RCX: ffffc9000a967003
-RDX: 0000000000000217 RSI: 00000000000003f4 RDI: 0000000000000000
-RBP: ffffc9000a967270 R08: ffffffff822832cb R09: ffffed100565982c
-R10: ffffed100565982c R11: 1ffff1100565982b R12: 0000000000000000
-R13: ffffffffffffffff R14: 0000000000000010 R15: dffffc0000000000
-FS:  00007f1f6b9fe700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000c00fba6000 CR3: 000000002bab4000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 ----------------
-Code disassembly (best guess), 5 bytes skipped:
-   0:	df 48 8b             	fisttps -0x75(%rax)
-   3:	44 24 58             	rex.R and $0x58,%al
-   6:	42 0f b6 04 38       	movzbl (%rax,%r15,1),%eax
-   b:	84 c0                	test   %al,%al
-   d:	0f 85 74 11 00 00    	jne    0x1187
-  13:	8b 94 24 20 04 00 00 	mov    0x420(%rsp),%edx
-  1a:	4b 8d 1c ae          	lea    (%r14,%r13,4),%rbx
-  1e:	48 89 d8             	mov    %rbx,%rax
-  21:	48 c1 e8 03          	shr    $0x3,%rax
-* 25:	42 0f b6 04 38       	movzbl (%rax,%r15,1),%eax <-- trapping instruction
-  2a:	84 c0                	test   %al,%al
-  2c:	0f 85 7d 11 00 00    	jne    0x11af
-  32:	4c 89 74 24 28       	mov    %r14,0x28(%rsp)
-  37:	48                   	rex.W
-  38:	89                   	.byte 0x89
-  39:	54                   	push   %rsp
-  3a:	24                   	.byte 0x24
+Code disassembly (best guess):
+   0:	8b2c4ecc 	add	x12, x22, w12, uxtw #3
+   4:	f85f818c 	ldur	x12, [x12, #-8]
+   8:	1200056b 	and	w11, w11, #0x3
+   c:	8b2b52ab 	add	x11, x21, w11, uxtw #4
+* 10:	f82b6988 	str	x8, [x12, x11] <-- trapping instruction
 
 
 ---
