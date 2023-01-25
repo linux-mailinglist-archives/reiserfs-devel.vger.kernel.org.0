@@ -2,160 +2,78 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 816A666BB97
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 16 Jan 2023 11:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3452767ADA4
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 25 Jan 2023 10:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjAPKV7 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 16 Jan 2023 05:21:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
+        id S235168AbjAYJTL (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 25 Jan 2023 04:19:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjAPKV6 (ORCPT
+        with ESMTP id S235221AbjAYJTI (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:21:58 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B691716B
-        for <reiserfs-devel@vger.kernel.org>; Mon, 16 Jan 2023 02:21:57 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id i7-20020a056e021b0700b003033a763270so20849802ilv.19
-        for <reiserfs-devel@vger.kernel.org>; Mon, 16 Jan 2023 02:21:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v8Ioxv32rX4tCvh+LRON4bGSQTYnk1jYyZqAqdJVnbY=;
-        b=JhOwVz24NCCpoZPm9uHveUp1fXOFrjh+nOt+jtCelihMSSrZApdUXEgQw7Z9ueBrpR
-         ZRckiu0u3SEF7+FowO2EnsBbTvBPxjVYOiLnWeIjUatQmu5Xth2BXj3ST598/CmyEVzL
-         0MMAWbE4UsRPXIRmXFwAU9oS7wDPHwqaimNzUbNsZ48H2IIHyoawgdZVtxwWekzdsn0b
-         89Vm7GNJ1ZLzz79CnO72HQrSHT+sr6TrIpO9gUrTH8S0mEA9uPIcDyw7TjVzkunH+9kj
-         emzMJwdx9zf4nvN+hchmnyXu37ClhXT+U+no3yYI/k6e3zoWX+BA4zWMn1R2qsDAmEKu
-         Eovg==
-X-Gm-Message-State: AFqh2krKOrH2160yZZbgpGjmwjQGpIQbMSYIu0sBwaoOLnEo39WivpL+
-        z7TPTdV3FBA0/Qb9/c+r73c4y1BV3quEHx9Nh5pKD0r7yRVZ
-X-Google-Smtp-Source: AMrXdXttgwQ2RhJoMOaZ4FwtGIczcVOvNshBCXrysMDIkTr/KLOwnwd/I+KMNSTHxvkjg2d+PTDyMZYlrjgsJx9nWnKXdXRzAXuE
+        Wed, 25 Jan 2023 04:19:08 -0500
+X-Greylist: delayed 459 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 25 Jan 2023 01:19:05 PST
+Received: from mail.gluegivebiz.com (mail.gluegivebiz.com [94.177.230.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED4349429
+        for <reiserfs-devel@vger.kernel.org>; Wed, 25 Jan 2023 01:19:05 -0800 (PST)
+Received: by mail.gluegivebiz.com (Postfix, from userid 1001)
+        id 9CFEE82C3C; Wed, 25 Jan 2023 09:11:17 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gluegivebiz.com;
+        s=mail; t=1674637882;
+        bh=5n0LayKpRHsZMclE7BidCW6LDGRdzRVHcrHQCq8kNN4=;
+        h=Date:From:To:Subject:From;
+        b=K3ZTonghlVAwluU3nUOVQ8y+D2xAGX4MzHrr91lYkpQQLoQzq35vTP2UI+5rJ1nc1
+         JhFhYjEtARlM16pzJ/MzWxtZWgz85f5GJ1w56LjxMrbL85OjPvUzR45OGHqG8T+iXe
+         9spy7vyPBowvtSBcSz0NMkKmLLoeyDvtXTnKDAsXXz4vN/qG44Tqc5YwsPk35cg7Ij
+         NoVUiQP+2YwHM6o0cuB+BgNYAM0v5ru8SQYGr4Epdi6+Vi2WKP+gYazpb/olW0YFj3
+         y+KRrGBmhUAkaFEHS6y3oG39OdFr5mSyJ99/vAyIS38YKt2IMHso9p+oqOngw6M1Ia
+         ugdUS4XzcdaUQ==
+Received: by mail.gluegivebiz.com for <reiserfs-devel@vger.kernel.org>; Wed, 25 Jan 2023 09:11:10 GMT
+Message-ID: <20230125074500-0.1.y.2bfn.0.8m6q0a12hb@gluegivebiz.com>
+Date:   Wed, 25 Jan 2023 09:11:10 GMT
+From:   =?UTF-8?Q? "Vil=C3=A9m_Du=C5=A1ek" ?= 
+        <vilem.dusek@gluegivebiz.com>
+To:     <reiserfs-devel@vger.kernel.org>
+Subject: =?UTF-8?Q?Tepeln=C3=A9_obr=C3=A1b=C4=9Bn=C3=AD_=E2=80=93_objedn=C3=A1vka?=
+X-Mailer: mail.gluegivebiz.com
 MIME-Version: 1.0
-X-Received: by 2002:a92:6a04:0:b0:30e:ef8d:de57 with SMTP id
- f4-20020a926a04000000b0030eef8dde57mr594204ilc.153.1673864517088; Mon, 16 Jan
- 2023 02:21:57 -0800 (PST)
-Date:   Mon, 16 Jan 2023 02:21:57 -0800
-In-Reply-To: <000000000000520d3405f075a026@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f17bea05f25ef32b@google.com>
-Subject: Re: [syzbot] [reiserfs?] divide error in do_journal_end (3)
-From:   syzbot <syzbot+74b838cfa47fc9554471@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, bvanassche@acm.org, jack@suse.cz,
-        jlayton@kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, song@kernel.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org,
-        yi.zhang@huawei.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Dobr=C3=BD den,
 
-HEAD commit:    5dc4c995db9e Linux 6.2-rc4
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=17104a36480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2d1e01fb80d3df97
-dashboard link: https://syzkaller.appspot.com/bug?extid=74b838cfa47fc9554471
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10169b86480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b27089480000
+m=C3=A1te z=C3=A1jem o vyu=C5=BEit=C3=AD velmi kvalitn=C3=AD slu=C5=BEby =
+tepeln=C3=A9ho obr=C3=A1b=C4=9Bn=C3=AD kov=C5=AF?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e52acf94631e/disk-5dc4c995.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/8ead5c940574/vmlinux-5dc4c995.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/f6b43b71bf31/bzImage-5dc4c995.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/964c239d9caf/mount_0.gz
+M=C5=AF=C5=BEeme v=C3=A1m nab=C3=ADdnout velmi v=C3=BDhodn=C3=A9 podm=C3=AD=
+nky spolupr=C3=A1ce, technick=C3=A9 poradenstv=C3=AD, s=C3=A9riovou v=C3=BD=
+robu a testov=C3=A1n=C3=AD prototyp=C5=AF.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+74b838cfa47fc9554471@syzkaller.appspotmail.com
+Specializujeme se na tradi=C4=8Dn=C3=AD a vakuov=C3=A9 technologie: cemen=
+tov=C3=A1n=C3=AD, nitrocementov=C3=A1n=C3=AD, kalen=C3=AD v plynu, zu=C5=A1=
+lecht=C4=9Bn=C3=AD, =C5=BE=C3=ADh=C3=A1n=C3=AD, p=C3=A1jen=C3=AD, normali=
+za=C4=8Dn=C3=AD =C5=BE=C3=ADh=C3=A1n=C3=AD (s p=C5=99ekrystalizac=C3=AD).
 
-divide error: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 5068 Comm: syz-executor317 Not tainted 6.2.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:do_journal_end+0x1822/0x4a30 fs/reiserfs/journal.c:4091
-Code: 04 28 84 c0 0f 85 f7 2b 00 00 4a 8d 5c 33 01 4c 89 e0 48 c1 e8 03 42 8a 04 28 84 c0 0f 85 ff 2b 00 00 41 8b 0f 48 89 d8 31 d2 <48> f7 f1 48 89 d3 48 03 5c 24 20 48 8b 84 24 d8 00 00 00 42 80 3c
-RSP: 0018:ffffc90003b7f820 EFLAGS: 00010246
-RAX: 0000000000000003 RBX: 0000000000000003 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888029c4f000
-RBP: ffffc90003b7fa90 R08: dffffc0000000000 R09: ffff888029c4f000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff88807a8e9017
-R13: dffffc0000000000 R14: 0000000000000002 R15: ffff88807a8e9014
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000005fdeb8 CR3: 0000000026e6b000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- reiserfs_sync_fs+0xbb/0x130 fs/reiserfs/super.c:78
- sync_filesystem+0xe8/0x220 fs/sync.c:56
- generic_shutdown_super+0x6b/0x310 fs/super.c:474
- kill_block_super+0x79/0xd0 fs/super.c:1386
- deactivate_locked_super+0xa7/0xf0 fs/super.c:332
- cleanup_mnt+0x494/0x520 fs/namespace.c:1291
- task_work_run+0x243/0x300 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0x644/0x2150 kernel/exit.c:867
- do_group_exit+0x1fd/0x2b0 kernel/exit.c:1012
- __do_sys_exit_group kernel/exit.c:1023 [inline]
- __se_sys_exit_group kernel/exit.c:1021 [inline]
- __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:1021
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f24fcf1bad9
-Code: Unable to access opcode bytes at 0x7f24fcf1baaf.
-RSP: 002b:00007ffda2e53128 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007f24fcf91350 RCX: 00007f24fcf1bad9
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000001
-RBP: 0000000000000001 R08: ffffffffffffffc0 R09: 00007f24fcf8be40
-R10: 000000000001ff01 R11: 0000000000000246 R12: 00007f24fcf91350
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:do_journal_end+0x1822/0x4a30 fs/reiserfs/journal.c:4091
-Code: 04 28 84 c0 0f 85 f7 2b 00 00 4a 8d 5c 33 01 4c 89 e0 48 c1 e8 03 42 8a 04 28 84 c0 0f 85 ff 2b 00 00 41 8b 0f 48 89 d8 31 d2 <48> f7 f1 48 89 d3 48 03 5c 24 20 48 8b 84 24 d8 00 00 00 42 80 3c
-RSP: 0018:ffffc90003b7f820 EFLAGS: 00010246
-RAX: 0000000000000003 RBX: 0000000000000003 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888029c4f000
-RBP: ffffc90003b7fa90 R08: dffffc0000000000 R09: ffff888029c4f000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff88807a8e9017
-R13: dffffc0000000000 R14: 0000000000000002 R15: ffff88807a8e9014
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000056252d1db088 CR3: 000000001da35000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	04 28                	add    $0x28,%al
-   2:	84 c0                	test   %al,%al
-   4:	0f 85 f7 2b 00 00    	jne    0x2c01
-   a:	4a 8d 5c 33 01       	lea    0x1(%rbx,%r14,1),%rbx
-   f:	4c 89 e0             	mov    %r12,%rax
-  12:	48 c1 e8 03          	shr    $0x3,%rax
-  16:	42 8a 04 28          	mov    (%rax,%r13,1),%al
-  1a:	84 c0                	test   %al,%al
-  1c:	0f 85 ff 2b 00 00    	jne    0x2c21
-  22:	41 8b 0f             	mov    (%r15),%ecx
-  25:	48 89 d8             	mov    %rbx,%rax
-  28:	31 d2                	xor    %edx,%edx
-* 2a:	48 f7 f1             	div    %rcx <-- trapping instruction
-  2d:	48 89 d3             	mov    %rdx,%rbx
-  30:	48 03 5c 24 20       	add    0x20(%rsp),%rbx
-  35:	48 8b 84 24 d8 00 00 	mov    0xd8(%rsp),%rax
-  3c:	00
-  3d:	42                   	rex.X
-  3e:	80                   	.byte 0x80
-  3f:	3c                   	.byte 0x3c
+M=C3=A1me k dispozici rozs=C3=A1hl=C3=A9 strojn=C3=AD vybaven=C3=AD, velk=
+=C3=BD t=C3=BDm odborn=C3=ADk=C5=AF, a proto jsme schopni se p=C5=99izp=C5=
+=AFsobit va=C5=A1im po=C5=BEadavk=C5=AFm.
 
+Pracujeme v souladu s na=C5=A1imi certifik=C3=A1ty v rozsahu norem platn=C3=
+=BDch v oblasti automobilov=C3=A9ho pr=C5=AFmyslu (IATF 16949; CQI 9) a t=
+ak=C3=A9 letectv=C3=AD (akreditace NADCAP).
+
+Pokud m=C3=A1te po=C5=BEadavky v t=C3=A9to oblasti, r=C3=A1d v=C3=A1m p=C5=
+=99edstav=C3=ADm na=C5=A1e mo=C5=BEnosti.
+
+Mohl bych v=C3=A1m zatelefonovat?
+
+
+Vil=C3=A9m Du=C5=A1ek
