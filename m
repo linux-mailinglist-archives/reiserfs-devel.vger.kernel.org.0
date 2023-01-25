@@ -2,60 +2,56 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB5567B138
+	by mail.lfdr.de (Postfix) with ESMTP id 9011A67B139
 	for <lists+reiserfs-devel@lfdr.de>; Wed, 25 Jan 2023 12:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235130AbjAYL36 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        id S235373AbjAYL36 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
         Wed, 25 Jan 2023 06:29:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49370 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235398AbjAYL31 (ORCPT
+        with ESMTP id S235762AbjAYL3w (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 25 Jan 2023 06:29:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7D42CFF6;
-        Wed, 25 Jan 2023 03:29:26 -0800 (PST)
+        Wed, 25 Jan 2023 06:29:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E313022A33;
+        Wed, 25 Jan 2023 03:29:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 072FE614B8;
-        Wed, 25 Jan 2023 11:29:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AAC2C433EF;
-        Wed, 25 Jan 2023 11:29:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E8BE614C0;
+        Wed, 25 Jan 2023 11:29:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B6C2C4339E;
+        Wed, 25 Jan 2023 11:29:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674646165;
-        bh=iVepgeT7psmWqr/2L8LpCH4RngFmQJ2i/zddXU3Ybms=;
-        h=From:Subject:Date:To:Cc:From;
-        b=aa0adWk8JIHYbDKjUCphZ1mzhrcTx2e5m+zTBZn9obQWuMBhYiKhvxE/PfkC0DrMo
-         n+Ti2ja6VfjxgUnPOpsi1+/EmtHqmyra/AonZ5w9wjQlfzKpsP+4TOI050CJaL0N1y
-         bKz7YhLgOmOvqok9PjXvsoVl3tKqVYUbksPXEapn+w0KefS9YB16xUcTypEO9pAwIN
-         evQ3wG1KZlyA608u+IFmR08EX1UGoUJze8vveYRXvWqAxEv1eQ5rc5zD6Fc879yXFq
-         13JMMXTEhD0lFVC6szsgPPomAG4klotXLnPAg8gEVmP0MH1tcrAZMyEp+bDrceHz66
-         q2f2/uwZQY7jw==
+        s=k20201202; t=1674646189;
+        bh=AoICruiO1fmkjMmVCbtvYwyBOmjeAS6gY4YyaNR8wz0=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=dF4D8bF47RsyStOaLuvZJIgd6MZaGTgdo5DoiqntT3BlbSbqElPDUPL5cWz6gZT+U
+         HyHGVef2rEGo8gGG41m3i8nc8sJqNS1wc6q1Lit5U2iAF2zpdVj46Chd53+jEKiIY0
+         9lr+Wg8ErLBAt3M06dVdXmK9gzWxM2M+TZQm2EwHB/fOxiDHw94yHCfgcts9Vcaw9u
+         8/7rUzcCg+dUvKBRCmRgkjnk5CS6OJW9K8GE/WnIFGGKIGQvRW0ETscc2SuebUaQxS
+         pLgCTwJPYfY1UzxMPEr2vsBXVWfoyMKjmXo3mTGa1B4uY5se67DKY4pxce4LdYy/DY
+         zTwvrANTf6PdA==
 From:   Christian Brauner <brauner@kernel.org>
-Subject: [PATCH 00/12] acl: remove remaining posix acl handlers
-Date:   Wed, 25 Jan 2023 12:28:45 +0100
-Message-Id: <20230125-fs-acl-remove-generic-xattr-handlers-v1-0-6cf155b492b6@kernel.org>
+Date:   Wed, 25 Jan 2023 12:28:56 +0100
+Subject: [PATCH 11/12] reiserfs: drop posix acl handlers
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAG4S0WMC/x2O0QqDMBAEf0XuuSeaVgj9ldKHmGw0YGO5UxHEf
- 2/s47DMsAcpJEHpWR0k2JKmORdobxX50eUBnEJhMo25N63pOCo7P7HgM2/gAbn4nne3LMJFCBN
- E+eEjgu06G6ylkuqdgntx2Y9XLGodV0VdQtf6FcS0/0+83uf5A07KJIqUAAAA
+Message-Id: <20230125-fs-acl-remove-generic-xattr-handlers-v1-11-6cf155b492b6@kernel.org>
+References: <20230125-fs-acl-remove-generic-xattr-handlers-v1-0-6cf155b492b6@kernel.org>
+In-Reply-To: <20230125-fs-acl-remove-generic-xattr-handlers-v1-0-6cf155b492b6@kernel.org>
 To:     linux-fsdevel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Seth Forshee <sforshee@kernel.org>,
         "Christian Brauner (Microsoft)" <brauner@kernel.org>,
-        linux-erofs@lists.ozlabs.org, Jan Kara <jack@suse.com>,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-mtd@lists.infradead.org, ocfs2-devel@oss.oracle.com,
         reiserfs-devel@vger.kernel.org
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3964; i=brauner@kernel.org;
- h=from:subject:message-id; bh=iVepgeT7psmWqr/2L8LpCH4RngFmQJ2i/zddXU3Ybms=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSRfFJq42SCo7mej0syzO7/VS69Ps21sFO48f9znuHr/fZEX
- p52lO0pZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACYSeIbhn+X/3zmPrKtsko21fh3Smv
- 5k/WvP2Uo6Sw92TuXesanV+BYjw7wCO68bLxsFprMsyP59RaXIcbL7hMBFnntnmxRL2pSJsAIA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3133; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=AoICruiO1fmkjMmVCbtvYwyBOmjeAS6gY4YyaNR8wz0=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSRfFJpknfH6FsONWq05LiZuKbdZ9TPV65bNe3A/IVT5Os+p
+ 7as5OkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACZiYsfIsGn6vXfqejUrQnScqv9pcG
+ 5wCJi1aH7rG5PEDdNT1908yM3I8OF1kaT0a2b5s+t/Xub0LG5he8il8C59B5fubMnf06YU8AAA
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -67,97 +63,98 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hey everyone,
+Last cycle we introduced a new posix acl api. Filesystems now only need
+to implement the inode operations for posix acls. The generic xattr
+handlers aren't used anymore by the vfs and will be completely removed.
+Keeping the handler around is confusing and gives the false impression
+that the xattr infrastructure of the vfs is used to interact with posix
+acls when it really isn't anymore.
 
-after we finished the introduction of the new posix acl api last cycle
-we still left the generic POSIX ACL xattr handler around for two
-reasons. First, because a few filesystems relied on the ->list() method
-of the generic POSIX ACL xattr handlers in their ->listxattr() inode
-operation. Second, during inode initalization in inode_init_always() the
-registered xattr handlers in sb->s_xattr are used to raise IOP_XATTR in
-inode->i_opflags.
+For this to work we simply rework the ->listxattr() inode operation to
+not rely on the generix posix acl handlers anymore.
 
-With the removal of the legacy POSIX ACL handlers it is at least
-possible for a filesystem to only implement POSIX ACLs but no other
-xattrs. If that were to happen we would miss to raise IOP_XATTR because
-sb->s_xattr would be NULL.
-
-Fix these things and then get rid of the misleading and effectively
-already unused generic POSIX ACL handlers.
-
-For most filesystems it is a trivial removal of the generic POSIX ACL
-handlers. Only for erofs, ext2, ext4, f2fs, jffs2, reiserfs, oc2fs the
-handler is used but rather easy to fix.
-
-All filesystems with reasonable integration into xfstests have been
-tested with:
-
-        ./check -g acl,attr,cap,idmapped,io_uring,perms,unlink
-
-All tests pass without regression on xfstests for-next branch.
-
-Since erofs doesn't have integration into xfstests yet afaict I have
-tested it with the testuite available in erofs-utils. They also all pass
-without any regressions.
-
-This branch depends on [1] which hopefully should be merged soon and can
-be pulled from [2] which already includes [1] so it's easy to test and
-compile.
-
-With this all remnants of the old POSIX ACL xattr handling will be gone.
-
-Thanks!
-Christian
-
-[1]: https://lore.kernel.org/lkml/20230125100040.374709-1-brauner@kernel.org
-[2]: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git tags/fs.acl.remove.generic.xattr.handlers.v1
-
+Cc: <reiserfs-devel@vger.kernel.org>
 Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
 ---
-Christian Brauner (12):
-      xattr: simplify listxattr helpers
-      xattr, posix acl: add listxattr helpers
-      xattr: remove unused argument
-      fs: drop unused posix acl handlers
-      erofs: drop posix acl handlers
-      ext2: drop posix acl handlers
-      ext4: drop posix acl handlers
-      f2fs: drop posix acl handlers
-      jffs2: drop posix acl handlers
-      ocfs2: drop posix acl handlers
-      reiserfs: drop posix acl handlers
-      acl: remove posix acl handlers
+ fs/reiserfs/xattr.c | 38 +++++++++++++++++---------------------
+ 1 file changed, 17 insertions(+), 21 deletions(-)
 
- fs/9p/xattr.c                   |   4 --
- fs/btrfs/xattr.c                |   4 --
- fs/ceph/xattr.c                 |   4 --
- fs/cifs/xattr.c                 |   4 --
- fs/ecryptfs/inode.c             |   4 --
- fs/erofs/xattr.c                |  49 ++++++++++++----
- fs/erofs/xattr.h                |  21 -------
- fs/ext2/xattr.c                 |  60 +++++++++++--------
- fs/ext4/xattr.c                 |  71 +++++++++++++----------
- fs/f2fs/xattr.c                 |  63 ++++++++++++--------
- fs/gfs2/xattr.c                 |   2 -
- fs/jffs2/xattr.c                |  42 +++++++-------
- fs/jfs/xattr.c                  |   4 --
- fs/nfs/nfs3_fs.h                |   1 -
- fs/nfs/nfs3acl.c                |   6 --
- fs/nfs/nfs3super.c              |   3 -
- fs/nfsd/nfs4xdr.c               |   3 +-
- fs/ntfs3/xattr.c                |   4 --
- fs/ocfs2/xattr.c                |  41 +++++++------
- fs/orangefs/xattr.c             |   2 -
- fs/overlayfs/super.c            |   8 ---
- fs/posix_acl.c                  |  20 -------
- fs/reiserfs/xattr.c             |  38 ++++++------
- fs/xattr.c                      | 124 ++++++++++++++++++++--------------------
- fs/xfs/xfs_xattr.c              |   4 --
- include/linux/posix_acl_xattr.h |   6 +-
- include/linux/xattr.h           |   8 ++-
- mm/shmem.c                      |   4 --
- 28 files changed, 290 insertions(+), 314 deletions(-)
----
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-change-id: 20230125-fs-acl-remove-generic-xattr-handlers-4cfed8558d88
+diff --git a/fs/reiserfs/xattr.c b/fs/reiserfs/xattr.c
+index 8b2d52443f41..cc6f42128031 100644
+--- a/fs/reiserfs/xattr.c
++++ b/fs/reiserfs/xattr.c
+@@ -52,6 +52,7 @@
+ #include <linux/quotaops.h>
+ #include <linux/security.h>
+ #include <linux/posix_acl_xattr.h>
++#include <linux/xattr.h>
+ 
+ #define PRIVROOT_NAME ".reiserfs_priv"
+ #define XAROOT_NAME   "xattrs"
+@@ -771,22 +772,26 @@ reiserfs_xattr_get(struct inode *inode, const char *name, void *buffer,
+ 			(handler) = *(handlers)++)
+ 
+ /* This is the implementation for the xattr plugin infrastructure */
+-static inline const struct xattr_handler *
+-find_xattr_handler_prefix(const struct xattr_handler **handlers,
+-			   const char *name)
++static inline bool reiserfs_xattr_list(const struct xattr_handler **handlers,
++				       const char *name, struct dentry *dentry)
+ {
+-	const struct xattr_handler *xah;
++	const struct xattr_handler *xah = NULL;
+ 
+-	if (!handlers)
+-		return NULL;
++	if (handlers) {
++		for_each_xattr_handler(handlers, xah) {
++			const char *prefix = xattr_prefix(xah);
+ 
+-	for_each_xattr_handler(handlers, xah) {
+-		const char *prefix = xattr_prefix(xah);
+-		if (strncmp(prefix, name, strlen(prefix)) == 0)
+-			break;
++			if (strncmp(prefix, name, strlen(prefix)))
++				continue;
++
++			if (!xattr_dentry_list(xah, dentry))
++				return false;
++
++			return true;
++		}
+ 	}
+ 
+-	return xah;
++	return (posix_acl_type(name) >= 0) && posix_acl_dentry_list(dentry);
+ }
+ 
+ struct listxattr_buf {
+@@ -807,12 +812,7 @@ static bool listxattr_filler(struct dir_context *ctx, const char *name,
+ 
+ 	if (name[0] != '.' ||
+ 	    (namelen != 1 && (name[1] != '.' || namelen != 2))) {
+-		const struct xattr_handler *handler;
+-
+-		handler = find_xattr_handler_prefix(b->dentry->d_sb->s_xattr,
+-						    name);
+-		if (!handler /* Unsupported xattr name */ ||
+-		    (handler->list && !handler->list(b->dentry)))
++		if (!reiserfs_xattr_list(b->dentry->d_sb->s_xattr, name, b->dentry))
+ 			return true;
+ 		size = namelen + 1;
+ 		if (b->buf) {
+@@ -910,10 +910,6 @@ const struct xattr_handler *reiserfs_xattr_handlers[] = {
+ #endif
+ #ifdef CONFIG_REISERFS_FS_SECURITY
+ 	&reiserfs_xattr_security_handler,
+-#endif
+-#ifdef CONFIG_REISERFS_FS_POSIX_ACL
+-	&posix_acl_access_xattr_handler,
+-	&posix_acl_default_xattr_handler,
+ #endif
+ 	NULL
+ };
+
+-- 
+2.34.1
 
