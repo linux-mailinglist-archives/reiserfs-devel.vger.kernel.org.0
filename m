@@ -2,70 +2,102 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B46E686743
-	for <lists+reiserfs-devel@lfdr.de>; Wed,  1 Feb 2023 14:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F7E687929
+	for <lists+reiserfs-devel@lfdr.de>; Thu,  2 Feb 2023 10:42:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbjBANnF (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 1 Feb 2023 08:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
+        id S230003AbjBBJmI (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 2 Feb 2023 04:42:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbjBANnE (ORCPT
+        with ESMTP id S230218AbjBBJmH (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 1 Feb 2023 08:43:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50357D88;
-        Wed,  1 Feb 2023 05:43:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 281ADB82188;
-        Wed,  1 Feb 2023 13:43:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5161DC433EF;
-        Wed,  1 Feb 2023 13:42:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675258979;
-        bh=236qP/C90Z1wdMee922mWauOTL0WF+oXGDgnJ96vQFg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lMMF4aTsthtPu0qSDZz5BvWT3Pmxnz+NILt33rgl1+vXpJfzqEv41DYzKsqYGtoGo
-         RfbSM457WNfz2Hj+9ntpXQApKcCjAJVksXRu34iUU27WSsyzFHxu28zKksBwqEgFjq
-         bEmZWftDL1skahY8fxJIf/X2bYWhUr5/ruKGAoT6wF16to0EWnPfOxShNm4aNuTyFH
-         TllIEyGeIvTdR60qHVy/Feh2ApS62j8QtGi5QRujJzXjmj7KFrOB8C3HaUwsJdZUwf
-         P83wP7ZfiBKmcU8JDkWwvICV8r+9vwyn/20bGSvqbW6MrkafLuuV0989PpLRqSWgss
-         U+lNph1qFbXHw==
-Date:   Wed, 1 Feb 2023 14:42:54 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Seth Forshee <sforshee@kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-        linux-mtd@lists.infradead.org, reiserfs-devel@vger.kernel.org,
-        linux-unionfs@vger.kernel.org
-Subject: Re: [PATCH v3 00/10] acl: drop posix acl handlers from xattr handlers
-Message-ID: <20230201134254.fai2vc7gtzj6iikx@wittgenstein>
-References: <20230125-fs-acl-remove-generic-xattr-handlers-v3-0-f760cc58967d@kernel.org>
- <20230201133020.GA31902@lst.de>
+        Thu, 2 Feb 2023 04:42:07 -0500
+X-Greylist: delayed 720 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 01:41:59 PST
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DD5B84FAA;
+        Thu,  2 Feb 2023 01:41:58 -0800 (PST)
+Received: from [172.24.5.120] (unknown [27.16.215.248])
+        by APP-03 (Coremail) with SMTP id rQCowAAnLh4ggdtjMB0dAw--.22567S3;
+        Thu, 02 Feb 2023 17:23:44 +0800 (CST)
+Message-ID: <3e450ff5-f084-4a33-bff7-4ef1061d1f30@iscas.ac.cn>
+Date:   Thu, 2 Feb 2023 17:27:09 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230201133020.GA31902@lst.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     reiserfs-devel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+From:   lujiongjia <lujiongjia@iscas.ac.cn>
+Subject: reiserfsprogs: fail to build from sources on riscv64gc machine
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: rQCowAAnLh4ggdtjMB0dAw--.22567S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFykCr18Cr1Dtw1DCrWxJFb_yoW8XrWrp3
+        yfJwsxtr1ktF1fG3yxG34xWFn5A3ZFk345Xr48t34DJr98ZFZ2vF97KrWa9FW8Cr1jyw4Y
+        kFZa9w1jkr1vqaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkab7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07beJ5wUUUUU=
+X-Originating-IP: [27.16.215.248]
+X-CM-SenderInfo: 5oxmx05qjmxt46lvutnvoduhdfq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 02:30:20PM +0100, Christoph Hellwig wrote:
-> This version looks good to me, but I'd really prefer if a reiserfs
-> insider could look over the reiserfs patches.
+The config.guess file contained in source tarball is too old that it 
+cannot guess build type on riscv64. Please release new source code 
+tarball with the latest autotools.
 
-I consider this material for v6.4 even with an -rc8 for v6.3. So there's
-time but we shouldn't block it on reiserfs. Especially, since it's
-marked deprecated.
+Full configure error output:
 
-Fwiw, I've tested reiserfs with xfstests on a kernel with and without
-this series applied and there's no regressions. But it's overall pretty
-buggy at least according to xfstests. Which is expected, I guess.
+> checking build system type... ./config.guess: unable to guess system type
+> 
+> This script, last modified 2014-11-04, has failed to recognize
+> the operating system you are using. It is advised that you
+> download the most up to date version of the config scripts from
+> 
+>   http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
+> and
+>   http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD
+> 
+> If the version you run (./config.guess) is already up to date, please
+> send the following data and any information you think might be
+> pertinent to <config-patches@gnu.org> in order to provide the needed
+> information to handle your system.
+> 
+> config.guess timestamp = 2014-11-04
+> 
+> uname -m = riscv64
+> uname -r = 6.1.7-arch1-1
+> uname -s = Linux
+> uname -v = #1 SMP PREEMPT_DYNAMIC Wed, 18 Jan 2023 19:54:38 +0000
+> 
+> /usr/bin/uname -p = unknown
+> /bin/uname -X     = 
+> 
+> hostinfo               = 
+> /bin/universe          = 
+> /usr/bin/arch -k       = 
+> /bin/arch              = 
+> /usr/bin/oslevel       = 
+> /usr/convex/getsysinfo = 
+> 
+> UNAME_MACHINE = riscv64
+> UNAME_RELEASE = 6.1.7-arch1-1
+> UNAME_SYSTEM  = Linux
+> UNAME_VERSION = #1 SMP PREEMPT_DYNAMIC Wed, 18 Jan 2023 19:54:38 +0000
+> configure: error: cannot guess build type; you must specify one
+
