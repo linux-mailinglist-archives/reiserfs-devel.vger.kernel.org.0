@@ -2,102 +2,152 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F7E687929
-	for <lists+reiserfs-devel@lfdr.de>; Thu,  2 Feb 2023 10:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53378688466
+	for <lists+reiserfs-devel@lfdr.de>; Thu,  2 Feb 2023 17:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjBBJmI (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 2 Feb 2023 04:42:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50552 "EHLO
+        id S232307AbjBBQ1n (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 2 Feb 2023 11:27:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbjBBJmH (ORCPT
+        with ESMTP id S230372AbjBBQ1n (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:42:07 -0500
-X-Greylist: delayed 720 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 01:41:59 PST
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DD5B84FAA;
-        Thu,  2 Feb 2023 01:41:58 -0800 (PST)
-Received: from [172.24.5.120] (unknown [27.16.215.248])
-        by APP-03 (Coremail) with SMTP id rQCowAAnLh4ggdtjMB0dAw--.22567S3;
-        Thu, 02 Feb 2023 17:23:44 +0800 (CST)
-Message-ID: <3e450ff5-f084-4a33-bff7-4ef1061d1f30@iscas.ac.cn>
-Date:   Thu, 2 Feb 2023 17:27:09 +0800
+        Thu, 2 Feb 2023 11:27:43 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6818866F8A
+        for <reiserfs-devel@vger.kernel.org>; Thu,  2 Feb 2023 08:27:40 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id m2-20020a056e021c2200b003138e921287so778508ilh.22
+        for <reiserfs-devel@vger.kernel.org>; Thu, 02 Feb 2023 08:27:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P/Fye7YGxkexdHFRmtjVTI5F+CBnNcSNRcKyzFayDxA=;
+        b=fiJRnJWNa52CKMZJtmv5AMUtVx8qO+mWhW9akSrajrVxOIb4v94vkwf0mL1r90NlHu
+         2AYQFeSXeWlTIU6rqOO7sEHSXI49Zy8vFojFiGp6ifLaC03PH5xpB3LIpjtXiSaoQA2t
+         CALQHp98mEJp7Ea9g0fyijnpQWf1XjMzgKU4gNmwJnP1Q8LZjQmgTDiBANRb2So1uixh
+         HgO9zTl6jjB/NPVLWoDGd8u7CbPR5oeqncJhRNW9Dfj2yFeJp3y3VdLlCzlfSrxMxCEV
+         K9jQyTFrcFXuaBX2XzZXdHd850XhcqmpaUoOAmig5vQ3O8l0zS7JQM5qbKaJxtg8w7+J
+         72zg==
+X-Gm-Message-State: AO0yUKVfqtut0UokcqqpN/2rK2Sy5pBTQ7V6mMKIx+ryCDIwkYv+cGkk
+        Gymlbgk8mp4EPTAuiXzO7ty4HjuEVoMwG7cKwBB1Oa3yhCiu
+X-Google-Smtp-Source: AK7set8QNCB7SLtxmJeYcyLmhCuin+LlMv7XQhE0Ti30t3fRboF29laG2odduXjGixWKgyND6iFR9gmbSrEesA6WNioHvN8UxPO1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     reiserfs-devel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-From:   lujiongjia <lujiongjia@iscas.ac.cn>
-Subject: reiserfsprogs: fail to build from sources on riscv64gc machine
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: rQCowAAnLh4ggdtjMB0dAw--.22567S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7AFykCr18Cr1Dtw1DCrWxJFb_yoW8XrWrp3
-        yfJwsxtr1ktF1fG3yxG34xWFn5A3ZFk345Xr48t34DJr98ZFZ2vF97KrWa9FW8Cr1jyw4Y
-        kFZa9w1jkr1vqaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkab7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07beJ5wUUUUU=
-X-Originating-IP: [27.16.215.248]
-X-CM-SenderInfo: 5oxmx05qjmxt46lvutnvoduhdfq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:dc13:0:b0:71a:b7de:6e1c with SMTP id
+ s19-20020a6bdc13000000b0071ab7de6e1cmr1472234ioc.87.1675355259498; Thu, 02
+ Feb 2023 08:27:39 -0800 (PST)
+Date:   Thu, 02 Feb 2023 08:27:39 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001d745f05f3ba0be7@google.com>
+Subject: [syzbot] [reiserfs?] panic: item_ops-NUM direntry_check_left: free
+ space NUM, entry_count NUM
+From:   syzbot <syzbot+3f480503caba4b4b47c5@syzkaller.appspotmail.com>
+To:     jack@suse.cz, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        yijiangshan@kylinos.cn
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-The config.guess file contained in source tarball is too old that it 
-cannot guess build type on riscv64. Please release new source code 
-tarball with the latest autotools.
+Hello,
 
-Full configure error output:
+syzbot found the following issue on:
 
-> checking build system type... ./config.guess: unable to guess system type
-> 
-> This script, last modified 2014-11-04, has failed to recognize
-> the operating system you are using. It is advised that you
-> download the most up to date version of the config scripts from
-> 
->   http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
-> and
->   http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD
-> 
-> If the version you run (./config.guess) is already up to date, please
-> send the following data and any information you think might be
-> pertinent to <config-patches@gnu.org> in order to provide the needed
-> information to handle your system.
-> 
-> config.guess timestamp = 2014-11-04
-> 
-> uname -m = riscv64
-> uname -r = 6.1.7-arch1-1
-> uname -s = Linux
-> uname -v = #1 SMP PREEMPT_DYNAMIC Wed, 18 Jan 2023 19:54:38 +0000
-> 
-> /usr/bin/uname -p = unknown
-> /bin/uname -X     = 
-> 
-> hostinfo               = 
-> /bin/universe          = 
-> /usr/bin/arch -k       = 
-> /bin/arch              = 
-> /usr/bin/oslevel       = 
-> /usr/convex/getsysinfo = 
-> 
-> UNAME_MACHINE = riscv64
-> UNAME_RELEASE = 6.1.7-arch1-1
-> UNAME_SYSTEM  = Linux
-> UNAME_VERSION = #1 SMP PREEMPT_DYNAMIC Wed, 18 Jan 2023 19:54:38 +0000
-> configure: error: cannot guess build type; you must specify one
+HEAD commit:    c96618275234 Fix up more non-executable files marked execu..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=10db6a69480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c8d5c2ee6c2bd4b8
+dashboard link: https://syzkaller.appspot.com/bug?extid=3f480503caba4b4b47c5
+compiler:       Debian clang version 13.0.1-6~deb11u1, GNU ld (GNU Binutils for Debian) 2.35.2
 
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/a829cd39e940/disk-c9661827.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/abbc86f52a98/vmlinux-c9661827.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ab0970dd4f84/bzImage-c9661827.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3f480503caba4b4b47c5@syzkaller.appspotmail.com
+
+REISERFS (device loop3): checking transaction log (loop3)
+REISERFS (device loop3): Using r5 hash to sort names
+REISERFS (device loop3): Created .reiserfs_priv - reserved for xattr storage.
+REISERFS warning: vs-16090 direntry_bytes_number: bytes number is asked for direntry
+REISERFS panic: item_ops-1 direntry_check_left: free space 16, entry_count 4
+------------[ cut here ]------------
+kernel BUG at fs/reiserfs/prints.c:390!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 8130 Comm: syz-executor.3 Not tainted 6.2.0-rc5-syzkaller-00205-gc96618275234 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+RIP: 0010:__reiserfs_panic+0xea/0x140 fs/reiserfs/prints.c:390
+Code: 48 c7 c2 00 51 03 8b 48 0f 44 d0 48 0f 44 d8 48 c7 c7 20 52 03 8b 48 89 de 4c 89 f1 49 c7 c0 40 76 16 92 31 c0 e8 96 3a 83 08 <0f> 0b e8 9f bb 5f ff 49 81 c7 a8 06 00 00 48 85 db 48 c7 c0 e0 50
+RSP: 0018:ffffc9000a3ee980 EFLAGS: 00010246
+RAX: 000000000000004c RBX: ffffffff8b03be20 RCX: ad4adfe0867ba200
+RDX: ffffc9000bd4b000 RSI: 0000000000008492 RDI: 0000000000008493
+RBP: ffffc9000a3eea68 R08: ffffffff816f2b8d R09: fffff5200147dce9
+R10: fffff5200147dce9 R11: 1ffff9200147dce8 R12: ffffffff8b03be40
+R13: ffffc9000a3ee9a0 R14: ffffffff8cc75f06 R15: 0000000000000000
+FS:  00007fc01024f700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b32823000 CR3: 000000007dd96000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ direntry_check_left+0x315/0x320 fs/reiserfs/item_ops.c:542
+ check_left+0x4e2/0x730 fs/reiserfs/fix_node.c:265
+ ip_check_balance fs/reiserfs/fix_node.c:1420 [inline]
+ check_balance fs/reiserfs/fix_node.c:2083 [inline]
+ fix_nodes+0x1d3d/0x8560 fs/reiserfs/fix_node.c:2635
+ reiserfs_paste_into_item+0x662/0x880 fs/reiserfs/stree.c:2130
+ reiserfs_get_block+0x223f/0x5180 fs/reiserfs/inode.c:1069
+ __block_write_begin_int+0x54c/0x1a80 fs/buffer.c:1991
+ reiserfs_write_begin+0x247/0x510 fs/reiserfs/inode.c:2775
+ generic_cont_expand_simple+0x151/0x250 fs/buffer.c:2347
+ reiserfs_setattr+0x642/0x1200 fs/reiserfs/inode.c:3305
+ notify_change+0xe50/0x1100 fs/attr.c:482
+ do_truncate+0x200/0x2f0 fs/open.c:65
+ do_sys_ftruncate+0x2b0/0x350 fs/open.c:193
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc00f48c0c9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fc01024f168 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
+RAX: ffffffffffffffda RBX: 00007fc00f5abf80 RCX: 00007fc00f48c0c9
+RDX: 0000000000000000 RSI: 0000000002007ffb RDI: 0000000000000006
+RBP: 00007fc00f4e7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd3617badf R14: 00007fc01024f300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__reiserfs_panic+0xea/0x140 fs/reiserfs/prints.c:390
+Code: 48 c7 c2 00 51 03 8b 48 0f 44 d0 48 0f 44 d8 48 c7 c7 20 52 03 8b 48 89 de 4c 89 f1 49 c7 c0 40 76 16 92 31 c0 e8 96 3a 83 08 <0f> 0b e8 9f bb 5f ff 49 81 c7 a8 06 00 00 48 85 db 48 c7 c0 e0 50
+RSP: 0018:ffffc9000a3ee980 EFLAGS: 00010246
+RAX: 000000000000004c RBX: ffffffff8b03be20 RCX: ad4adfe0867ba200
+RDX: ffffc9000bd4b000 RSI: 0000000000008492 RDI: 0000000000008493
+RBP: ffffc9000a3eea68 R08: ffffffff816f2b8d R09: fffff5200147dce9
+R10: fffff5200147dce9 R11: 1ffff9200147dce8 R12: ffffffff8b03be40
+R13: ffffc9000a3ee9a0 R14: ffffffff8cc75f06 R15: 0000000000000000
+FS:  00007fc01024f700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f8fb71de000 CR3: 000000007dd96000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
