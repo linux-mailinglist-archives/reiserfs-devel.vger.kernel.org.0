@@ -2,98 +2,114 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531EF688AC8
-	for <lists+reiserfs-devel@lfdr.de>; Fri,  3 Feb 2023 00:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F18E68F0E3
+	for <lists+reiserfs-devel@lfdr.de>; Wed,  8 Feb 2023 15:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjBBX1o (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 2 Feb 2023 18:27:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
+        id S231490AbjBHOd7 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 8 Feb 2023 09:33:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbjBBX1n (ORCPT
+        with ESMTP id S231405AbjBHOd6 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 2 Feb 2023 18:27:43 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BB584196
-        for <reiserfs-devel@vger.kernel.org>; Thu,  2 Feb 2023 15:27:01 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id me3so10657946ejb.7
-        for <reiserfs-devel@vger.kernel.org>; Thu, 02 Feb 2023 15:27:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=heWb1xMc0kW7nJACmZqD5FPkmEnTyUHQDiwcYuLjy4JwhpOrWLmFRkvJD6HKzdrF5h
-         yG3m1TV0lCIOO8tCtXK+lWlgJiXua4IR+JbnMv8CtGvkDvpK3+I0UQBwD5CXCWbjDA+V
-         oStuz8v0zUoiXfUNCsV04Yr1zxxCaqvzA7+BKEzrwNhDC5oGyfmZuZnMyktAR9XggEi6
-         RQUyVsjyC0UpQzNKk/SbCoQ81x8W/FNj0UnHRLjcviES5qtECep+1kpSm+6WedRp3fFH
-         EXGNdN6OnR/ZvLM6mEjhToXBSihr1o8Zg00aoXjIbdv+mYXP3jK8EXnSdD8cFg7srjFG
-         Dx8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=BQwYY9c5WWDIGmruncLE9XdI2b+Fr9XUogqJYJCYmydn2kkR33QiIk33PT3R4NvkEE
-         AmOdgbHje/ogE0oHZYZ+3kKEKfCLjvRkNYS/EiqDapIGMyt0f/+tZst99fxFaI4A2hEx
-         m+INUe8xDG500wLY/0FH2mkmoppUxg/4o761KghRGwOPSzo8qvzGILjted0wSgAaPJd7
-         7DvH0Bj9mZPJKmY9PKG/0jpqZea5PbVSyapq7o5oUxHkq3R3hPwuJJjJKgmzT+xVHiVC
-         l3xBVvIUZkeouIQxFv/mFcI2bH397Q4+vWlg4+UVGe0zcqRfGFOxSNq1jS8RfjUmBzxC
-         T+EQ==
-X-Gm-Message-State: AO0yUKVDD8zTeU2ZesOgHeLzyTW+DjnI7/dI/x1dk9OauBHarS7osYk+
-        MS8Uk85sMQiwjUggWFBw32vcn83NSkrvVDZ2Wzw=
-X-Google-Smtp-Source: AK7set//Vh4sVRJuzbpqu4kJR/bLi6/hkM8I8g+2xS5cMgoh7Da7f06HnK7YDuOltQCnTE3oSHcHr/WAN0j4OAYei1M=
-X-Received: by 2002:a17:906:c243:b0:87b:d73c:b064 with SMTP id
- bl3-20020a170906c24300b0087bd73cb064mr2240865ejb.124.1675380412982; Thu, 02
- Feb 2023 15:26:52 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a17:907:2130:b0:87b:db63:de32 with HTTP; Thu, 2 Feb 2023
- 15:26:52 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <chiogb003@gmail.com>
-Date:   Fri, 3 Feb 2023 00:26:52 +0100
-Message-ID: <CABa6GnkLC_m_7SOGtL_oOqUXjf8TWNj=AjSEgcd=mjgy=ODa-A@mail.gmail.com>
-Subject: Hi
-To:     undisclosed-recipients:;
+        Wed, 8 Feb 2023 09:33:58 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1BE901A;
+        Wed,  8 Feb 2023 06:33:56 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PBj2p2jCBz9v7gn;
+        Wed,  8 Feb 2023 22:25:38 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwC3PQmssuNjUbIEAQ--.46196S2;
+        Wed, 08 Feb 2023 15:33:27 +0100 (CET)
+Message-ID: <dc973294e5ad2d05705954b433bb550b04a86325.camel@huaweicloud.com>
+Subject: Re: [PATCH v7 2/6] ocfs2: Switch to security_inode_init_security()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 08 Feb 2023 15:33:12 +0100
+In-Reply-To: <CAHC9VhRu_pdEur4XDkwMETAQEd-8=13k+qvpMEgW=hiYMCKw2A@mail.gmail.com>
+References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
+         <20221201104125.919483-3-roberto.sassu@huaweicloud.com>
+         <6905166125130c22c244ebf234723d1587a01ae8.camel@huaweicloud.com>
+         <CAHC9VhRu_pdEur4XDkwMETAQEd-8=13k+qvpMEgW=hiYMCKw2A@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:634 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4999]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [chiogb003[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [chiogb003[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwC3PQmssuNjUbIEAQ--.46196S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4fJF43Kr4fAr43Jr4fKrg_yoW8Wr45pF
+        W3t3WakFsxJF18Kr1fKwsxWayIk3yxGws8Xws8GryUZwn8WFy3Kr4xtr409343WrZ7CFWS
+        vw4fJFZ3X3WDA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQACBF1jj4i4pgAAsg
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+On Thu, 2023-01-12 at 12:21 -0500, Paul Moore wrote:
+> On Tue, Jan 10, 2023 at 3:56 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On Thu, 2022-12-01 at 11:41 +0100, Roberto Sassu wrote:
+> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > 
+> > > In preparation for removing security_old_inode_init_security(), switch to
+> > > security_inode_init_security().
+> > > 
+> > > Extend the existing ocfs2_initxattrs() to take the
+> > > ocfs2_security_xattr_info structure from fs_info, and populate the
+> > > name/value/len triple with the first xattr provided by LSMs.
+> > 
+> > Hi Mark, Joel, Joseph
+> > 
+> > some time ago I sent this patch set to switch to the newer
+> > function security_inode_init_security(). Almost all the other parts of
+> > this patch set have been reviewed, and the patch set itself should be
+> > ready to be merged.
+> > 
+> > I kindly ask if you could have a look at this patch and give your
+> > Reviewed-by, so that Paul could take the patch set.
+> 
+> I've been pushing to clean up some of the LSM interfaces to try and
+> simplify things and remove as many special cases as possible,
+> Roberto's work in this patchset is part of that.  I would really
+> appreciate it if the vfs/ocfs2 folks could give patch 2/6 a quick look
+> to make sure you are okay with the changes.
+> 
+> I realize that the various end-of-year holidays tend to slow things
+> down a bit, but this patchset has been on the lists for over a month
+> now; if I don't hear anything in the next week or two I'll assume you
+> folks are okay with these patches ...
+
+Hi Paul
+
+is this patch set going to land in 6.3?
+
+Thanks
+
+Roberto
+
