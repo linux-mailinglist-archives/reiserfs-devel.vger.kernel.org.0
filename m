@@ -2,114 +2,156 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F18E68F0E3
-	for <lists+reiserfs-devel@lfdr.de>; Wed,  8 Feb 2023 15:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2892468FED4
+	for <lists+reiserfs-devel@lfdr.de>; Thu,  9 Feb 2023 05:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbjBHOd7 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 8 Feb 2023 09:33:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
+        id S229874AbjBIEa7 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 8 Feb 2023 23:30:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbjBHOd6 (ORCPT
+        with ESMTP id S229910AbjBIEar (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:33:58 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1BE901A;
-        Wed,  8 Feb 2023 06:33:56 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PBj2p2jCBz9v7gn;
-        Wed,  8 Feb 2023 22:25:38 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwC3PQmssuNjUbIEAQ--.46196S2;
-        Wed, 08 Feb 2023 15:33:27 +0100 (CET)
-Message-ID: <dc973294e5ad2d05705954b433bb550b04a86325.camel@huaweicloud.com>
-Subject: Re: [PATCH v7 2/6] ocfs2: Switch to security_inode_init_security()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com,
-        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 08 Feb 2023 15:33:12 +0100
-In-Reply-To: <CAHC9VhRu_pdEur4XDkwMETAQEd-8=13k+qvpMEgW=hiYMCKw2A@mail.gmail.com>
-References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
-         <20221201104125.919483-3-roberto.sassu@huaweicloud.com>
-         <6905166125130c22c244ebf234723d1587a01ae8.camel@huaweicloud.com>
-         <CAHC9VhRu_pdEur4XDkwMETAQEd-8=13k+qvpMEgW=hiYMCKw2A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 8 Feb 2023 23:30:47 -0500
+Received: from mail-io1-xd48.google.com (mail-io1-xd48.google.com [IPv6:2607:f8b0:4864:20::d48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8373F2B3
+        for <reiserfs-devel@vger.kernel.org>; Wed,  8 Feb 2023 20:30:09 -0800 (PST)
+Received: by mail-io1-xd48.google.com with SMTP id d14-20020a05660225ce00b00734acc87739so536443iop.9
+        for <reiserfs-devel@vger.kernel.org>; Wed, 08 Feb 2023 20:30:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rvwnVQ+OsTvO/R4s7QHo3J3Y+IsgRrC0rLTHXRjAvIE=;
+        b=XvbGQw36EfXmmU8Y/FPOHzi86yrSx3/svGd5uoHmfxajsYV+2In32IZPkIFMgfsvsZ
+         sISjhU3SvPO/4xIBp/nm4ZPpI+7P9eq4q8/7nFXb3rd65JRdW+GTp11o6/lVMF13/6ZE
+         6Xmy+lOMTjpTFVz1ueMMr16XssPkAB6X+ATxR1BgdvdiEncQLi29MDGPm7rhRegOHy5T
+         JCTS3a+0/NehrQuOfP+uNw/5G3FvelR4iJgdMvUY0GgZ3kGXPEDKkKbom7chiRndkFtT
+         sawZoWd3WgkLu3G9nboMilsTPjzWmALMS4WbZF6zin08SPzQWorBDh/nbEGMmVIHlvUf
+         JoFA==
+X-Gm-Message-State: AO0yUKUdaK0tk7Q2rFuX4gEogqUUJa1njUsifBr+m2EE7ljL4JdzAGgj
+        u/FUAuYBUjSHJtPMn302XDbnZduTqeFgoITqSxoCJVYWgcW0
+X-Google-Smtp-Source: AK7set+oeDrxd4GzIaxkIRRkqeNUsielY0Xsb2Vxvx2EuvE1bdyY+lsqTz77lldVZywpvBnzPOwdHD5bVC1RJHS33ttYOC3UGhMf
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwC3PQmssuNjUbIEAQ--.46196S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4fJF43Kr4fAr43Jr4fKrg_yoW8Wr45pF
-        W3t3WakFsxJF18Kr1fKwsxWayIk3yxGws8Xws8GryUZwn8WFy3Kr4xtr409343WrZ7CFWS
-        vw4fJFZ3X3WDA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQACBF1jj4i4pgAAsg
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:6407:0:b0:71b:3f4f:95f9 with SMTP id
+ t7-20020a6b6407000000b0071b3f4f95f9mr5368985iog.30.1675916681161; Wed, 08 Feb
+ 2023 20:24:41 -0800 (PST)
+Date:   Wed, 08 Feb 2023 20:24:41 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000074335b05f43cc203@google.com>
+Subject: [syzbot] [reiserfs?] BUG: corrupted list in percpu_counter_destroy
+From:   syzbot <syzbot+6b1a2e744e37db9f50b3@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, luto@kernel.org,
+        peterz@infradead.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Thu, 2023-01-12 at 12:21 -0500, Paul Moore wrote:
-> On Tue, Jan 10, 2023 at 3:56 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > On Thu, 2022-12-01 at 11:41 +0100, Roberto Sassu wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > 
-> > > In preparation for removing security_old_inode_init_security(), switch to
-> > > security_inode_init_security().
-> > > 
-> > > Extend the existing ocfs2_initxattrs() to take the
-> > > ocfs2_security_xattr_info structure from fs_info, and populate the
-> > > name/value/len triple with the first xattr provided by LSMs.
-> > 
-> > Hi Mark, Joel, Joseph
-> > 
-> > some time ago I sent this patch set to switch to the newer
-> > function security_inode_init_security(). Almost all the other parts of
-> > this patch set have been reviewed, and the patch set itself should be
-> > ready to be merged.
-> > 
-> > I kindly ask if you could have a look at this patch and give your
-> > Reviewed-by, so that Paul could take the patch set.
-> 
-> I've been pushing to clean up some of the LSM interfaces to try and
-> simplify things and remove as many special cases as possible,
-> Roberto's work in this patchset is part of that.  I would really
-> appreciate it if the vfs/ocfs2 folks could give patch 2/6 a quick look
-> to make sure you are okay with the changes.
-> 
-> I realize that the various end-of-year holidays tend to slow things
-> down a bit, but this patchset has been on the lists for over a month
-> now; if I don't hear anything in the next week or two I'll assume you
-> folks are okay with these patches ...
+Hello,
 
-Hi Paul
+syzbot found the following issue on:
 
-is this patch set going to land in 6.3?
+HEAD commit:    4fafd96910ad Add linux-next specific files for 20230203
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=16b014c5480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1d2fba7d42502ca4
+dashboard link: https://syzkaller.appspot.com/bug?extid=6b1a2e744e37db9f50b3
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=127247a5480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10cd186d480000
 
-Thanks
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/348cc2da441a/disk-4fafd969.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e2dedc500f12/vmlinux-4fafd969.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/fae710d9ebd8/bzImage-4fafd969.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/fbee878c2283/mount_0.gz
 
-Roberto
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6b1a2e744e37db9f50b3@syzkaller.appspotmail.com
 
+sshd[5074]: segfault at 200000001 ip 0000000200000001 sp 00007ffed2745410 error 14 in sshd[563ab7bc0000+b000] likely on CPU 0 (core 0, socket 0)
+Code: Unable to access opcode bytes at 0x1ffffffd7.
+list_del corruption. prev->next should be ffff88807a4b71e8, but was 0000000200000001. (prev=ffff8880761b16c8)
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:59!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 5074 Comm: sshd Not tainted 6.2.0-rc6-next-20230203-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+RIP: 0010:__list_del_entry_valid+0x11f/0x1b0 lib/list_debug.c:59
+Code: 07 a7 8a e8 f3 09 4b fd 0f 0b 48 89 ca 48 c7 c7 e0 07 a7 8a e8 e2 09 4b fd 0f 0b 4c 89 c2 48 c7 c7 40 08 a7 8a e8 d1 09 4b fd <0f> 0b 48 89 d1 48 c7 c7 c0 08 a7 8a 4c 89 c2 e8 bd 09 4b fd 0f 0b
+RSP: 0018:ffffc90003bbfaf8 EFLAGS: 00010086
+
+RAX: 000000000000006d RBX: ffff88807a4b71a0 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8168dfbc RDI: 0000000000000005
+RBP: ffff88807a4b71a0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000001 R11: 0000000000000000 R12: 0000000000000292
+R13: ffff88807a4b71e8 R14: ffff88807a4b71f0 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000040048 CR3: 0000000027e6d000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __list_del_entry include/linux/list.h:134 [inline]
+ list_del include/linux/list.h:148 [inline]
+ percpu_counter_destroy.part.0+0x4f/0x200 lib/percpu_counter.c:198
+ percpu_counter_destroy+0x3c/0x50 lib/percpu_counter.c:191
+ __mmdrop+0x294/0x470 kernel/fork.c:800
+ mmdrop include/linux/sched/mm.h:50 [inline]
+ __mmput+0x3fd/0x4c0 kernel/fork.c:1220
+ mmput+0x60/0x70 kernel/fork.c:1231
+ exit_mm kernel/exit.c:563 [inline]
+ do_exit+0x9d7/0x2b60 kernel/exit.c:856
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:1019
+ get_signal+0x2321/0x25b0 kernel/signal.c:2859
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ irqentry_exit_to_user_mode+0x9/0x40 kernel/entry/common.c:310
+ exc_page_fault+0xc0/0x170 arch/x86/mm/fault.c:1557
+ asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
+RIP: 0033:0x200000001
+Code: Unable to access opcode bytes at 0x1ffffffd7.
+RSP: 002b:00007ffed2745410 EFLAGS: 00010202
+
+RAX: 00000000ffffffff RBX: 0000000200000001 RCX: 00007fec0d6ead83
+RDX: fffffffffffffea0 RSI: 0000563ab9bf6f40 RDI: 000000000000000a
+RBP: 0000000000040048 R08: 00007ffed27453d0 R09: 00007ffed27453e0
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
+R13: 0000000000000001 R14: 00007ffed2745458 R15: 00007ffed27454d8
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__list_del_entry_valid+0x11f/0x1b0 lib/list_debug.c:59
+Code: 07 a7 8a e8 f3 09 4b fd 0f 0b 48 89 ca 48 c7 c7 e0 07 a7 8a e8 e2 09 4b fd 0f 0b 4c 89 c2 48 c7 c7 40 08 a7 8a e8 d1 09 4b fd <0f> 0b 48 89 d1 48 c7 c7 c0 08 a7 8a 4c 89 c2 e8 bd 09 4b fd 0f 0b
+RSP: 0018:ffffc90003bbfaf8 EFLAGS: 00010086
+
+RAX: 000000000000006d RBX: ffff88807a4b71a0 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8168dfbc RDI: 0000000000000005
+RBP: ffff88807a4b71a0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000001 R11: 0000000000000000 R12: 0000000000000292
+R13: ffff88807a4b71e8 R14: ffff88807a4b71f0 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000040048 CR3: 0000000027e6d000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
