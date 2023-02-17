@@ -2,53 +2,52 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DD56954E0
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 14 Feb 2023 00:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7346E69A3A7
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 17 Feb 2023 02:56:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbjBMXkt (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 13 Feb 2023 18:40:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49220 "EHLO
+        id S229953AbjBQB4y (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 16 Feb 2023 20:56:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbjBMXkt (ORCPT
+        with ESMTP id S229825AbjBQB4x (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 13 Feb 2023 18:40:49 -0500
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38CDECDDE
-        for <reiserfs-devel@vger.kernel.org>; Mon, 13 Feb 2023 15:40:44 -0800 (PST)
-Received: by mail-il1-f205.google.com with SMTP id r8-20020a92cd88000000b00313f4759a73so10397252ilb.9
-        for <reiserfs-devel@vger.kernel.org>; Mon, 13 Feb 2023 15:40:44 -0800 (PST)
+        Thu, 16 Feb 2023 20:56:53 -0500
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B99754D4E
+        for <reiserfs-devel@vger.kernel.org>; Thu, 16 Feb 2023 17:56:52 -0800 (PST)
+Received: by mail-il1-f207.google.com with SMTP id c11-20020a056e020bcb00b0030be9d07d63so2485182ilu.0
+        for <reiserfs-devel@vger.kernel.org>; Thu, 16 Feb 2023 17:56:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T96tNQ98xYNkeyLm/ikfyyjI3SBhxjFAaS1vmseZYrw=;
-        b=GQiX6uPWPxZJkfoDGjwUl9E6+NCkhDSZsJVPBjmgR8UT09esc+kN88UggQMcN0o07W
-         3zkvAvi9mcKYL5ZnHhCRohHbPMIAKUJxdj/4HJzyr6/pfjsW9qO7si46reluqLD+VYbV
-         0K14eeK2GlwQd/nRket7W0pSv77bBXcKn1VBs3CexjKmTrOcxfJYItawyXicYhhuLpx7
-         Fo/iCQJvre9sGHJXgx2hwaDvze5SMsO2t01ab3sAYuNkw2kPEoDnCAI+2NQ6hl/vuxGj
-         8N6xxF35F05iI5VzvmZox+fVd6wFeoYjzS5Z00TQIpP55tlTpI7hEggoF46nTYapfpu3
-         4gLA==
-X-Gm-Message-State: AO0yUKVOP640nmIgDGfwvSGbxlXfIXRVReOwPrNiCYTtbo+bq/a+mbe3
-        LRJrLVuGau4C8F0qUoxu91eiaO+/9AXEHhwLJeXA2QfHJAk7
-X-Google-Smtp-Source: AK7set+o+f4k/1hDdRq3ZCMdX6xGl3x0jWtmixz9HWvT8Xwc1AMdX/IAWmr/diQvDBsmefRlqZ+/jT6QRlNjz6S0ReZtFrwZpdXm
+        bh=ISU7/1DjKHh9fexdII7McIn/QS4zcm5Oor+4ZtCR53I=;
+        b=MV3WtXgH3BGsPXjlxkUH9VUL2yBT68zYOMGgvxn4xFAnXEssr5FA1aQUPE3BwRCZcU
+         kcWBNYcVOcvZCZGBos0UaeJxIpKny+v6v4nN6EzKjIwqNGAdVntPQ4ro3OFLfnES05Yg
+         JeSqsRzFfAqUtdagtG6Fh2aF8o4y7OXeBsnsjcn+K3HQa5PLrEz8Ap0PShiLq7BwhUV3
+         0R4hnrhcqhmAKMQwVYFRwOH7e0K4a5q3wTUffHw/c1ULSxM2TgQAIVZJgfJSg9dISSVh
+         vV+M1hDmpyDFvVIuLXoVHaBGmLvbWUeEUP6axW6p1Wq/a/q/I3MZFIL/V3NIGogKVyIw
+         wayA==
+X-Gm-Message-State: AO0yUKVeqPfDidp9+iVBPZK9mqqDv1gvimm8qTsCXPHvpct1OzYymDha
+        2zdh28OZ1CGzFS0LFoWoiCrF0EPqHeDafh//KrjEAMc2UxZL
+X-Google-Smtp-Source: AK7set8axkVHs4GrDeozxnytwgK4QumRQj4cbEg1tcE5vpxCqqzDm02l4wVnbBziW92X8gPIXqzenaQIiTAcZx1hfybN3o5OIxo6
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8799:0:b0:717:f07e:f74f with SMTP id
- f25-20020a5d8799000000b00717f07ef74fmr54374ion.55.1676331643582; Mon, 13 Feb
- 2023 15:40:43 -0800 (PST)
-Date:   Mon, 13 Feb 2023 15:40:43 -0800
-In-Reply-To: <00000000000073b6d905eb48de3f@google.com>
+X-Received: by 2002:a05:6e02:bf3:b0:313:f6fa:bc50 with SMTP id
+ d19-20020a056e020bf300b00313f6fabc50mr2189182ilu.5.1676599011921; Thu, 16 Feb
+ 2023 17:56:51 -0800 (PST)
+Date:   Thu, 16 Feb 2023 17:56:51 -0800
+In-Reply-To: <00000000000000040a05e714f000@google.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000243cc205f49d60c1@google.com>
-Subject: Re: [syzbot] [reiserfs?] BUG: unable to handle kernel NULL pointer
- dereference in reiserfs_find_entry
-From:   syzbot <syzbot+4654552e088ed458b10d@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <0000000000008955d005f4dba008@google.com>
+Subject: Re: [syzbot] [reiserfs?] WARNING in reiserfs_readdir_inode
+From:   syzbot <syzbot+798ffe5fe3e88235db59@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,136 +56,70 @@ X-Mailing-List: reiserfs-devel@vger.kernel.org
 
 syzbot has found a reproducer for the following issue on:
 
-HEAD commit:    ceaa837f96ad Linux 6.2-rc8
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=121b8ac7480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=42ba4da8e1e6af9f
-dashboard link: https://syzkaller.appspot.com/bug?extid=4654552e088ed458b10d
+HEAD commit:    2d3827b3f393 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=14eb7f2b480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=606ed7eeab569393
+dashboard link: https://syzkaller.appspot.com/bug?extid=798ffe5fe3e88235db59
 compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15852a00c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10146167480000
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=150829d7480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11ff04ab480000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/88042f9b5fc8/disk-ceaa837f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9945b57ec9ee/vmlinux-ceaa837f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/72ff118ed96b/bzImage-ceaa837f.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/804b18b8485e/mount_0.gz
+disk image: https://storage.googleapis.com/syzbot-assets/fd94d68ff17d/disk-2d3827b3.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f304fbef0773/vmlinux-2d3827b3.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/74eb318f51b0/Image-2d3827b3.gz.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/37f569d9f961/mount_0.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/0cd68cef0305/mount_1.gz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4654552e088ed458b10d@syzkaller.appspotmail.com
+Reported-by: syzbot+798ffe5fe3e88235db59@syzkaller.appspotmail.com
 
-REISERFS warning:  read_super_block: reiserfs filesystem is deprecated and scheduled to be removed from the kernel in 2025
-REISERFS (device loop0): found reiserfs format "3.5" with non-standard journal
-REISERFS (device loop0): using ordered data mode
-reiserfs: using flush barriers
-REISERFS (device loop0): journal params: device loop0, size 512, journal first block 18, max trans len 256, max batch 225, max commit age 30, max trans age 30
-REISERFS (device loop0): checking transaction log (loop0)
-REISERFS (device loop0): Using r5 hash to sort names
-==================================================================
-BUG: KASAN: use-after-free in strlen+0x58/0x70 lib/string.c:418
-Read of size 1 at addr ffff8880727180c4 by task syz-executor942/5076
-
-CPU: 0 PID: 5076 Comm: syz-executor942 Not tainted 6.2.0-rc8-syzkaller #0
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+WARNING: CPU: 0 PID: 4421 at kernel/locking/mutex.c:582 __mutex_lock_common+0x504/0xf64 kernel/locking/mutex.c:582
+Modules linked in:
+CPU: 0 PID: 4421 Comm: syz-executor270 Not tainted 6.2.0-rc7-syzkaller-17907-g2d3827b3f393 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x163/0x4f0 mm/kasan/report.c:417
- kasan_report+0x13a/0x170 mm/kasan/report.c:517
- strlen+0x58/0x70 lib/string.c:418
- set_de_name_and_namelen fs/reiserfs/namei.c:82 [inline]
- linear_search_in_dir_item fs/reiserfs/namei.c:262 [inline]
- reiserfs_find_entry+0x982/0x19b0 fs/reiserfs/namei.c:331
- reiserfs_lookup+0x1ea/0x4b0 fs/reiserfs/namei.c:368
- __lookup_slow+0x282/0x3e0 fs/namei.c:1685
- lookup_one_len+0x18b/0x2d0 fs/namei.c:2711
- reiserfs_lookup_privroot+0x89/0x1e0 fs/reiserfs/xattr.c:973
- reiserfs_fill_super+0x195b/0x2620 fs/reiserfs/super.c:2192
- mount_bdev+0x271/0x3a0 fs/super.c:1359
- legacy_get_tree+0xef/0x190 fs/fs_context.c:610
- vfs_get_tree+0x8c/0x270 fs/super.c:1489
- do_new_mount+0x28f/0xae0 fs/namespace.c:3145
- do_mount fs/namespace.c:3488 [inline]
- __do_sys_mount fs/namespace.c:3697 [inline]
- __se_sys_mount+0x2d9/0x3c0 fs/namespace.c:3674
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0deea57d0a
-Code: 48 c7 c2 c0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 a8 00 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe5e115c98 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 000055555718e2c0 RCX: 00007f0deea57d0a
-RDX: 00000000200000c0 RSI: 0000000020000040 RDI: 00007ffe5e115ce0
-RBP: 0000000000000000 R08: 00007ffe5e115d20 R09: 000000000000111a
-R10: 0000000000008001 R11: 0000000000000286 R12: 0000000000000004
-R13: 00007ffe5e115d20 R14: 0000000000000003 R15: 00007ffe5e115ce0
- </TASK>
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __mutex_lock_common+0x504/0xf64 kernel/locking/mutex.c:582
+lr : __mutex_lock_common+0x504/0xf64 kernel/locking/mutex.c:582
+sp : ffff80000ff739e0
+x29: ffff80000ff73a50 x28: ffff80000eeb4000 x27: 0000000000000000
 
-The buggy address belongs to the physical page:
-page:ffffea0001c9c600 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x72718
-flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000000 ffffea0001c9bec8 ffff8880b9841e20 0000000000000000
-raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as freed
-page last allocated via order 0, migratetype Movable, gfp_mask 0x140cca(GFP_HIGHUSER_MOVABLE|__GFP_COMP), pid 5074, tgid 5074 (syz-executor942), ts 68154639328, free_ts 68338552355
- prep_new_page mm/page_alloc.c:2531 [inline]
- get_page_from_freelist+0x3449/0x35c0 mm/page_alloc.c:4283
- __alloc_pages+0x291/0x7e0 mm/page_alloc.c:5549
- __folio_alloc+0x13/0x30 mm/page_alloc.c:5581
- vma_alloc_folio+0x48a/0x9a0 mm/mempolicy.c:2248
- shmem_alloc_folio mm/shmem.c:1569 [inline]
- shmem_alloc_and_acct_folio+0x596/0xd40 mm/shmem.c:1593
- shmem_get_folio_gfp+0x1408/0x34a0 mm/shmem.c:1920
- shmem_get_folio mm/shmem.c:2051 [inline]
- shmem_write_begin+0x172/0x4f0 mm/shmem.c:2543
- generic_perform_write+0x300/0x5e0 mm/filemap.c:3772
- __generic_file_write_iter+0x17a/0x400 mm/filemap.c:3900
- generic_file_write_iter+0xaf/0x310 mm/filemap.c:3932
- call_write_iter include/linux/fs.h:2189 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x7b2/0xbb0 fs/read_write.c:584
- ksys_write+0x1a0/0x2c0 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1446 [inline]
- free_pcp_prepare mm/page_alloc.c:1496 [inline]
- free_unref_page_prepare+0xf3a/0x1040 mm/page_alloc.c:3369
- free_unref_page_list+0x6b1/0x950 mm/page_alloc.c:3510
- release_pages+0x219e/0x2470 mm/swap.c:1076
- __pagevec_release+0x84/0x100 mm/swap.c:1096
- pagevec_release include/linux/pagevec.h:71 [inline]
- folio_batch_release include/linux/pagevec.h:135 [inline]
- shmem_undo_range+0x6b6/0x1dd0 mm/shmem.c:947
- shmem_truncate_range mm/shmem.c:1042 [inline]
- shmem_evict_inode+0x258/0x9f0 mm/shmem.c:1151
- evict+0x2a4/0x620 fs/inode.c:664
- __dentry_kill+0x436/0x650 fs/dcache.c:607
- dentry_kill+0xbb/0x290
- dput+0x1d8/0x3f0 fs/dcache.c:913
- __fput+0x5e4/0x890 fs/file_table.c:328
- task_work_run+0x24a/0x300 kernel/task_work.c:179
- ptrace_notify+0x2a2/0x350 kernel/signal.c:2354
- ptrace_report_syscall include/linux/ptrace.h:411 [inline]
- ptrace_report_syscall_exit include/linux/ptrace.h:473 [inline]
- syscall_exit_work kernel/entry/common.c:251 [inline]
- syscall_exit_to_user_mode_prepare kernel/entry/common.c:278 [inline]
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x171/0x2e0 kernel/entry/common.c:296
- do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff888072717f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff888072718000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->ffff888072718080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                                           ^
- ffff888072718100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff888072718180: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
+x26: 0000000000000000 x25: ffff800008748194 x24: 0000000000000002
+x23: ffff800008771cc4 x22: 0000000000000000 x21: 0000000000000000
+x20: 0000000000000000 x19: ffff0000c7bf7828 x18: 0000000000000000
+x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000000012 x12: ffff0000c3a31a00
+x11: ff808000081bbb4c x10: 0000000000000000 x9 : f02dd3de9c24e500
+x8 : f02dd3de9c24e500 x7 : 4e5241575f534b43 x6 : ffff80000bf650d4
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : 0000000100000000 x0 : 0000000000000028
+Call trace:
+ __mutex_lock_common+0x504/0xf64 kernel/locking/mutex.c:582
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ reiserfs_write_lock+0x3c/0x64 fs/reiserfs/lock.c:27
+ reiserfs_readdir_inode+0x9c/0x660 fs/reiserfs/dir.c:79
+ reiserfs_readdir+0x28/0x38 fs/reiserfs/dir.c:274
+ iterate_dir+0x114/0x28c
+ __do_sys_getdents64 fs/readdir.c:369 [inline]
+ __se_sys_getdents64 fs/readdir.c:354 [inline]
+ __arm64_sys_getdents64+0x80/0x204 fs/readdir.c:354
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x64/0x178 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0xbc/0x180 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x110 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x58/0x14c arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+irq event stamp: 24433
+hardirqs last  enabled at (24433): [<ffff800008039178>] local_daif_restore arch/arm64/include/asm/daifflags.h:75 [inline]
+hardirqs last  enabled at (24433): [<ffff800008039178>] el0_svc_common+0x40/0x180 arch/arm64/kernel/syscall.c:107
+hardirqs last disabled at (24432): [<ffff80000bf55074>] el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+softirqs last  enabled at (24376): [<ffff80000801c878>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
+softirqs last disabled at (24374): [<ffff80000801c844>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
+---[ end trace 0000000000000000 ]---
 
