@@ -2,64 +2,65 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 939C269B4CC
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 17 Feb 2023 22:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF9A69C224
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 19 Feb 2023 20:42:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjBQVa4 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 17 Feb 2023 16:30:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
+        id S231374AbjBSTmv (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 19 Feb 2023 14:42:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjBQVaz (ORCPT
+        with ESMTP id S231370AbjBSTmv (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 17 Feb 2023 16:30:55 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773951114D;
-        Fri, 17 Feb 2023 13:30:53 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31HKZR5K025011;
-        Fri, 17 Feb 2023 21:30:25 GMT
+        Sun, 19 Feb 2023 14:42:51 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F34C1733;
+        Sun, 19 Feb 2023 11:42:49 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31JHeYuK026969;
+        Sun, 19 Feb 2023 19:41:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  mime-version : content-transfer-encoding; s=pp1;
- bh=p/r/IgDm87Tg50qN8UcTg7CPY96iXbCv375Crz/M9t8=;
- b=hwsp6o0/xjemUyCbC8CTAJ7kd1mJfGycAfAEPeECkMijMai4WQNGrsyibonjkY+Re3JM
- lsaA8h2iummAqJOlzs4ESOPgy2VyHwqZBq2D1yFptWO/KErFEAexndt+tfFpLBVoB23F
- cQ2S2Wx/D9i9rfPlwt1SCer+mNf2cakL3lSz9/teqduzNAZWqL1p6a3a10P3ruE2P28c
- XNHr1V2bQUAy56K50OHTYndlDz6odQqYgrkRn7c1Yz0bwwUndfhrE62qIpGkabphWQOo
- l/KBDN1cCLyZJjNczAFz6rtYcAXcytShLc+rMx3AKHeUOgdZOV5o3ZYfcu/6arkMDIBe WA== 
+ bh=s63DfqR4NiC3QZGz8yhFyKSMoul9bYlY7/ahn77RpF4=;
+ b=LbScWa+/jpKBo4XSMLSlaXfty+s6n+EDSLfluGUo9+gnmcsIlrU60INox9/lcZY2PA0Y
+ hLUj2vm/woxrkwlXp9aPJyZcZLhHCe47gKAnzahmfx+2llFIMZQg/xWAAYljYpqXzIrT
+ +s4CyusDNGasMpUZhNdevGPBnkjLMu+uZb4hg0iWwMgW6+FfMZVy2/DA6Xvrsql2vXHf
+ /q+69TaoJ2Zwff4Mq2xQ7lYYPndr/6dzTThx2p3UCW5fVIS55gkIxwOkYUaIojQdToQ1
+ GvT/pl9rfqLZBqfElAXk5BI6+RUM6FeLNE1iDfgE3m2ysyPmmE5WAsBqCekdw1U8RskP /w== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ntd3dpfq7-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nuqgu2713-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 21:30:24 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31HLQ74E016133;
-        Fri, 17 Feb 2023 21:30:23 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ntd3dpfpq-1
+        Sun, 19 Feb 2023 19:41:59 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31JJUQSq006336;
+        Sun, 19 Feb 2023 19:41:58 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nuqgu270v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 21:30:23 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31HKPon8016541;
-        Fri, 17 Feb 2023 21:30:22 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3np2n79rqr-1
+        Sun, 19 Feb 2023 19:41:58 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31JID6dU004503;
+        Sun, 19 Feb 2023 19:41:57 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3ntpa6s3gf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 21:30:22 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31HLULZT3539568
+        Sun, 19 Feb 2023 19:41:56 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31JJftRA28836592
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Feb 2023 21:30:21 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C70B45805B;
-        Fri, 17 Feb 2023 21:30:21 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 44F1B58055;
-        Fri, 17 Feb 2023 21:30:19 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.25.123])
-        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 17 Feb 2023 21:30:19 +0000 (GMT)
-Message-ID: <aaeee7490cfee1b2163a3c9c894294aaf13e100c.camel@linux.ibm.com>
-Subject: Re: [PATCH v7 2/6] ocfs2: Switch to security_inode_init_security()
+        Sun, 19 Feb 2023 19:41:55 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 542625805E;
+        Sun, 19 Feb 2023 19:41:55 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D87D058052;
+        Sun, 19 Feb 2023 19:41:53 +0000 (GMT)
+Received: from sig-9-65-218-178.ibm.com (unknown [9.65.218.178])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Sun, 19 Feb 2023 19:41:53 +0000 (GMT)
+Message-ID: <b7b4eeb060d1f662f990b3ebb3848fa4ab7e8c97.camel@linux.ibm.com>
+Subject: Re: [PATCH v7 5/6] evm: Align evm_inode_init_security() definition
+ with LSM infrastructure
 From:   Mimi Zohar <zohar@linux.ibm.com>
 To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, mark@fasheh.com,
         jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
@@ -72,217 +73,161 @@ Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org, keescook@chromium.org,
         nicolas.bouchinet@clip-os.org,
         Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Fri, 17 Feb 2023 16:30:15 -0500
-In-Reply-To: <a20a6d84d8e682fbff546b80eda75a1918d7c108.camel@linux.ibm.com>
+Date:   Sun, 19 Feb 2023 14:41:47 -0500
+In-Reply-To: <20221201104125.919483-6-roberto.sassu@huaweicloud.com>
 References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
-         <20221201104125.919483-3-roberto.sassu@huaweicloud.com>
-         <a20a6d84d8e682fbff546b80eda75a1918d7c108.camel@linux.ibm.com>
+         <20221201104125.919483-6-roberto.sassu@huaweicloud.com>
 Content-Type: text/plain; charset="ISO-8859-15"
 X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GksIPGug5-2bMPWHC3PpHKYwxPW86-Ac
-X-Proofpoint-ORIG-GUID: uq2Z_zXEcPhRvQoV9G7RakzlHiyE5IFf
+X-Proofpoint-GUID: PIqnX7MkcDx9MSQ9O8jwB2A5iVhfTruB
+X-Proofpoint-ORIG-GUID: L6hFSedEGdzOEMGH9xja22553RiA3L3r
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-17_14,2023-02-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- lowpriorityscore=0 bulkscore=0 mlxscore=0 malwarescore=0 phishscore=0
- suspectscore=0 clxscore=1015 adultscore=0 priorityscore=1501
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302170185
+ definitions=2023-02-19_12,2023-02-17_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ malwarescore=0 lowpriorityscore=0 bulkscore=0 suspectscore=0
+ priorityscore=1501 mlxscore=0 clxscore=1015 mlxlogscore=999 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302190186
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Fri, 2023-02-17 at 14:51 -0500, Mimi Zohar wrote:
-> On Thu, 2022-12-01 at 11:41 +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > In preparation for removing security_old_inode_init_security(), switch to
-> > security_inode_init_security().
-> > 
-> > Extend the existing ocfs2_initxattrs() to take the
-> > ocfs2_security_xattr_info structure from fs_info, and populate the
-> > name/value/len triple with the first xattr provided by LSMs.
-> > 
-> > As fs_info was not used before, ocfs2_initxattrs() can now handle the case
-> > of replicating the behavior of security_old_inode_init_security(), i.e.
-> > just obtaining the xattr, in addition to setting all xattrs provided by
-> > LSMs.
-> > 
-> > Supporting multiple xattrs is not currently supported where
-> > security_old_inode_init_security() was called (mknod, symlink), as it
-> > requires non-trivial changes that can be done at a later time. Like for
-> > reiserfs, even if EVM is invoked, it will not provide an xattr (if it is
-> > not the first to set it, its xattr will be discarded; if it is the first,
-> > it does not have xattrs to calculate the HMAC on).
-> > 
-> > Finally, modify the handling of the return value from
-> > ocfs2_init_security_get(). As security_inode_init_security() does not
-> > return -EOPNOTSUPP, remove this case and directly handle the error if the
-> > return value is not zero.
-> > 
-> > However, the previous case of receiving -EOPNOTSUPP should be still
-> > taken into account, as security_inode_init_security() could return zero
-> > without setting xattrs and ocfs2 would consider it as if the xattr was set.
-> > 
-> > Instead, if security_inode_init_security() returned zero, look at the xattr
-> > if it was set, and behave accordingly, i.e. set si->enable to zero to
-> > notify to the functions following ocfs2_init_security_get() that the xattr
-> > is not available (same as if security_old_inode_init_security() returned
-> > -EOPNOTSUPP).
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+On Thu, 2022-12-01 at 11:41 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> My previous review missed a couple of concerns.
+> Change the evm_inode_init_security() definition to align with the LSM
+> infrastructure. Keep the existing behavior of including in the HMAC
+> calculation only the first xattr provided by LSMs.
 > 
-> > ---
-> >  fs/ocfs2/namei.c | 18 ++++++------------
-> >  fs/ocfs2/xattr.c | 30 ++++++++++++++++++++++++++----
-> >  2 files changed, 32 insertions(+), 16 deletions(-)
-> > 
-> > diff --git a/fs/ocfs2/namei.c b/fs/ocfs2/namei.c
-> > index 05f32989bad6..55fba81cd2d1 100644
-> > --- a/fs/ocfs2/namei.c
-> > +++ b/fs/ocfs2/namei.c
-> > @@ -242,6 +242,7 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
-> >  	int want_meta = 0;
-> >  	int xattr_credits = 0;
-> >  	struct ocfs2_security_xattr_info si = {
-> > +		.name = NULL,
-> >  		.enable = 1,
-> >  	};
-> >  	int did_quota_inode = 0;
-> > @@ -315,12 +316,8 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
-> >  	/* get security xattr */
-> >  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
-> >  	if (status) {
-> > -		if (status == -EOPNOTSUPP)
-> > -			si.enable = 0;
-> > -		else {
-> > -			mlog_errno(status);
-> > -			goto leave;
-> > -		}
+> Changing the evm_inode_init_security() definition requires passing only the
+> xattr array allocated by security_inode_init_security(), instead of the
+> first LSM xattr and the place where the EVM xattr should be filled. In lieu
+> of passing the EVM xattr, EVM must position itself after the last filled
+> xattr (by checking the xattr name), since only the beginning of the xattr
+> array is given.
 > 
-> Although security_inode_init_security() does not return -EOPNOTSUPP, 
-> ocfs2_init_security_get() could.  Refer to commit 8154da3d2114 ("ocfs2:
-> Add incompatible flag for extended attribute").   It was added as a
-> temporary solution back in 2008, so it is highly unlikely that it is
-> still needed.
+> Finally, make evm_inode_init_security() return value compatible with the
+> inode_init_security hook conventions, i.e. return -EOPNOTSUPP if it is not
+> setting an xattr.
 > 
-> > +		mlog_errno(status);
-> > +		goto leave;
+> EVM is a bit tricky, because xattrs is both an input and an output. If it
+> was just output, EVM should have returned zero if xattrs is NULL. But,
+> since xattrs is also input, EVM is unable to do its calculations, so return
+> -EOPNOTSUPP and handle this error in security_inode_init_security().
 > 
-> Without the -EOPNOTSUPP test, ocfs2_mknod() would not create the inode;
-> and similarly ocfs2_symlink(), below, would not create the symlink.  It
-> would be safer not to remove the -EOPNOTSUPP test.
-> 
-> >  	}
-> >  
-> >  	/* calculate meta data/clusters for setting security and acl xattr */
-> > @@ -1805,6 +1802,7 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
-> >  	int want_clusters = 0;
-> >  	int xattr_credits = 0;
-> >  	struct ocfs2_security_xattr_info si = {
-> > +		.name = NULL,
-> >  		.enable = 1,
-> >  	};
-> >  	int did_quota = 0, did_quota_inode = 0;
-> > @@ -1875,12 +1873,8 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
-> >  	/* get security xattr */
-> >  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
-> >  	if (status) {
-> > -		if (status == -EOPNOTSUPP)
-> > -			si.enable = 0;
-> > -		else {
-> > -			mlog_errno(status);
-> > -			goto bail;
-> > -		}
-> > +		mlog_errno(status);
-> > +		goto bail;
-> >  	}
-> >  
-> >  	/* calculate meta data/clusters for setting security xattr */
-> > diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
-> > index 95d0611c5fc7..55699c573541 100644
-> > --- a/fs/ocfs2/xattr.c
-> > +++ b/fs/ocfs2/xattr.c
-> > @@ -7259,9 +7259,21 @@ static int ocfs2_xattr_security_set(const struct xattr_handler *handler,
-> >  static int ocfs2_initxattrs(struct inode *inode, const struct xattr *xattr_array,
-> >  		     void *fs_info)
-> >  {
-> > +	struct ocfs2_security_xattr_info *si = fs_info;
-> >  	const struct xattr *xattr;
-> >  	int err = 0;
-> >  
-> > +	if (si) {
-> > +		si->value = kmemdup(xattr_array->value, xattr_array->value_len,
-> > +				    GFP_KERNEL);
-> > +		if (!si->value)
-> > +			return -ENOMEM;
-> > +
-> > +		si->name = xattr_array->name;
-> > +		si->value_len = xattr_array->value_len;
-> > +		return 0;
-> > +	}
-> > +
-> >  	for (xattr = xattr_array; xattr->name != NULL; xattr++) {
-> >  		err = ocfs2_xattr_set(inode, OCFS2_XATTR_INDEX_SECURITY,
-> >  				      xattr->name, xattr->value,
-> > @@ -7277,13 +7289,23 @@ int ocfs2_init_security_get(struct inode *inode,
-> >  			    const struct qstr *qstr,
-> >  			    struct ocfs2_security_xattr_info *si)
-> >  {
-> > +	int ret;
-> > +
-> >  	/* check whether ocfs2 support feature xattr */
-> >  	if (!ocfs2_supports_xattr(OCFS2_SB(dir->i_sb)))
-> >  		return -EOPNOTSUPP;
-> > -	if (si)
-> > -		return security_old_inode_init_security(inode, dir, qstr,
-> > -							&si->name, &si->value,
-> > -							&si->value_len);
-> > +	if (si) {
-> > +		ret = security_inode_init_security(inode, dir, qstr,
-> > +						   &ocfs2_initxattrs, si);
-> 
-> The "if (unlikely(IS_PRIVATE(inode))"  test exists in both
-> security_old_inode_init_security() and security_inode_init_security(),
-> but return different values.  In the former case, it returns
-> -EOPNOTSUPP.  In the latter case, it returns 0.  The question is
-> whether or not we need to be concerned about private inodes on ocfs2.  
-> If private inodes on ocfs2 are possible, then ocsf2_mknod() or
-> ocfs2_symlink() would fail to create the inode or symlink.
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
 
-Correction, previously when returning -EOPNOTSUPP for private inodes,
-xattrs would not be wrriten.  By returning 0 without setting si->enable 
-to 0, xattrs will be written.
- 
-> 
-> > +		/*
-> > +		 * security_inode_init_security() does not return -EOPNOTSUPP,
-> > +		 * we have to check the xattr ourselves.
-> > +		 */
-> > +		if (!ret && !si->name)
-> > +			si->enable = 0;
-> > +
-> > +		return ret;
-> > +	}
-> >  
-> >  	return security_inode_init_security(inode, dir, qstr,
-> >  					    &ocfs2_initxattrs, NULL);
-> 
+One comment below, otherwise,
+Reviewed-by: Mimi  Zohar <zohar@linux.ibm.com>
 
--- 
-thanks,
 
-Mimi
+> ---
+>  include/linux/evm.h               | 12 ++++++------
+>  security/integrity/evm/evm_main.c | 20 +++++++++++++-------
+>  security/security.c               |  5 ++---
+>  3 files changed, 21 insertions(+), 16 deletions(-)
+> 
+> diff --git a/include/linux/evm.h b/include/linux/evm.h
+> index aa63e0b3c0a2..3bb2ae9fe098 100644
+> --- a/include/linux/evm.h
+> +++ b/include/linux/evm.h
+> @@ -35,9 +35,9 @@ extern int evm_inode_removexattr(struct user_namespace *mnt_userns,
+>  				 struct dentry *dentry, const char *xattr_name);
+>  extern void evm_inode_post_removexattr(struct dentry *dentry,
+>  				       const char *xattr_name);
+> -extern int evm_inode_init_security(struct inode *inode,
+> -				   const struct xattr *xattr_array,
+> -				   struct xattr *evm);
+> +extern int evm_inode_init_security(struct inode *inode, struct inode *dir,
+> +				   const struct qstr *qstr,
+> +				   struct xattr *xattrs);
+>  extern bool evm_revalidate_status(const char *xattr_name);
+>  extern int evm_protected_xattr_if_enabled(const char *req_xattr_name);
+>  extern int evm_read_protected_xattrs(struct dentry *dentry, u8 *buffer,
+> @@ -108,9 +108,9 @@ static inline void evm_inode_post_removexattr(struct dentry *dentry,
+>  	return;
+>  }
+>  
+> -static inline int evm_inode_init_security(struct inode *inode,
+> -					  const struct xattr *xattr_array,
+> -					  struct xattr *evm)
+> +static inline int evm_inode_init_security(struct inode *inode, struct inode *dir,
+> +					  const struct qstr *qstr,
+> +					  struct xattr *xattrs)
+>  {
+>  	return 0;
+>  }
+> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+> index 23d484e05e6f..0a312cafb7de 100644
+> --- a/security/integrity/evm/evm_main.c
+> +++ b/security/integrity/evm/evm_main.c
+> @@ -845,23 +845,29 @@ void evm_inode_post_setattr(struct dentry *dentry, int ia_valid)
+>  /*
+>   * evm_inode_init_security - initializes security.evm HMAC value
+>   */
+> -int evm_inode_init_security(struct inode *inode,
+> -				 const struct xattr *lsm_xattr,
+> -				 struct xattr *evm_xattr)
+> +int evm_inode_init_security(struct inode *inode, struct inode *dir,
+> +			    const struct qstr *qstr,
+> +			    struct xattr *xattrs)
+>  {
+>  	struct evm_xattr *xattr_data;
+> +	struct xattr *xattr, *evm_xattr;
+>  	int rc;
+>  
+> -	if (!(evm_initialized & EVM_INIT_HMAC) ||
+> -	    !evm_protected_xattr(lsm_xattr->name))
+> -		return 0;
+> +	if (!(evm_initialized & EVM_INIT_HMAC) || !xattrs ||
+> +	    !evm_protected_xattr(xattrs->name))
+> +		return -EOPNOTSUPP;
+> +
+> +	for (xattr = xattrs; xattr->value != NULL; xattr++)
+> +		;
+
+security_inode_init_security() already contains a comment for
+allocating +2 extra space.   Adding a similar comment here to explain
+why walking the xattrs like this is safe would be nice.
+
+> +
+> +	evm_xattr = xattr;
+>  
+>  	xattr_data = kzalloc(sizeof(*xattr_data), GFP_NOFS);
+>  	if (!xattr_data)
+>  		return -ENOMEM;
+>  
+>  	xattr_data->data.type = EVM_XATTR_HMAC;
+> -	rc = evm_init_hmac(inode, lsm_xattr, xattr_data->digest);
+> +	rc = evm_init_hmac(inode, xattrs, xattr_data->digest);
+>  	if (rc < 0)
+>  		goto out;
+>  
+> diff --git a/security/security.c b/security/security.c
+> index 36804609caaa..44ce579daec1 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -1190,9 +1190,8 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
+>  	if (!num_filled_xattrs)
+>  		goto out;
+>  
+> -	ret = evm_inode_init_security(inode, new_xattrs,
+> -				      new_xattrs + num_filled_xattrs);
+> -	if (ret)
+> +	ret = evm_inode_init_security(inode, dir, qstr, new_xattrs);
+> +	if (ret && ret != -EOPNOTSUPP)
+>  		goto out;
+>  	ret = initxattrs(inode, new_xattrs, fs_data);
+>  out:
+
 
