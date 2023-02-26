@@ -2,103 +2,174 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612546A2085
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 24 Feb 2023 18:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91FA66A2DF0
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 26 Feb 2023 04:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjBXRhG (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 24 Feb 2023 12:37:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60636 "EHLO
+        id S230078AbjBZDyV (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sat, 25 Feb 2023 22:54:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBXRhF (ORCPT
+        with ESMTP id S230199AbjBZDyN (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 24 Feb 2023 12:37:05 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D356A794
-        for <reiserfs-devel@vger.kernel.org>; Fri, 24 Feb 2023 09:37:04 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so3615046pjb.1
-        for <reiserfs-devel@vger.kernel.org>; Fri, 24 Feb 2023 09:37:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=O0HJaUjEDadeep5F0ZYXzkrW1rTemjkBi2G9EEEgeakDIhVCkII1urowXNyiCwxf49
-         ta5itajMV5t21NUkGpjoslOkyPCrcaPbBGLRKhrVzmHH5PbjdfFnUIHO1IWMJrTe7Y/w
-         fHXQlEVXMcu15rYzSk8Tkh8rnV32C9hNioS0AfIHoHJaG250UvI7cUzP5GFHauXo/mbt
-         yY3aL53b11B8JvvSTEYbTLK1C9zJDMEO72jicsYyOC7Yqs3eKzkkJM86bn02/VK5TFtN
-         wi2rT7BdWvBiP57jmIqJaU5bfJjRQu2rX9gXtym1BKJ+W8xJdJ48N0Q8D6rzXEZRnxYN
-         K5zQ==
+        Sat, 25 Feb 2023 22:54:13 -0500
+Received: from mail-io1-xd47.google.com (mail-io1-xd47.google.com [IPv6:2607:f8b0:4864:20::d47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEDF17CC6
+        for <reiserfs-devel@vger.kernel.org>; Sat, 25 Feb 2023 19:53:42 -0800 (PST)
+Received: by mail-io1-xd47.google.com with SMTP id s1-20020a6bd301000000b0073e7646594aso1768199iob.8
+        for <reiserfs-devel@vger.kernel.org>; Sat, 25 Feb 2023 19:53:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=KlOPGT7SYV2tTxDvxkt9P44RyL/d1dlhd5ucFzttERns2f4tsqx1OtqL+fIzDqo+Xr
-         YoYFbvF+3/WWagjhRQAXMajB6oPnzUkpoO3ZGWhQDo7PNxAO+mnNH8NldgzZQcAixNqk
-         8EBZVWUoprGokstKFgdNXAi8lGX5bpBIcvmg1y+Gp+H1lvQnOU6MXuw+NokqThj4ab2x
-         XjVqxnzVUvaB7ZfmOHn3ihKBovvLMT8UCMo9BRNfVMxmCevJtQsfaLI50Otrvv46gBYU
-         WqfK7UNVPtdURkIvgrARDhgAUKUvyyoDG+QjLWzprTDwCBENCWkKTcx6LEhNgSCUQRH2
-         lDDQ==
-X-Gm-Message-State: AO0yUKXBzhnrbMB399xQ1lXdVUDHVsS0DJlw81QO9AyfNzFnG2K6tRsx
-        Kdz8WHQ8mDTpGWdLuc0T6BCTopUkmEBs481dld4=
-X-Google-Smtp-Source: AK7set//6mfoHL1JKpX3IIp9vG8fYCgGQw8Fblr/C9YkOaGAZnCVl4u71ogho6QoFL5cJ04ORi8MJIzDfVEvkif9EOM=
-X-Received: by 2002:a17:90a:f2c5:b0:234:13d8:ed5b with SMTP id
- gt5-20020a17090af2c500b0023413d8ed5bmr2005213pjb.3.1677260223802; Fri, 24 Feb
- 2023 09:37:03 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Cd31VU10PJZuIxtn4bPfkjZ2X0Vloo3og5W58I5g+Pc=;
+        b=TnLOcEYeFGuK3CmIthWQ4OmzkWdcfyb3sp4DLULmyGnlUG+YKzoEBX+zLDwX/38KQg
+         6Ks/4IpJrVjRx4k4xDxly1j2GL7GKXVEh+DvHtvCHpsa4pHsvf5zBpHLZYH86c2xitJb
+         5YVFWXuRkacxMCmyWp6xEvZSj3Y+fRIEfDxvyzX2NcHBh/G7KQ52E2rrdVrO+BcQvQaV
+         Q7s4oNKWg3EGUQx/dP6oAfDK+Ohe/mfzpUrM/bCy19ef7LZnUkagNadHz+bcSZyqUTQs
+         Cvgvn1m2qoY4aOlKSoBDs6Z1MCb2VFcxWt08MAHa+4NVEV189mtdlkyqOuEk/Aas/Rzw
+         cfVg==
+X-Gm-Message-State: AO0yUKVuJxkpc6LSgPwcfEZ/EE2dKhPRx1ud8rhyB5JeTPQTpaId6BEX
+        EKd2/2jxJ7zgQYm542QBWA1cTQtUcAb1TCComVvB7leP/kOa
+X-Google-Smtp-Source: AK7set9v5MKlOPXoI0zkAmoPq4P8x+H+7gnV15auRynzkYRxq7WzLRcqgNF+bpNd+NSYmqI0y1EvxMnLfy3Dbkiljc4/52V/v/cQ
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:3e48:b0:40a:b399:66c6 with HTTP; Fri, 24 Feb 2023
- 09:37:03 -0800 (PST)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <avasmt002@gmail.com>
-Date:   Fri, 24 Feb 2023 09:37:03 -0800
-Message-ID: <CAGJq2vtZEbb3KW6cQS7bmSRbYoYUsibN9sLv6Q6Zc7Os3eyUKA@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
+X-Received: by 2002:a05:6e02:1066:b0:310:9fc1:a92b with SMTP id
+ q6-20020a056e02106600b003109fc1a92bmr6813796ilj.0.1677383502889; Sat, 25 Feb
+ 2023 19:51:42 -0800 (PST)
+Date:   Sat, 25 Feb 2023 19:51:42 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d7894b05f5924787@google.com>
+Subject: [syzbot] [reiserfs?] [fat?] [fuse?] general protection fault in
+ timerqueue_add (4)
+From:   syzbot <syzbot+21f2b8753d8bfc6bb816@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        miklos@szeredi.hu, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1034 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5079]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [avasmt002[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dravasmith27[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [avasmt002[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    4a7d37e824f5 Merge tag 'hardening-v6.3-rc1' of git://git.k..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11fbf928c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8b969c5af147d31c
+dashboard link: https://syzkaller.appspot.com/bug?extid=21f2b8753d8bfc6bb816
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17c64f20c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13734ba0c80000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/6c3d867561ee/disk-4a7d37e8.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/422516721d17/vmlinux-4a7d37e8.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/164340e12ac4/bzImage-4a7d37e8.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/71954e6c3886/mount_1.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/89d5f0b5f58a/mount_5.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+21f2b8753d8bfc6bb816@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xe3fffb24000f33f5: 0000 [#1] PREEMPT SMP KASAN
+KASAN: maybe wild-memory-access in range [0x1ffff92000799fa8-0x1ffff92000799faf]
+CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.2.0-syzkaller-02299-g4a7d37e824f5 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+RIP: 0010:__timerqueue_less lib/timerqueue.c:22 [inline]
+RIP: 0010:rb_add_cached include/linux/rbtree.h:174 [inline]
+RIP: 0010:timerqueue_add+0xf7/0x330 lib/timerqueue.c:40
+Code: 48 c1 ea 03 42 80 3c 22 00 0f 85 c4 01 00 00 49 8b 17 48 85 d2 74 40 48 89 d3 e8 44 f1 c3 f7 48 8d 7b 18 48 89 f8 48 c1 e8 03 <42> 80 3c 20 00 0f 85 ab 01 00 00 4c 8b 7b 18 4c 89 ef 4c 89 fe e8
+RSP: 0018:ffffc900001e0da8 EFLAGS: 00010017
+RAX: 03ffff24000f33f5 RBX: 1ffff92000799f95 RCX: 0000000000000000
+RDX: ffff88813feb1d40 RSI: ffffffff89bdeb3c RDI: 1ffff92000799fad
+RBP: ffff8880b992c0e0 R08: 0000000000000006 R09: 00000009dd72e480
+R10: ffffc90003c9f5f8 R11: 0000000000000000 R12: dffffc0000000000
+R13: 00000009dd72e480 R14: 0000000000000000 R15: ffffc90003ccfc58
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f16907af000 CR3: 000000001de6d000 CR4: 0000000000350ee0
+Call Trace:
+ <IRQ>
+ enqueue_hrtimer+0x1aa/0x490 kernel/time/hrtimer.c:1091
+ __run_hrtimer kernel/time/hrtimer.c:1702 [inline]
+ __hrtimer_run_queues+0xc71/0x1010 kernel/time/hrtimer.c:1749
+ hrtimer_interrupt+0x320/0x790 kernel/time/hrtimer.c:1811
+ local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1096 [inline]
+ __sysvec_apic_timer_interrupt+0x180/0x660 arch/x86/kernel/apic/apic.c:1113
+ sysvec_apic_timer_interrupt+0x92/0xc0 arch/x86/kernel/apic/apic.c:1107
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:649
+RIP: 0010:native_irq_disable arch/x86/include/asm/irqflags.h:37 [inline]
+RIP: 0010:arch_local_irq_disable arch/x86/include/asm/irqflags.h:72 [inline]
+RIP: 0010:acpi_safe_halt+0x40/0x50 drivers/acpi/processor_idle.c:113
+Code: eb 03 83 e3 01 89 de 0f 1f 44 00 00 84 db 75 1b 0f 1f 44 00 00 eb 0c 0f 1f 44 00 00 0f 00 2d e7 5a a8 00 0f 1f 44 00 00 fb f4 <fa> 5b c3 cc 0f 1f 00 66 0f 1f 84 00 00 00 00 00 55 48 89 fd 53 0f
+RSP: 0018:ffffc90000177d10 EFLAGS: 00000246
+RAX: ffff88813feb1d40 RBX: 0000000000000000 RCX: ffffffff8a096b45
+RDX: 0000000000000001 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffff8880179b1864 R08: 0000000000000001 R09: ffff8880b993606b
+R10: ffffed1017326c0d R11: 0000000000000000 R12: 0000000000000001
+R13: ffff8880179b1800 R14: ffff8880179b1864 R15: 0000000000000000
+ acpi_idle_do_entry+0x53/0x70 drivers/acpi/processor_idle.c:573
+ acpi_idle_enter+0x173/0x290 drivers/acpi/processor_idle.c:711
+ cpuidle_enter_state+0xd3/0x6f0 drivers/cpuidle/cpuidle.c:267
+ cpuidle_enter+0x4e/0xa0 drivers/cpuidle/cpuidle.c:388
+ cpuidle_idle_call kernel/sched/idle.c:215 [inline]
+ do_idle+0x348/0x440 kernel/sched/idle.c:282
+ cpu_startup_entry+0x18/0x20 kernel/sched/idle.c:379
+ start_secondary+0x256/0x300 arch/x86/kernel/smpboot.c:264
+ secondary_startup_64_no_verify+0xce/0xdb
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__timerqueue_less lib/timerqueue.c:22 [inline]
+RIP: 0010:rb_add_cached include/linux/rbtree.h:174 [inline]
+RIP: 0010:timerqueue_add+0xf7/0x330 lib/timerqueue.c:40
+Code: 48 c1 ea 03 42 80 3c 22 00 0f 85 c4 01 00 00 49 8b 17 48 85 d2 74 40 48 89 d3 e8 44 f1 c3 f7 48 8d 7b 18 48 89 f8 48 c1 e8 03 <42> 80 3c 20 00 0f 85 ab 01 00 00 4c 8b 7b 18 4c 89 ef 4c 89 fe e8
+RSP: 0018:ffffc900001e0da8 EFLAGS: 00010017
+
+RAX: 03ffff24000f33f5 RBX: 1ffff92000799f95 RCX: 0000000000000000
+RDX: ffff88813feb1d40 RSI: ffffffff89bdeb3c RDI: 1ffff92000799fad
+RBP: ffff8880b992c0e0 R08: 0000000000000006 R09: 00000009dd72e480
+R10: ffffc90003c9f5f8 R11: 0000000000000000 R12: dffffc0000000000
+R13: 00000009dd72e480 R14: 0000000000000000 R15: ffffc90003ccfc58
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f16907af000 CR3: 000000001de6d000 CR4: 0000000000350ee0
+----------------
+Code disassembly (best guess):
+   0:	48 c1 ea 03          	shr    $0x3,%rdx
+   4:	42 80 3c 22 00       	cmpb   $0x0,(%rdx,%r12,1)
+   9:	0f 85 c4 01 00 00    	jne    0x1d3
+   f:	49 8b 17             	mov    (%r15),%rdx
+  12:	48 85 d2             	test   %rdx,%rdx
+  15:	74 40                	je     0x57
+  17:	48 89 d3             	mov    %rdx,%rbx
+  1a:	e8 44 f1 c3 f7       	callq  0xf7c3f163
+  1f:	48 8d 7b 18          	lea    0x18(%rbx),%rdi
+  23:	48 89 f8             	mov    %rdi,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 20 00       	cmpb   $0x0,(%rax,%r12,1) <-- trapping instruction
+  2f:	0f 85 ab 01 00 00    	jne    0x1e0
+  35:	4c 8b 7b 18          	mov    0x18(%rbx),%r15
+  39:	4c 89 ef             	mov    %r13,%rdi
+  3c:	4c 89 fe             	mov    %r15,%rsi
+  3f:	e8                   	.byte 0xe8
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
