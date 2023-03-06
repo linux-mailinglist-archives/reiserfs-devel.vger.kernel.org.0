@@ -2,78 +2,96 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B32E6AB9BE
-	for <lists+reiserfs-devel@lfdr.de>; Mon,  6 Mar 2023 10:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF7A6ABC0D
+	for <lists+reiserfs-devel@lfdr.de>; Mon,  6 Mar 2023 11:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbjCFJ0p (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 6 Mar 2023 04:26:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36402 "EHLO
+        id S229746AbjCFKZN (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 6 Mar 2023 05:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjCFJ0n (ORCPT
+        with ESMTP id S229912AbjCFKZL (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:26:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10557231E0;
-        Mon,  6 Mar 2023 01:26:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9D4E3B80D27;
-        Mon,  6 Mar 2023 09:26:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2167C433EF;
-        Mon,  6 Mar 2023 09:26:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678094799;
-        bh=57FrCCZ2Wq+YAZlBEbTVLCXLXyHrbe4LXgxzAP6Rt70=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aGpHk5/EASsEtl4vKnAkGUaXhtbPzA/d2cXgftsQx8PVrRgVXQNsAAnUOBX1GgX6I
-         G/6gfIFXfw4GETwfv8Vqa+2mueXnJba6vq4doCPeNTZ+42jYFYMi/XGYUBkeA8X/oD
-         ElKS799bOnXufZBGOEBscaDcXEpJHRp87DtATu56G0m7hUhBUbQpW3gm1nxMrdfglF
-         0ZbBUcHJGIkJmz/Hsybihbq8zOv2if13KJ/EEandIpN1dFYg7WzDuihAtyiEKIBsW3
-         NHz3uKORaef+IPel5P8LpgPELeV5dFcgKzByHGHs4b9oIVc5RyT13xsoOqXUWsxf3W
-         aynSxAyBPrijQ==
-Date:   Mon, 6 Mar 2023 10:26:33 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Seth Forshee <sforshee@kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-        linux-mtd@lists.infradead.org, reiserfs-devel@vger.kernel.org,
-        linux-unionfs@vger.kernel.org
-Subject: Re: [PATCH v3 00/10] acl: drop posix acl handlers from xattr handlers
-Message-ID: <20230306092633.tobpejvw7mwcx22v@wittgenstein>
-References: <20230125-fs-acl-remove-generic-xattr-handlers-v3-0-f760cc58967d@kernel.org>
- <20230201133020.GA31902@lst.de>
- <20230201134254.fai2vc7gtzj6iikx@wittgenstein>
+        Mon, 6 Mar 2023 05:25:11 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9481122002
+        for <reiserfs-devel@vger.kernel.org>; Mon,  6 Mar 2023 02:25:09 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id x40so6066271uaf.2
+        for <reiserfs-devel@vger.kernel.org>; Mon, 06 Mar 2023 02:25:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678098308;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vh7FN/ulAdnmY8O0LKz7bqpIFk4oOSQ9iCZ8VQ/AkNo=;
+        b=XLGWJIk9ngr+DzzO288LuvJaM4tXJNvPNwQ2aS9Ags44qiVmrxsinzlSTI373SWvQL
+         +6SgUcT0EwDOIVN2f57batbL6WGkZ2VjHiZD2U0ZfoB3ufKNwLox0AmmmOFBlt9HJ6RH
+         OS5dvcaELSOGwrw7xfZFJ2NbgVH7MQKiyCspd7sI5fG3WOcHvbeWf9pH0zYeQabOYzn3
+         yw9gnSfWn+YHaL2P9olrtireCVfXlHXeG4tpX1ltR43P7LxaSqE8ArqnuABg3RgkQyVT
+         NPOLZ1x9kR7oCsOGhR6lezPY8aiclxT9jA/o8x8OVtbG9/bfL0WUzRZuLJI8IqemKCfK
+         Id5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678098308;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vh7FN/ulAdnmY8O0LKz7bqpIFk4oOSQ9iCZ8VQ/AkNo=;
+        b=xCetnPJCt8ZxKB9FjUXkdTcuH6/F/9H67n0E4swQsfYoWw1u6+pQ3b/1zOb5stCl7R
+         nbEmlhW/AsveXC6Zkh07b+QyddSS3B4GgPnYxIdyTmp7EvvDK3379Qz1M6mshTY5pp1v
+         ojJpZlEjLiugAd62s/ur7GVzH6JyPFt4sQjBbPx+xgvqTYm4Mp1Q54DIOBNVvDwSm13B
+         XibPbh0bx/kRtKFupcqxwGIBNqvjzqGKKyqofhHAd4x3tfCA6kmdin3X+nW2hqzeU5EG
+         7kaOGBVlY3nNDj3iwUTwpy5ePkrHzjDUUSZoANtUdpGBlpit0x33HNEEuWQJPK4b6rOA
+         AreA==
+X-Gm-Message-State: AO0yUKW8+GJbgC3t+scDlAh75SToaOnm+nRlGhhEXRggQJmE9aTyusMi
+        6SbqjeOEVPDKjg0v/QYeyc7A2BmQiPzPlMMTsPA=
+X-Google-Smtp-Source: AK7set+HbxOG8fRWYdSd2Spe8YgeAHrZJbrwpyn/MCNLktCdTFpedrqR91TU0+OXtW6ZaqP/6B7py4FyO7omWVyWxwo=
+X-Received: by 2002:a1f:1752:0:b0:401:f65:99c2 with SMTP id
+ 79-20020a1f1752000000b004010f6599c2mr6566336vkx.3.1678098308425; Mon, 06 Mar
+ 2023 02:25:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230201134254.fai2vc7gtzj6iikx@wittgenstein>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a59:ce6f:0:b0:3ae:930b:3e70 with HTTP; Mon, 6 Mar 2023
+ 02:25:08 -0800 (PST)
+Reply-To: madis.scarl@terlera.it
+From:   "Ms Eve from U.N" <denisagotou@gmail.com>
+Date:   Mon, 6 Mar 2023 11:25:08 +0100
+Message-ID: <CAD6bNBj=acZn6jpkuAhuMAxbq=prud3DvWJUd6YsqM0swBt35Q@mail.gmail.com>
+Subject: Re: Claim of Fund:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_SCAM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:935 listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.9410]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [denisagotou[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.0 HK_SCAM No description available.
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 02:42:54PM +0100, Christian Brauner wrote:
-> On Wed, Feb 01, 2023 at 02:30:20PM +0100, Christoph Hellwig wrote:
-> > This version looks good to me, but I'd really prefer if a reiserfs
-> > insider could look over the reiserfs patches.
-> 
-> I consider this material for v6.4 even with an -rc8 for v6.3. So there's
-> time but we shouldn't block it on reiserfs. Especially, since it's
-> marked deprecated.
+Hello Good Morning,
+This is to bring to your notice that all our efforts to contact you
+through this your email ID failed Please Kindly contact Barrister.
+Steven Mike { mbarrsteven@gmail.com } on his private email for the
+claim of your compensation entitlement
 
-So I've applied this now. If there's still someone interested in
-checking the reiserfs bits more than what we did with xfstests they
-should please do so. But I don't want to hold up this series waiting for
-that to happen.
-
-> 
-> Fwiw, I've tested reiserfs with xfstests on a kernel with and without
-> this series applied and there's no regressions. But it's overall pretty
-> buggy at least according to xfstests. Which is expected, I guess.
+Note: You have to pay for the delivery fee.
+Yours Sincerely
+Mrs EVE LEWIS
