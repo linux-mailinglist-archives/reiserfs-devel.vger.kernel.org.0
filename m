@@ -2,103 +2,86 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DF06B1D1E
-	for <lists+reiserfs-devel@lfdr.de>; Thu,  9 Mar 2023 08:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4B66B3D12
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 10 Mar 2023 11:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbjCIHzs (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 9 Mar 2023 02:55:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
+        id S230039AbjCJK7Q (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 10 Mar 2023 05:59:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbjCIHyi (ORCPT
+        with ESMTP id S230221AbjCJK7B (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 9 Mar 2023 02:54:38 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512311CBCD;
-        Wed,  8 Mar 2023 23:54:30 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PXLnx0YDyz9xHvy;
-        Thu,  9 Mar 2023 15:45:41 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwB3Rl2OkAlkp2OBAQ--.23244S2;
-        Thu, 09 Mar 2023 08:54:01 +0100 (CET)
-Message-ID: <250fe1947dd3fea27d8f4aa86fdb9980954b5425.camel@huaweicloud.com>
-Subject: Re: [PATCH v7 0/6] evm: Do HMAC of multiple per LSM xattrs for new
- inodes
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com,
-        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 09 Mar 2023 08:53:48 +0100
-In-Reply-To: <CAHC9VhTRT=o9Rv+EhZ4aab1FDCyTNa7XEYuhuOiSEkWh0Cdrnw@mail.gmail.com>
-References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
-         <CAHC9VhTRT=o9Rv+EhZ4aab1FDCyTNa7XEYuhuOiSEkWh0Cdrnw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Fri, 10 Mar 2023 05:59:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617B36B974;
+        Fri, 10 Mar 2023 02:58:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01C11B82260;
+        Fri, 10 Mar 2023 10:58:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3B94C433D2;
+        Fri, 10 Mar 2023 10:58:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678445935;
+        bh=nyY232ZY2Q5K4pNyA+3/TkUKEbZ7ZEFY5fxylZaIKmM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QzWjuZYlOZitfbd5zPN6eEJbLRnrEK1rsoZrJNy0xQFPxqOAHgAbZZoHg7mgWkjp8
+         1QnG96QPhW1u8FEGaMRpmVNRT/iaf4TNXjvyW85L68ie1bdwIFMv/ZTsyA7tGtR5X0
+         /fuHXtGw+Dnw82NpyEFFK/WHCcSCSIsR0K0oI0CskJx2KFv7G7VYgitXKPsryprHZG
+         Xsmj+bTcm9T5a9zPpKsFdQ/rfIXz5m2XgSVT5bOfIomyEC1bg1czJP73BWvvtUk0X+
+         7Gsl46aEDJY0jNSwlWte5S0W2RmwTL7kqZ//rbMlrjW5cynr1nZe3/gp0PSxV8rhET
+         o7r7KoyFuj6Uw==
+Date:   Fri, 10 Mar 2023 11:58:50 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     ye.xingchen@zte.com.cn
+Cc:     dchinner@redhat.com, willy@infradead.org, viro@zeniv.linux.org.uk,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        fsdevel@vger.kernel.org
+Subject: Re: [PATCH] reiserfs: remove duplicate include header in xattr.c
+Message-ID: <20230310105850.gomiydgm22eoxmxw@wittgenstein>
+References: <202303071517050653678@zte.com.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwB3Rl2OkAlkp2OBAQ--.23244S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZw4kGFy8uryfCFWDJw47Jwb_yoWkZFg_u3
-        WUt3s7Gws8X3WkGa13tr1agry0g3ykZF1jvryqgr13Xw18JaykAFs7CFsavw15Jay7X3sI
-        kr9rZ342y3sIgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb78YFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQALBF1jj4pbjgACsi
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202303071517050653678@zte.com.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Wed, 2023-03-08 at 17:16 -0500, Paul Moore wrote:
-> On Thu, Dec 1, 2022 at 5:42 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > One of the major goals of LSM stacking is to run multiple LSMs side by side
-> > without interfering with each other. The ultimate decision will depend on
-> > individual LSM decision.
-> > 
-> > Several changes need to be made to the LSM infrastructure to be able to
-> > support that. This patch set tackles one of them: gives to each LSM the
-> > ability to specify one or multiple xattrs to be set at inode creation
-> > time and, at the same time, gives to EVM the ability to access all those
-> > xattrs and calculate the HMAC on them.
+On Tue, Mar 07, 2023 at 03:17:05PM +0800, ye.xingchen@zte.com.cn wrote:
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
 > 
-> Hi Roberto,
+> linux/xattr.h is included more than once.
 > 
-> The v7 draft of this patchset had some good discussion, and based on a
-> quick read of the comments it looks like everyone was eventually
-> satisfied that the v7 draft was good and no further changes were
-> necessary, is that correct or do you have an updated draft of this
-> patchset?
+> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+> ---
 
-Hi Paul
+I mean, yeah, it's included in the local xattr.h file but honestly
+reiserfs is marked deprecated and I just don't think that we should
+bother with cleaning up things that are _that_ minor. If it was the
+compiler complaining about some unused variable then for sure but this
+just seems pointless imho at this terminal stage...
 
-I addressed few more concerns from Mimi and Casey. I think v8 should be
-good to send (unless you have more comments/suggestions).
-
-Thanks
-
-Roberto
-
+>  fs/reiserfs/xattr.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/fs/reiserfs/xattr.c b/fs/reiserfs/xattr.c
+> index 651027967159..ed1984775a4f 100644
+> --- a/fs/reiserfs/xattr.c
+> +++ b/fs/reiserfs/xattr.c
+> @@ -43,7 +43,6 @@
+>  #include <linux/fs.h>
+>  #include <linux/file.h>
+>  #include <linux/pagemap.h>
+> -#include <linux/xattr.h>
+>  #include "xattr.h"
+>  #include "acl.h"
+>  #include <linux/uaccess.h>
+> -- 
+> 2.25.1
