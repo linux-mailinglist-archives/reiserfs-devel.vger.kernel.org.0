@@ -2,105 +2,82 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96CA6C178C
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 20 Mar 2023 16:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E30A6C3C98
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 21 Mar 2023 22:26:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232328AbjCTPO6 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 20 Mar 2023 11:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45088 "EHLO
+        id S230150AbjCUV02 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 21 Mar 2023 17:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232469AbjCTPO2 (ORCPT
+        with ESMTP id S229931AbjCUV01 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:14:28 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F0B32CCD
-        for <reiserfs-devel@vger.kernel.org>; Mon, 20 Mar 2023 08:09:34 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id t5so11229933edd.7
-        for <reiserfs-devel@vger.kernel.org>; Mon, 20 Mar 2023 08:09:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679324972;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oDVdWICwavrWQ8UAVYhe8ynFXsBBW1vVQ7W08zgiq24=;
-        b=llbeAuUHISTuwC5B62tqq262QPcXfi1d+kjmNurHi7KlaGlfvbjs1mYbZzvd2w1FbS
-         qQaLNVECYx06dx2NdHXkjMofkP124sY8pvB520ARYZVHlLq7a6DvFbKrx+XY3FZI9rJh
-         o6Gkt6mDzyFFJ2KtP4/XZuNTNOjC2Ey3J06HlEskT5mD8F5bDH7JgRFDpdtS/31nPu5q
-         CKvZkw2hPGMRng5kVXHmGC6XooztANkiJmkFV5cIpmLSs4frEDymTGBpI1Mg/QLqGpRB
-         oDKujJHuqXgbZCWUFDiJ9h40JD86L1KXkYjcRnQlXfAEJ8npBhIeDwsLCe7F/ZqDtflX
-         I5lg==
+        Tue, 21 Mar 2023 17:26:27 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FA15708F
+        for <reiserfs-devel@vger.kernel.org>; Tue, 21 Mar 2023 14:26:24 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id i2-20020a5d9e42000000b0074cfcc4ed07so8642122ioi.22
+        for <reiserfs-devel@vger.kernel.org>; Tue, 21 Mar 2023 14:26:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679324972;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        d=1e100.net; s=20210112; t=1679433983;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oDVdWICwavrWQ8UAVYhe8ynFXsBBW1vVQ7W08zgiq24=;
-        b=8AWBrBmakZnOdc6Xc8JcANtcQDvh4yT7egWIA5AxUqnR9g8F03+EGEKw+ifDo/8v+T
-         hZgLDZPZ9Ik562dZikP5OaSdy5+Nr7cGn4EiJRIxfsfHMsQfu8za/1jCmX5D0uYX+7lP
-         rCnpD1K7eHFA271xrA/cSbdxqigPdlacFC2bI7uaivObR6oujNgvSwxKIXjNR0LcoUpS
-         2AeXH3X/HygcI3yL+7l8/04rYTfqI/XTmBmeCv4udQaTNwdyVGZZtuPY2O0O3gdQ4VXr
-         zWn0vkukb5OIVYkbBKDfDlMw5IKjV00KDtnoxo8TNoGdHHvxhuFUZ4QaDPs+y2N5BVS+
-         odHw==
-X-Gm-Message-State: AO0yUKVqWFThjWYdMjIp06QZgwnmSaoKw9uc5Xa1DiRLCwDG202EeNuO
-        9DTTEneHskPC+nu+uOU6M36rvdjM9C3up6Wji/M=
-X-Google-Smtp-Source: AK7set9pDGPsTM06FgyhZiWfKiEITCe+eQJ2qx/bssC/xepE5NEEdgi72eK5WPBu0KJvo9MVaxtcCvBXroz6UvUA0FM=
-X-Received: by 2002:a50:ce0f:0:b0:4fa:6fdd:62dd with SMTP id
- y15-20020a50ce0f000000b004fa6fdd62ddmr6763167edi.7.1679324971943; Mon, 20 Mar
- 2023 08:09:31 -0700 (PDT)
+        bh=C+FYNnqKd+w1ZGDSpw0zb6Lp4HM2HTikzf97IDwlhu4=;
+        b=Jwy+FJu1FwGLnap5fZhDPRwVkA8jiPYgMq4Zhj6HTmh7Lc7dTRa09PPryYFUugc0nt
+         KbewUwjrr9Ne0wOjg/hEmvkodc2mm2fyr5X2oBtE726L5A3NbfMJQ7cwpwTZJIn5DNZ2
+         j/p8O5hZHAiE/+5QA7Nl/jxqEzblYclp0pRKCWwc3uIueHp8ZJMVB4aJDIydhYUW1/6F
+         D9DQ+jiEoVVyyJ+pwlgmj0KgAh4p4o3Btkzm/SsankEaxL/52BCie+vnAnXZMzYpiQFB
+         2JB0ailvAm2bzTYjPRXa2q2HsaCfQGCyL9/hHKsCluC4eG4BgMPzAlUSPQpfVscaVhMM
+         aEXQ==
+X-Gm-Message-State: AO0yUKVOr0OUDxpx3lb5aYH2/Ug0SV9Pfv2trJpoPV+sWGIwu/acZEQ6
+        26pvXlWa1NWu2vO1uMfE5NAxOCUrzQsdUigZSEU1EADyPlkL
+X-Google-Smtp-Source: AK7set8j1wnd0RNetmYMJ/6UVm+vkodHnklVedOj+4iGTAzRcSeU6bH9Zrt6hOlJcbmSWyRb6BJUUARVYMGbJfml75OIIWH9dC2/
 MIME-Version: 1.0
-Received: by 2002:a17:907:787:b0:928:3d6f:eb78 with HTTP; Mon, 20 Mar 2023
- 08:09:31 -0700 (PDT)
-Reply-To: ninacoulibaly03@hotmail.com
-From:   nina coulibaly <ninacoulibaly331@gmail.com>
-Date:   Mon, 20 Mar 2023 08:09:31 -0700
-Message-ID: <CAOK+POLF_7RG=SfJ_5TBSJgVh5Eb=Q6Z=iAkEH-WFJAnbtwp8A@mail.gmail.com>
-Subject: from nina coulibaly
-To:     undisclosed-recipients:;
+X-Received: by 2002:a05:6e02:f13:b0:310:fc49:1d9 with SMTP id
+ x19-20020a056e020f1300b00310fc4901d9mr1464283ilj.6.1679433983388; Tue, 21 Mar
+ 2023 14:26:23 -0700 (PDT)
+Date:   Tue, 21 Mar 2023 14:26:23 -0700
+In-Reply-To: <00000000000022a65705ec7f923c@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000000f2d005f76fb25e@google.com>
+Subject: Re: [syzbot] [reiserfs?] kernel BUG in do_journal_begin_r
+From:   syzbot <syzbot+2da5e132dd0268a9c0e4@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, axboe@kernel.dk, bvanassche@acm.org,
+        idosch@nvidia.com, jack@suse.cz, jacob.e.keller@intel.com,
+        jiri@nvidia.com, jlayton@kernel.org, kuba@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        neilb@suse.de, pabeni@redhat.com, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org,
+        yi.zhang@huawei.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:529 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [ninacoulibaly331[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ninacoulibaly331[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [ninacoulibaly03[at]hotmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Dear,
+syzbot suspects this issue was fixed by commit:
 
-I am interested to invest with you in your country with total trust
-and i hope you will give me total support, sincerity and commitment.
-Please get back to me as soon as possible so that i can give you my
-proposed details of funding and others.
+commit b20b8aec6ffc07bb547966b356780cd344f20f5b
+Author: Ido Schimmel <idosch@nvidia.com>
+Date:   Wed Feb 15 07:31:39 2023 +0000
 
-Best Regards.
+    devlink: Fix netdev notifier chain corruption
 
-Mrs Nina Coulibaly
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=139af019c80000
+start commit:   033c40a89f55 Merge tag 'apparmor-v6.2-rc9' of git://git.ke..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fe56f7d193926860
+dashboard link: https://syzkaller.appspot.com/bug?extid=2da5e132dd0268a9c0e4
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1264a8d7480000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: devlink: Fix netdev notifier chain corruption
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
