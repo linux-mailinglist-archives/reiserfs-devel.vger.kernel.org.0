@@ -2,71 +2,115 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1386C5AD0
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 23 Mar 2023 00:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB476C7409
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 24 Mar 2023 00:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjCVXtM (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 22 Mar 2023 19:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
+        id S229499AbjCWXdz (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 23 Mar 2023 19:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCVXtL (ORCPT
+        with ESMTP id S230132AbjCWXdy (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 22 Mar 2023 19:49:11 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A8021A13
-        for <reiserfs-devel@vger.kernel.org>; Wed, 22 Mar 2023 16:49:09 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id l7so2571390qvh.5
-        for <reiserfs-devel@vger.kernel.org>; Wed, 22 Mar 2023 16:49:09 -0700 (PDT)
+        Thu, 23 Mar 2023 19:33:54 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE24B241E3
+        for <reiserfs-devel@vger.kernel.org>; Thu, 23 Mar 2023 16:33:51 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id k17so266421ybm.11
+        for <reiserfs-devel@vger.kernel.org>; Thu, 23 Mar 2023 16:33:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679528948;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=91UiJeEJ1mze14WbHMd5QA14OarckVBimVzBrDtBEh8=;
-        b=b9viAn/QX2ir0mYpG7uim+/ubehS0DQyw6jcgTK3+ae2zG3IImHS2QfTDnUM6JssiY
-         62+JO9gkyJyCjO7jCQugUQQV5IPgc4R7Lh+XzyK3FcTbj9p0J+wRtwfsaZQ1EzEpOm6p
-         aKUdn8FSSozTFwcvkyq8eBJ51A/wqN6v3t412kaCvEuKfAv/noobjvEzn/NfxVIwF4G8
-         bc1zfWE9HrnPygx2lzUt+e2PkvV+0ahsJik8IirmUCrvTThhSr5cwTAJjQNnEGFmD/6v
-         dezoTkhKzs2Be4CanpEFYlY0rkERwK3mnBqC9iV/sbYL+uJWToUbiBU9mjamNbbRwsNX
-         5LUQ==
+        d=paul-moore.com; s=google; t=1679614431;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I4UQt9s0uViyb6ofhmfjXLpk2tpOHMTrFO4xtiTE1F0=;
+        b=B/0sSV7njn/GnbdGsZmwGqohjHyQKCvOu/6lA3UnCwY5crL557lHVTU44KJxZHT7yP
+         aPP+W3L7LsThfn1d73iOPDaxJ4xaogwioYx8PIMl/sbmCYK2QpbhQ/C3TGah4c41AH7d
+         34VK1xWYZtimyZLICoxE+b9Eqs8qV62zR0LZst+Hl5muiDzrsbLT4VjJQjVnxo20RgOx
+         QS6XgqmI6PTjN2jji+M23xYUJA5aMnZhcnEc1UWcg8cyTAqJUozNTyGh4D0U2mOYANmT
+         m2TjS6e7s7ht3ZDMN60F3ByMAURAMBiNlLvT9cSW4f6JHrOJwK9tvY7F3QFHQYSulqjZ
+         TNsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679528948;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=91UiJeEJ1mze14WbHMd5QA14OarckVBimVzBrDtBEh8=;
-        b=PByPUeM+gdQ4WtIyugErXfDHIjBVJfPivJX+vz9uZL2HxoAcSh0TorEgz7jQTO7CAu
-         gmuaBBc3YKsbBJb8F1lRVGe2fQs1ZQgeHeajpGP4Net36ihRZahUCKEJ2q+pb5jNsB8X
-         3cs5i/QLGydhPHd+A1sfE+LPPS3dtv/rLy8bNOkuzkS42hsmBfJ0SJk8mjwrzTzNaT0t
-         yftCQxtsCCcA+B07iaiUWz+7pWWmUz69F/oBUUfrc6brT3d5i8WjqmpHMlEWZmO2EAA+
-         K2bwodBIMMIeYXOq4fUabOkZAy90ngS89kayXxaxB9sO6TH2bYapZ3E2UdRj69G/AuoJ
-         D92w==
-X-Gm-Message-State: AO0yUKXIRpQBRt+2Pl6SUDfiV9daKqbdEkpt8Gyk/8+dWucL+Rxp+2ur
-        Jb749SrVyVYFWW2GVIMAst9TU3UHAAsLe/CG5Agcjl/GzFQ=
-X-Google-Smtp-Source: AK7set9xdpr3AxFG0JECpsH+HN/vBfyQRWZlojg1Syaq6Rs25soEu3kdu70JCQGyYH8Qs5JoeM4L7Ea7YomI9HPNynY=
-X-Received: by 2002:ad4:4f2e:0:b0:56e:a0ba:cc3e with SMTP id
- fc14-20020ad44f2e000000b0056ea0bacc3emr1193195qvb.0.1679528948512; Wed, 22
- Mar 2023 16:49:08 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679614431;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I4UQt9s0uViyb6ofhmfjXLpk2tpOHMTrFO4xtiTE1F0=;
+        b=N24OuDRBg7juWaBPOEqgcyIiqL4n4WMzlAf3PbhjYfNTcyA/RNHggd5bJz4SBgVdWL
+         G+47lSjhSQLw1DFg3aKvzXLBY7HYUERdUSbfyH/zZqwRAr7Xh/osKB9wax6RVln8w1HT
+         x46pkmtLECq4CSYnkyEYeCgV1ISfZ6er0lO7D+SmcLr4dMeDUfrzmZ+OJz1MCu4u3Xky
+         fofDaRr1Qa/L6dBDOQuNfF0J3FvrIAuQnAp90w5cp79IuQCNiMIENC0bJFWXyWgguWRC
+         pCGtN13ei2nk7UVAgHt6O/9HMTsHGHFAoJhDBLxWOypODl67GWfJblXKpB0FStBmFE87
+         vtvA==
+X-Gm-Message-State: AAQBX9eOiTMbi/ZzEqI3glGWAtjL3jWxCFlFzGacWAhTJhVnUNM3aTUw
+        4F9EMpfIHhQgPD7ak6ggKVspcn+qv49Pqj57egRK
+X-Google-Smtp-Source: AKy350Ythv2mrmo7XSEuLMBIjFRTDHgBFPhqt6X4Wf9cwlS+qXqGx6EuJGwGC9z42MtKE37zO8JrjgFxkcxJXq4nSaI=
+X-Received: by 2002:a25:abee:0:b0:b68:7a4a:5258 with SMTP id
+ v101-20020a25abee000000b00b687a4a5258mr211351ybi.3.1679614430992; Thu, 23 Mar
+ 2023 16:33:50 -0700 (PDT)
 MIME-Version: 1.0
-From:   S V <nerfur@gmail.com>
-Date:   Thu, 23 Mar 2023 02:48:57 +0300
-Message-ID: <CAKDfvLbmX6xNiUAdsTmWrN4PK9zC_LRbqmNEG_wu=YedpaH33A@mail.gmail.com>
-Subject: Want to try luck with OpenBSD?
-To:     reiserfs-devel@vger.kernel.org
+References: <20230314081720.4158676-1-roberto.sassu@huaweicloud.com> <20230314081720.4158676-2-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20230314081720.4158676-2-roberto.sassu@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 23 Mar 2023 19:33:40 -0400
+Message-ID: <CAHC9VhS1htA=cFqbc3KJsrZ3by6_m=f3Bd0sTbztC=qMZEvedA@mail.gmail.com>
+Subject: Re: [PATCH v8 1/6] reiserfs: Switch to security_inode_init_security()
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com,
+        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello, I know it may sound pretty rude, but don't you consider
-possibility of porting your fs to OpenBSD or any other *BSD OS?
-All of them have lean, understandable code base and high demand for
-some additional fs, why not?
+On Tue, Mar 14, 2023 at 4:18=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> In preparation for removing security_old_inode_init_security(), switch to
+> security_inode_init_security(). Commit 572302af1258 ("reiserfs: Add missi=
+ng
+> calls to reiserfs_security_free()") fixed possible memory leaks and anoth=
+er
+> issue related to adding an xattr at inode creation time.
+>
+> Define the initxattrs callback reiserfs_initxattrs(), to populate the
+> name/value/len triple in the reiserfs_security_handle() with the first
+> xattr provided by LSMs. Make a copy of the xattr value, as
+> security_inode_init_security() frees it.
+>
+> After the call to security_inode_init_security(), remove the check for
+> returning -EOPNOTSUPP, as security_inode_init_security() changes it to
+> zero.
+>
+> Multiple xattrs are currently not supported, as the
+> reiserfs_security_handle structure is exported to user space. As a
+> consequence, even if EVM is invoked, it will not provide an xattr (if it
+> is not the first to set it, its xattr will be discarded; if it is the
+> first, it does not have xattrs to calculate the HMAC on).
+>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>  fs/reiserfs/xattr_security.c | 23 ++++++++++++++++++-----
+>  1 file changed, 18 insertions(+), 5 deletions(-)
 
--- 
-Nerfur Dragon
--==(UDIC)==-
+Merged into lsm/next, thanks.
+
+--=20
+paul-moore.com
