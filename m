@@ -2,118 +2,122 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FC46C9EC5
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 27 Mar 2023 11:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681F26CA180
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 27 Mar 2023 12:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233276AbjC0JAR (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 27 Mar 2023 05:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
+        id S232707AbjC0KdH (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 27 Mar 2023 06:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233313AbjC0I7j (ORCPT
+        with ESMTP id S232655AbjC0KdG (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 27 Mar 2023 04:59:39 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7C96185;
-        Mon, 27 Mar 2023 01:57:51 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5A8111F390;
-        Mon, 27 Mar 2023 08:57:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679907470; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VsjdwQC1SQNlX4Ss19all/21eWMCxSr72u89IWVV3N8=;
-        b=3NB+KVfA63hYNzd6cCOT0J91ZMysy4InCEVvnVWRQEVecqVkoF/PZK4nAw4K4GR2gCDtiN
-        7Q5Rc95I4tErGOm+y7rXNbmD8J4HUjKGusyhe16EI5pcHsf/3xxzQSf9YcW1CX22M1ZqfT
-        NiqcarGBdO3kOvdKbJ1Xbp5zx4PIyDs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679907470;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VsjdwQC1SQNlX4Ss19all/21eWMCxSr72u89IWVV3N8=;
-        b=O/zS+lKt9iROId/HQmgAGxFMCy5PCQ62LGW6KPGAuidre1hh0+hViOJBt2Bk0rCYQDWdTH
-        yUw4i7s+0KlhnCAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 480B913329;
-        Mon, 27 Mar 2023 08:57:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id +uSMEY5aIWRHVQAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 27 Mar 2023 08:57:50 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id CC219A071C; Mon, 27 Mar 2023 10:57:49 +0200 (CEST)
-Date:   Mon, 27 Mar 2023 10:57:49 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Tom Rix <trix@redhat.com>
-Cc:     nathan@kernel.org, ndesaulniers@google.com, willy@infradead.org,
-        akpm@linux-foundation.org, jack@suse.cz, jlayton@kernel.org,
-        song@kernel.org, yi.zhang@huawei.com, bvanassche@acm.org,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] reiserfs: remove unused sched_count variable
-Message-ID: <20230327085749.feyfegzdjxqhymdu@quack3>
-References: <20230326204459.1358553-1-trix@redhat.com>
+        Mon, 27 Mar 2023 06:33:06 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B5D10FA
+        for <reiserfs-devel@vger.kernel.org>; Mon, 27 Mar 2023 03:33:04 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id b18so9899124ybp.1
+        for <reiserfs-devel@vger.kernel.org>; Mon, 27 Mar 2023 03:33:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679913183;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IE0Q22t9nDUcBAUVsmYKmeg+5EtHh5OHc8AXl8b80GM=;
+        b=fzIX1Z4cFoO+QCmPA+bU8qq/YUDwtIrljP7r/HRTtr6IDnzeTXO4sEMgfiSKeYYoC4
+         /28rtd5/xYBXdr202UGc+xt4t5XSxKrFsAZ20biEJ4qPD5gG5kscx8wqSFuLkRrJH3+M
+         DyRKENfx0e0ul7Pj0FeOzwo73FVzl/w4e0lkw9da2CyQTdR1dJTL5QVkv05cEyxL1Wye
+         biOpUKrNV8JunJZ8abujtX1UPk61gbT3mWaT3EdX10XuH7Umlzbjq2qn4Wsgxi9Yp2uW
+         UM7CPt2kwlHWvVrdAohge0pmv1xSGb3iVgw4OZhpfx96KmIRj+xnFtBB/Q9yDTmcWR65
+         CK5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679913183;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IE0Q22t9nDUcBAUVsmYKmeg+5EtHh5OHc8AXl8b80GM=;
+        b=6WcMZFR5iap1Ic+Svh/jmOly6mihG/EufpaNLwUPOmBcRoZPTfytR8sSrk7fpOcy6v
+         jPC2vk7Soe1WjlFlFVzPBYFOXBzmfgcg2jNy2Q+KILPCLAFGav9oLsbTUGZTLD7hun38
+         BEzcvH1MFvbkJr6HhDoX+PruexxPt+EFNFlQdSy6UMtXKOsERckmu10jxsP6dEswq+qA
+         zKzltAkd5/01VCaELTAiUKxJmC/aqMdpMXO+c/hV6GF69q4QjggaKUEf6j9Uus9b+YSD
+         q6OQBfgMkEhWl8HFQ9LAg9oHExUfVSrTaXvIw74wQgtW62PUFT217moK6mjYIE4kQRVO
+         SAIA==
+X-Gm-Message-State: AAQBX9cShR6W0UOBvhmK8R7MIelQDvVUumtG1dCg4NDsA6UQl8kbAvq9
+        w0ZMfc4c5sG0m7VBx/UFHXE/bCEHuNUBfYQN0Go=
+X-Google-Smtp-Source: AKy350YDDP6Uj2kRAOaYC/l4Ye9t0tHTdLIMkRH9Q/0tdHqjyvxssQIGbMF3pKckPevEzT0+JO8Ykq0pTQe1PcoOHxc=
+X-Received: by 2002:a05:6902:1108:b0:b6d:fc53:c5c0 with SMTP id
+ o8-20020a056902110800b00b6dfc53c5c0mr9251769ybu.1.1679913183411; Mon, 27 Mar
+ 2023 03:33:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230326204459.1358553-1-trix@redhat.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:7010:3802:b0:344:68a5:3ba0 with HTTP; Mon, 27 Mar 2023
+ 03:33:03 -0700 (PDT)
+Reply-To: annamalgorzata587@gmail.com
+From:   "Leszczynska Anna Malgorzata." <celinekorommah@gmail.com>
+Date:   Mon, 27 Mar 2023 03:33:03 -0700
+Message-ID: <CANRApRcvFD23+XPL15cJyMMhZEK413bQhMdvm4EXROerHCJ4gA@mail.gmail.com>
+Subject: Mrs. Leszczynska Anna Malgorzata.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=ADVANCE_FEE_5_NEW,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b35 listed in]
+        [list.dnswl.org]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [celinekorommah[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [annamalgorzata587[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.8 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Sun 26-03-23 16:44:59, Tom Rix wrote:
-> clang with W=1 reports
-> fs/reiserfs/journal.c:3034:6: error: variable
->   'sched_count' set but not used [-Werror,-Wunused-but-set-variable]
->         int sched_count = 0;
->             ^
-> This variable is not used so remove it.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-
-Thanks. I've added the fix to my tree.
-
-								Honza
-
-> ---
->  fs/reiserfs/journal.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/fs/reiserfs/journal.c b/fs/reiserfs/journal.c
-> index 9ce4ec296b74..4d11d60f493c 100644
-> --- a/fs/reiserfs/journal.c
-> +++ b/fs/reiserfs/journal.c
-> @@ -3031,7 +3031,6 @@ static int do_journal_begin_r(struct reiserfs_transaction_handle *th,
->  	unsigned int old_trans_id;
->  	struct reiserfs_journal *journal = SB_JOURNAL(sb);
->  	struct reiserfs_transaction_handle myth;
-> -	int sched_count = 0;
->  	int retval;
->  	int depth;
->  
-> @@ -3088,7 +3087,6 @@ static int do_journal_begin_r(struct reiserfs_transaction_handle *th,
->  		    ((journal->j_len + nblocks + 2) * 100) <
->  		    (journal->j_len_alloc * 75)) {
->  			if (atomic_read(&journal->j_wcount) > 10) {
-> -				sched_count++;
->  				queue_log_writer(sb);
->  				goto relock;
->  			}
-> -- 
-> 2.27.0
-> 
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+I am Mrs. Leszczynska Anna Malgorzatafrom  from Germany Presently
+admitted  in one of the hospitals here in Ivory Coast.
+
+I and my late husband do not have any child that is why I am donating
+this money to you having known my condition that I will join my late
+husband soonest.
+
+I wish to donate towards education and the less privileged I ask for
+your assistance. I am suffering from colon cancer I have some few
+weeks to live according to my doctor.
+
+The money should be used for this purpose.
+Motherless babies
+Children orphaned by aids.
+Destitute children
+Widows and Widowers.
+Children who cannot afford education.
+
+My husband stressed the importance of education and the less
+privileged I feel that this is what he would have wanted me to do with
+the money that he left for charity.
+
+These services bring so much joy to the kids. Together we are
+transforming lives and building brighter futures - but without you, it
+just would not be possible.
+
+Sincerely,
+
+Mrs. Leszczynska Anna Malgorzata.
