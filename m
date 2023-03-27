@@ -2,122 +2,91 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 681F26CA180
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 27 Mar 2023 12:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38DB26CA1FC
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 27 Mar 2023 13:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbjC0KdH (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 27 Mar 2023 06:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
+        id S229606AbjC0LDq (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 27 Mar 2023 07:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232655AbjC0KdG (ORCPT
+        with ESMTP id S232186AbjC0LDp (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 27 Mar 2023 06:33:06 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B5D10FA
-        for <reiserfs-devel@vger.kernel.org>; Mon, 27 Mar 2023 03:33:04 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id b18so9899124ybp.1
-        for <reiserfs-devel@vger.kernel.org>; Mon, 27 Mar 2023 03:33:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679913183;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IE0Q22t9nDUcBAUVsmYKmeg+5EtHh5OHc8AXl8b80GM=;
-        b=fzIX1Z4cFoO+QCmPA+bU8qq/YUDwtIrljP7r/HRTtr6IDnzeTXO4sEMgfiSKeYYoC4
-         /28rtd5/xYBXdr202UGc+xt4t5XSxKrFsAZ20biEJ4qPD5gG5kscx8wqSFuLkRrJH3+M
-         DyRKENfx0e0ul7Pj0FeOzwo73FVzl/w4e0lkw9da2CyQTdR1dJTL5QVkv05cEyxL1Wye
-         biOpUKrNV8JunJZ8abujtX1UPk61gbT3mWaT3EdX10XuH7Umlzbjq2qn4Wsgxi9Yp2uW
-         UM7CPt2kwlHWvVrdAohge0pmv1xSGb3iVgw4OZhpfx96KmIRj+xnFtBB/Q9yDTmcWR65
-         CK5w==
+        Mon, 27 Mar 2023 07:03:45 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D35C420F
+        for <reiserfs-devel@vger.kernel.org>; Mon, 27 Mar 2023 04:03:44 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id d3-20020a056e02050300b00317999dcfb1so5640404ils.4
+        for <reiserfs-devel@vger.kernel.org>; Mon, 27 Mar 2023 04:03:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679913183;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IE0Q22t9nDUcBAUVsmYKmeg+5EtHh5OHc8AXl8b80GM=;
-        b=6WcMZFR5iap1Ic+Svh/jmOly6mihG/EufpaNLwUPOmBcRoZPTfytR8sSrk7fpOcy6v
-         jPC2vk7Soe1WjlFlFVzPBYFOXBzmfgcg2jNy2Q+KILPCLAFGav9oLsbTUGZTLD7hun38
-         BEzcvH1MFvbkJr6HhDoX+PruexxPt+EFNFlQdSy6UMtXKOsERckmu10jxsP6dEswq+qA
-         zKzltAkd5/01VCaELTAiUKxJmC/aqMdpMXO+c/hV6GF69q4QjggaKUEf6j9Uus9b+YSD
-         q6OQBfgMkEhWl8HFQ9LAg9oHExUfVSrTaXvIw74wQgtW62PUFT217moK6mjYIE4kQRVO
-         SAIA==
-X-Gm-Message-State: AAQBX9cShR6W0UOBvhmK8R7MIelQDvVUumtG1dCg4NDsA6UQl8kbAvq9
-        w0ZMfc4c5sG0m7VBx/UFHXE/bCEHuNUBfYQN0Go=
-X-Google-Smtp-Source: AKy350YDDP6Uj2kRAOaYC/l4Ye9t0tHTdLIMkRH9Q/0tdHqjyvxssQIGbMF3pKckPevEzT0+JO8Ykq0pTQe1PcoOHxc=
-X-Received: by 2002:a05:6902:1108:b0:b6d:fc53:c5c0 with SMTP id
- o8-20020a056902110800b00b6dfc53c5c0mr9251769ybu.1.1679913183411; Mon, 27 Mar
- 2023 03:33:03 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679915023;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DYYeZ6q74P1EC6zduiIqaHw2RbP3mCxfZ8UiARotK1k=;
+        b=whpw/vbv5L74ZKhLBX8eBA/0I29rAqQOxyDxJkZQlw+T9sV6hbmuTB9EyHD6ij0c0X
+         CcLKeEcdsaAoHYm6LOTL86bWEza2vGOvC/gKJ7YYX5u9JmccvFqc3RmrUVOsnPAv1BNg
+         I+FgBP/6nxPoCZpgPy37vHkb70VreGzXOYSdoMm1/ulKx4IMSPoZC/s4mGskgaFNY07C
+         O9x/X3QdRlHtPo1xUW0K1lo73QLWGDJSbqxxVwj11GV4hCsc97KuMCjxNcgJt3N8sWit
+         mfvuruFKYCGxZY0HA07Zjz4t/iX2whBbL3ifqh/sJClWYBWxCIHY/aVmh3RjdAp4DWhe
+         I4Pw==
+X-Gm-Message-State: AO0yUKUbVtgpP6QXbH1d27L26HA24lYjTf+tRNc0LaJbi+uXU5IYfysV
+        Ko2Vr5l9FrKgsO44e0LV9HnNAz3VyEDTsv/fq25UmgQfndUe
+X-Google-Smtp-Source: AK7set/XcoJchD1aCq3fOiCDw2F7VdfwOOgdFWvdSPCPFB48nIER7QboA+QblG5wC7F891sXF3UvUAlaLvlNbhHIjt2x7thVO1jq
 MIME-Version: 1.0
-Received: by 2002:a05:7010:3802:b0:344:68a5:3ba0 with HTTP; Mon, 27 Mar 2023
- 03:33:03 -0700 (PDT)
-Reply-To: annamalgorzata587@gmail.com
-From:   "Leszczynska Anna Malgorzata." <celinekorommah@gmail.com>
-Date:   Mon, 27 Mar 2023 03:33:03 -0700
-Message-ID: <CANRApRcvFD23+XPL15cJyMMhZEK413bQhMdvm4EXROerHCJ4gA@mail.gmail.com>
-Subject: Mrs. Leszczynska Anna Malgorzata.
-To:     undisclosed-recipients:;
+X-Received: by 2002:a02:8547:0:b0:3c2:b9ba:72f9 with SMTP id
+ g65-20020a028547000000b003c2b9ba72f9mr4533372jai.5.1679915023586; Mon, 27 Mar
+ 2023 04:03:43 -0700 (PDT)
+Date:   Mon, 27 Mar 2023 04:03:43 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003bdd5d05f7dfb243@google.com>
+Subject: [syzbot] Monthly reiserfs report
+From:   syzbot <syzbot+list4a0f973260c9d6cd4fb2@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.8 required=5.0 tests=ADVANCE_FEE_5_NEW,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b35 listed in]
-        [list.dnswl.org]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [celinekorommah[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [annamalgorzata587[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.8 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
-        *      419)
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
--- 
-I am Mrs. Leszczynska Anna Malgorzatafrom  from Germany Presently
-admitted  in one of the hospitals here in Ivory Coast.
+Hello reiserfs maintainers/developers,
 
-I and my late husband do not have any child that is why I am donating
-this money to you having known my condition that I will join my late
-husband soonest.
+This is a 30-day syzbot report for the reiserfs subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/reiserfs
 
-I wish to donate towards education and the less privileged I ask for
-your assistance. I am suffering from colon cancer I have some few
-weeks to live according to my doctor.
+During the period, 4 new issues were detected and 0 were fixed.
+In total, 78 issues are still open and 16 have been fixed so far.
 
-The money should be used for this purpose.
-Motherless babies
-Children orphaned by aids.
-Destitute children
-Widows and Widowers.
-Children who cannot afford education.
+Some of the still happening issues:
 
-My husband stressed the importance of education and the less
-privileged I feel that this is what he would have wanted me to do with
-the money that he left for charity.
+Crashes Repro Title
+1220    No    KASAN: slab-out-of-bounds Read in search_by_key (2)
+              https://syzkaller.appspot.com/bug?extid=b3b14fb9f8a14c5d0267
+1096    Yes   WARNING in reiserfs_lookup
+              https://syzkaller.appspot.com/bug?extid=392ac209604cc18792e5
+1069    Yes   kernel BUG at fs/reiserfs/journal.c:LINE!
+              https://syzkaller.appspot.com/bug?extid=6820505ae5978f4f8f2f
+853     Yes   INFO: task hung in iterate_supers
+              https://syzkaller.appspot.com/bug?extid=2349f5067b1772c1d8a5
+565     No    KMSAN: uninit-value in reiserfs_new_inode (2)
+              https://syzkaller.appspot.com/bug?extid=6450929faa7a97cd42d1
+331     Yes   possible deadlock in mnt_want_write_file
+              https://syzkaller.appspot.com/bug?extid=1047e42179f502f2b0a2
+168     Yes   possible deadlock in reiserfs_ioctl
+              https://syzkaller.appspot.com/bug?extid=79c303ad05f4041e0dad
+122     Yes   WARNING in reiserfs_readdir_inode
+              https://syzkaller.appspot.com/bug?extid=798ffe5fe3e88235db59
+54      Yes   possible deadlock in path_openat (2)
+              https://syzkaller.appspot.com/bug?extid=a844a888fbc0ba4829ce
+45      Yes   BUG: unable to handle kernel paging request in path_openat
+              https://syzkaller.appspot.com/bug?extid=59a66cac604a6b49ecce
 
-These services bring so much joy to the kids. Together we are
-transforming lives and building brighter futures - but without you, it
-just would not be possible.
-
-Sincerely,
-
-Mrs. Leszczynska Anna Malgorzata.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
