@@ -2,52 +2,54 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC306F7D7F
-	for <lists+reiserfs-devel@lfdr.de>; Fri,  5 May 2023 09:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE986F8A6A
+	for <lists+reiserfs-devel@lfdr.de>; Fri,  5 May 2023 22:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbjEEHKL (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 5 May 2023 03:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44266 "EHLO
+        id S233397AbjEEUvf (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 5 May 2023 16:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbjEEHKJ (ORCPT
+        with ESMTP id S233382AbjEEUve (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 5 May 2023 03:10:09 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9231A5DA
-        for <reiserfs-devel@vger.kernel.org>; Fri,  5 May 2023 00:10:07 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-7639ebbef32so201023039f.2
-        for <reiserfs-devel@vger.kernel.org>; Fri, 05 May 2023 00:10:07 -0700 (PDT)
+        Fri, 5 May 2023 16:51:34 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444582D60
+        for <reiserfs-devel@vger.kernel.org>; Fri,  5 May 2023 13:51:29 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-76371bc5167so305062339f.1
+        for <reiserfs-devel@vger.kernel.org>; Fri, 05 May 2023 13:51:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683270607; x=1685862607;
+        d=1e100.net; s=20221208; t=1683319888; x=1685911888;
         h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eNTge60mhkv7VMoNAp38G1CzXS5rE2ER7GKmR9pmR+A=;
-        b=DYAsGZyiIGTqE8+kFBX7a1FN8b+G2BE65QRrKjVQUCcpF/p37cU0JM1HoFCbxs4ikf
-         BHRM8cOkeMUUxGJxp9QEX0/V8xvODEt7cCc5Zp9JpWZLK6nmkgwJCcNKp4UnL96XvCvm
-         VsDb8DuNTU+TX2bo4GX+kqsLnsHSYVtyZm6wU9BtNkBph+PMg7xdOccMa7hG8WD2OA4Y
-         9c6TDFfNtU9m154SrwJGBtn8UC4Ldrh+RgEQrqeG7QihV7L4s9P6WifoBC0ysJd4k+Ud
-         HKhooUo1OIZotsteviqSODRX4NV2OyE+FmxuwKGiLB72SLzEdxZdKqPVIO1ngwSdkQou
-         H4JA==
-X-Gm-Message-State: AC+VfDw/Wr3kQkJ3gTbJhk8PDuKjk2p+vXFaB9feev1ffAlBkMcfo71L
-        jsegFGmCZT3DqL5zDVAhI1v/WsHm8nCBuWgo+FnFnh8d3sO2
-X-Google-Smtp-Source: ACHHUZ4SVBJKNTRuYam+EqdTCIWZkmnchQBEbN86BBO+mW3Dc/q9B98EHOO9U+UJk7JKPZDkN9sP5xrnogtn5ZVMMixcy+rHNGTy
+        bh=xz8oP5bTFGUj6c4RnphlwwmDszCEtGrIv7CYsijiB50=;
+        b=F+UnQHnJRkV9z00wlzZcgXxzI7d+HtBP5xgSWL81k1THEo8IrpF7Mc1ux9Lb4//k7I
+         Mx1IOIlCbRUVylNVFMjAEZ9kNLYaYMPHtJMhUPb7YnUsYSnTpAmRP5FAEFHB+0mp9Bc+
+         DFpTGaiN1nmpaCogV3ymIfkhbb+MQTxeZi/l1050NezzihqSw/iv1hWFs45vPMwVLaRe
+         AhMV/TbOhQiQLP0DmCQlZuEZ/IZEoRw7pt68KS5u3LuUEqeTfvluy1/DnwfWjPPUhFy5
+         6cAFWyy9LMmyEvRO9ad4HltBRSb0J7GN2g3sQLwka3StJvhQROfv/YqAPuJRc0qNKX/S
+         VKAg==
+X-Gm-Message-State: AC+VfDyQc/sZPitiqZ8wSpNsXzI9dBnE7P4Y+bzb6Hf3niS/GOAUQgCO
+        sEtKd7Y65AM326KVkjlp6YDyJZ2qsjtThpZNOLgLm83ifVu6
+X-Google-Smtp-Source: ACHHUZ5vqOFA/5T+hNmtEX7lSCQTA27WTbngt21dM8oERoMh9pcLsuCOw/xFwc/AuBFHVzce/YEP+d5wbCIMMARA4ZzFB1Um25S1
 MIME-Version: 1.0
-X-Received: by 2002:a6b:e70e:0:b0:745:70d7:4962 with SMTP id
- b14-20020a6be70e000000b0074570d74962mr122419ioh.0.1683270606885; Fri, 05 May
- 2023 00:10:06 -0700 (PDT)
-Date:   Fri, 05 May 2023 00:10:06 -0700
+X-Received: by 2002:a02:638e:0:b0:416:4d10:3896 with SMTP id
+ j136-20020a02638e000000b004164d103896mr1200772jac.6.1683319888578; Fri, 05
+ May 2023 13:51:28 -0700 (PDT)
+Date:   Fri, 05 May 2023 13:51:28 -0700
 In-Reply-To: <0000000000007bedb605f119ed9f@google.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000959b3205faecfa72@google.com>
+Message-ID: <00000000000000964605faf87416@google.com>
 Subject: Re: [syzbot] [reiserfs?] possible deadlock in open_xa_dir
 From:   syzbot <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+To:     hdanton@sina.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com,
+        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,167 +57,25 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+syzbot has bisected this issue to:
 
-HEAD commit:    78b421b6a7c6 Merge tag 'linux-watchdog-6.4-rc1' of git://w..
+commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
+Author: Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri Mar 31 12:32:18 2023 +0000
+
+    reiserfs: Add security prefix to xattr name in reiserfs_security_write()
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14403182280000
+start commit:   3c4aa4434377 Merge tag 'ceph-for-6.4-rc1' of https://githu..
 git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=150c42a8280000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=16403182280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12403182280000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=73a06f6ef2d5b492
 dashboard link: https://syzkaller.appspot.com/bug?extid=8fb64a61fdd96b50f3b8
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14e2e518280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17c03112280000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12442414280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=176a7318280000
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/25168a5d3be8/disk-78b421b6.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f5af9f784d9d/vmlinux-78b421b6.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/7781e4e3e606/bzImage-78b421b6.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/29a59b19c7a8/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
 Reported-by: syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com
+Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in reiserfs_security_write()")
 
-======================================================
-WARNING: possible circular locking dependency detected
-6.3.0-syzkaller-13164-g78b421b6a7c6 #0 Not tainted
-------------------------------------------------------
-syz-executor363/4996 is trying to acquire lock:
-ffff888074558980 (&type->i_mutex_dir_key#6/3){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:810 [inline]
-ffff888074558980 (&type->i_mutex_dir_key#6/3){+.+.}-{3:3}, at: open_xa_root fs/reiserfs/xattr.c:128 [inline]
-ffff888074558980 (&type->i_mutex_dir_key#6/3){+.+.}-{3:3}, at: open_xa_dir+0x136/0x610 fs/reiserfs/xattr.c:153
-
-but task is already holding lock:
-ffff8880156f2090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock_nested+0x5f/0xd0 fs/reiserfs/lock.c:78
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (&sbi->lock){+.+.}-{3:3}:
-       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
-       __mutex_lock_common+0x1d8/0x2530 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x1b/0x20 kernel/locking/mutex.c:799
-       reiserfs_write_lock+0x7a/0xd0 fs/reiserfs/lock.c:27
-       reiserfs_mkdir+0x321/0x8f0 fs/reiserfs/namei.c:829
-       xattr_mkdir fs/reiserfs/xattr.c:77 [inline]
-       open_xa_root fs/reiserfs/xattr.c:137 [inline]
-       open_xa_dir+0x2cd/0x610 fs/reiserfs/xattr.c:153
-       xattr_lookup+0x24/0x280 fs/reiserfs/xattr.c:396
-       reiserfs_xattr_set_handle+0xfc/0xdc0 fs/reiserfs/xattr.c:534
-       reiserfs_security_write+0x157/0x1d0 fs/reiserfs/xattr_security.c:106
-       reiserfs_new_inode+0x1631/0x1d40 fs/reiserfs/inode.c:2111
-       reiserfs_create+0x3e7/0x6e0 fs/reiserfs/namei.c:666
-       lookup_open fs/namei.c:3492 [inline]
-       open_last_lookups fs/namei.c:3560 [inline]
-       path_openat+0x13df/0x3170 fs/namei.c:3788
-       do_filp_open+0x234/0x490 fs/namei.c:3818
-       do_sys_openat2+0x13f/0x500 fs/open.c:1356
-       do_sys_open fs/open.c:1372 [inline]
-       __do_sys_openat fs/open.c:1388 [inline]
-       __se_sys_openat fs/open.c:1383 [inline]
-       __x64_sys_openat+0x247/0x290 fs/open.c:1383
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (&type->i_mutex_dir_key#6/3){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3108 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3227 [inline]
-       validate_chain+0x166b/0x58e0 kernel/locking/lockdep.c:3842
-       __lock_acquire+0x1295/0x2000 kernel/locking/lockdep.c:5074
-       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
-       down_write_nested+0x3d/0x50 kernel/locking/rwsem.c:1689
-       inode_lock_nested include/linux/fs.h:810 [inline]
-       open_xa_root fs/reiserfs/xattr.c:128 [inline]
-       open_xa_dir+0x136/0x610 fs/reiserfs/xattr.c:153
-       xattr_lookup+0x24/0x280 fs/reiserfs/xattr.c:396
-       reiserfs_xattr_get+0xfd/0x570 fs/reiserfs/xattr.c:678
-       __vfs_getxattr+0x436/0x470 fs/xattr.c:424
-       smk_fetch+0xb1/0x140 security/smack/smack_lsm.c:295
-       smack_d_instantiate+0x6d9/0xb40 security/smack/smack_lsm.c:3475
-       security_d_instantiate+0x9b/0xf0 security/security.c:3760
-       d_instantiate_new+0x65/0x120 fs/dcache.c:2053
-       reiserfs_create+0x5cf/0x6e0 fs/reiserfs/namei.c:692
-       lookup_open fs/namei.c:3492 [inline]
-       open_last_lookups fs/namei.c:3560 [inline]
-       path_openat+0x13df/0x3170 fs/namei.c:3788
-       do_filp_open+0x234/0x490 fs/namei.c:3818
-       do_sys_openat2+0x13f/0x500 fs/open.c:1356
-       do_sys_open fs/open.c:1372 [inline]
-       __do_sys_openat fs/open.c:1388 [inline]
-       __se_sys_openat fs/open.c:1383 [inline]
-       __x64_sys_openat+0x247/0x290 fs/open.c:1383
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&sbi->lock);
-                               lock(&type->i_mutex_dir_key#6/3);
-                               lock(&sbi->lock);
-  lock(&type->i_mutex_dir_key#6/3);
-
- *** DEADLOCK ***
-
-3 locks held by syz-executor363/4996:
- #0: ffff88807c6be460 (sb_writers#9){.+.+}-{0:0}, at: mnt_want_write+0x3f/0x90 fs/namespace.c:394
- #1: ffff8880745582e0 (&type->i_mutex_dir_key#6){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
- #1: ffff8880745582e0 (&type->i_mutex_dir_key#6){+.+.}-{3:3}, at: open_last_lookups fs/namei.c:3557 [inline]
- #1: ffff8880745582e0 (&type->i_mutex_dir_key#6){+.+.}-{3:3}, at: path_openat+0x7ba/0x3170 fs/namei.c:3788
- #2: ffff8880156f2090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock_nested+0x5f/0xd0 fs/reiserfs/lock.c:78
-
-stack backtrace:
-CPU: 1 PID: 4996 Comm: syz-executor363 Not tainted 6.3.0-syzkaller-13164-g78b421b6a7c6 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- check_noncircular+0x2fe/0x3b0 kernel/locking/lockdep.c:2188
- check_prev_add kernel/locking/lockdep.c:3108 [inline]
- check_prevs_add kernel/locking/lockdep.c:3227 [inline]
- validate_chain+0x166b/0x58e0 kernel/locking/lockdep.c:3842
- __lock_acquire+0x1295/0x2000 kernel/locking/lockdep.c:5074
- lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
- down_write_nested+0x3d/0x50 kernel/locking/rwsem.c:1689
- inode_lock_nested include/linux/fs.h:810 [inline]
- open_xa_root fs/reiserfs/xattr.c:128 [inline]
- open_xa_dir+0x136/0x610 fs/reiserfs/xattr.c:153
- xattr_lookup+0x24/0x280 fs/reiserfs/xattr.c:396
- reiserfs_xattr_get+0xfd/0x570 fs/reiserfs/xattr.c:678
- __vfs_getxattr+0x436/0x470 fs/xattr.c:424
- smk_fetch+0xb1/0x140 security/smack/smack_lsm.c:295
- smack_d_instantiate+0x6d9/0xb40 security/smack/smack_lsm.c:3475
- security_d_instantiate+0x9b/0xf0 security/security.c:3760
- d_instantiate_new+0x65/0x120 fs/dcache.c:2053
- reiserfs_create+0x5cf/0x6e0 fs/reiserfs/namei.c:692
- lookup_open fs/namei.c:3492 [inline]
- open_last_lookups fs/namei.c:3560 [inline]
- path_openat+0x13df/0x3170 fs/namei.c:3788
- do_filp_open+0x234/0x490 fs/namei.c:3818
- do_sys_openat2+0x13f/0x500 fs/open.c:1356
- do_sys_open fs/open.c:1372 [inline]
- __do_sys_openat fs/open.c:1388 [inline]
- __se_sys_openat fs/open.c:1383 [inline]
- __x64_sys_openat+0x247/0x290 fs/open.c:1383
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fdd867933d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fdd867402f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 00007fdd868196c0 RCX: 00007fdd867933d9
-RDX: 000000000000275a RSI: 0000000020000080 RDI: 00000000ffffff9c
-
-
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
