@@ -2,67 +2,71 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261FC6F8B1E
-	for <lists+reiserfs-devel@lfdr.de>; Fri,  5 May 2023 23:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40CEA6FB007
+	for <lists+reiserfs-devel@lfdr.de>; Mon,  8 May 2023 14:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232887AbjEEVgl (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 5 May 2023 17:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
+        id S233847AbjEHMbB (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 8 May 2023 08:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232809AbjEEVgk (ORCPT
+        with ESMTP id S234037AbjEHMax (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 5 May 2023 17:36:40 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A55E42
-        for <reiserfs-devel@vger.kernel.org>; Fri,  5 May 2023 14:36:36 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-b8f34bca001so3039135276.3
-        for <reiserfs-devel@vger.kernel.org>; Fri, 05 May 2023 14:36:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1683322595; x=1685914595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V0JfIlTqaeXlyEjv8OL6VI/Norerpq4Zpq5DUaY96vQ=;
-        b=HFIJtI/kpmdLq8nRaDpAzU/Clt1/UJxLL8jrzJIQ3nN3zf4fqNv+ZtaSmm9nZ9WSxL
-         Fsdmz6Yg244MrJudDafdQdsz6UxENZYEXFzrOoHjOR1sy7cP5A+nj6c8BeRafdgdzmKW
-         EXxDU+bc0GuwPIFHgZLrSGRMNZGd68ZC038in7IflWIaQ4+gF9uANMqT/6PCnj4G7msL
-         Kp2821yv0nosKv0gQkf2+0iNHig/foynW4QCkBRYd1xWQZdSnHzLEuAnSGn0FWzJ2/pw
-         JhUAS6Nd8jaQw0XJpJHlYYBttFdbB9ggrTzlZlYeFD/4Fdu7rWzcXyK1NwEpIMGB8CWy
-         CKWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683322595; x=1685914595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V0JfIlTqaeXlyEjv8OL6VI/Norerpq4Zpq5DUaY96vQ=;
-        b=Eow+K0bShf6Yvr/iNuD8aabkH/53c/VNyP7RlzH8vOLdgPnxhojfAm1WphZJX/6ym1
-         E6GQVpFijg7+C/1EE/ASkjp9PSuEdboNq/juq8xaEZRM3pekAO/Ny2u9XA40Fd0Q4prD
-         b8s7BZ25U4K7oESnZODMl+Sd41X5PJodDbmkINA/qKSJflz4Huu/SXCQiLcj9CZNKLKV
-         TBq1MCXhtxU5GpocNb0Yow3Ns6Z4D+suu0PBCx4SyCmKipFOHR7SVjPquew6BwC97yzn
-         li8v7l5Saj2n3Krow9UH29YIDg/lhQCqU5tzV+kbPjKwWCrUEcuhMB6HdeR4gFNNQcvL
-         eUYg==
-X-Gm-Message-State: AC+VfDx5y3+Y7IPXtEhq5HJimWKXqPbb53cp8+EjCWP8Ob+Eq+3ZYoLo
-        hE6FfUt5bt0z9nwZoyOReSOheWLjNgecU8RDgK1R
-X-Google-Smtp-Source: ACHHUZ5mePxZSEmEoU+z772wuUV1h4yYiZ/D6Jn5MdbMYmXXJG0E7mS81yf5C+0NpsiFgG2/Nu/3hoJojsTP4keEGNQ=
-X-Received: by 2002:a05:6902:702:b0:b9e:5aad:edda with SMTP id
- k2-20020a056902070200b00b9e5aadeddamr3593877ybt.4.1683322595278; Fri, 05 May
- 2023 14:36:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <0000000000007bedb605f119ed9f@google.com> <00000000000000964605faf87416@google.com>
-In-Reply-To: <00000000000000964605faf87416@google.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 5 May 2023 17:36:24 -0400
-Message-ID: <CAHC9VhTZ=Esk+JxgAjch2J44WuLixe-SZMXW2iGHpLdrdMKQ=g@mail.gmail.com>
-Subject: Re: [syzbot] [reiserfs?] possible deadlock in open_xa_dir
-To:     syzbot <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com>
-Cc:     hdanton@sina.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        roberto.sassu@huawei.com, syzkaller-bugs@googlegroups.com
+        Mon, 8 May 2023 08:30:53 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCAD3A5CC;
+        Mon,  8 May 2023 05:30:33 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4QFL2875l9z9v7Z5;
+        Mon,  8 May 2023 20:19:28 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBXKWA661hkBwGLAg--.32489S2;
+        Mon, 08 May 2023 13:30:00 +0100 (CET)
+Message-ID: <2d0abd075d6c67e72e3fb88a4c163fb0dd28f72e.camel@huaweicloud.com>
+Subject: Re: [PATCH] Smack modifications for: security: Allow all LSMs to
+ provide xattrs for inode_init_security hook
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mengchi Cheng <mengcc@amazon.com>
+Cc:     bpf@vger.kernel.org, casey@schaufler-ca.com,
+        dmitry.kasatkin@gmail.com, eparis@parisplace.org,
+        jmorris@namei.org, kamatam@amazon.com, keescook@chromium.org,
+        kpsingh@kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, miklos@szeredi.hu,
+        nicolas.bouchinet@clip-os.org, paul@paul-moore.com,
+        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
+        selinux@vger.kernel.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, yoonjaeh@amazon.com,
+        zohar@linux.ibm.com
+Date:   Mon, 08 May 2023 14:29:42 +0200
+In-Reply-To: <2f90828cc8e9e1ab369790a3da687790c4348b0f.camel@huaweicloud.com>
+References: <0fccab67e496f10f4ee7bf2220e70a655013935f.camel@huaweicloud.com>
+         <20230419192516.757220-1-mengcc@amazon.com>
+         <2f90828cc8e9e1ab369790a3da687790c4348b0f.camel@huaweicloud.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwBXKWA661hkBwGLAg--.32489S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Gw18Wr1kuFyfZF18Xw1xGrg_yoWfWw13pF
+        Z5Ga43Krs5Jw17CayvqF43Za1F9FZ7Ga15XFnxKry7AF1DKr1IgryYqr1jkF1xtrsY93Wq
+        qF4jvry3Zr1Du3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQALBF1jj4z38QAAs1
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,50 +74,254 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Fri, May 5, 2023 at 4:51=E2=80=AFPM syzbot
-<syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com> wrote:
->
-> syzbot has bisected this issue to:
->
-> commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
-> Author: Roberto Sassu <roberto.sassu@huawei.com>
-> Date:   Fri Mar 31 12:32:18 2023 +0000
->
->     reiserfs: Add security prefix to xattr name in reiserfs_security_writ=
-e()
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D1440318228=
-0000
-> start commit:   3c4aa4434377 Merge tag 'ceph-for-6.4-rc1' of https://gith=
-u..
-> git tree:       upstream
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D1640318228=
-0000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D1240318228000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D73a06f6ef2d5b=
-492
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D8fb64a61fdd96b5=
-0f3b8
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D12442414280=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D176a731828000=
-0
->
-> Reported-by: syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com
-> Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in reis=
-erfs_security_write()")
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
-ion
+On Thu, 2023-04-20 at 10:48 +0200, Roberto Sassu wrote:
+> On Wed, 2023-04-19 at 12:25 -0700, Mengchi Cheng wrote:
+> > > I got some errors during xattr removal, so not sure if my patch was
+> > > working properly or not (it happened also without it, didn't
+> > > investigate more).
+> > > 
+> > > However, I saw another discussion related to transmute:
+> > > 
+> > > https://lore.kernel.org/linux-security-module/20230419002338.566487-1-mengcc@amazon.com/
+> > > 
+> > > I add the people in CC.
+> > > 
+> > > The steps described were so easy to understand and executed, I tried
+> > > without and with overlayfs.
+> > > 
+> > > Without:
+> > > 
+> > > # echo "_ system rwxatl" > /sys/fs/smackfs/load2
+> > > # mkdir /data
+> > > # chsmack -a "system" /data
+> > > # chsmack -t /data
+> > > # mkdir -p /data/dir1/dir2
+> > > # chsmack /data/dir1
+> > > /data/dir1 access="system" transmute="TRUE"
+> > > # chsmack /data/dir1/dir2
+> > > /data/dir1/dir2 access="system" transmute="TRUE"
+> > > 
+> > > It seems to work, right?
+> > > 
+> > > With overlay fs it didn't work, same result as the one Mengchi
+> > > reported. Since Mengchi's solution was to set SMK_INODE_CHANGED, and I
+> > > want to get rid of it, I thought to investigate more.
+> > > 
+> > > Looking at smack_dentry_create_files_as(), I see that the label of the
+> > > process is overwritten with the label of the transmuting directory.
+> > > 
+> > > That causes smack_inode_init_security() to lookup the transmuting rule
+> > > on the overridden credential, and not on the original one.
+> > > 
+> > > In the example above, it means that, when overlayfs is creating the new
+> > > inode, the label of the process is system, not _. So no transmute
+> > > permission, and also the xattr will not be added, as observed by
+> > > Mengchi.
+> > > 
+> > > Hopefully I undertood the code, so in this particular case we would not
+> > > need to override the label of the process in smack_dentry_create_files_
+> > > as().
+> > > 
+> > > If you see smack_inode_init_security():
+> > > 
+> > > 	struct smack_known *skp = smk_of_current();
+> > > 	struct smack_known *isp = smk_of_inode(inode);
+> > > 	struct smack_known *dsp = smk_of_inode(dir);
+> > > 
+> > > [...]
+> > > 
+> > > 		if (may > 0 && ((may & MAY_TRANSMUTE) != 0) &&
+> > > 		    smk_inode_transmutable(dir)) {
+> > > 			isp = dsp;
+> > > [...]
+> > > 
+> > > 		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
+> > > 
+> > > This code is telling, if there is a transmute rule, and the directory
+> > > is transmuting, set the label of the new inode to the label of the
+> > > directory. That should be already the result that we wanted to obtain.
+> > > 
+> > > The current code should have been doing it by overriding the label of
+> > > the process in smack_dentry_create_files_as() with the label of the
+> > > parent directory, and letting the inode being created with the
+> > > overridden label of the process. The transmute xattr is not set due to
+> > > the problem described above.
+> > > 
+> > > So, as a quick test, I kept this patch with the change to xattr2->name, 
+> > > and skipped the label override in smack_dentry_create_files_as(). It
+> > > worked, I get the same result as without overlayfs. Wondering if the
+> > > process label override is necessary in other cases.
+> > 
+> > If I understand correctly, removing the if block below is what you suggested.
+> 
+> Yes, more or less is what I did.
+> 
+> > diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> > index cfcbb748da25..a867288e9de9 100644
+> > --- a/security/smack/smack_lsm.c
+> > +++ b/security/smack/smack_lsm.c
+> > @@ -4769,8 +4769,8 @@ static int smack_dentry_create_files_as(struct dentry *dentry, int mode,
+> >                  * providing access is transmuting use the containing
+> >                  * directory label instead of the process label.
+> >                  */
+> > -               if (may > 0 && (may & MAY_TRANSMUTE))
+> > -                       ntsp->smk_task = isp->smk_inode;
+> > +//             if (may > 0 && (may & MAY_TRANSMUTE))
+> > +//                     ntsp->smk_task = isp->smk_inode;
+> >         }
+> >         return 0;
+> >  }
+> > 
+> > This way will have issue in the following situation on the vanila kernel.
+> > data in the lowerdir has "_" label before overlay and dir1 is already
+> > created in the lowerdir.
+> > # chsmack /data
+> > /data access="_"
+> > # chsmack /data/dir1
+> > /data/dir1 access="system" transmute="TRUE"
+> > Apply overlay on data directory and set the smack rule in the same way.
+> > data has the same smack label.
+> > # chsmack /data
+> > /data access="system" transmute="TRUE"
+> 
+> I'm using an older kernel, but I get _ instead of system.
+> 
+> > After that, remove dir1 and mkdir dir1 again. dir1 did not get the correct
+> > label.
+> > # rm -r /data/dir1
+> > # mkdir -p /data/dir1
+> > # chsmack /data/dir1
+> > /data/dir1 access="_"
+> 
+> Unfortunately, it cannot work:
+> 
+> Thread 3 hit Breakpoint 1, smack_inode_init_security (...) at security/smack/smack_lsm.c:959
+> 959	{
+> (gdb) p dir->i_ino
+> $12 = 9169116
+> (gdb) p dsp
+> $13 = (struct smack_known *) 0xffffffff831fc0a0 <smack_known_floor>
+> 
+> 
+> ls -i /home/root/data_work/
+> 9169116 work
+> 
+> So, transmuting is decided on the working directory.
 
-I don't think Roberto's patch identified above is the actual root
-cause of this problem as reiserfs_xattr_set_handle() is called in
-reiserfs_security_write() both before and after the patch.  However,
-due to some bad logic in reiserfs_security_write() which Roberto
-corrected, I'm thinking that it is possible this code is being
-exercised for the first time and syzbot is starting to trigger a
-locking issue in the reiserfs code ... ?
+Actually, after studying the code better, this is
+what security_dentry_create_files_as() is useful for.
 
---=20
-paul-moore.com
+ * Compute a context for a dentry as the inode is not yet available and set
+ * that context in passed in creds so that new files are created using that
+ * context. Context is calculated using the passed in creds and not the creds
+ * of the caller.
+
+And Smack is doing:
+
+		if (may > 0 && (may & MAY_TRANSMUTE)) {
+			ntsp->smk_task = isp->smk_inode;
+
+The new inode will be created with the label of the current task, that
+was replaced with the label of the parent directory (see above) in smac
+k_dentry_create_files_as().
+
+I think the reason why Mengchi was not obtaining the desired label when
+replacing /data/dir1 was because /data is incorrectly labeled.
+
+To ensure that /data has label 'system' and transmute is true, I added
+smackfstransmute=system to the mount options.
+
+However, at the beginning, it seemed that it didn't work:
+
+# mount -t overlay overlay -o lowerdir=/data,upperdir=/home/root/data,workdir=/home/root/data_work,smackfstransmute=system /data
+# chsmack /data
+/data access="system"
+
+I found that the reason for this is that smack_inode_getsecurity()
+retrieves metadata from the inode only for SMACK64, and the rest from
+xattrs (which would not work for mount options). I just made a patch to
+handle SMACK64TRANSMUTE too.
+
+With the patch applied, I correctly get:
+
+# mount -t overlay overlay -o lowerdir=/data,upperdir=/home/root/data,workdir=/home/root/data_work,smackfstransmute=system /data
+# chsmack /data
+/data access="system" transmute="TRUE"
+
+With the root inode correctly labeled, I get:
+
+# mount -t overlay overlay -o lowerdir=/data,upperdir=/home/root/data,workdir=/home/root/data_work,smackfstransmute=system /data
+# rm -Rf /data/dir1
+# mkdir /data/dir1
+# chsmack /data/dir1
+/data/dir1 access="system"
+
+This is partially correct, transmute="TRUE" is missing.
+
+Judging from smk_task, we cannot determine in smack_inode_init_security
+() if transmuting was successful in smack_dentry_create_files_as(). We
+need an extra information.
+
+Mengchi's solution was to add the new inode as parameter
+to security_dentry_create_files_as(), so that SMK_INODE_CHANGED can be
+set in smk_flags, and SMACK64TRANSMUTE is set in smack_d_instantiate().
+
+One concern could be that preallocating the inode maybe is overlayfs-
+specific? A comment also says that we might not use that one:
+
+	err = ovl_create_or_link(dentry, inode, &attr, false);
+	/* Did we end up using the preallocated inode? */
+	if (inode != d_inode(dentry))
+
+We could achieve the same goal without adding a new parameter to security_dentry_create_files_as() and, instead, by adding a new field
+in the task_smack structure, smk_transmuted, that is set to smk_task
+when transmuting is successful.
+
+Then, if smk_task == smk_transmuted, smack_inode_init_security() would
+set SMK_INODE_CHANGED. On top of that, I would instead just provide the
+second xattr SMACK64TRANSMUTE, in addition to SMACK64.
+
+Will send the patches for upstream first, and then switch to providing 
+SMACK64TRANSMUTE in smack_inode_init_security(), in a new version of
+the EVM patch set.
+
+Thanks
+
+Roberto
+
+> If I do:
+> 
+> # chsmack -a system -t /home/root/data_work/work/
+> # mkdir /data/dir1
+> # chsmack /data/dir1
+> /data/dir1 access="system" transmute="TRUE"
+> 
+> I obtain the expected result. However, this problem is due to how overlayfs works:
+> 
+> static int ovl_create_over_whiteout(struct dentry *dentry, struct inode *inode,
+> 				    struct ovl_cattr *cattr)
+> {
+> 
+> [...]
+> 
+> 	newdentry = ovl_create_temp(ofs, workdir, cattr);
+> 	err = PTR_ERR(newdentry);
+> 	if (IS_ERR(newdentry))
+> 		goto out_dput;
+> 
+> 
+> The good news seems to be that, once you set the label to the correct
+> directory, transmuting works with the changes I proposed.
+> 
+> Roberto
+> 
+> > Since I am not very familiar your change. Could you help check with your
+> > patch will this issue also happen? 
+> > 
+> > 
+> > Best,
+> > Mengchi
+> > 
+> > >  
+> > > Roberto
+
