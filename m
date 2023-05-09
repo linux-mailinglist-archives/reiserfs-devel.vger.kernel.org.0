@@ -2,113 +2,340 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C727D6FCA85
-	for <lists+reiserfs-devel@lfdr.de>; Tue,  9 May 2023 17:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF266FD315
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 10 May 2023 01:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235231AbjEIPtF (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 9 May 2023 11:49:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
+        id S234671AbjEIXoh (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 9 May 2023 19:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbjEIPtE (ORCPT
+        with ESMTP id S229461AbjEIXog (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 9 May 2023 11:49:04 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7ABE3598
-        for <reiserfs-devel@vger.kernel.org>; Tue,  9 May 2023 08:49:03 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id a640c23a62f3a-965f7bdab6bso896969566b.3
-        for <reiserfs-devel@vger.kernel.org>; Tue, 09 May 2023 08:49:03 -0700 (PDT)
+        Tue, 9 May 2023 19:44:36 -0400
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC202720;
+        Tue,  9 May 2023 16:44:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683647342; x=1686239342;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9MgH2yk3oKPfzsyrz/5pM854nV5ZPzia2UxJXZBDwzc=;
-        b=bRi8xcDrQ4zIrqHkOPSRw+LMVLVoJsGc1OMDRyaJRAKrnCH7esC/FcCk2wwt8U5KK4
-         q+GtVoX/FIgQZrQQy2LNzYcXdEdeBe4S/QEOD782VPnvK9fzTjgbr24V5UhlwzrvvcbV
-         Fj93PoJAw0UxT56GLWFHj/KT1mdTXDFfhk1YZcRdeYQiGFsPWlG75epYiDlmBROGF4uA
-         E3RA7OyxF3JSGcCSdx38pkrb/SHP44Y48KdAtZvPV5nihzjsJYGH6i02/2H87wY6Et3E
-         H8Xd9XwDy9BdvvkeiQvPVx+aYiDpO+zDnX3T/jD018wJgDtXIYBMVerp9pS+zcC6knjf
-         AAkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683647342; x=1686239342;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9MgH2yk3oKPfzsyrz/5pM854nV5ZPzia2UxJXZBDwzc=;
-        b=fbs+VcMSaA2kIJYip42+hEEyVinpxSdz3xKTjNQnDu0bPf7NOptLO+0AiIQa4P2HK2
-         8Mrser0ndYm105/Sc+FBJ4C02xVj2TJLHEx4q3Bdt/2SFESfJppd/dAGR3k4Gco6hH5e
-         ihIX6PKIzy5WQu11NMR96Hu2PwfO/wFGCFIJ4ucnXhGDUlXEZMNlWKLlDoU080i23MKK
-         /iiSFFqY3t+DuN+O7huYqQ6zM18iEqJfg6nTArATPVPDBG8nGNuXJIVOV8UQFm2pPPtg
-         5+KrhlV/N/u52dcjQKqzA+UEnyP3yNWSABX2obHevL33ISDKjN/I3UFn6P4LY3G8VrG0
-         /L6A==
-X-Gm-Message-State: AC+VfDyECESbKR1XPHnjKK9+lXGMz0ab/v3H2VBj7B6YTrTcZeoh4SFF
-        BjsU30WYkNM1zNV5yEg1R01Y7NyKPzHedR3iMW8=
-X-Google-Smtp-Source: ACHHUZ7bFBKXrDOBS+zHO6h8pfTyQTjdqx3zSVzxLowtE5vDfkQqK+vIDkM1mW4PzMaTmdEAe9Yo2jMeF35vZRO8sW8=
-X-Received: by 2002:a17:907:c22:b0:961:2956:2ed9 with SMTP id
- ga34-20020a1709070c2200b0096129562ed9mr16260849ejc.25.1683647341791; Tue, 09
- May 2023 08:49:01 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1683675874; x=1715211874;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=CUuCRv/NUzjgRIBeu2VwsSSjZsjxeEv5ZWd8kul32w8=;
+  b=YLBtAwfwmPXkWMBPqecSX0IUeh6cgNk7zh7ahJNT3sY2NQzBPEDyx9+D
+   9vL+69M9ZgWPAoICxuRyGfqpMeUgsbZb/A6/HnoF2geN1cuXzw0QgXueV
+   iRmyGXhAoLbIi4cc6WO+nNEKvpQCSm43JATDS+1Uq46Uvuj7KJwdpNlY4
+   w=;
+X-IronPort-AV: E=Sophos;i="5.99,263,1677542400"; 
+   d="scan'208";a="330021014"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-3e1fab07.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 23:44:33 +0000
+Received: from EX19MTAUWC001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1e-m6i4x-3e1fab07.us-east-1.amazon.com (Postfix) with ESMTPS id 4FBBC81A70;
+        Tue,  9 May 2023 23:44:27 +0000 (UTC)
+Received: from EX19D028UWA002.ant.amazon.com (10.13.138.248) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 9 May 2023 23:44:24 +0000
+Received: from uda95858fd22f53.ant.amazon.com (10.94.78.250) by
+ EX19D028UWA002.ant.amazon.com (10.13.138.248) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 9 May 2023 23:44:23 +0000
+From:   Mengchi Cheng <mengcc@amazon.com>
+To:     <roberto.sassu@huaweicloud.com>
+CC:     <bpf@vger.kernel.org>, <casey@schaufler-ca.com>,
+        <dmitry.kasatkin@gmail.com>, <eparis@parisplace.org>,
+        <jmorris@namei.org>, <kamatam@amazon.com>, <keescook@chromium.org>,
+        <kpsingh@kernel.org>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-unionfs@vger.kernel.org>, <mengcc@amazon.com>,
+        <miklos@szeredi.hu>, <nicolas.bouchinet@clip-os.org>,
+        <paul@paul-moore.com>, <reiserfs-devel@vger.kernel.org>,
+        <roberto.sassu@huawei.com>, <selinux@vger.kernel.org>,
+        <serge@hallyn.com>, <stephen.smalley.work@gmail.com>,
+        <yoonjaeh@amazon.com>, <zohar@linux.ibm.com>
+Subject: Re: [PATCH] Smack modifications for: security: Allow all LSMs to provide xattrs for inode_init_security hook
+Date:   Tue, 9 May 2023 16:44:12 -0700
+Message-ID: <20230509234412.3073389-1-mengcc@amazon.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <2d0abd075d6c67e72e3fb88a4c163fb0dd28f72e.camel@huaweicloud.com>
+References: <2d0abd075d6c67e72e3fb88a4c163fb0dd28f72e.camel@huaweicloud.com>
 MIME-Version: 1.0
-Received: by 2002:a17:906:db04:b0:953:7456:30e4 with HTTP; Tue, 9 May 2023
- 08:49:00 -0700 (PDT)
-Reply-To: rhsheikhalhamed@gmail.com
-From:   Abu Dhabi Investment Authority <hagdfcost@gmail.com>
-Date:   Tue, 9 May 2023 16:49:00 +0100
-Message-ID: <CAGUzCAcx3pFr9RZOe8Q0fYGz2sk8svUJF5bvK+phQzA3YbiBWA@mail.gmail.com>
-Subject: Salam Alaikum /ADIA LOAN OFFER
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.4 required=5.0 tests=BAYES_50,DEAR_SOMETHING,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:644 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [hagdfcost[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  2.0 DEAR_SOMETHING BODY: Contains 'Dear (something)'
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.94.78.250]
+X-ClientProxiedBy: EX19D031UWC002.ant.amazon.com (10.13.139.212) To
+ EX19D028UWA002.ant.amazon.com (10.13.138.248)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Dear Sir/Madam,
+On Mon, 2023-05-08 12:29:42 +0000, Roberto Sassu wrote:
+>
+> On Thu, 2023-04-20 at 10:48 +0200, Roberto Sassu wrote:
+> > On Wed, 2023-04-19 at 12:25 -0700, Mengchi Cheng wrote:
+> > > > I got some errors during xattr removal, so not sure if my patch was
+> > > > working properly or not (it happened also without it, didn't
+> > > > investigate more).
+> > > > 
+> > > > However, I saw another discussion related to transmute:
+> > > > 
+> > > > https://lore.kernel.org/linux-security-module/20230419002338.566487-1-mengcc@amazon.com/
+> > > > 
+> > > > I add the people in CC.
+> > > > 
+> > > > The steps described were so easy to understand and executed, I tried
+> > > > without and with overlayfs.
+> > > > 
+> > > > Without:
+> > > > 
+> > > > # echo "_ system rwxatl" > /sys/fs/smackfs/load2
+> > > > # mkdir /data
+> > > > # chsmack -a "system" /data
+> > > > # chsmack -t /data
+> > > > # mkdir -p /data/dir1/dir2
+> > > > # chsmack /data/dir1
+> > > > /data/dir1 access="system" transmute="TRUE"
+> > > > # chsmack /data/dir1/dir2
+> > > > /data/dir1/dir2 access="system" transmute="TRUE"
+> > > > 
+> > > > It seems to work, right?
+> > > > 
+> > > > With overlay fs it didn't work, same result as the one Mengchi
+> > > > reported. Since Mengchi's solution was to set SMK_INODE_CHANGED, and I
+> > > > want to get rid of it, I thought to investigate more.
+> > > > 
+> > > > Looking at smack_dentry_create_files_as(), I see that the label of the
+> > > > process is overwritten with the label of the transmuting directory.
+> > > > 
+> > > > That causes smack_inode_init_security() to lookup the transmuting rule
+> > > > on the overridden credential, and not on the original one.
+> > > > 
+> > > > In the example above, it means that, when overlayfs is creating the new
+> > > > inode, the label of the process is system, not _. So no transmute
+> > > > permission, and also the xattr will not be added, as observed by
+> > > > Mengchi.
+> > > > 
+> > > > Hopefully I undertood the code, so in this particular case we would not
+> > > > need to override the label of the process in smack_dentry_create_files_
+> > > > as().
+> > > > 
+> > > > If you see smack_inode_init_security():
+> > > > 
+> > > > 	struct smack_known *skp = smk_of_current();
+> > > > 	struct smack_known *isp = smk_of_inode(inode);
+> > > > 	struct smack_known *dsp = smk_of_inode(dir);
+> > > > 
+> > > > [...]
+> > > > 
+> > > > 		if (may > 0 && ((may & MAY_TRANSMUTE) != 0) &&
+> > > > 		    smk_inode_transmutable(dir)) {
+> > > > 			isp = dsp;
+> > > > [...]
+> > > > 
+> > > > 		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
+> > > > 
+> > > > This code is telling, if there is a transmute rule, and the directory
+> > > > is transmuting, set the label of the new inode to the label of the
+> > > > directory. That should be already the result that we wanted to obtain.
+> > > > 
+> > > > The current code should have been doing it by overriding the label of
+> > > > the process in smack_dentry_create_files_as() with the label of the
+> > > > parent directory, and letting the inode being created with the
+> > > > overridden label of the process. The transmute xattr is not set due to
+> > > > the problem described above.
+> > > > 
+> > > > So, as a quick test, I kept this patch with the change to xattr2->name, 
+> > > > and skipped the label override in smack_dentry_create_files_as(). It
+> > > > worked, I get the same result as without overlayfs. Wondering if the
+> > > > process label override is necessary in other cases.
+> > > 
+> > > If I understand correctly, removing the if block below is what you suggested.
+> > 
+> > Yes, more or less is what I did.
+> > 
+> > > diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> > > index cfcbb748da25..a867288e9de9 100644
+> > > --- a/security/smack/smack_lsm.c
+> > > +++ b/security/smack/smack_lsm.c
+> > > @@ -4769,8 +4769,8 @@ static int smack_dentry_create_files_as(struct dentry *dentry, int mode,
+> > >                  * providing access is transmuting use the containing
+> > >                  * directory label instead of the process label.
+> > >                  */
+> > > -               if (may > 0 && (may & MAY_TRANSMUTE))
+> > > -                       ntsp->smk_task = isp->smk_inode;
+> > > +//             if (may > 0 && (may & MAY_TRANSMUTE))
+> > > +//                     ntsp->smk_task = isp->smk_inode;
+> > >         }
+> > >         return 0;
+> > >  }
+> > > 
+> > > This way will have issue in the following situation on the vanila kernel.
+> > > data in the lowerdir has "_" label before overlay and dir1 is already
+> > > created in the lowerdir.
+> > > # chsmack /data
+> > > /data access="_"
+> > > # chsmack /data/dir1
+> > > /data/dir1 access="system" transmute="TRUE"
+> > > Apply overlay on data directory and set the smack rule in the same way.
+> > > data has the same smack label.
+> > > # chsmack /data
+> > > /data access="system" transmute="TRUE"
+> > 
+> > I'm using an older kernel, but I get _ instead of system.
+> > 
+> > > After that, remove dir1 and mkdir dir1 again. dir1 did not get the correct
+> > > label.
+> > > # rm -r /data/dir1
+> > > # mkdir -p /data/dir1
+> > > # chsmack /data/dir1
+> > > /data/dir1 access="_"
+> > 
+> > Unfortunately, it cannot work:
+> > 
+> > Thread 3 hit Breakpoint 1, smack_inode_init_security (...) at security/smack/smack_lsm.c:959
+> > 959	{
+> > (gdb) p dir->i_ino
+> > $12 = 9169116
+> > (gdb) p dsp
+> > $13 = (struct smack_known *) 0xffffffff831fc0a0 <smack_known_floor>
+> > 
+> > 
+> > ls -i /home/root/data_work/
+> > 9169116 work
+> > 
+> > So, transmuting is decided on the working directory.
+> 
+> Actually, after studying the code better, this is
+> what security_dentry_create_files_as() is useful for.
+> 
+>  * Compute a context for a dentry as the inode is not yet available and set
+>  * that context in passed in creds so that new files are created using that
+>  * context. Context is calculated using the passed in creds and not the creds
+>  * of the caller.
+> 
+> And Smack is doing:
+> 
+> 		if (may > 0 && (may & MAY_TRANSMUTE)) {
+> 			ntsp->smk_task = isp->smk_inode;
+> 
+> The new inode will be created with the label of the current task, that
+> was replaced with the label of the parent directory (see above) in smac
+> k_dentry_create_files_as().
+> 
+> I think the reason why Mengchi was not obtaining the desired label when
+> replacing /data/dir1 was because /data is incorrectly labeled.
+> 
+> To ensure that /data has label 'system' and transmute is true, I added
+> smackfstransmute=system to the mount options.
+> 
+> However, at the beginning, it seemed that it didn't work:
+> 
+> # mount -t overlay overlay -o lowerdir=/data,upperdir=/home/root/data,workdir=/home/root/data_work,smackfstransmute=system /data
+> # chsmack /data
+> /data access="system"
+> 
+> I found that the reason for this is that smack_inode_getsecurity()
+> retrieves metadata from the inode only for SMACK64, and the rest from
+> xattrs (which would not work for mount options). I just made a patch to
+> handle SMACK64TRANSMUTE too.
+> 
+> With the patch applied, I correctly get:
+> 
+> # mount -t overlay overlay -o lowerdir=/data,upperdir=/home/root/data,workdir=/home/root/data_work,smackfstransmute=system /data
+> # chsmack /data
+> /data access="system" transmute="TRUE"
+> 
+> With the root inode correctly labeled, I get:
+> 
+> # mount -t overlay overlay -o lowerdir=/data,upperdir=/home/root/data,workdir=/home/root/data_work,smackfstransmute=system /data
+> # rm -Rf /data/dir1
+> # mkdir /data/dir1
+> # chsmack /data/dir1
+> /data/dir1 access="system"
+> 
+> This is partially correct, transmute="TRUE" is missing.
+> 
+> Judging from smk_task, we cannot determine in smack_inode_init_security
+> () if transmuting was successful in smack_dentry_create_files_as(). We
+> need an extra information.
+> 
+> Mengchi's solution was to add the new inode as parameter
+> to security_dentry_create_files_as(), so that SMK_INODE_CHANGED can be
+> set in smk_flags, and SMACK64TRANSMUTE is set in smack_d_instantiate().
+> 
+> One concern could be that preallocating the inode maybe is overlayfs-
+> specific? A comment also says that we might not use that one:
 
-We are a United Arab Emirates based investment company known as Abu
-Dhabi Investment Authority working on expanding its portfolio globally
-and financing projects.
+security_dentry_create_files_as() is only referred in the fs/overlayfs/dir.c.
+inode is for sure preallocated in this case.
+I am glad you find a way without modifying security api. I did some tests
+with your patch on our system. It works as expected. I am ok to drop mine.
 
-We are offering Corporate and Personal Loan at 3.5% Interest Rate for
-a duration of 5 to 10 years.
+Best,
+Mengchi
 
-Contact us on Email: rhsheikhalhamed@gmail.com ,for more information
-and proceeding!
-
-We also give 2% commission to consultants and brokers who introduce
-project owners for finance or other opportunities.
-
-
-Yours truly,
-Mahmoud Al Hamoud
-(Personal Assistant)
-Abu Dhabi Investment Authority
-211 Corniche, PO Box 3600
-Abu Dhabi,United Arab Emirates
+> 
+> 	err = ovl_create_or_link(dentry, inode, &attr, false);
+> 	/* Did we end up using the preallocated inode? */
+> 	if (inode != d_inode(dentry))
+> 
+> We could achieve the same goal without adding a new parameter to security_dentry_create_files_as() and, instead, by adding a new field
+> in the task_smack structure, smk_transmuted, that is set to smk_task
+> when transmuting is successful.
+> 
+> Then, if smk_task == smk_transmuted, smack_inode_init_security() would
+> set SMK_INODE_CHANGED. On top of that, I would instead just provide the
+> second xattr SMACK64TRANSMUTE, in addition to SMACK64.
+> 
+> Will send the patches for upstream first, and then switch to providing 
+> SMACK64TRANSMUTE in smack_inode_init_security(), in a new version of
+> the EVM patch set.
+> 
+> Thanks
+> 
+> Roberto
+> 
+> > If I do:
+> > 
+> > # chsmack -a system -t /home/root/data_work/work/
+> > # mkdir /data/dir1
+> > # chsmack /data/dir1
+> > /data/dir1 access="system" transmute="TRUE"
+> > 
+> > I obtain the expected result. However, this problem is due to how overlayfs works:
+> > 
+> > static int ovl_create_over_whiteout(struct dentry *dentry, struct inode *inode,
+> > 				    struct ovl_cattr *cattr)
+> > {
+> > 
+> > [...]
+> > 
+> > 	newdentry = ovl_create_temp(ofs, workdir, cattr);
+> > 	err = PTR_ERR(newdentry);
+> > 	if (IS_ERR(newdentry))
+> > 		goto out_dput;
+> > 
+> > 
+> > The good news seems to be that, once you set the label to the correct
+> > directory, transmuting works with the changes I proposed.
+> > 
+> > Roberto
+> > 
+> > > Since I am not very familiar your change. Could you help check with your
+> > > patch will this issue also happen? 
+> > > 
+> > > 
+> > > Best,
+> > > Mengchi
+> > > 
+> > > >  
+> > > > Roberto
+> 
+> 
