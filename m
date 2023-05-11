@@ -2,135 +2,87 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3CE56FE66D
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 10 May 2023 23:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D04C6FF4F9
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 11 May 2023 16:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjEJVtS (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 10 May 2023 17:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
+        id S238622AbjEKOuq (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 11 May 2023 10:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEJVtR (ORCPT
+        with ESMTP id S238821AbjEKOuN (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 10 May 2023 17:49:17 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70CB46A2
-        for <reiserfs-devel@vger.kernel.org>; Wed, 10 May 2023 14:49:15 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3318baf6a8bso51577345ab.1
-        for <reiserfs-devel@vger.kernel.org>; Wed, 10 May 2023 14:49:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683755355; x=1686347355;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B1SGREDmcRfCOLqe/Yt3nb430iTEdmGYJDyvnyaeePE=;
-        b=ejnKuWYLgDTf6qiHkVgPI/eG9iBB4ggGONWmPCf5FZoQkSWsoXhGPZ7XXNzOiUWs/4
-         J89Z9bZXv3vST4GLOXNO8VNRDXw7fnzcvQiM0hoiGfUI8nGs2pBB1VjFcVwcQ9CwRG4T
-         MQkH7Q9vaTJd+0VOw4KPmuulntquMW4JTrsTS7wFYsb8/9qDCsQblUf5xRmDP0nJcEXc
-         eOLllRMpWn0JC6386sUkrDrZ5ZclgA8CaIkdvxEvghlVPpV7lDgmDu+MyEiW4ZgG95O+
-         SRoFcn7VuQ4zvsUmWijdxRz1AoMlPIVYeO8d21guCMKmA3usK/4mi+zJcj8mKHQdgTnD
-         cGUA==
-X-Gm-Message-State: AC+VfDxKENvxDa4muu2ohdyxe/gbNqKw3YBZniHT1rEap3pDFctzYkuF
-        iTEb0mfnFqqP3w39Q8Qdx+W9KZ6lYGO2SsW2g7BLOgVSl8Nd
-X-Google-Smtp-Source: ACHHUZ5RxOuGNZBLxewywHGqqnTg/z2+mfExTWYHm1eP9owdJyXGIgOFdY8rvNLrw1U9JIdALuIDsMRcQfGEAZwYOuijgs60pn5B
+        Thu, 11 May 2023 10:50:13 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AE111B72
+        for <reiserfs-devel@vger.kernel.org>; Thu, 11 May 2023 07:49:20 -0700 (PDT)
+Received: from fsav411.sakura.ne.jp (fsav411.sakura.ne.jp [133.242.250.110])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 34BEmotw075176;
+        Thu, 11 May 2023 23:48:50 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav411.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp);
+ Thu, 11 May 2023 23:48:50 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 34BEmo9g075172
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 11 May 2023 23:48:50 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <a800496b-cae9-81bf-c79e-d8342418c5be@I-love.SAKURA.ne.jp>
+Date:   Thu, 11 May 2023 23:48:45 +0900
 MIME-Version: 1.0
-X-Received: by 2002:a92:90c:0:b0:331:3168:9c33 with SMTP id
- y12-20020a92090c000000b0033131689c33mr10139371ilg.0.1683755355037; Wed, 10
- May 2023 14:49:15 -0700 (PDT)
-Date:   Wed, 10 May 2023 14:49:15 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d368dd05fb5dd7d3@google.com>
-Subject: [syzbot] [reiserfs?] KMSAN: uninit-value in reiserfs_security_init
-From:   syzbot <syzbot+00a3779539a23cbee38c@syzkaller.appspotmail.com>
-To:     glider@google.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: [PATCH] reiserfs: Initialize sec->length in reiserfs_security_init().
+Content-Language: en-US
+To:     syzbot <syzbot+00a3779539a23cbee38c@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com, Paul Moore <paul@paul-moore.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <000000000000d368dd05fb5dd7d3@google.com>
+Cc:     reiserfs-devel@vger.kernel.org, glider@google.com,
+        linux-fsdevel@vger.kernel.org
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <000000000000d368dd05fb5dd7d3@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+syzbot is reporting that sec->length is not initialized.
 
-syzbot found the following issue on:
+Since security_inode_init_security() returns 0 when initxattrs is provided
+but call_int_hook(inode_init_security) returned -EOPNOTSUPP, control will
+reach to "if (sec->length && ...) {" without initializing sec->length.
 
-HEAD commit:    46e8b6e7cfeb string: use __builtin_memcpy() in strlcpy/str..
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=13ea03bc280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a7a1059074b7bdce
-dashboard link: https://syzkaller.appspot.com/bug?extid=00a3779539a23cbee38c
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ad7fff770529/disk-46e8b6e7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ca6a66fcd14c/vmlinux-46e8b6e7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9dc8f5fe8588/bzImage-46e8b6e7.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+00a3779539a23cbee38c@syzkaller.appspotmail.com
-
-REISERFS (device loop5): journal params: device loop5, size 512, journal first block 18, max trans len 256, max batch 225, max commit age 30, max trans age 30
-REISERFS (device loop5): checking transaction log (loop5)
-REISERFS (device loop5): Using r5 hash to sort names
-reiserfs: enabling write barrier flush mode
-=====================================================
-BUG: KMSAN: uninit-value in reiserfs_security_init+0x663/0x750 fs/reiserfs/xattr_security.c:84
- reiserfs_security_init+0x663/0x750 fs/reiserfs/xattr_security.c:84
- reiserfs_mkdir+0x418/0xfc0 fs/reiserfs/namei.c:823
- xattr_mkdir fs/reiserfs/xattr.c:77 [inline]
- create_privroot fs/reiserfs/xattr.c:890 [inline]
- reiserfs_xattr_init+0x47e/0xc00 fs/reiserfs/xattr.c:1006
- reiserfs_remount+0xf9c/0x2390
- legacy_reconfigure+0x182/0x1d0 fs/fs_context.c:633
- reconfigure_super+0x346/0xdf0 fs/super.c:956
- do_remount fs/namespace.c:2701 [inline]
- path_mount+0x19c1/0x1ee0 fs/namespace.c:3361
- do_mount fs/namespace.c:3382 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x725/0x810 fs/namespace.c:3568
- __ia32_sys_mount+0xe3/0x150 fs/namespace.c:3568
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
- do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
-
-Local variable security created at:
- reiserfs_mkdir+0x5f/0xfc0 fs/reiserfs/namei.c:791
- xattr_mkdir fs/reiserfs/xattr.c:77 [inline]
- create_privroot fs/reiserfs/xattr.c:890 [inline]
- reiserfs_xattr_init+0x47e/0xc00 fs/reiserfs/xattr.c:1006
-
-CPU: 1 PID: 7610 Comm: syz-executor.5 Not tainted 6.4.0-rc1-syzkaller-g46e8b6e7cfeb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-=====================================================
-
-
+Reported-by: syzbot <syzbot+00a3779539a23cbee38c@syzkaller.appspotmail.com>
+Closes: https://syzkaller.appspot.com/bug?extid=00a3779539a23cbee38c
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Fixes: 52ca4b6435a4 ("reiserfs: Switch to security_inode_init_security()")
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ fs/reiserfs/xattr_security.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/fs/reiserfs/xattr_security.c b/fs/reiserfs/xattr_security.c
+index 6e0a099dd788..078dd8cc312f 100644
+--- a/fs/reiserfs/xattr_security.c
++++ b/fs/reiserfs/xattr_security.c
+@@ -67,6 +67,7 @@ int reiserfs_security_init(struct inode *dir, struct inode *inode,
+ 
+ 	sec->name = NULL;
+ 	sec->value = NULL;
++	sec->length = 0;
+ 
+ 	/* Don't add selinux attributes on xattrs - they'll never get used */
+ 	if (IS_PRIVATE(dir))
+-- 
+2.18.4
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
