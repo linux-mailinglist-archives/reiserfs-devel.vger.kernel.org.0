@@ -2,87 +2,75 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D04C6FF4F9
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 11 May 2023 16:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2B27003DC
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 12 May 2023 11:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238622AbjEKOuq (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 11 May 2023 10:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
+        id S239781AbjELJe4 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 12 May 2023 05:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238821AbjEKOuN (ORCPT
+        with ESMTP id S231767AbjELJe4 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 11 May 2023 10:50:13 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AE111B72
-        for <reiserfs-devel@vger.kernel.org>; Thu, 11 May 2023 07:49:20 -0700 (PDT)
-Received: from fsav411.sakura.ne.jp (fsav411.sakura.ne.jp [133.242.250.110])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 34BEmotw075176;
-        Thu, 11 May 2023 23:48:50 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav411.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp);
- Thu, 11 May 2023 23:48:50 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 34BEmo9g075172
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 11 May 2023 23:48:50 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <a800496b-cae9-81bf-c79e-d8342418c5be@I-love.SAKURA.ne.jp>
-Date:   Thu, 11 May 2023 23:48:45 +0900
+        Fri, 12 May 2023 05:34:56 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E54B4C1F
+        for <reiserfs-devel@vger.kernel.org>; Fri, 12 May 2023 02:34:55 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id 41be03b00d2f7-51452556acdso6522296a12.2
+        for <reiserfs-devel@vger.kernel.org>; Fri, 12 May 2023 02:34:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683884094; x=1686476094;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HoV3JkYW+m2YSydsWChxyq1Hq70FVpv6QJ9NnEFQ1pA=;
+        b=MxWH8SmIk9pp4GN9X/IEUjhacTCeHdmT5SJAAbXZcFdhuYePZqAeAb9xNu34o2JPno
+         dVj1PXMqFeErgzdXolN1nMkPOSNh+siPDlRFuD26PNF+Y4n0Lunh6exVNNhk6oMgEaGI
+         O2eONyIYd0uiYmdy/bvdlmwZ7ExbexXxJoz6jODTI6Iypb+mUqOuOP+NtCrk82PPU/Fg
+         /F+ayR/zm5RrI6X72rOtGcv/SsaDeZDDrJWXmbje8ElQQNTdrYGfndWwLDVfXLWTvqWz
+         QdQiN+KFUAa3OOYqavWIYh0C+sTnMP9GAwQejRP1OKoJfv1a7Olry8I/idZIVYQKcEv+
+         VyuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683884094; x=1686476094;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HoV3JkYW+m2YSydsWChxyq1Hq70FVpv6QJ9NnEFQ1pA=;
+        b=l66RMXrfTyb3cwt3YRi5Wkm2GytGs4IhDAFbgErywRT7JyFlN7KNxJxVgZyo930Mvj
+         /goJi6to+nwNj/9SX4N9d6Mx8cml+ThIosS4DVV26T1rVb9yU3aoVnVavUL7KdYhmR75
+         1OyaLB3yRxKLYJ2rp0JcV8NA5CCwRLHy0rn030gZOyrw1NHb0H8hGvHlhwGdDzpavjmO
+         VkfSZcUThXEKCG+J9tQKq+IWY6BuBLvLfxXgGtIc4vLmFZo8SzYpsYYLF5gqOwm4yCjz
+         5OTO9M8R0v3F7d4Ur5JbHwUqFO9Bs7XvnPgpaAvZuLOW9tiK7nTinbrOZszukGmBsgA2
+         WuEQ==
+X-Gm-Message-State: AC+VfDy022ojTO1wT3xda+d1cvOC7L7ZnD6agXgGxFaqzlSqqvTs8GMp
+        gKU6KqTXM6REXZhXV9WidAW+uO5KU8DivgvliCU=
+X-Google-Smtp-Source: ACHHUZ6s5LVOHQjyHA8XdKpNSkHcKGUFSA/7x9+0BZGR5M1BbpJkru5iaow6lMv7bcFsTBYi5qRbW8eYhjEOPsBrNU4=
+X-Received: by 2002:a17:903:247:b0:1ab:16cd:51a3 with SMTP id
+ j7-20020a170903024700b001ab16cd51a3mr32389182plh.10.1683884094573; Fri, 12
+ May 2023 02:34:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: [PATCH] reiserfs: Initialize sec->length in reiserfs_security_init().
-Content-Language: en-US
-To:     syzbot <syzbot+00a3779539a23cbee38c@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com, Paul Moore <paul@paul-moore.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <000000000000d368dd05fb5dd7d3@google.com>
-Cc:     reiserfs-devel@vger.kernel.org, glider@google.com,
-        linux-fsdevel@vger.kernel.org
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <000000000000d368dd05fb5dd7d3@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:7300:5351:b0:b2:195f:afcc with HTTP; Fri, 12 May 2023
+ 02:34:54 -0700 (PDT)
+Reply-To: mariamkouame.info@myself.com
+From:   Mariam Kouame <mariamkouame007@gmail.com>
+Date:   Fri, 12 May 2023 02:34:54 -0700
+Message-ID: <CAKQFrOK54XgiaFStJdpRtis9Uq7=1VH+gEOc1TvuTtTS17WYdg@mail.gmail.com>
+Subject: from mariam kouame
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-syzbot is reporting that sec->length is not initialized.
+Dear,
 
-Since security_inode_init_security() returns 0 when initxattrs is provided
-but call_int_hook(inode_init_security) returned -EOPNOTSUPP, control will
-reach to "if (sec->length && ...) {" without initializing sec->length.
+Please grant me permission to share a very crucial discussion with
+you.I am looking forward to hearing from you at your earliest
+convenience.
 
-Reported-by: syzbot <syzbot+00a3779539a23cbee38c@syzkaller.appspotmail.com>
-Closes: https://syzkaller.appspot.com/bug?extid=00a3779539a23cbee38c
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Fixes: 52ca4b6435a4 ("reiserfs: Switch to security_inode_init_security()")
----
- fs/reiserfs/xattr_security.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/fs/reiserfs/xattr_security.c b/fs/reiserfs/xattr_security.c
-index 6e0a099dd788..078dd8cc312f 100644
---- a/fs/reiserfs/xattr_security.c
-+++ b/fs/reiserfs/xattr_security.c
-@@ -67,6 +67,7 @@ int reiserfs_security_init(struct inode *dir, struct inode *inode,
- 
- 	sec->name = NULL;
- 	sec->value = NULL;
-+	sec->length = 0;
- 
- 	/* Don't add selinux attributes on xattrs - they'll never get used */
- 	if (IS_PRIVATE(dir))
--- 
-2.18.4
-
+Mrs. Mariam Kouam
