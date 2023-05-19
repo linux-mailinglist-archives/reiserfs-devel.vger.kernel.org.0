@@ -2,78 +2,80 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A3C709742
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 19 May 2023 14:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84AB70A11A
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 19 May 2023 22:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjESMeS (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 19 May 2023 08:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
+        id S230165AbjESU4q (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 19 May 2023 16:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjESMeR (ORCPT
+        with ESMTP id S229945AbjESU4e (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 19 May 2023 08:34:17 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59CCC4
-        for <reiserfs-devel@vger.kernel.org>; Fri, 19 May 2023 05:34:16 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id 5614622812f47-3942cd86697so1784170b6e.0
-        for <reiserfs-devel@vger.kernel.org>; Fri, 19 May 2023 05:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684499656; x=1687091656;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qNVI/u+vlE2iSYnBudk/aivP1bgPbzvxDOvNGrnVEw8=;
-        b=PLMpo/zG7fLO9eyYUP//H/rjkert7+HU4G4k67zn9vn268T6cHFuInV8bfMHyGQvbj
-         JQ5Njwc3D8+j16cwYn99vcEkySpDo5unUJXGAAki59dtsnx9KowIcZij9q9scmuASBw3
-         59ma859LiPTMUVnQJczuYuNwp1UjMImb+u15fk9AwlJk5Zro1QRUvZn2KSsTkZQfO6e7
-         HIAfxOUCGmmwNpyBul3yOYho93M471lOZ8rOO1WRIPVfkUE4rPMFkyUNy7Ftz/6OFegS
-         PF8pmJkA69gKAEIetUrHrtnDVWiyiGj8642V1B3DUTfpXjqdFfwfYh11pW0zaqAgOjTq
-         nRyA==
+        Fri, 19 May 2023 16:56:34 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028DB10C9
+        for <reiserfs-devel@vger.kernel.org>; Fri, 19 May 2023 13:56:23 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-760718e6878so26865139f.1
+        for <reiserfs-devel@vger.kernel.org>; Fri, 19 May 2023 13:56:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684499656; x=1687091656;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        d=1e100.net; s=20221208; t=1684529783; x=1687121783;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qNVI/u+vlE2iSYnBudk/aivP1bgPbzvxDOvNGrnVEw8=;
-        b=fFpyabU2TrVK9N0K3cRqSsmruA60oP4MXrjpT+LZmpCbNMaJ/EzIb6Woupopl/vFXJ
-         CtcHNVJqTZkJgqM4zzv9BPwMFZkqARTQLW55BeJJYO7/WvCNkXmxDO9GGWRqpS3VW7LA
-         djZQ2mkPrN0WxbTwFxda/K8ZeHkBOinoBNAmKq/jR4kESCqjBjuChvs8HfB9q9dDFxIw
-         IVmPmkhtYWGgF3Ggc0soLDhaSgrPEoY3qCu9+jBEtHEY0SxuzCdw8WUx9re2y92L/Ps9
-         dddnR1k0HEb0dphDeDBYUZObxNxkdHXCAhlwUt28Z9Nw+AehSbpDVaZo/fFO0JjQNwZK
-         T15Q==
-X-Gm-Message-State: AC+VfDxlgLhSkdg8jpg1HW/7MxdEuINN4Pe5duB/OF4onbW0bSEH1iSO
-        H6Uxg7aE/Ja7VvK7SED/+2k20f0g1JcOilCSowU=
-X-Google-Smtp-Source: ACHHUZ4yZ/8e7njh5L1cmy3K3+IvmD55xT/PFEgymslFoVdan3m8pWd0twyTiKBpfyAM8mEVGYe+LndCtTnOR0FHKn4=
-X-Received: by 2002:aca:2b16:0:b0:394:67a1:3e29 with SMTP id
- i22-20020aca2b16000000b0039467a13e29mr913806oik.8.1684499656124; Fri, 19 May
- 2023 05:34:16 -0700 (PDT)
+        bh=dAhsFZWzv4pW+FEJe+j1meXIun7sOpZm0ldqZGqi+6E=;
+        b=DlGNbYPHZ+kM5fHGFDu2+KqJdFKPbw7tzBsBC2JUrqj6zwK4LmlsZ0lWbmaOEMrD/4
+         JcuEdWsV7ViSL6f5Uj6oPpJUSa/a/QmTWq1OoELvABd4dyfMKYltGjH9GTbXj+y8MLiW
+         7M7hICpubOIqUkamgIuBnECvKK5oMdX0LYzBXYrcA3y4+adu+f9gGQlJLJ3jemngD7+j
+         EuyEbwbrdl9RPTSOtT5FcaN6D/MVqqkJLKvnVKQ0Ehf+WyvuW+GR0OAjUEXPjuOTbJZm
+         aaIq7wrhS9E83eQUYj11CAQlQ3Ww0DUiZ9KyO6bsSmGY73cnTerX/Hu/l2RpXE+Q/C2p
+         un/g==
+X-Gm-Message-State: AC+VfDxxW2Yn+tNf2wm1/cyv6T/y8TkSUh7CTBvCk9WwA5dok4LT9PBG
+        FmvB15qJls9TT0P1zRSvTAD74zHGhd6MXH1HityyaMwTnX03
+X-Google-Smtp-Source: ACHHUZ5eBPeWyWaKDI49prhq7AsL0tX3Bj9eT6ivEGfM3LMeHkEYBzhvJHuqViDOaSy6/2UcdyP6aCq7gupAugrkOgoTWXQny1xM
 MIME-Version: 1.0
-Received: by 2002:a05:6358:70cd:b0:122:db4b:7f79 with HTTP; Fri, 19 May 2023
- 05:34:15 -0700 (PDT)
-Reply-To: ninacoulibaly03@hotmail.com
-From:   nina coulibaly <ninacoulibaly.info@gmail.com>
-Date:   Fri, 19 May 2023 05:34:15 -0700
-Message-ID: <CABAHEt5=G3HJa6trGASbK9U=2df3fGkRetkzXpNPzBGycHAsiA@mail.gmail.com>
-Subject: from nina coulibaly
-To:     undisclosed-recipients:;
+X-Received: by 2002:a02:b0ca:0:b0:40f:ae69:a144 with SMTP id
+ w10-20020a02b0ca000000b0040fae69a144mr1390179jah.5.1684529783286; Fri, 19 May
+ 2023 13:56:23 -0700 (PDT)
+Date:   Fri, 19 May 2023 13:56:23 -0700
+In-Reply-To: <0000000000001b987605f47b72d3@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000058b12b05fc122703@google.com>
+Subject: Re: [syzbot] [reiserfs?] [overlayfs?] WARNING: locking bug in take_dentry_name_snapshot
+From:   syzbot <syzbot+5a195884ee3ad761db4e@syzkaller.appspotmail.com>
+To:     casey@schaufler-ca.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        miklos@szeredi.hu, paul@paul-moore.com,
+        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
+        syzkaller-bugs@googlegroups.com, zohar@linux.ibm.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Dear,
+syzbot suspects this issue was fixed by commit:
 
-I am interested to invest with you in your  country with total trust
-and I hope you will give me total support, sincerity and commitment.
-Please get back to me as soon as possible so that I can give you my
-proposed details of funding and others.
+commit 52ca4b6435a493e47aaa98e7345e19e1e8710b13
+Author: Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Tue Mar 14 08:17:15 2023 +0000
 
-Best Regards.
+    reiserfs: Switch to security_inode_init_security()
 
-Mrs Nina Coulibaly
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=121dea5a280000
+start commit:   4bdec23f971b Merge tag 'hwmon-for-v6.3-rc4' of git://git.k..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ea09b0836073ee4
+dashboard link: https://syzkaller.appspot.com/bug?extid=5a195884ee3ad761db4e
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1277fb1ec80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12543651c80000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: reiserfs: Switch to security_inode_init_security()
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
