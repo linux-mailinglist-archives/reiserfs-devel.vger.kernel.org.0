@@ -2,53 +2,68 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C438570F39A
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 24 May 2023 11:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B3B70F9D9
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 24 May 2023 17:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjEXJ7p (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 24 May 2023 05:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37616 "EHLO
+        id S235980AbjEXPLj (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 24 May 2023 11:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjEXJ7o (ORCPT
+        with ESMTP id S235926AbjEXPLi (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 24 May 2023 05:59:44 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F91A1
-        for <reiserfs-devel@vger.kernel.org>; Wed, 24 May 2023 02:59:43 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-763da06581dso53052939f.3
-        for <reiserfs-devel@vger.kernel.org>; Wed, 24 May 2023 02:59:43 -0700 (PDT)
+        Wed, 24 May 2023 11:11:38 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB6F18C
+        for <reiserfs-devel@vger.kernel.org>; Wed, 24 May 2023 08:11:35 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-ba829f93da3so1576295276.1
+        for <reiserfs-devel@vger.kernel.org>; Wed, 24 May 2023 08:11:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1684941094; x=1687533094;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HqqN7STJH2LoGCrwrill0kIUbhodoox7qSOdJoH92o8=;
+        b=EFehSwqT4xP3Dsgl9bmiZS3CIEPYx7oE8YP/dagGWOYw22jxpzPgKbLa+z/ZmWlOwX
+         sbDUYJK1SF3CUXwmwlypvEibDRI9nS0D2DX+1qVKP8T5GElGdyojL5b5LWCxsc3eJabx
+         TAQKujaM7/wvTwHsVvSiJVHxSnfB7NkBNEEEy0m67Z1moTU+gNl374iCNxVEG4RM6sZW
+         9VpQVnKwVC9ltwPttucugKAFTxlXCjokxJbv+TppvKl4cWmkpEiNAzPg+S0RLyaHL2T5
+         8746YxI3TCs5u9PRcnTlk2UxGUeRQTfCZaRTwVv3wIyHrEIF5SBSX4BfjZzx6oLbdaGJ
+         X1Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684922382; x=1687514382;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1y4v5dGXXlsdtRC3uXVTLATx1IP65h/O1W1Vau1z36c=;
-        b=Ij57TpbdsJhiZQQu4I9Q+hv2nHVj6R9V6SudxPahCHtPr2miHtaYSajmpApx1LCEHd
-         dFevYBZIOd4sAfzwtOTmP/BMdnhWD+x/zrTiaBEN3MBffGPFhJ7wyfZiAWYf4QJVYetF
-         wwwILdrQyUtSt+Dp5LqWMtGKz4iUuG9tUrUOIJk4+oM1nKMIR3HvXKbUWc9GfPOxzj/p
-         q0E0mPMa4yoYPqi5uhMO3fRBSbkYHk4DzOAdxKo1G4+HCqIxixJwfQ9wkx/nCgSl0vBT
-         koStYEFABHP5p99PGE4QcE0NCccx7z5TnZjZf8+reAbXC2B38gWMT6Jiol2RE7y7MTp6
-         Bc4w==
-X-Gm-Message-State: AC+VfDw7YLJC/KOcZyJGvl727dllCfF/8GKzeIsGAbd0SH1YrlZhCPMT
-        4IKZ5ET7D1skErOKVjjONKB8MS4D6aSHE+huae6Th8Zvd41B
-X-Google-Smtp-Source: ACHHUZ6PZMlHgxI46j1tQBns8nc8d3nGtIJnm0KlDV5DvWHSG0dXSo3asRiBt3s951Us5qDHQxRhmkeaH50+DeqGK/dOClg+Cr28
+        d=1e100.net; s=20221208; t=1684941094; x=1687533094;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HqqN7STJH2LoGCrwrill0kIUbhodoox7qSOdJoH92o8=;
+        b=mBe41HOUwQ8YV5aMPsPIdtBihYm2ufy8+ZCtd+It+VP8QyhIHTuxNpGpkWDdVrgA5V
+         lFz6HZzooleu0yTYlKE9GuETafokPJaw2ldwcHmbuDeLnT1sSzSWbxNrXbwB9mzCn/nw
+         AVQPPisToPt6hmyKTtPBV76ELHRBIs12gZ69Yx1m0Fqv6qRwfTAOopDdo3MixoVXvjlw
+         p7GjluO3nEXWbeqVAKJEma+g2Tb/aOmaYgLczey941V7b7fxT3QPLVkyRJNKsj09V3M8
+         rSDSjeWZp9SkooLj5s8xABoDIHbcSUFkg4h1mugN2FAKr/lEazXCnElMsNbueSCMCHHT
+         Rf7w==
+X-Gm-Message-State: AC+VfDzr6z72OAoUAJinYBEHnrXF3YugpcH9+TYqTZ/Rs5/ggKJa1sg+
+        e4WjTEYwvBar+jZHogyCD3qlDnFOiuzM/+J+Pr6F
+X-Google-Smtp-Source: ACHHUZ7h5ztNlZIBSemxHTQoG+pdx9LkR0k/enQ4NmhLwlTYFQsLUTSuCVlVruca0i0KPIlmFIwlSwu/781g1QjhNk8=
+X-Received: by 2002:a0d:cc95:0:b0:561:7ec:cf90 with SMTP id
+ o143-20020a0dcc95000000b0056107eccf90mr18983019ywd.42.1684941094273; Wed, 24
+ May 2023 08:11:34 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a6b:d907:0:b0:76c:69f7:9b2 with SMTP id
- r7-20020a6bd907000000b0076c69f709b2mr8176146ioc.2.1684922382742; Wed, 24 May
- 2023 02:59:42 -0700 (PDT)
-Date:   Wed, 24 May 2023 02:59:42 -0700
-In-Reply-To: <000000000000be039005fc540ed7@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000018faf905fc6d9056@google.com>
+References: <000000000000be039005fc540ed7@google.com> <00000000000018faf905fc6d9056@google.com>
+In-Reply-To: <00000000000018faf905fc6d9056@google.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 24 May 2023 11:11:23 -0400
+Message-ID: <CAHC9VhTM0a7jnhxpCyonepcfWbnG-OJbbLpjQi68gL2GVnKSRg@mail.gmail.com>
 Subject: Re: [syzbot] [reiserfs?] INFO: task hung in flush_old_commits
-From:   syzbot <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, reiserfs-devel@vger.kernel.org,
-        roberto.sassu@huawei.com, syzkaller-bugs@googlegroups.com
+To:     linux-security-module@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,25 +71,58 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-syzbot has bisected this issue to:
+On Wed, May 24, 2023 at 5:59=E2=80=AFAM syzbot
+<syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com> wrote:
+>
+> syzbot has bisected this issue to:
+>
+> commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
+> Author: Roberto Sassu <roberto.sassu@huawei.com>
+> Date:   Fri Mar 31 12:32:18 2023 +0000
+>
+>     reiserfs: Add security prefix to xattr name in reiserfs_security_writ=
+e()
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D11c3963928=
+0000
+> start commit:   421ca22e3138 Merge tag 'nfs-for-6.4-2' of git://git.linux=
+-..
+> git tree:       upstream
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D13c3963928=
+0000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D15c3963928000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D7d8067683055e=
+3f5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D0a684c061589dcc=
+30e51
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D14312791280=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D12da860528000=
+0
+>
+> Reported-by: syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com
+> Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in reis=
+erfs_security_write()")
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
+ion
 
-commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
-Author: Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Fri Mar 31 12:32:18 2023 +0000
+Roberto, I think we need to resolve this somehow.  As I mentioned
+earlier, I don't believe this to be a fault in your patch, rather that
+patch simply triggered a situation that had not been present before,
+likely because the reiserfs code always failed when writing LSM
+xattrs.  Regardless, we still need to fix the deadlocks that sysbot
+has been reporting.
 
-    reiserfs: Add security prefix to xattr name in reiserfs_security_write()
+Has anyone dug into the reiserfs code to try and resolve the deadlock?
+ Considering the state of reiserfs, I'm guessing no one has, and I
+can't blame them; I personally would have a hard time justifying
+significant time spent on reiserfs at this point.  Unless someone has
+any better ideas, I'm wondering if we shouldn't just admit defeat with
+reiserfs and LSM xattrs and disable/remove the reiserfs LSM xattr
+support?  Given the bug that Roberto was fixing with the patch in
+question, it's unlikely this was working anyway.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11c39639280000
-start commit:   421ca22e3138 Merge tag 'nfs-for-6.4-2' of git://git.linux-..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=13c39639280000
-console output: https://syzkaller.appspot.com/x/log.txt?x=15c39639280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7d8067683055e3f5
-dashboard link: https://syzkaller.appspot.com/bug?extid=0a684c061589dcc30e51
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14312791280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12da8605280000
-
-Reported-by: syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com
-Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in reiserfs_security_write()")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+--
+paul-moore.com
