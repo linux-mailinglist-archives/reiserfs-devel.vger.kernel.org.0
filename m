@@ -2,139 +2,135 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F64710042
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 24 May 2023 23:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF87F711988
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 25 May 2023 23:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236224AbjEXV51 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 24 May 2023 17:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
+        id S241973AbjEYVuT (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 25 May 2023 17:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbjEXV50 (ORCPT
+        with ESMTP id S242297AbjEYVuF (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 24 May 2023 17:57:26 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D2513A
-        for <reiserfs-devel@vger.kernel.org>; Wed, 24 May 2023 14:57:25 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5619032c026so21501457b3.1
-        for <reiserfs-devel@vger.kernel.org>; Wed, 24 May 2023 14:57:24 -0700 (PDT)
+        Thu, 25 May 2023 17:50:05 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DD71737
+        for <reiserfs-devel@vger.kernel.org>; Thu, 25 May 2023 14:49:39 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-b9daef8681fso151698276.1
+        for <reiserfs-devel@vger.kernel.org>; Thu, 25 May 2023 14:49:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684965444; x=1687557444;
+        d=paul-moore.com; s=google; t=1685051379; x=1687643379;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HnrQePs+guIncAtpR4LpewLTG9uJD1WVMzDg7x5+JnQ=;
-        b=MOJGgNeeZ2NTaZLOw5dLeQKOsSMdZuOUDLi4BpOvTiIWRhxlewpCkLWFm90AvCFDM0
-         dBbOiUgnwSF3tx2OCsfzW5pehrThLZTOsfw+byMilrUxH/Cj5v2axZNDxs+vrOsJ2N4v
-         IxXP53ZTgLR3muduWGVYPh1B5tWmAMwq4uWqW4WLkhKPpMI27Eee0C+v/cW+dzVTGCUZ
-         4A+99EiMuntUsoYNf+LzQB7aUOpYtEqfYo2C/g9I4lkOyTxkb7Zoy5dm+ieqK7BfUV0z
-         H7dMG4Is8HvC4rO8ie0Gg/xc9BXLT61Su2UirLdP/AoEm8mYapaDU29mprZAm7Yp+MSi
-         ymhg==
+        bh=OC+9NjL0irobHibDiO4Xj0w+axMGUz0a3YWUxzC5iGM=;
+        b=Xli9upD25QW3yaKVzMKeJym2HC6mDnRJ2oNlJGpRtJQwE+0RjgFyE9NaGRZl/KANmT
+         hqxJeSbWCtsnkz5POe4lDP5ZDSW+iz2uoBYWRnbQOZxpzeMMJ0S05Y32fG9dWgPm1Gjd
+         LG/Au3dHaY1f9YS5PEcLPsYE+UlHmQH+YtNM2kiwuVjctXfG8vNraS6leg7ZoqoS1HAH
+         sNPt7D1kLZ3XbX2Zp9+xHyW+DjX4cuP1mNAa5KGNeNtQiywsb1xh2PsgdnZ3kivM04x6
+         LXzXHOT6hFj2j7eGDlSygweyJb31DKXEO0OP7xcFeOiJcRu9bIHckRGXf8gpAwZqCV1c
+         VMLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684965444; x=1687557444;
+        d=1e100.net; s=20221208; t=1685051379; x=1687643379;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HnrQePs+guIncAtpR4LpewLTG9uJD1WVMzDg7x5+JnQ=;
-        b=VhM5e9/balPMzWAT9CTp2EgBxuYUWQtxszW91CkCxZhZrXGE4dTkpqJ/dPMLfWxKI+
-         7DCYrhjqjUrfmBxyjYf/WXnl4LXJbMrYSvjylGHVhbJCaaDXPStHQmAfa88pnhuiqYj0
-         q2xooLhJjH1VRX5+EKUOv2MzyAKY01iRM8TOYayyzy3cphqVPnm4dsHc8Fo5R/Owvge1
-         R0BfM6AQpIfTZCvfEYb8QR7L0N9BBeSqu1AKrvVXicCvbyYRw8xBhL+C0+BrIb7jQZoH
-         nIIm5FwI0lCedroJj5RNP7YiT8oGj28lLS1vjqOtATreCkf6biGfhvJGbqu7rMLLjuQA
-         Tccg==
-X-Gm-Message-State: AC+VfDwcogT8fql9DqoO0lbrwd7yxwkPmeFX2oK4zPNHhKeEx6NKmkui
-        uYJ7XX2yKWpI+3jAdUlPUHWjp5IS1PQcw96/xBJy
-X-Google-Smtp-Source: ACHHUZ6wwnRp26WVRb5bMlIwp5UO3NdT+DkO9QgYycHZoQNR88qp6I/wrFTyf14xwXWr/rrvRF6bugZWse9TXC6cuUE=
-X-Received: by 2002:a0d:e807:0:b0:55a:4ff4:f97d with SMTP id
- r7-20020a0de807000000b0055a4ff4f97dmr19964058ywe.48.1684965444190; Wed, 24
- May 2023 14:57:24 -0700 (PDT)
+        bh=OC+9NjL0irobHibDiO4Xj0w+axMGUz0a3YWUxzC5iGM=;
+        b=dfjwiGoSe0eCAe+B00lIJjDSxAWPfuaPBQA9PgMC5i/w8WXcRivcewtHd3CaOr5VEV
+         ITML5o7aj/98crPEDprWCAPnv6wZZzXz0WzeTHsNVOMltNTsx4nXPzcNA32EQcUmsebf
+         ckXev5QgXQhTjarTk35olGXm7pKJc8xhOG7HvAl5P0HQTnuO/MmQX7PrshvYsvFT9Smq
+         VLI53AHDWEnIPX0lmyhw87mMSLYbOLBHSMbSR1EGpUJSSTPdeIGewVwV3yG6EBosDn2W
+         tuCjRc78lF40wz5Rm8ihdYLTCX5juE9WPr5HgwQzHg7weknaVaODgAwif+JUtrNX8d8e
+         nwgQ==
+X-Gm-Message-State: AC+VfDzXQ8gp6NzdDZE3zNDlpNL7FP7IWDu09Z8sTX40MHLYofb01dU2
+        jBhbRm2x0ZnilmZVuO8p/RHSgtfh46i/dVMJxQcu
+X-Google-Smtp-Source: ACHHUZ6lpc0Ms3TflRcikKP9rQMUcNUUX12zKG6c7RupY5OQ+TBvP2H/Du0k5GoZMiQR8/JmxXHq1tN/wEo2i5a4DLc=
+X-Received: by 2002:a81:4e84:0:b0:55a:985e:8ad1 with SMTP id
+ c126-20020a814e84000000b0055a985e8ad1mr798556ywb.33.1685051378870; Thu, 25
+ May 2023 14:49:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000be039005fc540ed7@google.com> <00000000000018faf905fc6d9056@google.com>
- <CAHC9VhTM0a7jnhxpCyonepcfWbnG-OJbbLpjQi68gL2GVnKSRg@mail.gmail.com> <813148798c14a49cbdf0f500fbbbab154929e6ed.camel@huaweicloud.com>
-In-Reply-To: <813148798c14a49cbdf0f500fbbbab154929e6ed.camel@huaweicloud.com>
+References: <000000000000d368dd05fb5dd7d3@google.com> <a800496b-cae9-81bf-c79e-d8342418c5be@I-love.SAKURA.ne.jp>
+ <CAHC9VhSEd5BK=ROaN7wMB4WtGMZ=vXz7gQk=xjjn1-mbp_RWSQ@mail.gmail.com>
+In-Reply-To: <CAHC9VhSEd5BK=ROaN7wMB4WtGMZ=vXz7gQk=xjjn1-mbp_RWSQ@mail.gmail.com>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 24 May 2023 17:57:13 -0400
-Message-ID: <CAHC9VhRoj3muyD0+pTwpJvCdmzz25C8k8eufWcjc8ZE4e2AOew@mail.gmail.com>
-Subject: Re: [syzbot] [reiserfs?] INFO: task hung in flush_old_commits
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
+Date:   Thu, 25 May 2023 17:49:28 -0400
+Message-ID: <CAHC9VhSGwM9VXshWwopr3d2epVksFNZUbS-mQyFOg9bVBOC1aA@mail.gmail.com>
+Subject: Re: [PATCH] reiserfs: Initialize sec->length in reiserfs_security_init().
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     syzbot <syzbot+00a3779539a23cbee38c@syzkaller.appspotmail.com>,
         syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com>
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        reiserfs-devel@vger.kernel.org, glider@google.com,
+        linux-fsdevel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Wed, May 24, 2023 at 11:50=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> On Wed, 2023-05-24 at 11:11 -0400, Paul Moore wrote:
-> > On Wed, May 24, 2023 at 5:59=E2=80=AFAM syzbot
-> > <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com> wrote:
-> > > syzbot has bisected this issue to:
-> > >
-> > > commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
-> > > Author: Roberto Sassu <roberto.sassu@huawei.com>
-> > > Date:   Fri Mar 31 12:32:18 2023 +0000
-> > >
-> > >     reiserfs: Add security prefix to xattr name in reiserfs_security_=
-write()
-> > >
-> > > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D11c396=
-39280000
-> > > start commit:   421ca22e3138 Merge tag 'nfs-for-6.4-2' of git://git.l=
-inux-..
-> > > git tree:       upstream
-> > > final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D13c396=
-39280000
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=3D15c396392=
-80000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D7d8067683=
-055e3f5
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=3D0a684c06158=
-9dcc30e51
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1431279=
-1280000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D12da86052=
-80000
-> > >
-> > > Reported-by: syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com
-> > > Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in =
-reiserfs_security_write()")
-> > >
-> > > For information about bisection process see: https://goo.gl/tpsmEJ#bi=
-section
+On Sat, May 20, 2023 at 3:47=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+> On Thu, May 11, 2023 at 10:49=E2=80=AFAM Tetsuo Handa
+> <penguin-kernel@i-love.sakura.ne.jp> wrote:
 > >
-> > Roberto, I think we need to resolve this somehow.  As I mentioned
-> > earlier, I don't believe this to be a fault in your patch, rather that
-> > patch simply triggered a situation that had not been present before,
-> > likely because the reiserfs code always failed when writing LSM
-> > xattrs.  Regardless, we still need to fix the deadlocks that sysbot
-> > has been reporting.
+> > syzbot is reporting that sec->length is not initialized.
+> >
+> > Since security_inode_init_security() returns 0 when initxattrs is provi=
+ded
+> > but call_int_hook(inode_init_security) returned -EOPNOTSUPP, control wi=
+ll
+> > reach to "if (sec->length && ...) {" without initializing sec->length.
+> >
+> > Reported-by: syzbot <syzbot+00a3779539a23cbee38c@syzkaller.appspotmail.=
+com>
+> > Closes: https://syzkaller.appspot.com/bug?extid=3D00a3779539a23cbee38c
+> > Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> > Fixes: 52ca4b6435a4 ("reiserfs: Switch to security_inode_init_security(=
+)")
+> > ---
+> >  fs/reiserfs/xattr_security.c | 1 +
+> >  1 file changed, 1 insertion(+)
 >
-> Hi Paul
->
-> ok, I will try.
+> Adding the LSM list to the CC line.
 
-Thanks Roberto.  If it gets to be too challenging, let us know and we
-can look into safely disabling the LSM xattrs for reiserfs, I'll be
-shocked if anyone is successfully using LSM xattrs on reiserfs.
+I haven't seen any objections, and it looks reasonable to me so I've
+gone ahead and merged it into lsm/next.  This is arguably
+lsm/stable-6.4 material, but I'm going to stick with lsm/next in hopes
+that Roberto can resolve the other reiserfs issue and we can push all
+the reiser fixes up to Linus in one shot.
 
-> > Has anyone dug into the reiserfs code to try and resolve the deadlock?
-> >  Considering the state of reiserfs, I'm guessing no one has, and I
-> > can't blame them; I personally would have a hard time justifying
-> > significant time spent on reiserfs at this point.  Unless someone has
-> > any better ideas, I'm wondering if we shouldn't just admit defeat with
-> > reiserfs and LSM xattrs and disable/remove the reiserfs LSM xattr
-> > support?  Given the bug that Roberto was fixing with the patch in
-> > question, it's unlikely this was working anyway.
+The reality is that LSM xattrs have been broken on reiserfs for a long
+time and no one has complained, I figure a few more weeks isn't going
+to matter that much.
+
+Regardless, thanks for digging into this syzbot failure and sending a patch=
+.
+
+> > diff --git a/fs/reiserfs/xattr_security.c b/fs/reiserfs/xattr_security.=
+c
+> > index 6e0a099dd788..078dd8cc312f 100644
+> > --- a/fs/reiserfs/xattr_security.c
+> > +++ b/fs/reiserfs/xattr_security.c
+> > @@ -67,6 +67,7 @@ int reiserfs_security_init(struct inode *dir, struct =
+inode *inode,
+> >
+> >         sec->name =3D NULL;
+> >         sec->value =3D NULL;
+> > +       sec->length =3D 0;
+> >
+> >         /* Don't add selinux attributes on xattrs - they'll never get u=
+sed */
+> >         if (IS_PRIVATE(dir))
+> > --
+> > 2.18.4
 
 --=20
 paul-moore.com
