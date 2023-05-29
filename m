@@ -2,45 +2,45 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56DEA71468D
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 29 May 2023 10:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65901714ECF
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 29 May 2023 19:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbjE2IsP (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 29 May 2023 04:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
+        id S229527AbjE2RNz (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 29 May 2023 13:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231659AbjE2IsN (ORCPT
+        with ESMTP id S229517AbjE2RNy (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 29 May 2023 04:48:13 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD9ED9
-        for <reiserfs-devel@vger.kernel.org>; Mon, 29 May 2023 01:47:56 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-33b384b619eso7812705ab.3
-        for <reiserfs-devel@vger.kernel.org>; Mon, 29 May 2023 01:47:56 -0700 (PDT)
+        Mon, 29 May 2023 13:13:54 -0400
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E14BE
+        for <reiserfs-devel@vger.kernel.org>; Mon, 29 May 2023 10:13:52 -0700 (PDT)
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-772e344fde5so223979939f.0
+        for <reiserfs-devel@vger.kernel.org>; Mon, 29 May 2023 10:13:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685350076; x=1687942076;
+        d=1e100.net; s=20221208; t=1685380432; x=1687972432;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=IbHpzrqgBAsJqGDHS3MPrS3ZW+nNib8fMwdVh4fuRHA=;
-        b=TuYlTTulAIrmesqCHaVJ9GWASS79y5oKruX/WHKpSL1Zl4XYSrwlpOgfeOKfrohxdv
-         GuDcfFLf9JhsMFbqiWv8SyXzot42z5fVxGRKxpnDVjOtzGpIeq5A84a8oyCSWKx3ZRUp
-         VVnNzwZgUYxY5p1Y6QnPHXtUWvq+PPRgfnZ8rF+KCm2vd0/Q2zkAlIGP3j6o0eGAXSbJ
-         m07Xgyzgxcm3nU7hZtZ18VBi/37ePvHur1GwVxsfLUaNn/FvcCNDRo/MNbEUyf37OK5G
-         gpniXTDXwng1Ej0EFSM0hv+b6rp97j4t1ZN8/6nnowEbif1JufQojn60oc9UNProCKPv
-         dRBA==
-X-Gm-Message-State: AC+VfDwRywb9DFoDiqDcOHNvy1BuE1mTgLFZzswt3THnD0jxrCpODuGr
-        0HuDd2AFH5Ig3hrg26FSQ2K0qoCrAyu79zNAOUTVlFKyXe7j
-X-Google-Smtp-Source: ACHHUZ6zeFwwZP5TLdA7JZzbIJ5uSjQ/t4rKCf707qsAPscDziQNun43ikPCoHPixjkvPKICSgW4HBGJzglIEhVwfw4BXf4yHDkM
+        bh=ebxk1Up7SOQpJbCMXXPHyjff+XCGPo0IXGxHF8GOp5Y=;
+        b=Jr7hfEQ9nRV6IHeyU0XwNXRKaOjUj6Rhzjf3smiVmqnQd4lFRQt4UH9/nI44eFXxH1
+         bXaJ6EtqigItvX0s5rpI5irk2lFbIv512fE2B4OkzruDSZ+n3kFYNp1yHhtLCvgR/Gim
+         dkB1AhxjTnGUhmIEr2BK8X0BpFhYR24D8iK/j+Zu2tpjcJz/rocC4l6a7Rrc8df6TaLe
+         0jhQ66tFsro4oGXGwRxuyDKRarM6rEVbp9/8AqOeSsfc3J/rChUbFzBlOLc9KdyfBqEe
+         qYDKtpx4PDZuwYCxb8FuAlKBwJJsW5plSpWRmUh7lUUYTwhAv1vQ7qOG9Pu7KHYLextU
+         Jt7Q==
+X-Gm-Message-State: AC+VfDxiHixtVgDFcW67CQTtl4Ryk93lxpwfAZLiDHk/WhmRc9fICZmG
+        REhLuJGcSef+7wA6iCX2856PeJ1HCX2ByArXVnhgm+HINK1a
+X-Google-Smtp-Source: ACHHUZ719JgOvsWUXMznoKZghQiAyD4AFO0DDl21J8oAwcAXIwlmKvxeoIITN21nDCTOS9J3sSTgcOfjRfbWhKoOr3HVcoZRMCtg
 MIME-Version: 1.0
-X-Received: by 2002:a92:d392:0:b0:33a:4f71:b9c5 with SMTP id
- o18-20020a92d392000000b0033a4f71b9c5mr2708975ilo.1.1685350075862; Mon, 29 May
- 2023 01:47:55 -0700 (PDT)
-Date:   Mon, 29 May 2023 01:47:55 -0700
+X-Received: by 2002:a02:2a47:0:b0:41a:bb82:ddc0 with SMTP id
+ w68-20020a022a47000000b0041abb82ddc0mr2965834jaw.4.1685380432263; Mon, 29 May
+ 2023 10:13:52 -0700 (PDT)
+Date:   Mon, 29 May 2023 10:13:52 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000098177b05fcd124f6@google.com>
-Subject: [syzbot] Monthly reiserfs report (May 2023)
-From:   syzbot <syzbot+listc7e3fffb336c714441aa@syzkaller.appspotmail.com>
+Message-ID: <000000000000fa007305fcd83579@google.com>
+Subject: [syzbot] [reiserfs?] possible deadlock in do_unlinkat
+From:   syzbot <syzbot+ada12d2d935bbc82aa7f@syzkaller.appspotmail.com>
 To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
@@ -54,48 +54,164 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello reiserfs maintainers/developers,
+Hello,
 
-This is a 31-day syzbot report for the reiserfs subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/reiserfs
+syzbot found the following issue on:
 
-During the period, 2 new issues were detected and 1 were fixed.
-In total, 71 issues are still open and 16 have been fixed so far.
+HEAD commit:    933174ae28ba Merge tag 'spi-fix-v6.4-rc3' of git://git.ker..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=167d464d280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7d8067683055e3f5
+dashboard link: https://syzkaller.appspot.com/bug?extid=ada12d2d935bbc82aa7f
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=106e6d19280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13cf84e5280000
 
-Some of the still happening issues:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/189d556c105e/disk-933174ae.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/498458304963/vmlinux-933174ae.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/68bcd9d7c04c/bzImage-933174ae.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/a89e85025777/mount_0.gz
 
-Ref  Crashes Repro Title
-<1>  1958    Yes   possible deadlock in open_xa_dir
-                   https://syzkaller.appspot.com/bug?extid=8fb64a61fdd96b50f3b8
-<2>  1597    No    KASAN: slab-out-of-bounds Read in search_by_key (2)
-                   https://syzkaller.appspot.com/bug?extid=b3b14fb9f8a14c5d0267
-<3>  1455    Yes   kernel BUG in do_journal_begin_r
-                   https://syzkaller.appspot.com/bug?extid=2da5e132dd0268a9c0e4
-<4>  1315    Yes   kernel BUG at fs/reiserfs/journal.c:LINE!
-                   https://syzkaller.appspot.com/bug?extid=6820505ae5978f4f8f2f
-<5>  1184    Yes   WARNING in reiserfs_lookup
-                   https://syzkaller.appspot.com/bug?extid=392ac209604cc18792e5
-<6>  597     Yes   possible deadlock in mnt_want_write_file
-                   https://syzkaller.appspot.com/bug?extid=1047e42179f502f2b0a2
-<7>  242     Yes   possible deadlock in reiserfs_ioctl
-                   https://syzkaller.appspot.com/bug?extid=79c303ad05f4041e0dad
-<8>  218     Yes   possible deadlock in do_journal_begin_r
-                   https://syzkaller.appspot.com/bug?extid=5e385bfa7d505b075d9f
-<9>  187     Yes   KASAN: out-of-bounds Read in leaf_paste_entries (2)
-                   https://syzkaller.appspot.com/bug?extid=38b79774b6c990637f95
-<10> 159     Yes   WARNING in journal_end
-                   https://syzkaller.appspot.com/bug?extid=d43f346675e449548021
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ada12d2d935bbc82aa7f@syzkaller.appspotmail.com
+
+REISERFS (device loop0): Created .reiserfs_priv - reserved for xattr storage.
+======================================================
+WARNING: possible circular locking dependency detected
+6.4.0-rc3-syzkaller-00032-g933174ae28ba #0 Not tainted
+------------------------------------------------------
+syz-executor392/4995 is trying to acquire lock:
+ffff888022309090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x7a/0xd0 fs/reiserfs/lock.c:27
+
+but task is already holding lock:
+ffff8880759902e0 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:810 [inline]
+ffff8880759902e0 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: do_unlinkat+0x26a/0x950 fs/namei.c:4378
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}:
+       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
+       down_write_nested+0x3d/0x50 kernel/locking/rwsem.c:1689
+       inode_lock_nested include/linux/fs.h:810 [inline]
+       do_unlinkat+0x26a/0x950 fs/namei.c:4378
+       __do_sys_unlinkat fs/namei.c:4436 [inline]
+       __se_sys_unlinkat fs/namei.c:4429 [inline]
+       __x64_sys_unlinkat+0xce/0xf0 fs/namei.c:4429
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #1 (sb_writers#9){.+.+}-{0:0}:
+       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1494 [inline]
+       sb_start_write+0x4d/0x1c0 include/linux/fs.h:1569
+       mnt_want_write_file+0x5e/0x1f0 fs/namespace.c:438
+       reiserfs_ioctl+0x174/0x340 fs/reiserfs/ioctl.c:103
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl+0xf1/0x160 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&sbi->lock){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3108 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3227 [inline]
+       validate_chain+0x166b/0x58e0 kernel/locking/lockdep.c:3842
+       __lock_acquire+0x1295/0x2000 kernel/locking/lockdep.c:5074
+       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
+       __mutex_lock_common+0x1d8/0x2530 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x1b/0x20 kernel/locking/mutex.c:799
+       reiserfs_write_lock+0x7a/0xd0 fs/reiserfs/lock.c:27
+       reiserfs_lookup+0x162/0x580 fs/reiserfs/namei.c:364
+       lookup_one_qstr_excl+0x11b/0x250 fs/namei.c:1605
+       do_unlinkat+0x298/0x950 fs/namei.c:4379
+       __do_sys_unlinkat fs/namei.c:4436 [inline]
+       __se_sys_unlinkat fs/namei.c:4429 [inline]
+       __x64_sys_unlinkat+0xce/0xf0 fs/namei.c:4429
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+Chain exists of:
+  &sbi->lock --> sb_writers#9 --> &type->i_mutex_dir_key#6/1
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&type->i_mutex_dir_key#6/1);
+                               lock(sb_writers#9);
+                               lock(&type->i_mutex_dir_key#6/1);
+  lock(&sbi->lock);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor392/4995:
+ #0: ffff88807d18c460 (sb_writers#9){.+.+}-{0:0}, at: mnt_want_write+0x3f/0x90 fs/namespace.c:394
+ #1: ffff8880759902e0 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:810 [inline]
+ #1: ffff8880759902e0 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: do_unlinkat+0x26a/0x950 fs/namei.c:4378
+
+stack backtrace:
+CPU: 0 PID: 4995 Comm: syz-executor392 Not tainted 6.4.0-rc3-syzkaller-00032-g933174ae28ba #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/16/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ check_noncircular+0x2fe/0x3b0 kernel/locking/lockdep.c:2188
+ check_prev_add kernel/locking/lockdep.c:3108 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3227 [inline]
+ validate_chain+0x166b/0x58e0 kernel/locking/lockdep.c:3842
+ __lock_acquire+0x1295/0x2000 kernel/locking/lockdep.c:5074
+ lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
+ __mutex_lock_common+0x1d8/0x2530 kernel/locking/mutex.c:603
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x1b/0x20 kernel/locking/mutex.c:799
+ reiserfs_write_lock+0x7a/0xd0 fs/reiserfs/lock.c:27
+ reiserfs_lookup+0x162/0x580 fs/reiserfs/namei.c:364
+ lookup_one_qstr_excl+0x11b/0x250 fs/namei.c:1605
+ do_unlinkat+0x298/0x950 fs/namei.c:4379
+ __do_sys_unlinkat fs/namei.c:4436 [inline]
+ __se_sys_unlinkat fs/namei.c:4429 [inline]
+ __x64_sys_unlinkat+0xce/0xf0 fs/namei.c:4429
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7ffa0fa838f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+
+
 
 ---
 This report is generated by a bot. It may contain errors.
 See https://goo.gl/tpsmEJ for more information about syzbot.
 syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-You may send multiple commands in a single email message.
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
