@@ -2,51 +2,50 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EEF71F3FB
-	for <lists+reiserfs-devel@lfdr.de>; Thu,  1 Jun 2023 22:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E27C771F442
+	for <lists+reiserfs-devel@lfdr.de>; Thu,  1 Jun 2023 22:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbjFAUim (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 1 Jun 2023 16:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
+        id S232558AbjFAU53 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 1 Jun 2023 16:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjFAUil (ORCPT
+        with ESMTP id S231890AbjFAU53 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 1 Jun 2023 16:38:41 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91A0134
-        for <reiserfs-devel@vger.kernel.org>; Thu,  1 Jun 2023 13:38:39 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-33b50b22030so10445605ab.3
-        for <reiserfs-devel@vger.kernel.org>; Thu, 01 Jun 2023 13:38:39 -0700 (PDT)
+        Thu, 1 Jun 2023 16:57:29 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551ABB3
+        for <reiserfs-devel@vger.kernel.org>; Thu,  1 Jun 2023 13:57:28 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7749b49ce95so30050139f.2
+        for <reiserfs-devel@vger.kernel.org>; Thu, 01 Jun 2023 13:57:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685651919; x=1688243919;
+        d=1e100.net; s=20221208; t=1685653047; x=1688245047;
         h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=abFcT4+hDaiL7vl8OJ3SqlfajtLNvtNMMTdrV5w1YEs=;
-        b=g0DYZnlz7fa+DGEh9rWSQRKZxEnRbnh8W1mD5qRW2a+KM3ae88TYGE7d1QE+72HZfn
-         pO7HCcNdRcGQ/rnNZIeeSErjYqfdGEcu/SOPrV2Tkjv+7WzML6MqfrRfYFQ1hsfptzM0
-         uofcBtI4vm9zvIIT9oQmKW3HMJ1INJFYgTCU+D30sf8XyaQYbcRsSNsb6V+E/i40q6ay
-         Wp1OZKyNDFoUWnBhZh578QHtyRjeFAHB4mfVN/IqaBpJ7v0nO/n27fKrlqOBYIGJot4e
-         QCVmUKNGAjcMqQ6gmKRloVtCy+WMRPpiTbxUjNJSUakXml0Xc51Zo/XYeW/P/5FDAw1A
-         Lx0g==
-X-Gm-Message-State: AC+VfDxf3KquxfOfp4e1Vd2G3nn3g0k2souMEtpuywqb6mdUiIP31caw
-        BC8kjVGhNagFWVbDsipgm0AL+5OjJt4mCCsJSuN1NoVJIxO8
-X-Google-Smtp-Source: ACHHUZ4mES9mMqLcqY4/ltDAP65fIJ5pUXbWdR7w/ZbmJ03JHOgDKUP6/2iyiQFWhfCdpZ/4HP7e6dMELDh8utjSqjE5gqzNQOjd
+        bh=H+l1U73mbKH9j4OejDCTya2AgY4321krTJ/ukN0/34Q=;
+        b=IWM5uLC4C/OAo+QNEaCDAEsLJ5Zxk6lPyc114v1sXpVdW8q7pekKHb6eZhzZzvbPt5
+         Qmt3nezcufCmIxfg4jrdpF1b3xsSiuUEDnlOEYLYac1+vDihk0eH7O0dp+JsZS8m6kgz
+         Dnucq9j1VQE3sAGfAodxAd6/dkiNIS0l0hZLBaJodp8AnApW6iAowj7fQyQS9UqAmrko
+         8mN0RV2qNgTBI57WYVdrudCP3qUgTvMHPrEe0tO/Gswaf6esnDWrr5fdaOEW8WbgvxxK
+         AktVkP/zLjXywNGTfjN/h1KGWXH72PCOGjyq4d6Ay5eCXuCIay8NDk5sbu3U06+t4oDE
+         ndPg==
+X-Gm-Message-State: AC+VfDyET0RBBK51wWjtUDTTAdSzoJZfRHOIKfQ6xHlNPhEsvkuXn0GM
+        lxCcw5WM7T7o6iN6v4VppK9aDIC3NQ4ONSvBISjxXVC/0RTo
+X-Google-Smtp-Source: ACHHUZ7bUwXBbZVCrZNRxrQa5023b/GTViYVQBHHLxfBXUh0nMyBSQxMYlCW5YBYKTlxmQRiZvA4raYDP+qvoq/e80zbSI2rTWxg
 MIME-Version: 1.0
-X-Received: by 2002:a92:d581:0:b0:331:9a82:33f8 with SMTP id
- a1-20020a92d581000000b003319a8233f8mr3146924iln.3.1685651919186; Thu, 01 Jun
- 2023 13:38:39 -0700 (PDT)
-Date:   Thu, 01 Jun 2023 13:38:39 -0700
-In-Reply-To: <8a48ede1-3a45-7c3c-39e9-36001ac09283@huaweicloud.com>
+X-Received: by 2002:a5d:8f89:0:b0:770:2afa:25ae with SMTP id
+ l9-20020a5d8f89000000b007702afa25aemr325298iol.1.1685653047714; Thu, 01 Jun
+ 2023 13:57:27 -0700 (PDT)
+Date:   Thu, 01 Jun 2023 13:57:27 -0700
+In-Reply-To: <ffde7908-be73-cc56-2646-72f4f94cb51b@huaweicloud.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000dbb63805fd176bc6@google.com>
+Message-ID: <0000000000001faca405fd17af1b@google.com>
 Subject: Re: [syzbot] [reiserfs?] possible deadlock in open_xa_dir
 From:   syzbot <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, jack@suse.cz, jeffm@suse.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, reiserfs-devel@vger.kernel.org,
-        roberto.sassu@huawei.com, roberto.sassu@huaweicloud.com,
-        syzkaller-bugs@googlegroups.com
+To:     hdanton@sina.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com,
+        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
+        roberto.sassu@huaweicloud.com, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -60,19 +59,18 @@ X-Mailing-List: reiserfs-devel@vger.kernel.org
 
 Hello,
 
-syzbot tried to test the proposed patch but the build/boot failed:
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-failed to apply patch:
-checking file fs/reiserfs/namei.c
-patch: **** unexpected end of file in patch
-
-
+Reported-and-tested-by: syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com
 
 Tested on:
 
 commit:         929ed21d Merge tag '6.4-rc4-smb3-client-fixes' of git:..
 git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16c69fed280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=162cf2103e4a7453
 dashboard link: https://syzkaller.appspot.com/bug?extid=8fb64a61fdd96b50f3b8
-compiler:       
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=10efc079280000
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1159c149280000
 
+Note: testing is done by a robot and is best-effort only.
