@@ -2,204 +2,174 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70AEA72575E
-	for <lists+reiserfs-devel@lfdr.de>; Wed,  7 Jun 2023 10:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B2F727228
+	for <lists+reiserfs-devel@lfdr.de>; Thu,  8 Jun 2023 00:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239198AbjFGIUc (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 7 Jun 2023 04:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60608 "EHLO
+        id S233064AbjFGWyn (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 7 Jun 2023 18:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238720AbjFGIUY (ORCPT
+        with ESMTP id S232927AbjFGWyl (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:20:24 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD90188
-        for <reiserfs-devel@vger.kernel.org>; Wed,  7 Jun 2023 01:20:23 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-760c58747cdso583717239f.0
-        for <reiserfs-devel@vger.kernel.org>; Wed, 07 Jun 2023 01:20:23 -0700 (PDT)
+        Wed, 7 Jun 2023 18:54:41 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB912682
+        for <reiserfs-devel@vger.kernel.org>; Wed,  7 Jun 2023 15:54:36 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51458e3af68so2381474a12.2
+        for <reiserfs-devel@vger.kernel.org>; Wed, 07 Jun 2023 15:54:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686178475; x=1688770475;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
+        b=WeqXDhOYObEU4Q4S3JxL3bEVQtplVvNKCfakhFkSuiLBGZe/ef388CiKUayAOmbEOV
+         ZR0I5GAxPbS54gQ7Fi+hG72GeTokI+noW1OPwtavsLtjymUzaeyKWDDpDiOtNBnLq40U
+         hKN8QzuE3yuzJvRNnur8tzVGd/WDVGu93YT1PuP86BcJTXG/Q3+EyiY1Ov5Itgxf9sfV
+         puzj8gFJzfO5zpoPQ0K3fO44i5t5qr504eako4ZleNRX8Z/LIaI8UL0On16+KpM6t7Hk
+         P05xDxotWEktWnY1d5dyENuc5li2l9dXU7CCPzvtyNY2IFMeysO2qVasevOMBOewfS/V
+         nc1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686126022; x=1688718022;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZGDkToLFGk1DNDwTbnbGDMJ2Z/I7N57HOST/ddBoKsA=;
-        b=FObZEnjf2HwcQz02bMzX135JfegOzCKOZBrsL5zBOmV1XN3hZGSXa7Ilw3sL+G1QIc
-         X+8vpk96ZKyWUnux585zXG7O39JBZT/M832rampjo6a8aq7USua6XeFjUCYBU1cc4rbp
-         29/L2fjdUnL3KTfvGFJRXFl4Qs/iniCRlPSHlfGxOZo85ecQRlKpUeNZeIAotqA22gMm
-         0v87bMAmOPUUBrUPj8yai5hSuFaMkQoQDjZSm/NebvIlXMtOn6tYqx4ZfBjjBSDcCMWV
-         ctS1xpRt0fLlsFCnUhmmRlqzdB/iUmi0vEZHDrTLvk56T0sGXuwrjKgDMmXwclklA2FS
-         3ccQ==
-X-Gm-Message-State: AC+VfDzn7ZUeyZVj+h4NYFc/iu+Hxzso1IGdUstgga9qy7myqSHyAFyX
-        5a52eKkA9z0R/XDYcsYIT32NNX81/RjXIt0Ap6HCP4Fi7bi9
-X-Google-Smtp-Source: ACHHUZ4NXM0D0aLaoAzGGeI09qKS177rQEU0i2amhGkFpzGO+a2vh8a/5qcVwh7qRH5lYclg/SDEIuImXmgeCyrAdGthgw9xI5j2
+        d=1e100.net; s=20221208; t=1686178475; x=1688770475;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
+        b=YslJaeYeyyqBKvHqwxD60L8mUO72D/iVXKSZM5FPcCdgc8fuNn2TnzFnPM5vxoson7
+         zOamv9lNsW8sk/H86Ya6vl+aqXsKvLrpeMj6VvssaBG3pNPmGnTRx6/SEsmnaTgIUgxu
+         ETEfFwPnkqczitHL+/Yl5zjKpx0Sep4Hgysb51+WP6oTWIXvZBiAgSUZ76zfSCcALRy5
+         qMF24rzQfFamDS9gsvy5hVID5lxHe7GZNGmPgvgnbmV2Qga1KMMh7WEU6TOBK/vwdpw5
+         jqh2Yv4wcIrvMiEF8vcA9ljDHzrG8VS28aprRL2bfOO+b7tFNEwD+gPjdDvghls9sMbt
+         apOA==
+X-Gm-Message-State: AC+VfDxytNx4JCI8f2aczXm9eNPHgXIK7NVo2Y1tuuC3gRN54Og6UoCK
+        4v23DEnhJ9GRhj5ILeDCJGo/za4dDIbUMpc64ZE=
+X-Google-Smtp-Source: ACHHUZ7J0yv2Uy0Ff3URHHllMh6dn7geAOftATdUjaOMCSCEm6sdR3gpAsqx+SgrMGXj3gnAhFPKaDZy027dlMN9Xtw=
+X-Received: by 2002:a17:907:783:b0:94a:6de2:ba9 with SMTP id
+ xd3-20020a170907078300b0094a6de20ba9mr6600647ejb.68.1686178474547; Wed, 07
+ Jun 2023 15:54:34 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:624a:0:b0:41d:879c:fae4 with SMTP id
- d71-20020a02624a000000b0041d879cfae4mr2006339jac.1.1686126022474; Wed, 07 Jun
- 2023 01:20:22 -0700 (PDT)
-Date:   Wed, 07 Jun 2023 01:20:22 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009dc57505fd85ceb9@google.com>
-Subject: [syzbot] [reiserfs?] general protection fault in rcu_core (2)
-From:   syzbot <syzbot+b23c4c9d3d228ba328d7@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Received: by 2002:a54:2409:0:b0:217:72a9:f646 with HTTP; Wed, 7 Jun 2023
+ 15:54:33 -0700 (PDT)
+Reply-To: unitednationcompensationcoordinatortreasury@hotmail.com
+From:   "UNITED NATION DEPUTY SECRETARY-GENERAL (U.N)" 
+        <successikolo@gmail.com>
+Date:   Wed, 7 Jun 2023 15:54:33 -0700
+Message-ID: <CADFNGJ9M60ti_yHcUzQD8BP2Qji_qiW+6MK-iYxt_qf8B830+w@mail.gmail.com>
+Subject: CONTACT DHL OFFICE IMMEDIATELY FOR YOUR ATM MASTER CARD 1.5 MILLION,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FILL_THIS_FORM,FORM_FRAUD_5,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FORM,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_FILL_THIS_FORM_LOAN,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:532 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [successikolo[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  0.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
+        *  0.0 MONEY_FORM Lots of money if you fill out a form
+        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
+        *      money
+        *  0.2 MONEY_FRAUD_5 Lots of money and many fraud phrases
+        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+UNITED NATION DEPUTY SECRETARY-GENERAL.
 
-syzbot found the following issue on:
+This is to official inform you that we have been having meetings for
+the past three (3) weeks which ended two days ago with MR. JIM YONG
+KIM the world bank president and other seven continent presidents on
+the congress we treated on solution to scam victim problems.
 
-HEAD commit:    f8dba31b0a82 Merge tag 'asym-keys-fix-for-linus-v6.4-rc5' ..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=121b80dd280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3c980bfe8b399968
-dashboard link: https://syzkaller.appspot.com/bug?extid=b23c4c9d3d228ba328d7
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1680f7d1280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12fad50d280000
+ Note: we have decided to contact you following the reports we
+received from anti-fraud international monitoring group your
+name/email has been submitted to us therefore the united nations have
+agreed to compensate you with the sum of (USD$ 1.5 Million) this
+compensation is also including international business that failed you
+in the past due to government problems etc.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0aac0833aa9d/disk-f8dba31b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/06f1060b83c8/vmlinux-f8dba31b.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8450975febdf/bzImage-f8dba31b.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/f17b197e6309/mount_0.gz
+ We have arranged your payment through our ATM Master Card and
+deposited it in DHL Office to deliver it to you which is the latest
+instruction from the World Bank president MR. JIM YONG KIM, For your
+information=E2=80=99s, the delivery charges already paid by U.N treasury, t=
+he
+only money you will send to DHL office south Korea is
+($500). for security keeping fee, U.N coordinator already paid for
+others charges fees for delivery except the security keeping fee, the
+director of DHL refused to collect the security keeping fee from U.N
+coordinator, the Director of DHL office said that they don=E2=80=99t know
+exactly time you will contact them to reconfirm your details to avoid
+counting demur-rage that is why they refused collecting the ($500) .
+for security keeping fee.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b23c4c9d3d228ba328d7@syzkaller.appspotmail.com
+ Therefore be advice to contact DHL Office agent south Korea. Rev:John
+Lee Tae-seok
+who is in position to deliver your ATM
+Master Card to your location address, contact DHL Office immediately
+with the bellow email & phone number as listed below.
 
-BUG: kernel NULL pointer dereference, address: 0000000000000000
-#PF: supervisor instruction fetch in kernel mode
-#PF: error_code(0x0010) - not-present page
-PGD 737b3067 P4D 737b3067 PUD 737b2067 PMD 0 
-Oops: 0010 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 4991 Comm: syz-executor264 Not tainted 6.4.0-rc5-syzkaller-00002-gf8dba31b0a82 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-RIP: 0010:0x0
-Code: Unable to access opcode bytes at 0xffffffffffffffd6.
-RSP: 0018:ffffc90000007e58 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: ffff8880b983d4c0 RCX: 611bc496b427aee7
-RDX: 1ffff110059278c8 RSI: 0000000000000100 RDI: ffff888077a3ef00
-RBP: 0000000000000001 R08: ffffffff816f1181 R09: ffffffff91529d1f
-R10: fffffbfff22a53a3 R11: 0000000000000000 R12: dffffc0000000000
-R13: ffff888077a3ef00 R14: ffffc90000007ed8 R15: 0000000000000000
-FS:  000055555682c3c0(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffd6 CR3: 00000000737b9000 CR4: 0000000000350ef0
-Call Trace:
- <IRQ>
- rcu_do_batch kernel/rcu/tree.c:2115 [inline]
- rcu_core+0x806/0x1ad0 kernel/rcu/tree.c:2377
- __do_softirq+0x1d4/0x905 kernel/softirq.c:571
- invoke_softirq kernel/softirq.c:445 [inline]
- __irq_exit_rcu+0x114/0x190 kernel/softirq.c:650
- irq_exit_rcu+0x9/0x20 kernel/softirq.c:662
- sysvec_apic_timer_interrupt+0x97/0xc0 arch/x86/kernel/apic/apic.c:1106
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
-RIP: 0010:memmove+0x43/0x1b0 arch/x86/lib/memmove_64.S:66
-Code: 00 00 48 83 fa 20 0f 82 01 01 00 00 0f 1f 44 00 00 48 81 fa a8 02 00 00 72 05 40 38 fe 74 48 48 83 ea 20 48 83 ea 20 4c 8b 1e <4c> 8b 56 08 4c 8b 4e 10 4c 8b 46 18 48 8d 76 20 4c 89 1f 4c 89 57
-RSP: 0018:ffffc90003afef90 EFLAGS: 00000282
-RAX: ffff88807500e030 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: fffffffff9b0ee85 RSI: ffff88807b500040 RDI: ffff88807b4ff070
-RBP: dffffc0000000000 R08: 0000000034365f36 R09: 38782f34365f3638
-R10: 782f736c742f3436 R11: 0000000000000000 R12: 0000000000000001
-R13: 0000000000000fd0 R14: ffff88807500e0a8 R15: 0000000000000006
- leaf_paste_in_buffer+0x270/0xc30 fs/reiserfs/lbalance.c:1017
- balance_leaf_new_nodes_paste_whole fs/reiserfs/do_balan.c:1171 [inline]
- balance_leaf_new_nodes_paste fs/reiserfs/do_balan.c:1215 [inline]
- balance_leaf_new_nodes fs/reiserfs/do_balan.c:1246 [inline]
- balance_leaf+0x29c5/0xddc0 fs/reiserfs/do_balan.c:1450
- do_balance+0x319/0x810 fs/reiserfs/do_balan.c:1888
- reiserfs_paste_into_item+0x74b/0x8d0 fs/reiserfs/stree.c:2157
- reiserfs_get_block+0x165c/0x4100 fs/reiserfs/inode.c:1069
- __block_write_begin_int+0x3bd/0x14b0 fs/buffer.c:2064
- reiserfs_write_begin+0x36e/0xa60 fs/reiserfs/inode.c:2773
- generic_cont_expand_simple+0x117/0x1f0 fs/buffer.c:2425
- reiserfs_setattr+0x395/0x1370 fs/reiserfs/inode.c:3303
- notify_change+0xb2c/0x1180 fs/attr.c:483
- do_truncate+0x143/0x200 fs/open.c:66
- do_sys_ftruncate+0x53a/0x770 fs/open.c:194
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f987e211279
-Code: Unable to access opcode bytes at 0x7f987e21124f.
-RSP: 002b:00007ffc67526118 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
-RAX: ffffffffffffffda RBX: 00007ffc67526158 RCX: 00007f987e211279
-RDX: 00007f987e211279 RSI: 0000000002007fff RDI: 0000000000000004
-RBP: 00007ffc67526150 R08: aaaaaaaaaaaa0102 R09: aaaaaaaaaaaa0102
-R10: aaaaaaaaaaaa0102 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007f987e2876dc R14: 0000000000000003 R15: 0000000000000001
- </TASK>
-Modules linked in:
-CR2: 0000000000000000
----[ end trace 0000000000000000 ]---
-RIP: 0010:0x0
-Code: Unable to access opcode bytes at 0xffffffffffffffd6.
-RSP: 0018:ffffc90000007e58 EFLAGS: 00010246
+ Contact name: John Lee Tae-seok
 
-RAX: 0000000000000000 RBX: ffff8880b983d4c0 RCX: 611bc496b427aee7
-RDX: 1ffff110059278c8 RSI: 0000000000000100 RDI: ffff888077a3ef00
-RBP: 0000000000000001 R08: ffffffff816f1181 R09: ffffffff91529d1f
-R10: fffffbfff22a53a3 R11: 0000000000000000 R12: dffffc0000000000
-R13: ffff888077a3ef00 R14: ffffc90000007ed8 R15: 0000000000000000
-FS:  000055555682c3c0(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffd6 CR3: 00000000737b9000 CR4: 0000000000350ef0
-----------------
-Code disassembly (best guess):
-   0:	00 00                	add    %al,(%rax)
-   2:	48 83 fa 20          	cmp    $0x20,%rdx
-   6:	0f 82 01 01 00 00    	jb     0x10d
-   c:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
-  11:	48 81 fa a8 02 00 00 	cmp    $0x2a8,%rdx
-  18:	72 05                	jb     0x1f
-  1a:	40 38 fe             	cmp    %dil,%sil
-  1d:	74 48                	je     0x67
-  1f:	48 83 ea 20          	sub    $0x20,%rdx
-  23:	48 83 ea 20          	sub    $0x20,%rdx
-  27:	4c 8b 1e             	mov    (%rsi),%r11
-* 2a:	4c 8b 56 08          	mov    0x8(%rsi),%r10 <-- trapping instruction
-  2e:	4c 8b 4e 10          	mov    0x10(%rsi),%r9
-  32:	4c 8b 46 18          	mov    0x18(%rsi),%r8
-  36:	48 8d 76 20          	lea    0x20(%rsi),%rsi
-  3a:	4c 89 1f             	mov    %r11,(%rdi)
-  3d:	4c                   	rex.WR
-  3e:	89                   	.byte 0x89
-  3f:	57                   	push   %rdi
+ Email:( dhlgeneralheadquartersrepublic@gmail.com )
 
+ Do not hesitate to Contact Rev: John Lee Tae-seok, as soon as you
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ read this message. Email:( dhlgeneralheadquartersrepublic@gmail.com )
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+ Make sure you reconfirmed DHL Office your details ASAP as stated
+below to avoid wrong delivery.
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+ Your full name..........
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+ Home address:.........
 
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+ Your country...........
 
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
+ Your city..............
 
-If you want to undo deduplication, reply with:
-#syz undup
+ Telephone......
+
+ Occupation:.......
+
+ Age:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6..
+
+ Let us know as soon as possible you receive your ATM MasterCard
+for proper verification.
+
+ Regards,
+
+ Mrs Vivian kakadu.
+
+ DEPUTY SECRETARY-GENERAL (U.N)
