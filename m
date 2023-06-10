@@ -2,59 +2,54 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29542727D56
-	for <lists+reiserfs-devel@lfdr.de>; Thu,  8 Jun 2023 12:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 368AD72AC6C
+	for <lists+reiserfs-devel@lfdr.de>; Sat, 10 Jun 2023 17:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234958AbjFHK44 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 8 Jun 2023 06:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
+        id S235504AbjFJO77 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sat, 10 Jun 2023 10:59:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235119AbjFHK4y (ORCPT
+        with ESMTP id S235485AbjFJO74 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:56:54 -0400
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553CA2697
-        for <reiserfs-devel@vger.kernel.org>; Thu,  8 Jun 2023 03:56:50 -0700 (PDT)
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-777a93b3277so36324139f.3
-        for <reiserfs-devel@vger.kernel.org>; Thu, 08 Jun 2023 03:56:50 -0700 (PDT)
+        Sat, 10 Jun 2023 10:59:56 -0400
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A7630F9
+        for <reiserfs-devel@vger.kernel.org>; Sat, 10 Jun 2023 07:59:54 -0700 (PDT)
+Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-777a93b3277so303780339f.3
+        for <reiserfs-devel@vger.kernel.org>; Sat, 10 Jun 2023 07:59:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686221809; x=1688813809;
-        h=content-transfer-encoding:to:from:subject:message-id:date
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=56P43OZeMl15DbELWqp1RKpvGY+TPkEjkZ30u6bGsgM=;
-        b=l9FY7LyVVttcahe8426zdWGY+HHGXhHPZnPb4VfU0rCa5/NBjEEIBxQELK093wGOTc
-         BAP6+1X91sEuaXmne++AWxJG8wEehQ6NJzwBHT8bsGNJBHWov8URSpFLZm93Z7EEU9Oc
-         lUJJ1cHM2KPk1DwiWOJuqrwfbRnbg6cRo21ejJPvXAW+3AhflTC2IdBF9ZCbka5mvFnQ
-         frBnIXq5dikUDxnZJwWvc4s2gxRlffN8ljQjbqxknPUy92IfyVbhAPSkOhOiGPBDT2Vr
-         1wR6RFjNpnwYHwKkFmBdntdqDo2ciqzZJYUEpLmio/OeGPoD0VpPw+u10m1TYAUltSC4
-         Qiig==
-X-Gm-Message-State: AC+VfDyG7f7GVsGU7eHMPSf35mS1O3rXEYvwVzr2kU4LWMB16Yu/pIGo
-        wGboLJ+hglQtZwfMQQVHKLm9XuqRpYEce/pVSRc+fAif/CCu
-X-Google-Smtp-Source: ACHHUZ4CQcs+o2Hmzc7fVYZMWF1iIF5QPeZVYyIgsChz/EHPCazmwosvqFMYbuCcxWASDAuV9jqktsxXGz1TQhq69lLCa0ZhihS1
+        d=1e100.net; s=20221208; t=1686409194; x=1689001194;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Mbe6t2dEkBkVede/hffFYqMKvsenN4bBBlpxem1wQqg=;
+        b=P/7M3HS6xG3NQ8c3BNVgKPgVfeSFhbqOvonAGiIgyyHWD9w8yWy+r+KU+dsfgKBCSC
+         Cp5VA2khFWJEQQ6kgGk9sbEIIm82qaq1LzU+YLmeBFgAnx3oqGSshbNI1s1PRSzon30n
+         KGHWLxpy4vpgGjN8Nsh5vxkbUFa4jM79b3kAcBnisUtqh4GtcJtpXkmIs+V3DxK4uGp1
+         jEXB+NpraajF4/Z/Td8Gi+M6Wm8EsjexhsVjJIZnHmZ2CK7lXSjce8sY0A5aHZR46gtP
+         nP6HX7AwNRWFxDf2UxpI9I0jlFbOkWMmVTKrgDlncbUV7lXLaBfdEmt1hY8SX9Gc06JD
+         5COg==
+X-Gm-Message-State: AC+VfDymniNf7WSSZQE3GIAR77YQJXrOmyFda8S2iymwDljnuihaCFQw
+        FIhP1bcnc3jWvdmR+Qjd5oXtcju5/+g2JELjwp/bOsIaNqfA
+X-Google-Smtp-Source: ACHHUZ61A3Zt8iS5EybZb5zQI2e8iuVk8IuJd48tQLCZkULoSo1oe8FnTidU5rWoXz00OVE4VXRh9rN5LJjuOjTB7GPX2g3cGSjT
 MIME-Version: 1.0
-X-Received: by 2002:a92:4a0f:0:b0:331:9a82:33f8 with SMTP id
- m15-20020a924a0f000000b003319a8233f8mr4000200ilf.3.1686221809674; Thu, 08 Jun
- 2023 03:56:49 -0700 (PDT)
-Date:   Thu, 08 Jun 2023 03:56:49 -0700
+X-Received: by 2002:a02:84e7:0:b0:40f:83e7:a965 with SMTP id
+ f94-20020a0284e7000000b0040f83e7a965mr1744493jai.4.1686409194056; Sat, 10 Jun
+ 2023 07:59:54 -0700 (PDT)
+Date:   Sat, 10 Jun 2023 07:59:54 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fa721205fd9c1b6b@google.com>
-Subject: [syzbot] [virt?] [reiserfs?] general protection fault in psi_account_irqtime
-From:   syzbot <syzbot+85fda6d9c9dfad58eaca@syzkaller.appspotmail.com>
-To:     david@redhat.com, jasowang@redhat.com,
+Message-ID: <000000000000f5371205fdc7bc44@google.com>
+Subject: [syzbot] [reiserfs?] [fat?] WARNING: locking bug in remove_wait_queue
+From:   syzbot <syzbot+4152c2c2c9ad88fc6159@syzkaller.appspotmail.com>
+To:     brauner@kernel.org, linkinjeon@kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mst@redhat.com, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org,
-        xuanzhuo@linux.alibaba.com
+        reiserfs-devel@vger.kernel.org, sj1557.seo@samsung.com,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,101 +62,78 @@ syzbot found the following issue on:
 
 HEAD commit:    715abedee4cd Add linux-next specific files for 20230515
 git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1205c5c9280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17aab2a5280000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=6a2745d066dda0ec
-dashboard link: https://syzkaller.appspot.com/bug?extid=85fda6d9c9dfad58eaca
+dashboard link: https://syzkaller.appspot.com/bug?extid=4152c2c2c9ad88fc6159
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14ddc72b280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1271e63b280000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1264910d280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10aa8a1d280000
 
 Downloadable assets:
 disk image: https://storage.googleapis.com/syzbot-assets/d4d1d06b34b8/disk-715abede.raw.xz
 vmlinux: https://storage.googleapis.com/syzbot-assets/3ef33a86fdc8/vmlinux-715abede.xz
 kernel image: https://storage.googleapis.com/syzbot-assets/e0006b413ed1/bzImage-715abede.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/1c84902de2f0/mount_0.gz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/392115368f88/mount_1.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/98193504359c/mount_3.gz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+85fda6d9c9dfad58eaca@syzkaller.appspotmail.com
+Reported-by: syzbot+4152c2c2c9ad88fc6159@syzkaller.appspotmail.com
 
-general protection fault, probably for non-canonical address 0xdffffc0000001ff1: 0000 [#1] PREEMPT SMP KASAN
-KASAN: probably user-memory-access in range [0x000000000000ff88-0x000000000000ff8f]
-CPU: 1 PID: 262176 Comm: � Not tainted 6.4.0-rc2-next-20230515-syzkaller #0
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(1)
+WARNING: CPU: 0 PID: 5003 at kernel/locking/lockdep.c:232 hlock_class kernel/locking/lockdep.c:232 [inline]
+WARNING: CPU: 0 PID: 5003 at kernel/locking/lockdep.c:232 hlock_class kernel/locking/lockdep.c:221 [inline]
+WARNING: CPU: 0 PID: 5003 at kernel/locking/lockdep.c:232 check_wait_context kernel/locking/lockdep.c:4751 [inline]
+WARNING: CPU: 0 PID: 5003 at kernel/locking/lockdep.c:232 __lock_acquire+0x192f/0x5f30 kernel/locking/lockdep.c:5038
+Modules linked in:
+CPU: 0 PID: 5003 Comm: udevd Not tainted 6.4.0-rc2-next-20230515-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-RIP: 0010:task_dfl_cgroup include/linux/cgroup.h:493 [inline]
-RIP: 0010:task_psi_group kernel/sched/psi.c:884 [inline]
-RIP: 0010:psi_account_irqtime+0xeb/0x520 kernel/sched/psi.c:1013
-Code: 38 13 00 00 e8 06 ef ac 08 85 c0 0f 85 b6 02 00 00 49 8d bc 24 88 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 e7 03 00 00 49 8b 9c 24 88 00 00 00 48 b8 00 00
-RSP: 0018:ffffc900001e0c18 EFLAGS: 00010002
-RAX: dffffc0000000000 RBX: ffff888079e20000 RCX: 0000000000000001
-RDX: 0000000000001ff1 RSI: 000000000000a9cf RDI: 000000000000ff89
-RBP: 000000000072af41 R08: 0000000bfb3e0a35 R09: fffff5200003c17f
-R10: 0000000000000003 R11: 0000000000000000 R12: 000000000000ff01
-R13: 0000000000000001 R14: 0000000bfb3e0a35 R15: ffff8880b993cfd8
-FS:  00005555567f03c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+RIP: 0010:hlock_class kernel/locking/lockdep.c:232 [inline]
+RIP: 0010:hlock_class kernel/locking/lockdep.c:221 [inline]
+RIP: 0010:check_wait_context kernel/locking/lockdep.c:4751 [inline]
+RIP: 0010:__lock_acquire+0x192f/0x5f30 kernel/locking/lockdep.c:5038
+Code: 08 84 d2 0f 85 6b 3e 00 00 8b 0d c8 b2 15 0d 85 c9 0f 85 a3 f8 ff ff 48 c7 c6 60 74 4c 8a 48 c7 c7 20 68 4c 8a e8 81 57 e6 ff <0f> 0b e9 89 f8 ff ff c7 44 24 40 fe ff ff ff 41 be 01 00 00 00 c7
+RSP: 0018:ffffc9000390fac0 EFLAGS: 00010086
+
+RAX: 0000000000000000 RBX: 1ffff92000721f88 RCX: 0000000000000000
+RDX: ffff88801377bb80 RSI: ffffffff814bd247 RDI: 0000000000000001
+RBP: ffff88801377bb80 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 284e4f5f4e524157 R12: ffff888073d30c58
+R13: 0000000000000b14 R14: ffff88801377c670 R15: ffff88801377c698
+FS:  00007f75968b2c80(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffc77214000 CR3: 0000000029760000 CR4: 00000000003506e0
+CR2: 00007fff26751008 CR3: 000000001879b000 CR4: 00000000003506f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
- <IRQ>
- update_rq_clock_task kernel/sched/core.c:725 [inline]
- update_rq_clock kernel/sched/core.c:769 [inline]
- update_rq_clock+0x241/0xb40 kernel/sched/core.c:750
- ttwu_queue kernel/sched/core.c:3984 [inline]
- try_to_wake_up+0xba2/0x1a50 kernel/sched/core.c:4307
- wake_up_worker kernel/workqueue.c:863 [inline]
- insert_work+0x287/0x360 kernel/workqueue.c:1373
- __queue_work+0x5c6/0xfb0 kernel/workqueue.c:1526
- queue_work_on+0xf2/0x110 kernel/workqueue.c:1556
- queue_work include/linux/workqueue.h:505 [inline]
- stats_request+0xf2/0x130 drivers/virtio/virtio_balloon.c:369
- vring_interrupt drivers/virtio/virtio_ring.c:2501 [inline]
- vring_interrupt+0x2a1/0x3d0 drivers/virtio/virtio_ring.c:2476
- __handle_irq_event_percpu+0x22b/0x730 kernel/irq/handle.c:158
- handle_irq_event_percpu kernel/irq/handle.c:193 [inline]
- handle_irq_event+0xab/0x1e0 kernel/irq/handle.c:210
- handle_edge_irq+0x263/0xd00 kernel/irq/chip.c:819
- generic_handle_irq_desc include/linux/irqdesc.h:158 [inline]
- handle_irq arch/x86/kernel/irq.c:231 [inline]
- __common_interrupt+0xa1/0x220 arch/x86/kernel/irq.c:250
- common_interrupt+0xa8/0xd0 arch/x86/kernel/irq.c:240
- </IRQ>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:task_dfl_cgroup include/linux/cgroup.h:493 [inline]
-RIP: 0010:task_psi_group kernel/sched/psi.c:884 [inline]
-RIP: 0010:psi_account_irqtime+0xeb/0x520 kernel/sched/psi.c:1013
-Code: 38 13 00 00 e8 06 ef ac 08 85 c0 0f 85 b6 02 00 00 49 8d bc 24 88 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 e7 03 00 00 49 8b 9c 24 88 00 00 00 48 b8 00 00
-RSP: 0018:ffffc900001e0c18 EFLAGS: 00010002
-RAX: dffffc0000000000 RBX: ffff888079e20000 RCX: 0000000000000001
-RDX: 0000000000001ff1 RSI: 000000000000a9cf RDI: 000000000000ff89
-RBP: 000000000072af41 R08: 0000000bfb3e0a35 R09: fffff5200003c17f
-R10: 0000000000000003 R11: 0000000000000000 R12: 000000000000ff01
-R13: 0000000000000001 R14: 0000000bfb3e0a35 R15: ffff8880b993cfd8
-FS:  00005555567f03c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffc77214000 CR3: 0000000029760000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	38 13                	cmp    %dl,(%rbx)
-   2:	00 00                	add    %al,(%rax)
-   4:	e8 06 ef ac 08       	callq  0x8acef0f
-   9:	85 c0                	test   %eax,%eax
-   b:	0f 85 b6 02 00 00    	jne    0x2c7
-  11:	49 8d bc 24 88 00 00 	lea    0x88(%r12),%rdi
-  18:	00
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2e:	0f 85 e7 03 00 00    	jne    0x41b
-  34:	49 8b 9c 24 88 00 00 	mov    0x88(%r12),%rbx
-  3b:	00
-  3c:	48                   	rex.W
-  3d:	b8                   	.byte 0xb8
+ <TASK>
+ lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5705
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
+ remove_wait_queue+0x21/0x180 kernel/sched/wait.c:54
+ ep_remove_wait_queue+0x87/0x1e0 fs/eventpoll.c:559
+ ep_unregister_pollwait fs/eventpoll.c:574 [inline]
+ ep_clear_and_put+0x176/0x380 fs/eventpoll.c:803
+ ep_eventpoll_release+0x45/0x60 fs/eventpoll.c:834
+ __fput+0x27c/0xa90 fs/file_table.c:321
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x210/0x240 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f75965170a8
+Code: 48 8b 05 83 9d 0d 00 64 c7 00 16 00 00 00 83 c8 ff 48 83 c4 20 5b c3 64 8b 04 25 18 00 00 00 85 c0 75 20 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 76 5b 48 8b 15 51 9d 0d 00 f7 d8 64 89 02 48 83
+RSP: 002b:00007fff26750b28 EFLAGS: 00000246
+ ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 00007f75968b2ae0 RCX: 00007f75965170a8
+RDX: 0000000000000080 RSI: 00007fff26750c58 RDI: 0000000000000004
+RBP: 0000000000000000 R08: 0000000000000007 R09: 8f45ebd50ebdce3c
+R10: 00000000ffffffff R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff26750ba8 R14: 0000000000000001 R15: 000055b5d7e3a910
+ </TASK>
 
 
 ---
