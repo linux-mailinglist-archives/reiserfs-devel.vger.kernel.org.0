@@ -2,161 +2,98 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368AD72AC6C
-	for <lists+reiserfs-devel@lfdr.de>; Sat, 10 Jun 2023 17:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5050772C3FF
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 12 Jun 2023 14:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235504AbjFJO77 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sat, 10 Jun 2023 10:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
+        id S233645AbjFLM0p (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 12 Jun 2023 08:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235485AbjFJO74 (ORCPT
+        with ESMTP id S229699AbjFLM0o (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sat, 10 Jun 2023 10:59:56 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A7630F9
-        for <reiserfs-devel@vger.kernel.org>; Sat, 10 Jun 2023 07:59:54 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-777a93b3277so303780339f.3
-        for <reiserfs-devel@vger.kernel.org>; Sat, 10 Jun 2023 07:59:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686409194; x=1689001194;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Mbe6t2dEkBkVede/hffFYqMKvsenN4bBBlpxem1wQqg=;
-        b=P/7M3HS6xG3NQ8c3BNVgKPgVfeSFhbqOvonAGiIgyyHWD9w8yWy+r+KU+dsfgKBCSC
-         Cp5VA2khFWJEQQ6kgGk9sbEIIm82qaq1LzU+YLmeBFgAnx3oqGSshbNI1s1PRSzon30n
-         KGHWLxpy4vpgGjN8Nsh5vxkbUFa4jM79b3kAcBnisUtqh4GtcJtpXkmIs+V3DxK4uGp1
-         jEXB+NpraajF4/Z/Td8Gi+M6Wm8EsjexhsVjJIZnHmZ2CK7lXSjce8sY0A5aHZR46gtP
-         nP6HX7AwNRWFxDf2UxpI9I0jlFbOkWMmVTKrgDlncbUV7lXLaBfdEmt1hY8SX9Gc06JD
-         5COg==
-X-Gm-Message-State: AC+VfDymniNf7WSSZQE3GIAR77YQJXrOmyFda8S2iymwDljnuihaCFQw
-        FIhP1bcnc3jWvdmR+Qjd5oXtcju5/+g2JELjwp/bOsIaNqfA
-X-Google-Smtp-Source: ACHHUZ61A3Zt8iS5EybZb5zQI2e8iuVk8IuJd48tQLCZkULoSo1oe8FnTidU5rWoXz00OVE4VXRh9rN5LJjuOjTB7GPX2g3cGSjT
+        Mon, 12 Jun 2023 08:26:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00224127
+        for <reiserfs-devel@vger.kernel.org>; Mon, 12 Jun 2023 05:26:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686572761;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tTMhvLLlxLduku60kqh9t4hhU2KGCMkQO9qTJKYmDvE=;
+        b=R8KYLgos4qvJwdjnlXTsKGUW664IAn57250CaNpFr6uEvwbf2cunOShycwBAh7j7Siiims
+        cv2au+3tq5lIHiqG63ADTRcQd+W1dWLL03HtnHzkDgwi7/50ZOLB2qCPRKG7/7R2SAxAz6
+        nqf0gzVkFdSSa6AN90x1L7SP2EXwEZo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-30-AynBElupPJ6WiOJw2BAedg-1; Mon, 12 Jun 2023 08:25:57 -0400
+X-MC-Unique: AynBElupPJ6WiOJw2BAedg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BDEEC3C11C67;
+        Mon, 12 Jun 2023 12:25:55 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 023222026833;
+        Mon, 12 Jun 2023 12:25:50 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <202306121557.2d17019b-oliver.sang@intel.com>
+References: <202306121557.2d17019b-oliver.sang@intel.com>
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     dhowells@redhat.com, oe-lkp@lists.linux.dev, lkp@intel.com,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Christian Brauner <brauner@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        David Hildenbrand <david@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-btrfs@vger.kernel.org,
+        ecryptfs@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-ext4@vger.kernel.org, cluster-devel@redhat.com,
+        linux-um@lists.infradead.org, linux-mtd@lists.infradead.org,
+        jfs-discussion@lists.sourceforge.net, linux-nilfs@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net, ntfs3@lists.linux.dev,
+        ocfs2-devel@oss.oracle.com,
+        linux-karma-devel@lists.sourceforge.net,
+        reiserfs-devel@vger.kernel.org, ying.huang@intel.com,
+        feng.tang@intel.com, fengwei.yin@intel.com
+Subject: Re: [linux-next:master] [splice] 2cb1e08985: stress-ng.sendfile.ops_per_sec 11.6% improvement
 MIME-Version: 1.0
-X-Received: by 2002:a02:84e7:0:b0:40f:83e7:a965 with SMTP id
- f94-20020a0284e7000000b0040f83e7a965mr1744493jai.4.1686409194056; Sat, 10 Jun
- 2023 07:59:54 -0700 (PDT)
-Date:   Sat, 10 Jun 2023 07:59:54 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f5371205fdc7bc44@google.com>
-Subject: [syzbot] [reiserfs?] [fat?] WARNING: locking bug in remove_wait_queue
-From:   syzbot <syzbot+4152c2c2c9ad88fc6159@syzkaller.appspotmail.com>
-To:     brauner@kernel.org, linkinjeon@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, sj1557.seo@samsung.com,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <105868.1686572748.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 12 Jun 2023 13:25:48 +0100
+Message-ID: <105869.1686572748@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+kernel test robot <oliver.sang@intel.com> wrote:
 
-syzbot found the following issue on:
+> kernel test robot noticed a 11.6% improvement of stress-ng.sendfile.ops_=
+per_sec on:
 
-HEAD commit:    715abedee4cd Add linux-next specific files for 20230515
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=17aab2a5280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6a2745d066dda0ec
-dashboard link: https://syzkaller.appspot.com/bug?extid=4152c2c2c9ad88fc6159
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1264910d280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10aa8a1d280000
+If it's sending to a socket, this is entirely feasible.  The
+splice_to_socket() function now sends multiple pages in one go to the netw=
+ork
+protocol's sendmsg() method to process instead of using sendpage to send o=
+ne
+page at a time.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d4d1d06b34b8/disk-715abede.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/3ef33a86fdc8/vmlinux-715abede.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e0006b413ed1/bzImage-715abede.xz
-mounted in repro #1: https://storage.googleapis.com/syzbot-assets/392115368f88/mount_1.gz
-mounted in repro #2: https://storage.googleapis.com/syzbot-assets/98193504359c/mount_3.gz
+David
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4152c2c2c9ad88fc6159@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(1)
-WARNING: CPU: 0 PID: 5003 at kernel/locking/lockdep.c:232 hlock_class kernel/locking/lockdep.c:232 [inline]
-WARNING: CPU: 0 PID: 5003 at kernel/locking/lockdep.c:232 hlock_class kernel/locking/lockdep.c:221 [inline]
-WARNING: CPU: 0 PID: 5003 at kernel/locking/lockdep.c:232 check_wait_context kernel/locking/lockdep.c:4751 [inline]
-WARNING: CPU: 0 PID: 5003 at kernel/locking/lockdep.c:232 __lock_acquire+0x192f/0x5f30 kernel/locking/lockdep.c:5038
-Modules linked in:
-CPU: 0 PID: 5003 Comm: udevd Not tainted 6.4.0-rc2-next-20230515-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-RIP: 0010:hlock_class kernel/locking/lockdep.c:232 [inline]
-RIP: 0010:hlock_class kernel/locking/lockdep.c:221 [inline]
-RIP: 0010:check_wait_context kernel/locking/lockdep.c:4751 [inline]
-RIP: 0010:__lock_acquire+0x192f/0x5f30 kernel/locking/lockdep.c:5038
-Code: 08 84 d2 0f 85 6b 3e 00 00 8b 0d c8 b2 15 0d 85 c9 0f 85 a3 f8 ff ff 48 c7 c6 60 74 4c 8a 48 c7 c7 20 68 4c 8a e8 81 57 e6 ff <0f> 0b e9 89 f8 ff ff c7 44 24 40 fe ff ff ff 41 be 01 00 00 00 c7
-RSP: 0018:ffffc9000390fac0 EFLAGS: 00010086
-
-RAX: 0000000000000000 RBX: 1ffff92000721f88 RCX: 0000000000000000
-RDX: ffff88801377bb80 RSI: ffffffff814bd247 RDI: 0000000000000001
-RBP: ffff88801377bb80 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 284e4f5f4e524157 R12: ffff888073d30c58
-R13: 0000000000000b14 R14: ffff88801377c670 R15: ffff88801377c698
-FS:  00007f75968b2c80(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fff26751008 CR3: 000000001879b000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5705
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
- remove_wait_queue+0x21/0x180 kernel/sched/wait.c:54
- ep_remove_wait_queue+0x87/0x1e0 fs/eventpoll.c:559
- ep_unregister_pollwait fs/eventpoll.c:574 [inline]
- ep_clear_and_put+0x176/0x380 fs/eventpoll.c:803
- ep_eventpoll_release+0x45/0x60 fs/eventpoll.c:834
- __fput+0x27c/0xa90 fs/file_table.c:321
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
- exit_to_user_mode_prepare+0x210/0x240 kernel/entry/common.c:204
- __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
- syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f75965170a8
-Code: 48 8b 05 83 9d 0d 00 64 c7 00 16 00 00 00 83 c8 ff 48 83 c4 20 5b c3 64 8b 04 25 18 00 00 00 85 c0 75 20 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 76 5b 48 8b 15 51 9d 0d 00 f7 d8 64 89 02 48 83
-RSP: 002b:00007fff26750b28 EFLAGS: 00000246
- ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 00007f75968b2ae0 RCX: 00007f75965170a8
-RDX: 0000000000000080 RSI: 00007fff26750c58 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 0000000000000007 R09: 8f45ebd50ebdce3c
-R10: 00000000ffffffff R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff26750ba8 R14: 0000000000000001 R15: 000055b5d7e3a910
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
