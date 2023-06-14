@@ -2,140 +2,81 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5080872EBB6
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 13 Jun 2023 21:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB4F730A86
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 15 Jun 2023 00:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233084AbjFMTNF (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 13 Jun 2023 15:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
+        id S236304AbjFNWUl (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 14 Jun 2023 18:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjFMTNE (ORCPT
+        with ESMTP id S235084AbjFNWUi (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 13 Jun 2023 15:13:04 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A9E122
-        for <reiserfs-devel@vger.kernel.org>; Tue, 13 Jun 2023 12:13:03 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-77accdaa0e0so635811739f.0
-        for <reiserfs-devel@vger.kernel.org>; Tue, 13 Jun 2023 12:13:02 -0700 (PDT)
+        Wed, 14 Jun 2023 18:20:38 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDECD1FEB
+        for <reiserfs-devel@vger.kernel.org>; Wed, 14 Jun 2023 15:20:35 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-77b266b9fc3so266739139f.3
+        for <reiserfs-devel@vger.kernel.org>; Wed, 14 Jun 2023 15:20:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686683582; x=1689275582;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eCNqdunKDuVY4aQw92zFkhhfWi7DLSQ56UGFt9Om+VA=;
-        b=DnEy3i5x4JA2hwJF0F2tZU8YfP+odfhuthiZklYwP7ZP2Ka4ugp80WsxYRZ4QN0YYT
-         5Ic/qcU+Kh9S4u0K2mvAC2YuqVFDc5zz1JumSw/HjSFCGrqtpH3yHvLhFcuZY6beR34r
-         N/dlz0k+eXqeOC6ekjtjAMOTHSVNA4bZIVIDOiiwBFGRvsMqhXQuJQie9ZDig/5W6PYC
-         U8m8Q20qPHafOI1uGOtanR3SROPF1uOTzkRox/+UwcvUZAkSrsX8mLKI7tJGMkdD6yPR
-         X+3AvLoNE/ZdkBPZqcxFwpSDF53Q3YH94vcQ+fZAiMa6WLtj2P2MJexAmPHaAk5sb2rX
-         MIFw==
-X-Gm-Message-State: AC+VfDzB/+VwmiBf8UVDNGNrLDsNy8GRAFmmWP+FecwlOuFRLmdEQoO2
-        g3IXvsr9YQKxGTW9EdSoK+XZYIgtW+DUxvCaiZFHwp1eF6lE
-X-Google-Smtp-Source: ACHHUZ5Kc3S8nfvS+Ei/DvQAZwxWT0Y3C6QjfRbQBEmGZOPCQnb5kpwPL9uE2LywEbAopkf22ohUqmqTZQGnJ7YYt13vhhjzMf0r
+        d=1e100.net; s=20221208; t=1686781235; x=1689373235;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=saQrsy2XrGPJ3k719ppS8DNAI7XodtKtjgjHItuEn30=;
+        b=N88NkpRLH3VNkZwDLiR9DzWYSwDq7NtUPMtsv4tBDbdbFZKe7tAUTa/Ri3RUTVBEDL
+         GpQRBMFoT2GuRhjernis0mGe2S3YObGNuA6XNsPKy0wiAlHMBuom1W424hn8ggDJMPc3
+         4D1YRvWnBFiiia4HIhAI0LnNRaILQ3tdc2Kd1Iw96ZMEMcDWi1biTUEVk7mLrBIVhhUd
+         1cT/j6PCeArSaNivOz+NJAl9a06DUmFDYBCf47KcchUcGLIQ3ibw/5GQfWJO7cV/z8Bo
+         VL1EzEwbJi+Jy6vcErOgNVSpjF3/uhrxPn+X3ttPZfe0h0b2K7Gjx++0YvyeMXTCs0v9
+         A1Pw==
+X-Gm-Message-State: AC+VfDwvjmRHKZ2ntm/lTEBPzM+/nRoXRnFrATwIXVZ6A7mJPafzK7it
+        +/dvXXh2+PzcsOxdrJpXzzpnXUYGdBtdsG5uusnVF3VrVcVV
+X-Google-Smtp-Source: ACHHUZ4Rq8vPI0UKF0LwNM11iVpw+lNRi7DPQKw4Nr0zSl0czZF/ZNGfw/30Cg7/WbBl1KXK9aAQ1q06ZnR1lu0pxzQQ34v296Id
 MIME-Version: 1.0
-X-Received: by 2002:a6b:fd15:0:b0:777:afc6:8da0 with SMTP id
- c21-20020a6bfd15000000b00777afc68da0mr5335883ioi.1.1686683582324; Tue, 13 Jun
- 2023 12:13:02 -0700 (PDT)
-Date:   Tue, 13 Jun 2023 12:13:02 -0700
+X-Received: by 2002:a02:b147:0:b0:41d:71e1:4764 with SMTP id
+ s7-20020a02b147000000b0041d71e14764mr6578556jah.3.1686781235127; Wed, 14 Jun
+ 2023 15:20:35 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 15:20:35 -0700
+In-Reply-To: <0000000000009dc57505fd85ceb9@google.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c5e79405fe079f9d@google.com>
-Subject: [syzbot] [reiserfs?] UBSAN: array-index-out-of-bounds in direntry_create_vi
-From:   syzbot <syzbot+e5bb9eb00a5a5ed2a9a2@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <000000000000556d9605fe1e5c40@google.com>
+Subject: Re: [syzbot] [reiserfs?] general protection fault in rcu_core (2)
+From:   syzbot <syzbot+b23c4c9d3d228ba328d7@syzkaller.appspotmail.com>
+To:     jack@suse.cz, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luto@kernel.org,
+        peterz@infradead.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        yukuai3@huawei.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+syzbot has bisected this issue to:
 
-syzbot found the following issue on:
+commit 2acf15b94d5b8ea8392c4b6753a6ffac3135cd78
+Author: Yu Kuai <yukuai3@huawei.com>
+Date:   Fri Jul 2 04:07:43 2021 +0000
 
-HEAD commit:    1f6ce8392d6f Add linux-next specific files for 20230613
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=164a5a9b280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d103d5f9125e9fe9
-dashboard link: https://syzkaller.appspot.com/bug?extid=e5bb9eb00a5a5ed2a9a2
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+    reiserfs: add check for root_inode in reiserfs_fill_super
 
-Unfortunately, I don't have any reproducer for this issue yet.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1715ffdd280000
+start commit:   f8dba31b0a82 Merge tag 'asym-keys-fix-for-linus-v6.4-rc5' ..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1495ffdd280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1095ffdd280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3c980bfe8b399968
+dashboard link: https://syzkaller.appspot.com/bug?extid=b23c4c9d3d228ba328d7
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1680f7d1280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12fad50d280000
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2d9bf45aeae9/disk-1f6ce839.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e0b03ef83e17/vmlinux-1f6ce839.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b6c21a24174d/bzImage-1f6ce839.xz
+Reported-by: syzbot+b23c4c9d3d228ba328d7@syzkaller.appspotmail.com
+Fixes: 2acf15b94d5b ("reiserfs: add check for root_inode in reiserfs_fill_super")
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e5bb9eb00a5a5ed2a9a2@syzkaller.appspotmail.com
-
-REISERFS (device loop2): checking transaction log (loop2)
-REISERFS (device loop2): Using r5 hash to sort names
-reiserfs: enabling write barrier flush mode
-REISERFS (device loop2): Created .reiserfs_priv - reserved for xattr storage.
-================================================================================
-UBSAN: array-index-out-of-bounds in fs/reiserfs/item_ops.c:485:21
-index 1 is out of range for type '__u16 [1]'
-CPU: 1 PID: 10154 Comm: syz-executor.2 Not tainted 6.4.0-rc6-next-20230613-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_out_of_bounds+0xd5/0x140 lib/ubsan.c:348
- direntry_create_vi+0x8db/0x9f0 fs/reiserfs/item_ops.c:485
- create_virtual_node+0x748/0x1a70 fs/reiserfs/fix_node.c:115
- ip_check_balance fs/reiserfs/fix_node.c:1412 [inline]
- check_balance fs/reiserfs/fix_node.c:2083 [inline]
- fix_nodes+0x42e9/0x8660 fs/reiserfs/fix_node.c:2635
- reiserfs_paste_into_item+0x51a/0x8d0 fs/reiserfs/stree.c:2128
- reiserfs_get_block+0x165c/0x4100 fs/reiserfs/inode.c:1069
- __block_write_begin_int+0x3b1/0x14a0 fs/buffer.c:2128
- reiserfs_write_begin+0x36e/0xa60 fs/reiserfs/inode.c:2773
- generic_cont_expand_simple+0x117/0x1f0 fs/buffer.c:2488
- reiserfs_setattr+0x395/0x1370 fs/reiserfs/inode.c:3304
- notify_change+0xb2c/0x1180 fs/attr.c:483
- do_truncate+0x143/0x200 fs/open.c:66
- do_sys_ftruncate+0x549/0x780 fs/open.c:194
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fd1ea48c199
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fd1eb140168 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
-RAX: ffffffffffffffda RBX: 00007fd1ea5abf80 RCX: 00007fd1ea48c199
-RDX: 0000000000000000 RSI: 0000000006000000 RDI: 0000000000000005
-RBP: 00007fd1ea4e7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe9b988ecf R14: 00007fd1eb140300 R15: 0000000000022000
- </TASK>
-================================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
