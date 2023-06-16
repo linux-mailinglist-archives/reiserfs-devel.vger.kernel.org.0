@@ -2,133 +2,77 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0647321A5
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 15 Jun 2023 23:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D463B7329B6
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 16 Jun 2023 10:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjFOV0F (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 15 Jun 2023 17:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
+        id S245465AbjFPIZp (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 16 Jun 2023 04:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbjFOV0B (ORCPT
+        with ESMTP id S244199AbjFPIZg (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 15 Jun 2023 17:26:01 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652B0296B
-        for <reiserfs-devel@vger.kernel.org>; Thu, 15 Jun 2023 14:25:51 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-77d8bce6533so186633839f.2
-        for <reiserfs-devel@vger.kernel.org>; Thu, 15 Jun 2023 14:25:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686864350; x=1689456350;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MyGuBkOkfn1vzxniYK1NxAxBPMXoWG64Z93gFfspPmk=;
-        b=ix/wHnHKguFxl9OP9B2Y+gRMG9YnDNmPpn8agmdOH8mNktPTuTy5u0NRCFjwo9ND3i
-         UBQoIGSXf8ho9bni3m3kzPaWqykKfLsFIiBon0i2mPWDFfNeo2o1lE1L0Lg0PnRIAN+9
-         Fm1BpR87Ot6prPz25oJtQHYGWDSH08oD0u4R6lU3k1U0smQYXKgNMjsb7DWRaDvH/tgl
-         qgVp/OdykuTkiEEIaw3pysWAF4zPLcbo40LiVxFzpBV63LmnfwzUj+3fXx0qeV6/8DCB
-         UNu3jUTP62haHR+kNSePB86DHU63r+c6roUN/uncTQfA8z97MB99mdrb3kJkHCK8PsyT
-         YPgw==
-X-Gm-Message-State: AC+VfDyNnj4kiEqLTVu/V+K37Fx2fyT+Bumbn7Yxb/XXbDBUwRTzjJgK
-        WM4mEytJ1x0Jrp00pqwwtvtcVQvrO2FsrwZkuxNBi30AJOka
-X-Google-Smtp-Source: ACHHUZ7fZ83ceLB+hf8LDWpMq1TETENwzSI2ME2hj43xEPpeM+rHTNvlLCW/kRC0+nZmxVNzSy6KzTzG8ZfYGU/lCNHNDBAB7mra
+        Fri, 16 Jun 2023 04:25:36 -0400
+X-Greylist: delayed 553 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 16 Jun 2023 01:25:33 PDT
+Received: from mail.paretdee.com (mail.paretdee.com [141.95.17.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3322E2D67
+        for <reiserfs-devel@vger.kernel.org>; Fri, 16 Jun 2023 01:25:33 -0700 (PDT)
+Received: by mail.paretdee.com (Postfix, from userid 1002)
+        id 17EF3A33DA; Fri, 16 Jun 2023 08:16:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=paretdee.com; s=mail;
+        t=1686903378; bh=YtPWhpqttWkror/OXW+RT7d5qvBhyF8jxaFrqRhKfz8=;
+        h=Date:From:To:Subject:From;
+        b=Q0gFrQTXhhKbx5RatZLZ4oNAZu+gU4TcMtVXMv/XqioyaM7id4p81aFjCisYqR1Ab
+         qpE/KXaYYDg3uZwluUbUwOLxbZUPQhYfuP5/+f+rKCVUhNSpU6PZlPs3tM4kCPdXNC
+         254c39a+FGFKi/SxcFtpUWnX4np4UrkhPKJtVkbQq6U++0xGmHsLyMc5yCeuWanqwS
+         wdsJU8OjpHS21c/GwuEMuhLjH/3CpfJC7h4ApRgLhsCGBe664JMvi7bg8ZcpU4D+C0
+         MnwXEiU1qrMv2qfQfrM9SChWA5JcTut0+AZEEiX4D+UEU+Wcm0yUC6cmiitx6fxhUO
+         7C71KIJLZFj4g==
+Received: by paretdee.com for <reiserfs-devel@vger.kernel.org>; Fri, 16 Jun 2023 08:16:03 GMT
+Message-ID: <20230616064520-0.1.6p.fy9z.0.v3anapsvjj@paretdee.com>
+Date:   Fri, 16 Jun 2023 08:16:03 GMT
+From:   "Leos Sladek" <leos.sladek@paretdee.com>
+To:     <reiserfs-devel@vger.kernel.org>
+Subject: =?UTF-8?Q?Fotovoltaick=C3=A9_rozvodnice?=
+X-Mailer: mail.paretdee.com
 MIME-Version: 1.0
-X-Received: by 2002:a02:7a57:0:b0:423:1c61:b08f with SMTP id
- z23-20020a027a57000000b004231c61b08fmr120752jad.2.1686864350400; Thu, 15 Jun
- 2023 14:25:50 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 14:25:50 -0700
-In-Reply-To: <0000000000007fcc9c05f909f7f3@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000063df4305fe31b6c7@google.com>
-Subject: Re: [syzbot] [reiserfs?] KASAN: null-ptr-deref Read in fix_nodes
-From:   syzbot <syzbot+5184326923f180b9d11a@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Dobr=C3=BD den,
 
-HEAD commit:    b6dad5178cea Merge tag 'nios2_fix_v6.4' of git://git.kerne..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1495dce3280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ac246111fb601aec
-dashboard link: https://syzkaller.appspot.com/bug?extid=5184326923f180b9d11a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10bbc887280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c9558b280000
+obrac=C3=ADm se na V=C3=A1s jm=C3=A9nem dlouholet=C3=A9ho v=C3=BDrobce fo=
+tovoltaick=C3=BDch rozvodnic ur=C4=8Den=C3=BDch pro
+soukrom=C3=A9 i pr=C5=AFmyslov=C3=A9 pou=C5=BEit=C3=AD.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/fb7aeb21864c/disk-b6dad517.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/3004476364b7/vmlinux-b6dad517.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a143be294854/bzImage-b6dad517.xz
-mounted in repro #1: https://storage.googleapis.com/syzbot-assets/92adf3c12845/mount_1.gz
-mounted in repro #2: https://storage.googleapis.com/syzbot-assets/3861119d1700/mount_8.gz
+Dod=C3=A1v=C3=A1me fotovoltaick=C3=A9 rozvodnice na zak=C3=A1zku a jsme s=
+chopni realizovat i ty nejn=C3=A1ro=C4=8Dn=C4=9Bj=C5=A1=C3=AD
+po=C5=BEadavky instala=C4=8Dn=C3=ADch firem, velkoobchod=C5=AF a distribu=
+tor=C5=AF.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5184326923f180b9d11a@syzkaller.appspotmail.com
+Vyu=C5=BE=C3=ADv=C3=A1me nejkvalitn=C4=9Bj=C5=A1=C3=AD komponenty a mater=
+i=C3=A1ly, =C4=8D=C3=ADm=C5=BE dosahujeme vy=C5=A1=C5=A1=C3=AD odolnost, =
+stabilitu
+provozu a ochranu proti vod=C4=9B, vlku, prachu a n=C3=A1raz=C5=AFm.
 
-REISERFS error (device loop2): vs-5150 search_by_key: invalid format found in block 540. Fsck?
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:68 [inline]
-BUG: KASAN: null-ptr-deref in _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
-BUG: KASAN: null-ptr-deref in buffer_locked include/linux/buffer_head.h:126 [inline]
-BUG: KASAN: null-ptr-deref in fix_nodes+0x464/0x8660 fs/reiserfs/fix_node.c:2578
-Read of size 8 at addr 0000000000000000 by task syz-executor539/5535
+V na=C5=A1em sortimentu jsou tak=C3=A9 omezova=C4=8De p=C5=99ep=C4=9Bt=C3=
+=AD AC/DC, kter=C3=A9 zaji=C5=A1=C5=A5uj=C3=AD ochranu
+fotovoltaick=C3=BDch nap=C3=A1jec=C3=ADch instalac=C3=AD p=C5=99ed negati=
+vn=C3=ADmi efekty p=C5=99ep=C4=9Bt=C3=AD a chr=C3=A1n=C3=AD za=C5=99=C3=AD=
+zen=C3=AD p=C5=99ed
+efekty p=C5=AFsoben=C3=AD p=C5=99ep=C4=9Bt=C3=AD a bleskov=C3=BDch proud=C5=
+=AF.
 
-CPU: 0 PID: 5535 Comm: syz-executor539 Not tainted 6.4.0-rc6-syzkaller-00037-gb6dad5178cea #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_report mm/kasan/report.c:465 [inline]
- kasan_report+0xec/0x130 mm/kasan/report.c:572
- check_region_inline mm/kasan/generic.c:181 [inline]
- kasan_check_range+0x141/0x190 mm/kasan/generic.c:187
- instrument_atomic_read include/linux/instrumented.h:68 [inline]
- _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
- buffer_locked include/linux/buffer_head.h:126 [inline]
- fix_nodes+0x464/0x8660 fs/reiserfs/fix_node.c:2578
- reiserfs_cut_from_item+0x2bd/0x1b20 fs/reiserfs/stree.c:1740
- reiserfs_do_truncate+0x630/0x1080 fs/reiserfs/stree.c:1971
- reiserfs_truncate_file+0x1b5/0x1070 fs/reiserfs/inode.c:2308
- reiserfs_setattr+0xddf/0x1370 fs/reiserfs/inode.c:3393
- notify_change+0xb2c/0x1180 fs/attr.c:483
- do_truncate+0x143/0x200 fs/open.c:66
- handle_truncate fs/namei.c:3295 [inline]
- do_open fs/namei.c:3640 [inline]
- path_openat+0x2083/0x2750 fs/namei.c:3791
- do_filp_open+0x1ba/0x410 fs/namei.c:3818
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1356
- do_sys_open fs/open.c:1372 [inline]
- __do_sys_open fs/open.c:1380 [inline]
- __se_sys_open fs/open.c:1376 [inline]
- __x64_sys_open+0x11d/0x1c0 fs/open.c:1376
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f7cb89c3be9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f7cb094e2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 00007f7cb8a497f0 RCX: 00007f7cb89c3be9
-RDX: 0000000000000000 RSI: 000000000014937e RDI: 0000000020000180
-RBP: 00007f7cb8a16410 R08: 0000000000000000 R09: 0000000000000000
-R10: 00000000000010f7 R11: 0000000000000246 R12: 0030656c69662f2e
-R13: 7366726573696572 R14: 6bd71a7077694d3f R15: 00007f7cb8a497f8
- </TASK>
-==================================================================
+Chcete si vyzkou=C5=A1et na=C5=A1e =C5=99e=C5=A1en=C3=AD?
 
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+S pozdravem
+Leos Sladek
