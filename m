@@ -2,71 +2,124 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2387F736960
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 20 Jun 2023 12:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 838C3736D23
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 20 Jun 2023 15:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbjFTKfF (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 20 Jun 2023 06:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53758 "EHLO
+        id S232516AbjFTNVI (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 20 Jun 2023 09:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjFTKfE (ORCPT
+        with ESMTP id S232517AbjFTNUz (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 20 Jun 2023 06:35:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDE8CE;
-        Tue, 20 Jun 2023 03:35:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94CC161188;
-        Tue, 20 Jun 2023 10:35:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2F1CC433C8;
-        Tue, 20 Jun 2023 10:34:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687257303;
-        bh=mSNmNKjU1+q7lSL0XI4fm9/XsSbvmqYX9+lrHnaptR4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ebr5UIF6mTBrOZiECk/zFRlWZNbul9E0LOL9hUl4Ct0NEEc4cdiTFvWPiU3mYflgK
-         EnkvOuQsA+nsoNTAI7e1Q14dQ3d7d0N0t0r6rgR6LfBMLxgb4q+7pF07K6OtmuW6Ga
-         qkmpXcV0bdCbXvT+bhyU/r62yiNKKMBx1PfcpNYPISDLb46SZBLz6rnr/ZoOIAQrPV
-         E5OlhMMrpQaMNUwXD/+M71ox8PRNyLSniDL795rg/+oI6sHALQh0auzYvaJM5wE/IT
-         2Xep04M9xLotJ9c6yQh62O58oPqc3+wdWvZoeZfwbNPovhEaVjPp2NxrTSj1s2nDtI
-         fxvkEAJz65s6w==
-Date:   Tue, 20 Jun 2023 12:34:56 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Cc:     Yu Kuai <yukuai1@huaweicloud.com>, axboe@kernel.dk, jack@suse.cz,
-        jinpu.wang@ionos.com, dchinner@redhat.com, hare@suse.de,
-        trix@redhat.com, bvanassche@acm.org, yukuai3@huawei.com,
-        willy@infradead.org, yi.zhang@huawei.com, dsterba@suse.com,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tue, 20 Jun 2023 09:20:55 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57310295E
+        for <reiserfs-devel@vger.kernel.org>; Tue, 20 Jun 2023 06:19:41 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-25edb2433b8so655309a91.1
+        for <reiserfs-devel@vger.kernel.org>; Tue, 20 Jun 2023 06:19:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687267180; x=1689859180;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xVUN/UeiDfdpA4Wf+eSb0/ZWuKlO/eBPU0TJTZdGiJU=;
+        b=FIpNdsuz91q5A7kLQ0j0ZfYx8Rg2FiCOpmGc8uV7yDNVSy89++Zlmlt8pSCdJPivFo
+         /Uz5y6XMRFoJcXmt7Ci7y7ipXlv9iXlvZ1Py4iFTRBLAm5KJkyrf1KPOI/IzjKYRaLSM
+         YbjINvsaxuferhK1tfQSbaY3Krmh66rQA2vaePkoHuIzajOy6a/LaAQmGjDx1U/Zb7ha
+         oiYIfTz5UqzE78DtCLNAi2FHa6eWlh10RisFvHa8Nzd5DGPjb+afJm9CB5s/CxiIc23j
+         OqbjFBuPg0QSqqsskAKgfoaw3J0G3s9/t5NLz1cggR17+Bf+GW3rtROnE7Ui0t96wqe/
+         SmGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687267180; x=1689859180;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xVUN/UeiDfdpA4Wf+eSb0/ZWuKlO/eBPU0TJTZdGiJU=;
+        b=eOC7mla0G2lsueicW3IaxZipqGy8JtGBa56RF0QrxWfgCkp7qPDNtC7e6K1UX5IRv8
+         73i0GH+hwUdDml6huvsBrLTfqH5RbTecYIQVaMVFFk5KR/yiSxQs9HxZEkH0ELuBFK9d
+         D5f84y7vKxi/wUTUxYeijZBO7mNqdwA6gOeNPI7lIJ2YSjzZjISAfM6jV7mks1xpkCiE
+         wesVxBqC1E5whUe1Ezk/6C19eIf5jWWf7gAShwuYtlzS+V/ozVWErrqWenvFXhHzedIg
+         9KcS0obNbmvBzuIw1NYt9wguXESdZfaFyy9IOCJPAJdpTPpsHrT0c1HyqhfWkmT5ni/M
+         BY1A==
+X-Gm-Message-State: AC+VfDyDGS+A/wRj/Jse/hTIP7E0Y/1knp0WyXL2dCl3hqspqtzzrCw5
+        iwHFGjwr+IJ2kqn3EHRAk4zKnw==
+X-Google-Smtp-Source: ACHHUZ439jswv/SXgv/CmKXTfq/lZyFwq/ZU8iTJxKlOQ5HLoq/MxPCQ51T1RKCEQGdLU30umIxZ0w==
+X-Received: by 2002:a17:90b:350f:b0:255:54c4:9a75 with SMTP id ls15-20020a17090b350f00b0025554c49a75mr15065844pjb.2.1687267180146;
+        Tue, 20 Jun 2023 06:19:40 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id j16-20020a17090ae61000b002532ddc3a00sm7372589pjy.15.2023.06.20.06.19.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 06:19:39 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     hch@lst.de, jack@suse.cz, jinpu.wang@ionos.com,
+        dchinner@redhat.com, hare@suse.de, trix@redhat.com,
+        bvanassche@acm.org, yukuai3@huawei.com, willy@infradead.org,
+        yi.zhang@huawei.com, dsterba@suse.com, brauner@kernel.org,
+        Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
         yangerkun@huawei.com
+In-Reply-To: <20230620111322.1014775-1-yukuai1@huaweicloud.com>
+References: <20230620111322.1014775-1-yukuai1@huaweicloud.com>
 Subject: Re: [PATCH -next] reiserfs: fix blkdev_put() warning from
  release_journal_dev()
-Message-ID: <20230620-baden-antrieb-23bb65a2ac86@brauner>
-References: <20230620111322.1014775-1-yukuai1@huaweicloud.com>
- <20230620042359.GA10255@lst.de>
+Message-Id: <168726717847.3595984.4839375056813352937.b4-ty@kernel.dk>
+Date:   Tue, 20 Jun 2023 07:19:38 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230620042359.GA10255@lst.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 06:23:59AM +0200, Christoph Hellwig wrote:
-> Looks good:
+
+On Tue, 20 Jun 2023 19:13:22 +0800, Yu Kuai wrote:
+> In journal_init_dev(), if super bdev is used as 'j_dev_bd', then
+> blkdev_get_by_dev() is called with NULL holder, otherwise, holder will
+> be journal. However, later in release_journal_dev(), blkdev_put() is
+> called with journal unconditionally, cause following warning:
 > 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> WARNING: CPU: 1 PID: 5034 at block/bdev.c:617 bd_end_claim block/bdev.c:617 [inline]
+> WARNING: CPU: 1 PID: 5034 at block/bdev.c:617 blkdev_put+0x562/0x8a0 block/bdev.c:901
+> RIP: 0010:blkdev_put+0x562/0x8a0 block/bdev.c:901
+> Call Trace:
+>  <TASK>
+>  release_journal_dev fs/reiserfs/journal.c:2592 [inline]
+>  free_journal_ram+0x421/0x5c0 fs/reiserfs/journal.c:1896
+>  do_journal_release fs/reiserfs/journal.c:1960 [inline]
+>  journal_release+0x276/0x630 fs/reiserfs/journal.c:1971
+>  reiserfs_put_super+0xe4/0x5c0 fs/reiserfs/super.c:616
+>  generic_shutdown_super+0x158/0x480 fs/super.c:499
+>  kill_block_super+0x64/0xb0 fs/super.c:1422
+>  deactivate_locked_super+0x98/0x160 fs/super.c:330
+>  deactivate_super+0xb1/0xd0 fs/super.c:361
+>  cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1247
+>  task_work_run+0x16f/0x270 kernel/task_work.c:179
+>  exit_task_work include/linux/task_work.h:38 [inline]
+>  do_exit+0xadc/0x2a30 kernel/exit.c:874
+>  do_group_exit+0xd4/0x2a0 kernel/exit.c:1024
+>  __do_sys_exit_group kernel/exit.c:1035 [inline]
+>  __se_sys_exit_group kernel/exit.c:1033 [inline]
+>  __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1033
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> [...]
 
-This needs to go on top of the FMODE_* cleanup series in Jens tree.
+Applied, thanks!
 
-Looks good to me,
-Reviewed-by: Christian Brauner <brauner@kernel.org>
+[1/1] reiserfs: fix blkdev_put() warning from release_journal_dev()
+      commit: c576c4bf9ecfa3fb9f7b11681cc2f60aba5276c4
+
+Best regards,
+-- 
+Jens Axboe
+
+
+
