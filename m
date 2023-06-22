@@ -2,234 +2,54 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84063739E36
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 22 Jun 2023 12:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119CC73A769
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 22 Jun 2023 19:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjFVKO7 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 22 Jun 2023 06:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36808 "EHLO
+        id S230332AbjFVRj7 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 22 Jun 2023 13:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjFVKOw (ORCPT
+        with ESMTP id S231410AbjFVRjx (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 22 Jun 2023 06:14:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FA2DD;
-        Thu, 22 Jun 2023 03:14:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2EBF617C7;
-        Thu, 22 Jun 2023 10:14:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2888C433C9;
-        Thu, 22 Jun 2023 10:14:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687428888;
-        bh=7+cabg86v1cYpPv8vDJOW5RfunjhlSEWXfJLwIkmtqs=;
-        h=Subject:From:To:Date:In-Reply-To:References:From;
-        b=bash4qEoN8ysoF4HTnLUBoIb4R/VvEf+WW/D9VIwZ7IkIbfsRZHAuo5DrHgU3mESQ
-         YV3L6vJlJ5RLoTi5/71VkN5rQAydrP7yy38zcSGGfwasNdQxjqfQEDJO2KhRfaS72P
-         L3pOkZCMNStmacczTh8Bxts4KstAt3iUVQoAzfNq5O0qEkTp/AQ/ZxnvFiOtuM8Rrh
-         hGFigQvIDdzAyY8j4H2gTF58blmQ8XCJxFBrtJ8bp21DHjiO/HINP7f4QOOgCaaZnm
-         wPOh/3PFD9MITyv48Pm3mcErp57QuFgfhsUJhmJROqlUtadgwIZDzlw31/avwVXFpE
-         VwFt0TPP5toFA==
-Message-ID: <ad4bfb630128709588164db6f1fd2ef39c31d2a5.camel@kernel.org>
-Subject: Re: [PATCH 01/79] fs: add ctime accessors infrastructure
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Damien Le Moal <dlemoal@kernel.org>, Jeremy Kerr <jk@ozlabs.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?ISO-8859-1?Q?Hj=F8nnev=E5g?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Carlos Llamas <cmllamas@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Brad Warrum <bwarrum@linux.ibm.com>,
-        Ritu Agarwal <rituagar@linux.ibm.com>,
-        Eric Van Hensbergen <ericvh@kernel.org>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        David Sterba <dsterba@suse.com>,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Ian Kent <raven@themaw.net>,
-        Luis de Bethencourt <luisbg@kernel.org>,
-        Salah Triki <salah.triki@gmail.com>,
-        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Xiubo Li <xiubli@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu,
-        Joel Becker <jlbec@evilplan.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Tyler Hicks <code@tyhicks.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Gao Xiang <xiang@kernel.org>,
-        Chao Yu <chao@kernel.org>, Yue Hu <huyue2@coolpad.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Jan Kara <jack@suse.com>, Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Dave Kleikamp <shaggy@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        Anton Altaparmakov <anton@tuxera.com>,
-        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        Mark Fasheh <mark@fasheh.com>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Bob Copeland <me@bobcopeland.com>,
-        Mike Marshall <hubcap@omnibond.com>,
-        Martin Brandenburg <martin@omnibond.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Anders Larsen <al@alarsen.net>,
-        Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Evgeniy Dushistov <dushistov@mail.ru>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Naohiro Aota <naohiro.aota@wdc.com>,
-        Johannes Thumshirn <jth@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Juergen Gross <jgross@suse.com>,
-        Ruihan Li <lrh2000@pku.edu.cn>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>,
-        John Keeping <john@keeping.me.uk>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Yuta Hayama <hayama@lineo.co.jp>,
-        Jozef Martiniak <jomajm@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Sandeep Dhavale <dhavale@google.com>,
-        Dave Chinner <dchinner@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        Viacheslav Dubeyko <slava@dubeyko.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Aditya Garg <gargaditya08@live.com>,
-        Erez Zadok <ezk@cs.stonybrook.edu>,
-        Yifei Liu <yifeliu@cs.stonybrook.edu>,
-        Yu Zhe <yuzhe@nfschina.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Oleg Kanatov <okanatov@gmail.com>,
-        "Dr. David Alan Gilbert" <linux@treblig.org>,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        xu xin <cgel.zte@gmail.com>, Stefan Roesch <shr@devkernel.io>,
-        Zhihao Cheng <chengzhihao1@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Seth Forshee <sforshee@digitalocean.com>,
-        Zeng Jingxiang <linuszeng@tencent.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Zhang Yi <yi.zhang@huawei.com>, Tom Rix <trix@redhat.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Rik van Riel <riel@surriel.com>,
-        Jingyu Wang <jingyuwang_vip@163.com>,
-        Hangyu Hua <hbh25y@gmail.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-usb@vger.kernel.org,
-        v9fs@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-afs@lists.infradead.org, autofs@vger.kernel.org,
-        linux-mm@kvack.org, linux-btrfs@vger.kernel.org,
-        ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu,
-        ecryptfs@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-um@lists.infradead.org, linux-mtd@lists.infradead.org,
-        jfs-discussion@lists.sourceforge.net, linux-nfs@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        ntfs3@lists.linux.dev, ocfs2-devel@oss.oracle.com,
-        linux-karma-devel@lists.sourceforge.net, devel@lists.orangefs.org,
-        linux-unionfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org,
-        linux-trace-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org
-Date:   Thu, 22 Jun 2023 06:14:30 -0400
-In-Reply-To: <99b3c749-23d9-6f09-fb75-6a84f3d1b066@kernel.org>
-References: <20230621144507.55591-1-jlayton@kernel.org>
-         <20230621144507.55591-2-jlayton@kernel.org>
-         <99b3c749-23d9-6f09-fb75-6a84f3d1b066@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        Thu, 22 Jun 2023 13:39:53 -0400
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D41C1BE6
+        for <reiserfs-devel@vger.kernel.org>; Thu, 22 Jun 2023 10:39:49 -0700 (PDT)
+Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-77e390c2cfeso499391339f.0
+        for <reiserfs-devel@vger.kernel.org>; Thu, 22 Jun 2023 10:39:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687455588; x=1690047588;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vMw5eT7Dqt5FIPh3vvSLGqZ/Chp2Isd/CXfCmTLAyNY=;
+        b=JvkLJHJ0J1xpoX/+jHvLI+vSCejrCTyWsm1RPlSBl83/M4iooRRlaDZlw1FdFjjnbz
+         Fu5kIHopGxcPQaKqXUUaCC4aVzPn2EtAAkp+u1yQ1jj2f8OuyFLb9rG1iCWv2LK4cZbx
+         b/C7+DCzG0ettpxl3rkuDVCKUnpk400/KLfaF8cooBuLwm65sWmTUZsXz9MEueUMu/Wo
+         Yi5cro15na2eSTjeWlu0XIAMpL1fxQxQq/Wg5mDh5nrlpCZU8MVCWYJ7PFOpIeYyuQzs
+         NU0xM5nVqSvfMRbJI68TRqTF6B/J0HchAr9ZDqNWiVIjWFBkdTOwpqWEQfBuzuJ4XW+2
+         daCg==
+X-Gm-Message-State: AC+VfDwaBK+DoqkOp0EUtkiNZFX2oqidVXp8A4I7/Nur9CZRsD5b5Ev8
+        Xu0rqZSqLS/M4ZYg6gT9/t7VFgvwmg37byExqYm+6CGkM+BZ
+X-Google-Smtp-Source: ACHHUZ4uCoU11SiMUR/V6HBOqLN+B+mpGqiVD8qRA7mPGSBQAjIGbL+3K/olNtg/0UFccYA0iiKJgrLRJl206IiNiXg3pbyswm1g
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a6b:d808:0:b0:777:afc6:8da0 with SMTP id
+ y8-20020a6bd808000000b00777afc68da0mr6942611iob.1.1687455588688; Thu, 22 Jun
+ 2023 10:39:48 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 10:39:48 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f02c0005febb5e74@google.com>
+Subject: [syzbot] [reiserfs?] [fat?] [acpi?] KASAN: slab-use-after-free Write
+ in collect_expired_timers
+From:   syzbot <syzbot+fb8d39ebb665f80c2ec1@syzkaller.appspotmail.com>
+To:     linkinjeon@kernel.org, linux-acpi@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, sj1557.seo@samsung.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -237,47 +57,92 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Thu, 2023-06-22 at 09:46 +0900, Damien Le Moal wrote:
-> On 6/21/23 23:45, Jeff Layton wrote:
-> > struct timespec64 has unused bits in the tv_nsec field that can be used
-> > for other purposes. In future patches, we're going to change how the
-> > inode->i_ctime is accessed in certain inodes in order to make use of
-> > them. In order to do that safely though, we'll need to eradicate raw
-> > accesses of the inode->i_ctime field from the kernel.
-> >=20
-> > Add new accessor functions for the ctime that we can use to replace the=
-m.
-> >=20
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
->=20
-> [...]
->=20
-> > +/**
-> > + * inode_ctime_peek - fetch the current ctime from the inode
-> > + * @inode: inode from which to fetch ctime
-> > + *
-> > + * Grab the current ctime from the inode and return it.
-> > + */
-> > +static inline struct timespec64 inode_ctime_peek(const struct inode *i=
-node)
->=20
-> To be consistent with inode_ctime_set(), why not call this one inode_ctim=
-e_get()
+Hello,
 
-In later patches fetching the ctime for presentation may have side
-effects on certain filesystems. Using "peek" here is a hint that we want
-to avoid those side effects in these calls.
+syzbot found the following issue on:
 
-> ? Also, inode_set_ctime() & inode_get_ctime() may be a little more natura=
-l. But
-> no strong opinion about that though.
->=20
+HEAD commit:    dad9774deaf1 Merge tag 'timers-urgent-2023-06-21' of git:/..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1682f600a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2cbd298d0aff1140
+dashboard link: https://syzkaller.appspot.com/bug?extid=fb8d39ebb665f80c2ec1
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17effe1f280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14972500a80000
 
-I like the consistency of the inode_ctime_* prefix. It makes it simpler
-to find these calls when grepping, etc.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/fd1a285f59ed/disk-dad9774d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3121ad3d6486/vmlinux-dad9774d.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6a57f0b6184a/bzImage-dad9774d.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/c4a7e9030518/mount_1.gz
 
-That said, my opinions on naming are pretty loosely-held, so if the
-consensus is that the names should as you suggest, I'll go along with
-it.
---=20
-Jeff Layton <jlayton@kernel.org>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fb8d39ebb665f80c2ec1@syzkaller.appspotmail.com
+
+BUG: unable to handle page fault for address: fffff5200002af99
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 0 P4D 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 4993 Comm: syz-executor193 Not tainted 6.4.0-rc7-syzkaller-00072-gdad9774deaf1 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:hlist_move_list include/linux/list.h:1029 [inline]
+RIP: 0010:collect_expired_timers+0x13b/0x200 kernel/time/timer.c:1772
+Code: 49 89 45 00 48 89 44 24 10 74 29 e8 bf 21 11 00 48 8b 44 24 10 48 b9 00 00 00 00 00 fc ff df 48 8d 78 08 48 89 fa 48 c1 ea 03 <80> 3c 0a 00 75 7a 4c 89 68 08 e8 96 21 11 00 4d 89 fd 49 c7 04 24
+RSP: 0018:ffffc900001e0e20 EFLAGS: 00010016
+RAX: ffffc90000157cc0 RBX: 0000000000000000 RCX: dffffc0000000000
+RDX: 1ffff9200002af99 RSI: ffffffff81732551 RDI: ffffc90000157cc8
+RBP: 00000000ffff9b50 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: ffff8880b993cf98 R12: ffff8880b99297e0
+R13: ffffc900001e0eb8 R14: ffff8880b9929720 R15: ffffc900001e0ec0
+FS:  00005555561173c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: fffff5200002af99 CR3: 0000000079098000 CR4: 0000000000350ee0
+Call Trace:
+ <IRQ>
+----------------
+Code disassembly (best guess):
+   0:	49 89 45 00          	mov    %rax,0x0(%r13)
+   4:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
+   9:	74 29                	je     0x34
+   b:	e8 bf 21 11 00       	callq  0x1121cf
+  10:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  15:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
+  1c:	fc ff df
+  1f:	48 8d 78 08          	lea    0x8(%rax),%rdi
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 0a 00          	cmpb   $0x0,(%rdx,%rcx,1) <-- trapping instruction
+  2e:	75 7a                	jne    0xaa
+  30:	4c 89 68 08          	mov    %r13,0x8(%rax)
+  34:	e8 96 21 11 00       	callq  0x1121cf
+  39:	4d 89 fd             	mov    %r15,%r13
+  3c:	49                   	rex.WB
+  3d:	c7                   	.byte 0xc7
+  3e:	04 24                	add    $0x24,%al
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
