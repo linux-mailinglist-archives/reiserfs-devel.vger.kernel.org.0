@@ -2,110 +2,93 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FE17392A6
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 22 Jun 2023 00:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6683E739385
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 22 Jun 2023 02:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjFUWnB (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 21 Jun 2023 18:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45428 "EHLO
+        id S230315AbjFVAFp (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 21 Jun 2023 20:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjFUWnA (ORCPT
+        with ESMTP id S230270AbjFVAFm (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 21 Jun 2023 18:43:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3282F1;
-        Wed, 21 Jun 2023 15:42:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44B5C616F5;
-        Wed, 21 Jun 2023 22:42:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A789C433C0;
-        Wed, 21 Jun 2023 22:42:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687387378;
-        bh=4kl07al0Jzvum5d8UANt44upxbmeLGvcypOHEKRd24g=;
-        h=Date:From:To:Cc:Subject:From;
-        b=a2QblHnOuvKjfWHwLNTTBOT/dKg0l/lM4+DxplEJkUhTJBJFfJfSaLpbh8VpmRh2M
-         Fdm/WkVndX/G1Jkz7Yaf4kT+3GsgDZD+doKNXwWCP3GcJrfvBPuJpKaATiwz8n2fZR
-         zkMHGCDvuhEJYb0P1StefrO2WIE2K1vdXtrNGWv6bFbzDhA4RBPC7A2tSe8q+GWwkK
-         oIQbxvwrLwpQDF1Co2k9cudV2F8MdEECv1lDox7ulPYrukl8oPD18cO1LUfo3XEiQE
-         Dkx00pw2DQ0ZnpmrWePGzR4e1Q4AU34al9+hS7sQ2q0oqDuSa5CERmUghq+IYLVeps
-         02aR1CvCvJdOg==
-Date:   Wed, 21 Jun 2023 16:43:54 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Wed, 21 Jun 2023 20:05:42 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9641BF9
+        for <reiserfs-devel@vger.kernel.org>; Wed, 21 Jun 2023 17:05:14 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b4f95833c7so34590725ad.1
+        for <reiserfs-devel@vger.kernel.org>; Wed, 21 Jun 2023 17:05:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687392239; x=1689984239;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xq0dkv7azkvedb0KULWF4WuIbSO15dlwApz3MpULLXE=;
+        b=AwtajXI8+J6DndfxRUIKzXCkBY8xGz60/k5sDcezJKwVGjGClzxX4hXpgteDe2dQ9h
+         4d2HnnsDKY90T8y0a3ww96+rL99eVgWq1UXwqto72GaZgsChKyMxxDHywAY92C/ZdF6T
+         X74yKEqM1f90KQ6KGhb8eT7QKMRkG+1RM2z/Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687392239; x=1689984239;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xq0dkv7azkvedb0KULWF4WuIbSO15dlwApz3MpULLXE=;
+        b=H8Lewy/xKQK8VfvMJi3Pd6SFt7/2O/H/1aytFiIhY4GnHit7F076oKbrevqCdFdI6e
+         F/bgvOlYkOLWalRKZdP6iVWhHSUrwnUy94SCCCPSpP3fyW8TcCeD6KElAZcADYDWhcrF
+         PnGe6A7KKYfzt2ZH+jKwNXqOmk8ife+1WXMRv792idA3DpRXJpcaYPd461V9pKY+BX9i
+         qqOWQEdaNyXGlRfY7scxRWD7FIICDCHEDGk7C44Z0pTzvhSFuftz7FN6zwKI+pfBqb0u
+         Yib+4+hltc80F+aPbK3zi1yp1HhUuLlZcRAT3U+/VivCKq39RBof+y5Je3IcchPl5mpn
+         TSdQ==
+X-Gm-Message-State: AC+VfDw7colZKg4lesAOWHG7Wj+G2yO/Yx70fuyry7SNYcEfS+DYzaWX
+        9fFDqSV0kXYhhaVzf1BfUDnAFA==
+X-Google-Smtp-Source: ACHHUZ53xmAEhlIo0pgHgTU4ZsSk7xwA4q8JgCHr72rMOhDtXySNGOwMcP4W8fBuxFBj5os20ReXhQ==
+X-Received: by 2002:a17:902:e544:b0:1b6:7c9a:3a53 with SMTP id n4-20020a170902e54400b001b67c9a3a53mr6912803plf.67.1687392239478;
+        Wed, 21 Jun 2023 17:03:59 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id lg13-20020a170902fb8d00b0019aeddce6casm4013845plb.205.2023.06.21.17.03.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 17:03:58 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 17:03:58 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hardening@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>
-Subject: [PATCH][next] reiserfs: Replace one-element array with
+Subject: Re: [PATCH][next] reiserfs: Replace one-element array with
  flexible-array member
-Message-ID: <ZJN9Kqhcs0ZGET/8@work>
+Message-ID: <202306211703.9AC418A@keescook>
+References: <ZJN9Kqhcs0ZGET/8@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZJN9Kqhcs0ZGET/8@work>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-One-element arrays are deprecated, and we are replacing them with flexible
-array members instead. So, replace one-element array with flexible-array
-member in direntry_uarea structure, and refactor the rest of the code,
-accordingly.
+On Wed, Jun 21, 2023 at 04:43:54PM -0600, Gustavo A. R. Silva wrote:
+> One-element arrays are deprecated, and we are replacing them with flexible
+> array members instead. So, replace one-element array with flexible-array
+> member in direntry_uarea structure, and refactor the rest of the code,
+> accordingly.
+> 
+> Worth mentioning is that before these changes, the original implementation
+> was returning two-too many bytes in function direntry_create_vi():
+> 
+> fs/reiserfs/item_ops.c:464:     int size = sizeof(struct direntry_uarea);
+> ...
+> fs/reiserfs/item_ops.c-490-     size += (dir_u->entry_count * sizeof(short));
+> ...
+> fs/reiserfs/item_ops.c-517-     return size;
+> 
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/290
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Worth mentioning is that before these changes, the original implementation
-was returning two-too many bytes in function direntry_create_vi():
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-fs/reiserfs/item_ops.c:464:     int size = sizeof(struct direntry_uarea);
-...
-fs/reiserfs/item_ops.c-490-     size += (dir_u->entry_count * sizeof(short));
-...
-fs/reiserfs/item_ops.c-517-     return size;
-
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://github.com/KSPP/linux/issues/290
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- fs/reiserfs/fix_node.c | 5 +++--
- fs/reiserfs/reiserfs.h | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/fs/reiserfs/fix_node.c b/fs/reiserfs/fix_node.c
-index fefe87e1c099..6c13a8d9a73c 100644
---- a/fs/reiserfs/fix_node.c
-+++ b/fs/reiserfs/fix_node.c
-@@ -2252,8 +2252,9 @@ static int get_virtual_node_size(struct super_block *sb, struct buffer_head *bh)
- 
- 	return sizeof(struct virtual_node) +
- 	    max(max_num_of_items * sizeof(struct virtual_item),
--		sizeof(struct virtual_item) + sizeof(struct direntry_uarea) +
--		(max_num_of_entries - 1) * sizeof(__u16));
-+		sizeof(struct virtual_item) +
-+		struct_size_t(struct direntry_uarea, entry_sizes,
-+			      max_num_of_entries));
- }
- 
- /*
-diff --git a/fs/reiserfs/reiserfs.h b/fs/reiserfs/reiserfs.h
-index 55e85256aae8..b81749492ef9 100644
---- a/fs/reiserfs/reiserfs.h
-+++ b/fs/reiserfs/reiserfs.h
-@@ -2373,7 +2373,7 @@ struct virtual_node {
- struct direntry_uarea {
- 	int flags;
- 	__u16 entry_count;
--	__u16 entry_sizes[1];
-+	__u16 entry_sizes[];
- } __attribute__ ((__packed__));
- 
- /***************************************************************************
 -- 
-2.34.1
-
+Kees Cook
