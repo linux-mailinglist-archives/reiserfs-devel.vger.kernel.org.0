@@ -2,54 +2,55 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119CC73A769
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 22 Jun 2023 19:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF3373B5D7
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 23 Jun 2023 13:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjFVRj7 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 22 Jun 2023 13:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
+        id S230200AbjFWLIh (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 23 Jun 2023 07:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbjFVRjx (ORCPT
+        with ESMTP id S229830AbjFWLIf (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 22 Jun 2023 13:39:53 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D41C1BE6
-        for <reiserfs-devel@vger.kernel.org>; Thu, 22 Jun 2023 10:39:49 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-77e390c2cfeso499391339f.0
-        for <reiserfs-devel@vger.kernel.org>; Thu, 22 Jun 2023 10:39:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687455588; x=1690047588;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vMw5eT7Dqt5FIPh3vvSLGqZ/Chp2Isd/CXfCmTLAyNY=;
-        b=JvkLJHJ0J1xpoX/+jHvLI+vSCejrCTyWsm1RPlSBl83/M4iooRRlaDZlw1FdFjjnbz
-         Fu5kIHopGxcPQaKqXUUaCC4aVzPn2EtAAkp+u1yQ1jj2f8OuyFLb9rG1iCWv2LK4cZbx
-         b/C7+DCzG0ettpxl3rkuDVCKUnpk400/KLfaF8cooBuLwm65sWmTUZsXz9MEueUMu/Wo
-         Yi5cro15na2eSTjeWlu0XIAMpL1fxQxQq/Wg5mDh5nrlpCZU8MVCWYJ7PFOpIeYyuQzs
-         NU0xM5nVqSvfMRbJI68TRqTF6B/J0HchAr9ZDqNWiVIjWFBkdTOwpqWEQfBuzuJ4XW+2
-         daCg==
-X-Gm-Message-State: AC+VfDwaBK+DoqkOp0EUtkiNZFX2oqidVXp8A4I7/Nur9CZRsD5b5Ev8
-        Xu0rqZSqLS/M4ZYg6gT9/t7VFgvwmg37byExqYm+6CGkM+BZ
-X-Google-Smtp-Source: ACHHUZ4uCoU11SiMUR/V6HBOqLN+B+mpGqiVD8qRA7mPGSBQAjIGbL+3K/olNtg/0UFccYA0iiKJgrLRJl206IiNiXg3pbyswm1g
-MIME-Version: 1.0
-X-Received: by 2002:a6b:d808:0:b0:777:afc6:8da0 with SMTP id
- y8-20020a6bd808000000b00777afc68da0mr6942611iob.1.1687455588688; Thu, 22 Jun
- 2023 10:39:48 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 10:39:48 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f02c0005febb5e74@google.com>
-Subject: [syzbot] [reiserfs?] [fat?] [acpi?] KASAN: slab-use-after-free Write
- in collect_expired_timers
-From:   syzbot <syzbot+fb8d39ebb665f80c2ec1@syzkaller.appspotmail.com>
-To:     linkinjeon@kernel.org, linux-acpi@vger.kernel.org,
+        Fri, 23 Jun 2023 07:08:35 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D120A10F4;
+        Fri, 23 Jun 2023 04:08:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:To:From:Subject:Message-ID:Sender:
+        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=7YE9sah6m6BOooMB9JhCskJMQwa//8HJtLtELm3K1WQ=;
+        t=1687518514; x=1688728114; b=iz9mOAa8fO4rth4sQlnfHl3X6lG1c2OSvIHAUc5uSMEywZh
+        bH9vfi07vUPVhRV2KW4j33GXvBC6PIDMIq4AlwQ4vEmG+CY+ApEs+zUHfI95KBUuLur2t/OGRSQmr
+        kvA2VXx43sowZrpjd8O57fb7Nz9bVqS4+iCukULdDB2hMYGo/KSizTZZVPQnPYtiCpDJ1NCoTbFTQ
+        Qqunrm7F0lqeiJq4WEpD2pWg5lo6vYKQSVCMJGz5ix4yILfWqFnzB7gLq/7dy0S2LyHtwT9gyvVUK
+        kdJkMoY8kQAsSGuH46IFok8XCOTQfb4WjOzcq5dz8vHONsdOVQDb/hcnwzuqlscQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1qCeeO-00FhOU-2T;
+        Fri, 23 Jun 2023 13:08:24 +0200
+Message-ID: <d15cd98d8612e756b4c22a10394d680342512c44.camel@sipsolutions.net>
+Subject: Re: [syzbot] [wireless?] [reiserfs?] general protection fault in
+ __iterate_interfaces
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     syzbot <syzbot+1c54f0eff457978ad5f9@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, sj1557.seo@samsung.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, reiserfs-devel@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
+Date:   Fri, 23 Jun 2023 13:08:23 +0200
+In-Reply-To: <000000000000302fb805fd180f4a@google.com>
+References: <000000000000302fb805fd180f4a@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+MIME-Version: 1.0
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SORTED_RECIPS,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,92 +58,30 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+On Thu, 2023-06-01 at 14:24 -0700, syzbot wrote:
+> Hello,
+>=20
+> syzbot found the following issue on:
+>=20
+> HEAD commit:    715abedee4cd Add linux-next specific files for 20230515
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D13c9672528000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D6a2745d066dda=
+0ec
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D1c54f0eff457978=
+ad5f9
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binuti=
+ls for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1588e999280=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D1013cbc128000=
+0
+>=20
 
-syzbot found the following issue on:
+Looking at the reproducers, there's basically nothing happening in wifi.
 
-HEAD commit:    dad9774deaf1 Merge tag 'timers-urgent-2023-06-21' of git:/..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1682f600a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2cbd298d0aff1140
-dashboard link: https://syzkaller.appspot.com/bug?extid=fb8d39ebb665f80c2ec1
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17effe1f280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14972500a80000
+So seems likely it's just some really bad memory corruption issue in
+reiserfs?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/fd1a285f59ed/disk-dad9774d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/3121ad3d6486/vmlinux-dad9774d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6a57f0b6184a/bzImage-dad9774d.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/c4a7e9030518/mount_1.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fb8d39ebb665f80c2ec1@syzkaller.appspotmail.com
-
-BUG: unable to handle page fault for address: fffff5200002af99
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 0 P4D 0 
-Oops: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 4993 Comm: syz-executor193 Not tainted 6.4.0-rc7-syzkaller-00072-gdad9774deaf1 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-RIP: 0010:hlist_move_list include/linux/list.h:1029 [inline]
-RIP: 0010:collect_expired_timers+0x13b/0x200 kernel/time/timer.c:1772
-Code: 49 89 45 00 48 89 44 24 10 74 29 e8 bf 21 11 00 48 8b 44 24 10 48 b9 00 00 00 00 00 fc ff df 48 8d 78 08 48 89 fa 48 c1 ea 03 <80> 3c 0a 00 75 7a 4c 89 68 08 e8 96 21 11 00 4d 89 fd 49 c7 04 24
-RSP: 0018:ffffc900001e0e20 EFLAGS: 00010016
-RAX: ffffc90000157cc0 RBX: 0000000000000000 RCX: dffffc0000000000
-RDX: 1ffff9200002af99 RSI: ffffffff81732551 RDI: ffffc90000157cc8
-RBP: 00000000ffff9b50 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: ffff8880b993cf98 R12: ffff8880b99297e0
-R13: ffffc900001e0eb8 R14: ffff8880b9929720 R15: ffffc900001e0ec0
-FS:  00005555561173c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: fffff5200002af99 CR3: 0000000079098000 CR4: 0000000000350ee0
-Call Trace:
- <IRQ>
-----------------
-Code disassembly (best guess):
-   0:	49 89 45 00          	mov    %rax,0x0(%r13)
-   4:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
-   9:	74 29                	je     0x34
-   b:	e8 bf 21 11 00       	callq  0x1121cf
-  10:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
-  15:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
-  1c:	fc ff df
-  1f:	48 8d 78 08          	lea    0x8(%rax),%rdi
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	80 3c 0a 00          	cmpb   $0x0,(%rdx,%rcx,1) <-- trapping instruction
-  2e:	75 7a                	jne    0xaa
-  30:	4c 89 68 08          	mov    %r13,0x8(%rax)
-  34:	e8 96 21 11 00       	callq  0x1121cf
-  39:	4d 89 fd             	mov    %r15,%r13
-  3c:	49                   	rex.WB
-  3d:	c7                   	.byte 0xc7
-  3e:	04 24                	add    $0x24,%al
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+johannes
