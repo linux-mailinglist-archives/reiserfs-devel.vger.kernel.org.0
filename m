@@ -2,178 +2,121 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01EF873D835
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 26 Jun 2023 09:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4930273E708
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 26 Jun 2023 19:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjFZHHN (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 26 Jun 2023 03:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54450 "EHLO
+        id S230430AbjFZR4P (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 26 Jun 2023 13:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjFZHHM (ORCPT
+        with ESMTP id S230086AbjFZR4M (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 26 Jun 2023 03:07:12 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9177F134
-        for <reiserfs-devel@vger.kernel.org>; Mon, 26 Jun 2023 00:06:55 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-33b2e96ea07so24088095ab.0
-        for <reiserfs-devel@vger.kernel.org>; Mon, 26 Jun 2023 00:06:55 -0700 (PDT)
+        Mon, 26 Jun 2023 13:56:12 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F057171B
+        for <reiserfs-devel@vger.kernel.org>; Mon, 26 Jun 2023 10:56:01 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f9b9863bfdso10775e9.1
+        for <reiserfs-devel@vger.kernel.org>; Mon, 26 Jun 2023 10:56:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687802160; x=1690394160;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+KyqId0hy9n8ww7dcYImtfZGCEfGZtufQ6XSWSyML2w=;
+        b=UWtA6BfqBZs0V7WU4CJsXSVx/DqY8RLqLfYuMZlc98E6LB0sbyhWRwGzRowIqb3fwb
+         5SGmfJui+n46jrgKlCMTEBgO3XWs9VNxTAZO3zuBYF2gYwZA5Un1huHhl/12CyJGGmlc
+         f2tbysJD8byNZvDVUxQ7lXacoxcNY9Z9g4/xPmTWLB1BFExo5WHNYu7gXcjGfPM4yT9p
+         goqaekJCGUTzkMRrYE7bjxXPE7NTe5SOF/HMjEfz4VbBMv0eXLl/5h6YKAxn5lFuu/Ir
+         goXiCjZrHj0/Q7ZIgI/cIaxmhMrZD5uOZoRx2mjLiqcX9KaOBlA+0b0UdDBnWdf9/2bL
+         QZgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687763215; x=1690355215;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F7+/YozsNpY44NNHnDxuZa5iAazpTZjily6SH1uHkgM=;
-        b=IhFo+7NkyhQTUeTInBkVtQfOcwpYxy7U7tHqj9mhOVX5zFv2sOdio1r6fVUDw9PTpS
-         4xowCHInaOZFA0uoYqw0P9wFeQRuoej/uCyXDYU576wQd9E7+ZY8h22eRe2ZSmf5vS8F
-         2vZ2b/pWRNBuEZ3YbHBv2RaIuzJxLzxeEWST7Rx1GmTMyHQA8zunjwKY+XOLtaGb5iaH
-         2teod0IS8ggNw1Zw5/oo77rAxhfIwmRZ56zhMmR1aYH8xZ4ledI6jeybnaOkfkSTiUC8
-         r9aOndPq41XcBS3gm2L9R1wixur+g45bwB/pA/Vhzvfz4JCz/uLx3QcL2NHYuPMs9r9P
-         /b2A==
-X-Gm-Message-State: AC+VfDwILzEC3mcyYNqahYMVKqfOQt5zCAOZYOYXs4+3vDJRNVnpkspa
-        QzKeNZN+7cpZ1XQbAqItQ+QuoCzxjZ6NYLwX7J7kQHY8gPrR
-X-Google-Smtp-Source: ACHHUZ4YrD1bnJDhdrkDIkBdSn5q6ZZaGblGtau4bsywV21K0C5X4XZwZemP0/DoGKaO0FyihBbk0IfOQHf9thpMPx2hb4zIh4ue
+        d=1e100.net; s=20221208; t=1687802160; x=1690394160;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+KyqId0hy9n8ww7dcYImtfZGCEfGZtufQ6XSWSyML2w=;
+        b=CV6Bml39k/JF+oJYZ9kkZwvHcuZwCncvpgmFvKhvZfRbnRU5HukXmvQHyQJiUkMFsF
+         4esQiXaNIrPOOddfjDDoUHAK2kdH+Qvs678cUJIBot75G4l7GRSEym39O7rsdq3WuQeF
+         9vLpz+SAKEhsATOOzWJ1iMctmEhD05qGNQqgh1kBZMULPyiVel7fX/EWNBsc3rYRemTO
+         lIsy2f1q6V3Lv3/zUFeFgJ0cEC7regllXbeqF30laoYJcIK5GRYteN/pg4v6lm7wHySj
+         OTS8xn4dOVqUphZJDygcXt47wpdT7zHUONVHL73TOe55ovQGbVzYm2G/+ytRuBrNLlJ2
+         W/nw==
+X-Gm-Message-State: AC+VfDw8LsPX2MzQZmCAUtj0N1K2XuKIPboAYPTxCiQM864RArYBby40
+        cBZOCFsFsczwRDAo6TiDXFrE8HIqvtDnTBSt4aW5hA==
+X-Google-Smtp-Source: ACHHUZ7fOtQqITnjUHE4upIpxoY78QOhNQWgm2nIIVhobHy5VsaUiiRz2ni1BkJ6rj6APH+79eaw69F6OE1YTga4dIY=
+X-Received: by 2002:a05:600c:34d5:b0:3f4:fb7:48d4 with SMTP id
+ d21-20020a05600c34d500b003f40fb748d4mr228125wmq.3.1687802159671; Mon, 26 Jun
+ 2023 10:55:59 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:dc47:0:b0:345:aba5:3775 with SMTP id
- x7-20020a92dc47000000b00345aba53775mr710495ilq.4.1687763214843; Mon, 26 Jun
- 2023 00:06:54 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 00:06:54 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e2c68a05ff02fe43@google.com>
-Subject: [syzbot] [reiserfs?] kernel panic: corrupted stack end in do_sys_ftruncate
-From:   syzbot <syzbot+3e32db5854a2dc0011ff@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        luto@kernel.org, peterz@infradead.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de
+References: <000000000000302fb805fd180f4a@google.com> <d15cd98d8612e756b4c22a10394d680342512c44.camel@sipsolutions.net>
+In-Reply-To: <d15cd98d8612e756b4c22a10394d680342512c44.camel@sipsolutions.net>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Mon, 26 Jun 2023 19:55:47 +0200
+Message-ID: <CANp29Y6eSpawFhDhv2SW78PKhvCSke8z26=MYNdSu8V4vPSoag@mail.gmail.com>
+Subject: Re: [syzbot] [wireless?] [reiserfs?] general protection fault in __iterate_interfaces
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     syzbot <syzbot+1c54f0eff457978ad5f9@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+On Fri, Jun 23, 2023 at 1:08=E2=80=AFPM Johannes Berg <johannes@sipsolution=
+s.net> wrote:
+>
+> On Thu, 2023-06-01 at 14:24 -0700, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    715abedee4cd Add linux-next specific files for 20230515
+> > git tree:       linux-next
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D13c96725280=
+000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D6a2745d066d=
+da0ec
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D1c54f0eff4579=
+78ad5f9
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binu=
+tils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1588e9992=
+80000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D1013cbc1280=
+000
+> >
+>
+> Looking at the reproducers, there's basically nothing happening in wifi.
+>
+> So seems likely it's just some really bad memory corruption issue in
+> reiserfs?
 
-syzbot found the following issue on:
+Looks like that indeed.
 
-HEAD commit:    a92b7d26c743 Merge tag 'drm-fixes-2023-06-23' of git://ano..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17455d57280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2cbd298d0aff1140
-dashboard link: https://syzkaller.appspot.com/bug?extid=3e32db5854a2dc0011ff
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16a44d50a80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10bee4cb280000
+Let's update bug's subsystems on the syzbot dashboard:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/53d1be238f30/disk-a92b7d26.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/04748ac79920/vmlinux-a92b7d26.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/78634d05a96b/bzImage-a92b7d26.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/1afab00be7e0/mount_0.gz
+#syz set subsystems: reiserfs
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3e32db5854a2dc0011ff@syzkaller.appspotmail.com
-
-REISERFS (device loop0): Created .reiserfs_priv - reserved for xattr storage.
-Kernel panic - not syncing: corrupted stack end detected inside scheduler
-CPU: 1 PID: 4994 Comm: syz-executor351 Not tainted 6.4.0-rc7-syzkaller-00226-ga92b7d26c743 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- panic+0x686/0x730 kernel/panic.c:340
- schedule_debug kernel/sched/core.c:5905 [inline]
- __schedule+0x5055/0x5880 kernel/sched/core.c:6563
- preempt_schedule_irq+0x52/0x90 kernel/sched/core.c:6981
- irqentry_exit+0x35/0x80 kernel/entry/common.c:433
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
-RIP: 0010:memmove+0x4b/0x1b0 arch/x86/lib/memmove_64.S:68
-Code: 01 01 00 00 0f 1f 44 00 00 48 81 fa a8 02 00 00 72 05 40 38 fe 74 48 48 83 ea 20 48 83 ea 20 4c 8b 1e 4c 8b 56 08 4c 8b 4e 10 <4c> 8b 46 18 48 8d 76 20 4c 89 1f 4c 89 57 08 4c 89 4f 10 4c 89 47
-RSP: 0018:ffffc9000390ef90 EFLAGS: 00000282
-RAX: ffff8880734b1030 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: fffffffff67b3789 RSI: ffff88807ccfe700 RDI: ffff88807ccfd730
-RBP: dffffc0000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
-R13: 0000000000000fd0 R14: ffff8880734b10d8 R15: 0000000000000008
- leaf_paste_in_buffer+0x270/0xc30 fs/reiserfs/lbalance.c:1017
- balance_leaf_new_nodes_paste_whole fs/reiserfs/do_balan.c:1171 [inline]
- balance_leaf_new_nodes_paste fs/reiserfs/do_balan.c:1215 [inline]
- balance_leaf_new_nodes fs/reiserfs/do_balan.c:1246 [inline]
- balance_leaf+0x29c5/0xddc0 fs/reiserfs/do_balan.c:1450
- do_balance+0x319/0x810 fs/reiserfs/do_balan.c:1888
- reiserfs_paste_into_item+0x74b/0x8d0 fs/reiserfs/stree.c:2157
- reiserfs_get_block+0x165c/0x4100 fs/reiserfs/inode.c:1069
- __block_write_begin_int+0x3bd/0x14b0 fs/buffer.c:2064
- reiserfs_write_begin+0x36e/0xa60 fs/reiserfs/inode.c:2773
- generic_cont_expand_simple+0x117/0x1f0 fs/buffer.c:2425
- reiserfs_setattr+0x395/0x1370 fs/reiserfs/inode.c:3303
- notify_change+0xb2c/0x1180 fs/attr.c:483
- do_truncate+0x143/0x200 fs/open.c:66
- do_sys_ftruncate+0x53a/0x770 fs/open.c:194
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa89d7102b9
-Code: eb ff ff 44 89 25 77 1e 07 00 48 8b 45 90 48 89 05 2c 43 07 00 48 8b 45 c8 64 48 2b 04 25 28 00 00 00 0f 85 1f 01 00 00 48 8d <65> d8 44 89 e0 5b 41 5c 41 5d 41 5e 41 5f 5d c3 0f 1f 80 00 00 00
-RSP: 002b:00007ffc8f2c2e78 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fa89d7102b9
-RDX: 00007fa89d7102b9 RSI: 0000000002007fff RDI: 0000000000000004
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
-R10: 0000000000000001 R11: 0000000000000246 R12: 00007ffc8f2c2ea0
-R13: 0000000000000000 R14: 431bde82d7b634db R15: 0000000000000000
- </TASK>
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
-----------------
-Code disassembly (best guess):
-   0:	01 01                	add    %eax,(%rcx)
-   2:	00 00                	add    %al,(%rax)
-   4:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
-   9:	48 81 fa a8 02 00 00 	cmp    $0x2a8,%rdx
-  10:	72 05                	jb     0x17
-  12:	40 38 fe             	cmp    %dil,%sil
-  15:	74 48                	je     0x5f
-  17:	48 83 ea 20          	sub    $0x20,%rdx
-  1b:	48 83 ea 20          	sub    $0x20,%rdx
-  1f:	4c 8b 1e             	mov    (%rsi),%r11
-  22:	4c 8b 56 08          	mov    0x8(%rsi),%r10
-  26:	4c 8b 4e 10          	mov    0x10(%rsi),%r9
-* 2a:	4c 8b 46 18          	mov    0x18(%rsi),%r8 <-- trapping instruction
-  2e:	48 8d 76 20          	lea    0x20(%rsi),%rsi
-  32:	4c 89 1f             	mov    %r11,(%rdi)
-  35:	4c 89 57 08          	mov    %r10,0x8(%rdi)
-  39:	4c 89 4f 10          	mov    %r9,0x10(%rdi)
-  3d:	4c                   	rex.WR
-  3e:	89                   	.byte 0x89
-  3f:	47                   	rex.RXB
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+>
+> johannes
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/syzkaller-bugs/d15cd98d8612e756b4c22a10394d680342512c44.camel%40sipsoluti=
+ons.net.
