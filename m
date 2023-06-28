@@ -2,58 +2,196 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D26741234
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 28 Jun 2023 15:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C387741C25
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 29 Jun 2023 01:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbjF1NVz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 28 Jun 2023 09:21:55 -0400
-Received: from [102.23.136.209] ([102.23.136.209]:2598 "EHLO mail.nsts.go.ke"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S231678AbjF1NVz (ORCPT <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:21:55 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.nsts.go.ke (Postfix) with ESMTP id 95D6D103746
-        for <reiserfs-devel@vger.kernel.org>; Tue, 27 Jun 2023 22:04:44 +0300 (EAT)
-Received: from mail.nsts.go.ke ([127.0.0.1])
-        by localhost (mail.nsts.go.ke [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id mk952AfEtEX9 for <reiserfs-devel@vger.kernel.org>;
-        Tue, 27 Jun 2023 22:04:44 +0300 (EAT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.nsts.go.ke (Postfix) with ESMTP id 46A51605D2A
-        for <reiserfs-devel@vger.kernel.org>; Tue, 27 Jun 2023 22:04:44 +0300 (EAT)
-X-Virus-Scanned: amavisd-new at nsts.go.ke
-Received: from mail.nsts.go.ke ([127.0.0.1])
-        by localhost (mail.nsts.go.ke [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 1aL-4YwJsbiQ for <reiserfs-devel@vger.kernel.org>;
-        Tue, 27 Jun 2023 22:04:44 +0300 (EAT)
-Received: from [193.169.252.111] (unknown [193.169.252.111])
-        by mail.nsts.go.ke (Postfix) with ESMTPSA id 8BB7D5E0141
-        for <reiserfs-devel@vger.kernel.org>; Tue, 27 Jun 2023 22:04:43 +0300 (EAT)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S231563AbjF1XGF (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 28 Jun 2023 19:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231555AbjF1XGD (ORCPT
+        <rfc822;reiserfs-devel@vger.kernel.org>);
+        Wed, 28 Jun 2023 19:06:03 -0400
+Received: from mail-oi1-f207.google.com (mail-oi1-f207.google.com [209.85.167.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EBA1FF7
+        for <reiserfs-devel@vger.kernel.org>; Wed, 28 Jun 2023 16:06:00 -0700 (PDT)
+Received: by mail-oi1-f207.google.com with SMTP id 5614622812f47-39ecef7a101so105562b6e.2
+        for <reiserfs-devel@vger.kernel.org>; Wed, 28 Jun 2023 16:06:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687993559; x=1690585559;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K+HZZJTaP1niJAASeD1Z5YiUeNBbVaSIkYrwhZkkWGE=;
+        b=f70Po/LcpxRKhQUb1esRBdf4zJIKdEqiakPBWod1ABGC3EvsxdQGNTXbwpwy4tUys1
+         Gy2+pCEOdHhfgjfQeCpMoP4etjrUU+CGHpRxfi/PnMHybn2VSEjw4t8asCm1JOfwEkn5
+         HjhdL2WDVDY1dozemUGw6K7G7yhRFCPF24wcqJSyckKrkucWkG9aY6zkHjLps0Lowbff
+         xJ1lWsPNX5OksfkkUDahR1IK5AhLNxKA/aKwlO1E3mEblEDvXoA/2BGzZ17Cj+GuHgCr
+         ygpcfwHHka7IUfhvKh9+kLqNHMaHTomd+OyYk4HgmdIHs+397YOu5UXLT5vSMmiMmTOQ
+         948g==
+X-Gm-Message-State: AC+VfDwe1YRsMRQCqyTz7JXzleWKH4b+JilaAV6Qxt4/Flm4tR9sKbQm
+        uL+ngjg3GFZ0AzGKqgrrV1mp1H+oU6LTbUWXf0XLO8wOiEzN
+X-Google-Smtp-Source: ACHHUZ45uBzCfUUWpNuv+u0VAEYoN5K9kHXgLHorzGiwGb8GomNpLnMqlak7GVneuBrWBaRN+kdVdwjaMcPrpOvOZcySWavRKOcz
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: URGENT MAIL
-To:     reiserfs-devel@vger.kernel.org
-From:   "Mr. Ronald Evergreen <said"@desaque.com
-Date:   Tue, 27 Jun 2023 12:04:59 -0700
-Reply-To: evergreen5565343@gmail.com
-Message-Id: <20230627190443.8BB7D5E0141@mail.nsts.go.ke>
+X-Received: by 2002:a05:6808:1987:b0:3a0:6079:3201 with SMTP id
+ bj7-20020a056808198700b003a060793201mr5356926oib.8.1687993559555; Wed, 28 Jun
+ 2023 16:05:59 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 16:05:59 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008023b805ff38a0af@google.com>
+Subject: [syzbot] [reiserfs?] general protection fault in __hrtimer_run_queues (3)
+From:   syzbot <syzbot+f13a9546e229c1a6e378@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hi There,
+Hello,
 
-How are you doing? I am sorry to have contacted you this way but it is a matter of great urgency. I seek your partnership on an important business transaction which will be of great benefit to both of us. I seek to work with you to claim as next of kin to
-late John Shumejda who died in a plane crash some years back, You can read more about his death on the BBC news link below:
-http://news.bbc.co.uk/2/hi/uk_news/england/1742404.stm
+syzbot found the following issue on:
 
-Write to me on:
-( evergreen5565343@gmail.com ) and we can talk more about this.
+HEAD commit:    e8f75c0270d9 Merge tag 'x86_sgx_for_v6.5' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13710670a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a98ec7f738e43bd4
+dashboard link: https://syzkaller.appspot.com/bug?extid=f13a9546e229c1a6e378
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1227af7b280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13803daf280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f27c1d41217a/disk-e8f75c02.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/843ae5d5c810/vmlinux-e8f75c02.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/da48bc4c0ec1/bzImage-e8f75c02.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/667a76526623/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f13a9546e229c1a6e378@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: global-out-of-bounds in lookup_object lib/debugobjects.c:195 [inline]
+BUG: KASAN: global-out-of-bounds in debug_object_deactivate lib/debugobjects.c:785 [inline]
+BUG: KASAN: global-out-of-bounds in debug_object_deactivate+0x27b/0x300 lib/debugobjects.c:771
+Read of size 8 at addr ffffffff8a49cd78 by task kauditd/27
+
+CPU: 1 PID: 27 Comm: kauditd Not tainted 6.4.0-syzkaller-01406-ge8f75c0270d9 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:351
+ print_report mm/kasan/report.c:462 [inline]
+ kasan_report+0x11c/0x130 mm/kasan/report.c:572
+ lookup_object lib/debugobjects.c:195 [inline]
+ debug_object_deactivate lib/debugobjects.c:785 [inline]
+ debug_object_deactivate+0x27b/0x300 lib/debugobjects.c:771
+ debug_hrtimer_deactivate kernel/time/hrtimer.c:427 [inline]
+ debug_deactivate kernel/time/hrtimer.c:483 [inline]
+ __run_hrtimer kernel/time/hrtimer.c:1656 [inline]
+ __hrtimer_run_queues+0x3f3/0xbe0 kernel/time/hrtimer.c:1752
+ hrtimer_interrupt+0x320/0x7b0 kernel/time/hrtimer.c:1814
+ local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1098 [inline]
+ __sysvec_apic_timer_interrupt+0x14a/0x430 arch/x86/kernel/apic/apic.c:1115
+ sysvec_apic_timer_interrupt+0x92/0xc0 arch/x86/kernel/apic/apic.c:1109
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
+RIP: 0010:__sanitizer_cov_trace_pc+0x0/0x70 kernel/kcov.c:200
+Code: 66 d4 8f 02 66 0f 1f 44 00 00 f3 0f 1e fa 48 8b be b0 01 00 00 e8 b0 ff ff ff 31 c0 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 <f3> 0f 1e fa 65 8b 05 3d 3a 7f 7e 89 c1 48 8b 34 24 81 e1 00 01 00
+RSP: 0018:ffffc90000a3faa8 EFLAGS: 00000293
+
+RAX: 0000000000000000 RBX: 0000000000000200 RCX: 0000000000000000
+RDX: ffff88801724bb80 RSI: ffffffff81686965 RDI: 0000000000000007
+RBP: ffffffff8d26a498 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000200 R11: 205d373254202020 R12: 0000000000000000
+R13: ffffffff8d26a440 R14: dffffc0000000000 R15: 0000000000000001
+ console_emit_next_record arch/x86/include/asm/irqflags.h:42 [inline]
+ console_flush_all+0x61b/0xcc0 kernel/printk/printk.c:2933
+ console_unlock+0xb8/0x1f0 kernel/printk/printk.c:3007
+ vprintk_emit+0x1bd/0x600 kernel/printk/printk.c:2307
+ vprintk+0x84/0xa0 kernel/printk/printk_safe.c:50
+ _printk+0xbf/0xf0 kernel/printk/printk.c:2328
+ kauditd_printk_skb kernel/audit.c:536 [inline]
+ kauditd_hold_skb+0x1fb/0x240 kernel/audit.c:571
+ kauditd_send_queue+0x220/0x280 kernel/audit.c:756
+ kauditd_thread+0x617/0xaa0 kernel/audit.c:880
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+The buggy address belongs to the variable:
+ ds.0+0x218/0x580
+
+The buggy address belongs to the physical page:
+page:ffffea0000292700 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0xa49c
+flags: 0xfff00000001000(reserved|node=0|zone=1|lastcpupid=0x7ff)
+page_type: 0xffffffff()
+raw: 00fff00000001000 ffffea0000292708 ffffea0000292708 0000000000000000
+raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner info is not present (never set?)
+
+Memory state around the buggy address:
+ ffffffff8a49cc00: f9 f9 f9 f9 00 00 00 00 03 f9 f9 f9 f9 f9 f9 f9
+ ffffffff8a49cc80: 07 f9 f9 f9 f9 f9 f9 f9 00 00 00 00 00 05 f9 f9
+>ffffffff8a49cd00: f9 f9 f9 f9 00 00 03 f9 f9 f9 f9 f9 00 00 01 f9
+                                                                ^
+ ffffffff8a49cd80: f9 f9 f9 f9 00 00 00 00 00 00 00 00 06 f9 f9 f9
+ ffffffff8a49ce00: f9 f9 f9 f9 00 00 00 03 f9 f9 f9 f9 00 00 00 00
+==================================================================
+----------------
+Code disassembly (best guess):
+   0:	66 d4                	data16 (bad)
+   2:	8f 02                	popq   (%rdx)
+   4:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+   a:	f3 0f 1e fa          	endbr64
+   e:	48 8b be b0 01 00 00 	mov    0x1b0(%rsi),%rdi
+  15:	e8 b0 ff ff ff       	callq  0xffffffca
+  1a:	31 c0                	xor    %eax,%eax
+  1c:	c3                   	retq
+  1d:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
+  24:	00 00 00 00
+  28:	66 90                	xchg   %ax,%ax
+* 2a:	f3 0f 1e fa          	endbr64 <-- trapping instruction
+  2e:	65 8b 05 3d 3a 7f 7e 	mov    %gs:0x7e7f3a3d(%rip),%eax        # 0x7e7f3a72
+  35:	89 c1                	mov    %eax,%ecx
+  37:	48 8b 34 24          	mov    (%rsp),%rsi
+  3b:	81                   	.byte 0x81
+  3c:	e1 00                	loope  0x3e
+  3e:	01 00                	add    %eax,(%rax)
 
 
-Yours faithfully.
-Mr. Ronald Evergreen,
-Financial Officer.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
