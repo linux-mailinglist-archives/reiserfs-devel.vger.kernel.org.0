@@ -2,122 +2,100 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1421A741F3B
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 29 Jun 2023 06:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56FF7422B2
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 29 Jun 2023 10:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjF2E3I (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 29 Jun 2023 00:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49300 "EHLO
+        id S231737AbjF2IyH (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 29 Jun 2023 04:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbjF2E2y (ORCPT
+        with ESMTP id S231561AbjF2IyG (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 29 Jun 2023 00:28:54 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593D62110
-        for <reiserfs-devel@vger.kernel.org>; Wed, 28 Jun 2023 21:28:51 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-117-150.bstnma.fios.verizon.net [173.48.117.150])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 35T4SdNS028271
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jun 2023 00:28:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1688012921; bh=G1WywpSC7JbNF3VsEtkgr5IRIuWVWKPrradmgoLImzQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=hMd79orpIHdr7WocGloof1z2O9ZX12vsq9VbYdJ38vtZvIwjhMjKrgytgMH7FhN3i
-         0vxIbMbRlxg5jQtIPcbXHjAxmP2FJ/fEOX252QUk/cxkyY8QyIVgFOVe1oixmKmweb
-         tTIJBNjciUDhVqqz0Yn0h9LPl0z5ubaPGaqPOQ35h1xzvVjKduEG2/99IpFfogB7wh
-         w1+u4EnnqTfxch4fS3Be9CHidiTlQ9lfzeBpYU18hUGpTTBLKAPxjTyjxLl+rc88uM
-         ZNLNYPNatVwV1jRPVvhZfLu/fhUAzlbmLOxNxL6SN1Hgmvaj3lsyVZURI1IPnKAcPE
-         zn2pLhc0mGUEQ==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 1168B15C027F; Thu, 29 Jun 2023 00:28:39 -0400 (EDT)
-Date:   Thu, 29 Jun 2023 00:28:39 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     syzbot <syzbot+5407ecf3112f882d2ef3@syzkaller.appspotmail.com>
-Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [ext4?] KASAN: slab-use-after-free Read in __ext4_iget
-Message-ID: <20230629042839.GK8954@mit.edu>
-References: <000000000000ddfe0405fd7ef847@google.com>
+        Thu, 29 Jun 2023 04:54:06 -0400
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB12E4B
+        for <reiserfs-devel@vger.kernel.org>; Thu, 29 Jun 2023 01:54:02 -0700 (PDT)
+Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-6b747da8ab9so688896a34.0
+        for <reiserfs-devel@vger.kernel.org>; Thu, 29 Jun 2023 01:54:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688028842; x=1690620842;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zEUG58nL5iLmeTt4LnH06pyXU55y46fgRDzs9ZfJaKw=;
+        b=kfU7bNZpo8ZXm0yEZ7DFcTvMV3vSP2RLQQNnpaONFX1slqBA2WgrQG+UoEsRmr0moh
+         ipfmJ9RIZ9E2SKOGh/nq1lFH7DDGCppEzXoT3VcSJU+JpmW4asQ7R7VAy0MozVuIRUVt
+         x87Jx6G3Ca4e//mbcfERa0KUXgVpG0uMN81ChhPnhOwZNywg78hZqaGwzQtQ0WE0eVLh
+         uZYheaFenKMs9COqVxcA+BLiEtba8GLKff33DE/U0V4Yhyu88v1XN6v50jGcsbnplP4Q
+         mZ5aw7rpO1AUSTzk1kRuxppU/jRMPze6xSgCpmsqrJVnx9iJvE/3NfOGWklNiN5dHto5
+         DWPg==
+X-Gm-Message-State: AC+VfDw7NVoisLnFZ48ZKHe9xbyleHvRZe5XAbivOpz4VV9ne5jGCmjo
+        Lts62l034g+joQp31SfnsCrgH+V5sPv+DRYoV8MzLAuCDJfQ
+X-Google-Smtp-Source: ACHHUZ4oYdEE5FHWfiHBwn7fffeJLHHJch/YalC2dRBY7bZ2Hv371AeaSCXmkBauDLzffnM/TdG1hmxApe31kltI/KpGXjzScTS6
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000ddfe0405fd7ef847@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a9d:7a94:0:b0:6b7:4aa6:77b3 with SMTP id
+ l20-20020a9d7a94000000b006b74aa677b3mr3616673otn.3.1688028842186; Thu, 29 Jun
+ 2023 01:54:02 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 01:54:02 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000825f0d05ff40d7ca@google.com>
+Subject: [syzbot] Monthly reiserfs report (Jun 2023)
+From:   syzbot <syzbot+list27f0754ef9e5b00bcfe9@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-#syz set subsystems: fs, reiserfs
+Hello reiserfs maintainers/developers,
 
-On Tue, Jun 06, 2023 at 05:11:06PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    a4d7d7011219 Merge tag 'spi-fix-v6.4-rc5' of git://git.ker..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1455f745280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=7474de833c217bf4
-> dashboard link: https://syzkaller.appspot.com/bug?extid=5407ecf3112f882d2ef3
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+This is a 31-day syzbot report for the reiserfs subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/reiserfs
 
-The stack traces on this are... intersting.  The use-after free is
-coming when ext4_fill_super() tries to get the root inode, via
-iget_locked(sb, EXT2_ROOT_INO)
+During the period, 13 new issues were detected and 0 were fixed.
+In total, 84 issues are still open and 17 have been fixed so far.
 
-> BUG: KASAN: slab-use-after-free in __ext4_iget+0x2f2/0x3f30 fs/ext4/inode.c:4700
-> Read of size 8 at addr ffff888078ca5550 by task syz-executor.5/26112
-	...
->  __ext4_iget+0x2f2/0x3f30 fs/ext4/inode.c:4700
->  __ext4_fill_super fs/ext4/super.c:5446 [inline]
->  ext4_fill_super+0x545b/0x6c60 fs/ext4/super.c:5672
+Some of the still happening issues:
 
-However, we are getting back an object which is freed, and which was
-originally allocated by reiserfs(!):
+Ref  Crashes Repro Title
+<1>  3597    Yes   possible deadlock in open_xa_dir
+                   https://syzkaller.appspot.com/bug?extid=8fb64a61fdd96b50f3b8
+<2>  2491    Yes   KASAN: null-ptr-deref Read in do_journal_end (2)
+                   https://syzkaller.appspot.com/bug?extid=845cd8e5c47f2a125683
+<3>  1474    Yes   kernel BUG in do_journal_begin_r
+                   https://syzkaller.appspot.com/bug?extid=2da5e132dd0268a9c0e4
+<4>  1394    Yes   kernel BUG at fs/reiserfs/journal.c:LINE!
+                   https://syzkaller.appspot.com/bug?extid=6820505ae5978f4f8f2f
+<5>  1197    Yes   WARNING in reiserfs_lookup
+                   https://syzkaller.appspot.com/bug?extid=392ac209604cc18792e5
+<6>  912     No    UBSAN: array-index-out-of-bounds in direntry_create_vi
+                   https://syzkaller.appspot.com/bug?extid=e5bb9eb00a5a5ed2a9a2
+<7>  861     Yes   possible deadlock in mnt_want_write_file
+                   https://syzkaller.appspot.com/bug?extid=1047e42179f502f2b0a2
+<8>  291     Yes   possible deadlock in reiserfs_ioctl
+                   https://syzkaller.appspot.com/bug?extid=79c303ad05f4041e0dad
+<9>  266     Yes   WARNING in journal_end
+                   https://syzkaller.appspot.com/bug?extid=d43f346675e449548021
+<10> 233     Yes   KASAN: out-of-bounds Read in leaf_paste_entries (2)
+                   https://syzkaller.appspot.com/bug?extid=38b79774b6c990637f95
 
-> Allocated by task 20729:
->  kasan_save_stack mm/kasan/common.c:45 [inline]
->  kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
->  __kasan_slab_alloc+0x66/0x70 mm/kasan/common.c:328
->  kasan_slab_alloc include/linux/kasan.h:186 [inline]
->  slab_post_alloc_hook+0x68/0x3a0 mm/slab.h:711
->  slab_alloc_node mm/slub.c:3451 [inline]
->  slab_alloc mm/slub.c:3459 [inline]
->  __kmem_cache_alloc_lru mm/slub.c:3466 [inline]
->  kmem_cache_alloc_lru+0x11f/0x2e0 mm/slub.c:3482
->  alloc_inode_sb include/linux/fs.h:2705 [inline]
->  reiserfs_alloc_inode+0x2a/0xc0 fs/reiserfs/super.c:642
->  alloc_inode fs/inode.c:260 [inline]
->  iget5_locked+0xa0/0x270 fs/inode.c:1241
->  reiserfs_fill_super+0x12e4/0x2620 fs/reiserfs/super.c:2053
->  mount_bdev+0x2d0/0x3f0 fs/super.c:1380
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-There is no reproducer, but it seems to be triggering quite frequently
-(over once day --- 20 times since June 16, 2023 as of this writing).
-I've checked a number of the reports in the Syzkaller dashboard, and
-they are all quite similar; somehow ext4 is getting an inode which is
-freed, and whose memory was originally allocated by reiserfs.
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
-I'm not sure if this is a reiserfs bug or a core VFS bug, since this
-seems to imply that an an old reiserfs inode was left on the
-inode_hashtable when a reiserfs file system was unmounted, and then
-the struct super was reused and returned for a fresh ext4 mount, and
-then when ext4 tried do an iget_locked(), it got the reserifs inode.
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
 
-That reiserfs inode was either freed and left on the inode_hashtable,
-or lifetime of the reiserfs root inode was allowed to last longer than
-the reiserfs superblock (maybe someone is playing RCU games?) and so
-since it was left on the inode_hashtable, the attempt to free reiserfs
-root inode raced with ext4's attempt to fetch the ext4 inode via
-iget_locked().
-
-Perhaps one of the VFS or reiserfs maintainers could take a look?
-
-       	       	  	   	      	       - Ted
+You may send multiple commands in a single email message.
