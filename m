@@ -2,196 +2,122 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C387741C25
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 29 Jun 2023 01:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1421A741F3B
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 29 Jun 2023 06:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231563AbjF1XGF (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 28 Jun 2023 19:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
+        id S231249AbjF2E3I (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 29 Jun 2023 00:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbjF1XGD (ORCPT
+        with ESMTP id S230523AbjF2E2y (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 28 Jun 2023 19:06:03 -0400
-Received: from mail-oi1-f207.google.com (mail-oi1-f207.google.com [209.85.167.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EBA1FF7
-        for <reiserfs-devel@vger.kernel.org>; Wed, 28 Jun 2023 16:06:00 -0700 (PDT)
-Received: by mail-oi1-f207.google.com with SMTP id 5614622812f47-39ecef7a101so105562b6e.2
-        for <reiserfs-devel@vger.kernel.org>; Wed, 28 Jun 2023 16:06:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687993559; x=1690585559;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=K+HZZJTaP1niJAASeD1Z5YiUeNBbVaSIkYrwhZkkWGE=;
-        b=f70Po/LcpxRKhQUb1esRBdf4zJIKdEqiakPBWod1ABGC3EvsxdQGNTXbwpwy4tUys1
-         Gy2+pCEOdHhfgjfQeCpMoP4etjrUU+CGHpRxfi/PnMHybn2VSEjw4t8asCm1JOfwEkn5
-         HjhdL2WDVDY1dozemUGw6K7G7yhRFCPF24wcqJSyckKrkucWkG9aY6zkHjLps0Lowbff
-         xJ1lWsPNX5OksfkkUDahR1IK5AhLNxKA/aKwlO1E3mEblEDvXoA/2BGzZ17Cj+GuHgCr
-         ygpcfwHHka7IUfhvKh9+kLqNHMaHTomd+OyYk4HgmdIHs+397YOu5UXLT5vSMmiMmTOQ
-         948g==
-X-Gm-Message-State: AC+VfDwe1YRsMRQCqyTz7JXzleWKH4b+JilaAV6Qxt4/Flm4tR9sKbQm
-        uL+ngjg3GFZ0AzGKqgrrV1mp1H+oU6LTbUWXf0XLO8wOiEzN
-X-Google-Smtp-Source: ACHHUZ45uBzCfUUWpNuv+u0VAEYoN5K9kHXgLHorzGiwGb8GomNpLnMqlak7GVneuBrWBaRN+kdVdwjaMcPrpOvOZcySWavRKOcz
+        Thu, 29 Jun 2023 00:28:54 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593D62110
+        for <reiserfs-devel@vger.kernel.org>; Wed, 28 Jun 2023 21:28:51 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-117-150.bstnma.fios.verizon.net [173.48.117.150])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 35T4SdNS028271
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 00:28:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1688012921; bh=G1WywpSC7JbNF3VsEtkgr5IRIuWVWKPrradmgoLImzQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=hMd79orpIHdr7WocGloof1z2O9ZX12vsq9VbYdJ38vtZvIwjhMjKrgytgMH7FhN3i
+         0vxIbMbRlxg5jQtIPcbXHjAxmP2FJ/fEOX252QUk/cxkyY8QyIVgFOVe1oixmKmweb
+         tTIJBNjciUDhVqqz0Yn0h9LPl0z5ubaPGaqPOQ35h1xzvVjKduEG2/99IpFfogB7wh
+         w1+u4EnnqTfxch4fS3Be9CHidiTlQ9lfzeBpYU18hUGpTTBLKAPxjTyjxLl+rc88uM
+         ZNLNYPNatVwV1jRPVvhZfLu/fhUAzlbmLOxNxL6SN1Hgmvaj3lsyVZURI1IPnKAcPE
+         zn2pLhc0mGUEQ==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 1168B15C027F; Thu, 29 Jun 2023 00:28:39 -0400 (EDT)
+Date:   Thu, 29 Jun 2023 00:28:39 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     syzbot <syzbot+5407ecf3112f882d2ef3@syzkaller.appspotmail.com>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [ext4?] KASAN: slab-use-after-free Read in __ext4_iget
+Message-ID: <20230629042839.GK8954@mit.edu>
+References: <000000000000ddfe0405fd7ef847@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:1987:b0:3a0:6079:3201 with SMTP id
- bj7-20020a056808198700b003a060793201mr5356926oib.8.1687993559555; Wed, 28 Jun
- 2023 16:05:59 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 16:05:59 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008023b805ff38a0af@google.com>
-Subject: [syzbot] [reiserfs?] general protection fault in __hrtimer_run_queues (3)
-From:   syzbot <syzbot+f13a9546e229c1a6e378@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000ddfe0405fd7ef847@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+#syz set subsystems: fs, reiserfs
 
-syzbot found the following issue on:
+On Tue, Jun 06, 2023 at 05:11:06PM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    a4d7d7011219 Merge tag 'spi-fix-v6.4-rc5' of git://git.ker..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1455f745280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=7474de833c217bf4
+> dashboard link: https://syzkaller.appspot.com/bug?extid=5407ecf3112f882d2ef3
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-HEAD commit:    e8f75c0270d9 Merge tag 'x86_sgx_for_v6.5' of git://git.ker..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13710670a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a98ec7f738e43bd4
-dashboard link: https://syzkaller.appspot.com/bug?extid=f13a9546e229c1a6e378
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1227af7b280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13803daf280000
+The stack traces on this are... intersting.  The use-after free is
+coming when ext4_fill_super() tries to get the root inode, via
+iget_locked(sb, EXT2_ROOT_INO)
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f27c1d41217a/disk-e8f75c02.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/843ae5d5c810/vmlinux-e8f75c02.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/da48bc4c0ec1/bzImage-e8f75c02.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/667a76526623/mount_0.gz
+> BUG: KASAN: slab-use-after-free in __ext4_iget+0x2f2/0x3f30 fs/ext4/inode.c:4700
+> Read of size 8 at addr ffff888078ca5550 by task syz-executor.5/26112
+	...
+>  __ext4_iget+0x2f2/0x3f30 fs/ext4/inode.c:4700
+>  __ext4_fill_super fs/ext4/super.c:5446 [inline]
+>  ext4_fill_super+0x545b/0x6c60 fs/ext4/super.c:5672
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f13a9546e229c1a6e378@syzkaller.appspotmail.com
+However, we are getting back an object which is freed, and which was
+originally allocated by reiserfs(!):
 
-==================================================================
-BUG: KASAN: global-out-of-bounds in lookup_object lib/debugobjects.c:195 [inline]
-BUG: KASAN: global-out-of-bounds in debug_object_deactivate lib/debugobjects.c:785 [inline]
-BUG: KASAN: global-out-of-bounds in debug_object_deactivate+0x27b/0x300 lib/debugobjects.c:771
-Read of size 8 at addr ffffffff8a49cd78 by task kauditd/27
+> Allocated by task 20729:
+>  kasan_save_stack mm/kasan/common.c:45 [inline]
+>  kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
+>  __kasan_slab_alloc+0x66/0x70 mm/kasan/common.c:328
+>  kasan_slab_alloc include/linux/kasan.h:186 [inline]
+>  slab_post_alloc_hook+0x68/0x3a0 mm/slab.h:711
+>  slab_alloc_node mm/slub.c:3451 [inline]
+>  slab_alloc mm/slub.c:3459 [inline]
+>  __kmem_cache_alloc_lru mm/slub.c:3466 [inline]
+>  kmem_cache_alloc_lru+0x11f/0x2e0 mm/slub.c:3482
+>  alloc_inode_sb include/linux/fs.h:2705 [inline]
+>  reiserfs_alloc_inode+0x2a/0xc0 fs/reiserfs/super.c:642
+>  alloc_inode fs/inode.c:260 [inline]
+>  iget5_locked+0xa0/0x270 fs/inode.c:1241
+>  reiserfs_fill_super+0x12e4/0x2620 fs/reiserfs/super.c:2053
+>  mount_bdev+0x2d0/0x3f0 fs/super.c:1380
 
-CPU: 1 PID: 27 Comm: kauditd Not tainted 6.4.0-syzkaller-01406-ge8f75c0270d9 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:351
- print_report mm/kasan/report.c:462 [inline]
- kasan_report+0x11c/0x130 mm/kasan/report.c:572
- lookup_object lib/debugobjects.c:195 [inline]
- debug_object_deactivate lib/debugobjects.c:785 [inline]
- debug_object_deactivate+0x27b/0x300 lib/debugobjects.c:771
- debug_hrtimer_deactivate kernel/time/hrtimer.c:427 [inline]
- debug_deactivate kernel/time/hrtimer.c:483 [inline]
- __run_hrtimer kernel/time/hrtimer.c:1656 [inline]
- __hrtimer_run_queues+0x3f3/0xbe0 kernel/time/hrtimer.c:1752
- hrtimer_interrupt+0x320/0x7b0 kernel/time/hrtimer.c:1814
- local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1098 [inline]
- __sysvec_apic_timer_interrupt+0x14a/0x430 arch/x86/kernel/apic/apic.c:1115
- sysvec_apic_timer_interrupt+0x92/0xc0 arch/x86/kernel/apic/apic.c:1109
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
-RIP: 0010:__sanitizer_cov_trace_pc+0x0/0x70 kernel/kcov.c:200
-Code: 66 d4 8f 02 66 0f 1f 44 00 00 f3 0f 1e fa 48 8b be b0 01 00 00 e8 b0 ff ff ff 31 c0 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 <f3> 0f 1e fa 65 8b 05 3d 3a 7f 7e 89 c1 48 8b 34 24 81 e1 00 01 00
-RSP: 0018:ffffc90000a3faa8 EFLAGS: 00000293
+There is no reproducer, but it seems to be triggering quite frequently
+(over once day --- 20 times since June 16, 2023 as of this writing).
+I've checked a number of the reports in the Syzkaller dashboard, and
+they are all quite similar; somehow ext4 is getting an inode which is
+freed, and whose memory was originally allocated by reiserfs.
 
-RAX: 0000000000000000 RBX: 0000000000000200 RCX: 0000000000000000
-RDX: ffff88801724bb80 RSI: ffffffff81686965 RDI: 0000000000000007
-RBP: ffffffff8d26a498 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000200 R11: 205d373254202020 R12: 0000000000000000
-R13: ffffffff8d26a440 R14: dffffc0000000000 R15: 0000000000000001
- console_emit_next_record arch/x86/include/asm/irqflags.h:42 [inline]
- console_flush_all+0x61b/0xcc0 kernel/printk/printk.c:2933
- console_unlock+0xb8/0x1f0 kernel/printk/printk.c:3007
- vprintk_emit+0x1bd/0x600 kernel/printk/printk.c:2307
- vprintk+0x84/0xa0 kernel/printk/printk_safe.c:50
- _printk+0xbf/0xf0 kernel/printk/printk.c:2328
- kauditd_printk_skb kernel/audit.c:536 [inline]
- kauditd_hold_skb+0x1fb/0x240 kernel/audit.c:571
- kauditd_send_queue+0x220/0x280 kernel/audit.c:756
- kauditd_thread+0x617/0xaa0 kernel/audit.c:880
- kthread+0x344/0x440 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+I'm not sure if this is a reiserfs bug or a core VFS bug, since this
+seems to imply that an an old reiserfs inode was left on the
+inode_hashtable when a reiserfs file system was unmounted, and then
+the struct super was reused and returned for a fresh ext4 mount, and
+then when ext4 tried do an iget_locked(), it got the reserifs inode.
 
-The buggy address belongs to the variable:
- ds.0+0x218/0x580
+That reiserfs inode was either freed and left on the inode_hashtable,
+or lifetime of the reiserfs root inode was allowed to last longer than
+the reiserfs superblock (maybe someone is playing RCU games?) and so
+since it was left on the inode_hashtable, the attempt to free reiserfs
+root inode raced with ext4's attempt to fetch the ext4 inode via
+iget_locked().
 
-The buggy address belongs to the physical page:
-page:ffffea0000292700 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0xa49c
-flags: 0xfff00000001000(reserved|node=0|zone=1|lastcpupid=0x7ff)
-page_type: 0xffffffff()
-raw: 00fff00000001000 ffffea0000292708 ffffea0000292708 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner info is not present (never set?)
+Perhaps one of the VFS or reiserfs maintainers could take a look?
 
-Memory state around the buggy address:
- ffffffff8a49cc00: f9 f9 f9 f9 00 00 00 00 03 f9 f9 f9 f9 f9 f9 f9
- ffffffff8a49cc80: 07 f9 f9 f9 f9 f9 f9 f9 00 00 00 00 00 05 f9 f9
->ffffffff8a49cd00: f9 f9 f9 f9 00 00 03 f9 f9 f9 f9 f9 00 00 01 f9
-                                                                ^
- ffffffff8a49cd80: f9 f9 f9 f9 00 00 00 00 00 00 00 00 06 f9 f9 f9
- ffffffff8a49ce00: f9 f9 f9 f9 00 00 00 03 f9 f9 f9 f9 00 00 00 00
-==================================================================
-----------------
-Code disassembly (best guess):
-   0:	66 d4                	data16 (bad)
-   2:	8f 02                	popq   (%rdx)
-   4:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
-   a:	f3 0f 1e fa          	endbr64
-   e:	48 8b be b0 01 00 00 	mov    0x1b0(%rsi),%rdi
-  15:	e8 b0 ff ff ff       	callq  0xffffffca
-  1a:	31 c0                	xor    %eax,%eax
-  1c:	c3                   	retq
-  1d:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
-  24:	00 00 00 00
-  28:	66 90                	xchg   %ax,%ax
-* 2a:	f3 0f 1e fa          	endbr64 <-- trapping instruction
-  2e:	65 8b 05 3d 3a 7f 7e 	mov    %gs:0x7e7f3a3d(%rip),%eax        # 0x7e7f3a72
-  35:	89 c1                	mov    %eax,%ecx
-  37:	48 8b 34 24          	mov    (%rsp),%rsi
-  3b:	81                   	.byte 0x81
-  3c:	e1 00                	loope  0x3e
-  3e:	01 00                	add    %eax,(%rax)
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+       	       	  	   	      	       - Ted
