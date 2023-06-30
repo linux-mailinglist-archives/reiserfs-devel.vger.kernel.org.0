@@ -2,96 +2,97 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C84742F7B
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 29 Jun 2023 23:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08497437D6
+	for <lists+reiserfs-devel@lfdr.de>; Fri, 30 Jun 2023 11:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjF2V0W (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Thu, 29 Jun 2023 17:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
+        id S231140AbjF3JDS (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 30 Jun 2023 05:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbjF2V0V (ORCPT
+        with ESMTP id S229522AbjF3JDR (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Thu, 29 Jun 2023 17:26:21 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFF02D4E;
-        Thu, 29 Jun 2023 14:26:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bQS0PiE1k5TMzQa6AP3znnR0sMcdBZTuUSLtC+nP2cw=; b=PdzRD67YmTAnA/wX7Gu0GM1sNl
-        xasvLLa8EB4oxixlkiy792Su9qU5uS723FW1i6lmttfd5CUH8sNBdujDho/fWj/VmiycfTuNW64zZ
-        hc3tGO9Z/9RXIhapvVpy7X4HL6qFx75MO52b5w/0r7EIW2HFdxoCImsQboW/TXKM7lZqU5xp27vnJ
-        VcK4RxJ8Z+chUT4GEw6KBUJ4HzKSUH7AnoECTEWUWpMp3B1ubKwdjIpa/ASHkbChuYCZ+WgWu5MV1
-        RwuS7f2jYcL5lpf1eldnXpQg8VvhPOn2pn5+sGhh54Bl10kcBTKMEcnw1LxsWv3iIarnW8n1wE7+E
-        Das9QysQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qEz9d-005Bk1-Ff; Thu, 29 Jun 2023 21:26:17 +0000
-Date:   Thu, 29 Jun 2023 22:26:17 +0100
-From:   Matthew Wilcox <willy@infradead.org>
+        Fri, 30 Jun 2023 05:03:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487C710C;
+        Fri, 30 Jun 2023 02:03:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9FDB61704;
+        Fri, 30 Jun 2023 09:03:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A7A3C433C0;
+        Fri, 30 Jun 2023 09:03:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688115795;
+        bh=BAEdB9AU2UhM5oIx7SMy+OVSnZV+XbGLw1XDnZhbfjQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=G3AWj7zC6tSuEDvbCtpbrqx0/vLrEbpPa5n0slRgbYVhKNidm5e6nZOqZKKpFXkks
+         G1j1Kn072ZE/kqYrA5VDJpnbhN1UXySSKshSHq0Rn8OOnmyCVRZXRfmEstJIFpBuY+
+         qjtvLg6LrI8++QgT0/4rUfkTYPrCyPL/2gLY9NnzBIwzUC9BiPIN0XZDqz43hkYYC/
+         JJKl4VWQcJnrMNbduVKBx8hDvtyE2v0TR9yzaYG1zNFOrgF8I60koQpbSEaRtv8dUr
+         0jcCi3faGa7ZUCBwVwIJ2c5CrXjjwwsw69T+EUICOzuAr9aHsBhqP7b92Abun9tdql
+         +2hYNuJZkulVQ==
+From:   Christian Brauner <brauner@kernel.org>
 To:     reiserfs-devel@vger.kernel.org, Jan Kara <jack@suse.cz>,
         Andrew Morton <akpm@linux-foundation.org>,
         Christian Brauner <brauner@kernel.org>,
         linux-fsdevel@vger.kernel.org
-Cc:     butt3rflyh4ck <butterflyhuangxx@gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        butt3rflyh4ck <butterflyhuangxx@gmail.com>
 Subject: Re: [PATCH] reiserfs: Check the return value from __getblk()
-Message-ID: <ZJ32+b+3O8Z6cuRo@casper.infradead.org>
-References: <20230605142335.2883264-1-willy@infradead.org>
+Date:   Fri, 30 Jun 2023 11:03:05 +0200
+Message-Id: <20230630-kerbholz-koiteich-a7395bc04eae@brauner>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <ZJ32+b+3O8Z6cuRo@casper.infradead.org>
+References: <ZJ32+b+3O8Z6cuRo@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605142335.2883264-1-willy@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1274; i=brauner@kernel.org; h=from:subject:message-id; bh=DCdt8XEWQ1l0xHmVcCmWOPuYByMfuib7CuZ1rw+h1tc=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaTMm2VbO5Oj/XrCxup3B3d05v6fUmTIMPlOg07CxR1TskSc DOef7ChlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZjI5NWMDD+/djrUxPhNcN9s/33jtB uiTxXWhcmFn77mXvrmZ+KmtB2MDP/XB8/fVvuryCWU79jM6tjTRUXnul1mXXyyXkTx2SoBeQYA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
+From: Matthew Wilcox <willy@infradead.org>
 
-I was expecting Jan to pick this one up, but it's not in his pull
-request that just got merged.  Looking at patches to reiserfs over the
-last few cycles, patches go in a few different ways; there doesn't seem
-to be a defined path.  Anyone want to take this one?
-
-On Mon, Jun 05, 2023 at 03:23:34PM +0100, Matthew Wilcox (Oracle) wrote:
+On Thu, 29 Jun 2023 23:26:17 +0200, Matthew Wilcox wrote:
 > __getblk() can return a NULL pointer if we run out of memory or if
 > we try to access beyond the end of the device; check it and handle it
 > appropriately.
 > 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Link: https://lore.kernel.org/lkml/CAFcO6XOacq3hscbXevPQP7sXRoYFz34ZdKPYjmd6k5sZuhGFDw@mail.gmail.com/
-> Tested-by: butt3rflyh4ck <butterflyhuangxx@gmail.com>
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2") # probably introduced in 2002
-> ---
->  fs/reiserfs/journal.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/reiserfs/journal.c b/fs/reiserfs/journal.c
-> index 4d11d60f493c..dd58e0dca5e5 100644
-> --- a/fs/reiserfs/journal.c
-> +++ b/fs/reiserfs/journal.c
-> @@ -2326,7 +2326,7 @@ static struct buffer_head *reiserfs_breada(struct block_device *dev,
->  	int i, j;
->  
->  	bh = __getblk(dev, block, bufsize);
-> -	if (buffer_uptodate(bh))
-> +	if (!bh || buffer_uptodate(bh))
->  		return (bh);
->  
->  	if (block + BUFNR > max_block) {
-> @@ -2336,6 +2336,8 @@ static struct buffer_head *reiserfs_breada(struct block_device *dev,
->  	j = 1;
->  	for (i = 1; i < blocks; i++) {
->  		bh = __getblk(dev, block + i, bufsize);
-> +		if (!bh)
-> +			break;
->  		if (buffer_uptodate(bh)) {
->  			brelse(bh);
->  			break;
-> -- 
-> 2.39.2
-> 
+> [...]
+
+Willy's original commit with message id
+<20230605142335.2883264-1-willy@infradead.org> didn't show up on lore.
+Might be because reiserfs-devel isn't a list tracked by lore; not sure.
+So I grabbed this from somewhere else.
+
+In any case, I picked this up now.
+
+---
+
+Applied to the vfs.misc branch of the vfs/vfs.git tree.
+Patches in the vfs.misc branch should appear in linux-next soon.
+
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
+
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
+
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.misc
+
+[1/1] reiserfs: Check the return value from __getblk()
+      commit: https://git.kernel.org/vfs/vfs/c/958c5fee0047
