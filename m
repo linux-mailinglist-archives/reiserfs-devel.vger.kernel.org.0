@@ -2,56 +2,103 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF02747DE8
-	for <lists+reiserfs-devel@lfdr.de>; Wed,  5 Jul 2023 09:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C94007481FB
+	for <lists+reiserfs-devel@lfdr.de>; Wed,  5 Jul 2023 12:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbjGEHJB (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 5 Jul 2023 03:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38814 "EHLO
+        id S231820AbjGEKVe (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 5 Jul 2023 06:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbjGEHJB (ORCPT
+        with ESMTP id S231213AbjGEKVb (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 5 Jul 2023 03:09:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B4C195;
-        Wed,  5 Jul 2023 00:09:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 5 Jul 2023 06:21:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A246B122;
+        Wed,  5 Jul 2023 03:21:30 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F14B36143A;
-        Wed,  5 Jul 2023 07:08:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00057C433C8;
-        Wed,  5 Jul 2023 07:08:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688540939;
-        bh=OzfmgDFtXJCKbJ5VtxUn1n2vz3F/TIx9jNO3WUb6xxI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JICvmyve75o3h7NDZxOYzIfAhgkRR9zSTOSPyfCq5AvB6CzfcoETKMvjHfmQRVLoB
-         P6YuAW+Dqo1AotnqIZO7PKevdJHPSocc53AvfxMd7AaBlisZJa24KA7jcbUL2OyvPo
-         dnc0Ho1eC/LrKWj7zgkTOVNKoZ+jGy2UVFgMJMKT1Z2dFfjNanO8FHagNUGgVGTNTp
-         Kxlt+8dDf3ZYF2+GojSIlg5zbf/ykKL4OO9NMXl2fMGWW2PcOQNk31ntntp2GQH9Jl
-         0D58njpBHN4A7fG1eSxGqF3KN2VMcDjoGMmgvOCjdhqP6NO+JlLHY3cNMvHLfXYftN
-         4ZB/Z4AWN/qIQ==
-Date:   Wed, 5 Jul 2023 09:08:55 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     reiserfs-devel@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 58F0C1F6E6;
+        Wed,  5 Jul 2023 10:21:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1688552489; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qqER76PXnxWxMVZH46uY+IP0A7ISNxa4dFOpqm8Npig=;
+        b=rK+eFTza2+XXgbRvOv5tQtV93F/4zZpu7norREAepZy5yow7baD/dvvqWhpeeItBt0IPcu
+        Y5rwLWutv/on4mwv5EJraqTeqhb05mRkTW0yYXikGz/UA9AQcATVDIgxrBuvXRHMAszN6R
+        RSIAN/j2D8s9RJrt3/Umhb+lT3pvazU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1688552489;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qqER76PXnxWxMVZH46uY+IP0A7ISNxa4dFOpqm8Npig=;
+        b=0Ik5A3faiNr6MKUo0ZlFf0SVDy0zGGeX4x6PTOEnPlUJVjHk96v3tsbq/TGqKcufwhGJGx
+        3sf2EXg0rHzUTICQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 44C0D13460;
+        Wed,  5 Jul 2023 10:21:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Xem5EClEpWRSCwAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 05 Jul 2023 10:21:29 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id C5467A0707; Wed,  5 Jul 2023 12:21:28 +0200 (CEST)
+Date:   Wed, 5 Jul 2023 12:21:28 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     Jan Kara <jack@suse.cz>, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alasdair Kergon <agk@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org,
-        butt3rflyh4ck <butterflyhuangxx@gmail.com>
-Subject: Re: [PATCH] reiserfs: Check the return value from __getblk()
-Message-ID: <20230705-gecheckt-unzumutbar-4010ffac4ea7@brauner>
-References: <ZJ32+b+3O8Z6cuRo@casper.infradead.org>
- <20230630-kerbholz-koiteich-a7395bc04eae@brauner>
- <ZKRptMjtL6X74X1B@casper.infradead.org>
+        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Kleikamp <shaggy@kernel.org>,
+        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        jfs-discussion@lists.sourceforge.net,
+        Joern Engel <joern@lazybastard.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-xfs@vger.kernel.org,
+        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Song Liu <song@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH 01/32] block: Provide blkdev_get_handle_* functions
+Message-ID: <20230705102128.vquve4qencbbn2br@quack3>
+References: <20230629165206.383-1-jack@suse.cz>
+ <20230704122224.16257-1-jack@suse.cz>
+ <ZKRItBRhm8f5Vba/@kbusch-mbp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZKRptMjtL6X74X1B@casper.infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <ZKRItBRhm8f5Vba/@kbusch-mbp>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,37 +106,35 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 07:49:24PM +0100, Matthew Wilcox wrote:
-> On Fri, Jun 30, 2023 at 11:03:05AM +0200, Christian Brauner wrote:
-> > From: Matthew Wilcox <willy@infradead.org>
-> > 
-> > On Thu, 29 Jun 2023 23:26:17 +0200, Matthew Wilcox wrote:
-> > > __getblk() can return a NULL pointer if we run out of memory or if
-> > > we try to access beyond the end of the device; check it and handle it
-> > > appropriately.
-> > > 
-> > > [...]
-> > 
-> > Willy's original commit with message id
-> > <20230605142335.2883264-1-willy@infradead.org> didn't show up on lore.
-> > Might be because reiserfs-devel isn't a list tracked by lore; not sure.
-> > So I grabbed this from somewhere else.
-> > 
-> > In any case, I picked this up now.
-> > 
-> > ---
-> > 
-> > Applied to the vfs.misc branch of the vfs/vfs.git tree.
-> > Patches in the vfs.misc branch should appear in linux-next soon.
-> > 
-> > Please report any outstanding bugs that were missed during review in a
-> > new review to the original patch series allowing us to drop it.
-> > 
-> > It's encouraged to provide Acked-bys and Reviewed-bys even though the
-> > patch has now been applied. If possible patch trailers will be updated.
+On Tue 04-07-23 10:28:36, Keith Busch wrote:
+> On Tue, Jul 04, 2023 at 02:21:28PM +0200, Jan Kara wrote:
+> > +struct bdev_handle *blkdev_get_handle_by_dev(dev_t dev, blk_mode_t mode,
+> > +		void *holder, const struct blk_holder_ops *hops)
+> > +{
+> > +	struct bdev_handle *handle = kmalloc(sizeof(struct bdev_handle),
+> > +					     GFP_KERNEL);
 > 
-> Acked-by: Edward Shishkin <edward.shishkin@gmail.com>
-> 
-> was added in a response to the original, FYI
+> I believe 'sizeof(*handle)' is the preferred style.
 
-Thank you! I've updated the patch trailer accordingly.
+OK.
+
+> > +	struct block_device *bdev;
+> > +
+> > +	if (!handle)
+> > +		return ERR_PTR(-ENOMEM);
+> > +	bdev = blkdev_get_by_dev(dev, mode, holder, hops);
+> > +	if (IS_ERR(bdev))
+> > +		return ERR_CAST(bdev);
+> 
+> Need a 'kfree(handle)' before the error return. Or would it be simpler
+> to get the bdev first so you can check the mode settings against a
+> read-only bdev prior to the kmalloc?
+
+Yeah. Good point with kfree(). I'm not sure calling blkdev_get_by_dev()
+first will be "simpler" - then we need blkdev_put() in case of kmalloc()
+failure. Thanks for review!
+ 
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
