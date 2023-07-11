@@ -2,210 +2,194 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7803C74D7BB
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 10 Jul 2023 15:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2563774E3C3
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 11 Jul 2023 03:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232742AbjGJNdP (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 10 Jul 2023 09:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43150 "EHLO
+        id S230128AbjGKBxu (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 10 Jul 2023 21:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232944AbjGJNdF (ORCPT
+        with ESMTP id S229928AbjGKBxt (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 10 Jul 2023 09:33:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B68019F;
-        Mon, 10 Jul 2023 06:32:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5933560FE9;
-        Mon, 10 Jul 2023 13:32:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7E3BC433C9;
-        Mon, 10 Jul 2023 13:32:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688995962;
-        bh=ypo6EEC/a10vTp0LME1omXwBE1UiKK/mReyAl6l5UHQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=J7Z7W1QfjLNRfgVQcSdKnYFRxtD+3fk+fVeHY9xuci1TKV61DCMVSYVvDG9kwuCBX
-         g+QpzC0XDkSjeL9nV9+lGdPbp68Q96EXBiPlDNXBynN9HrAz4Y+E89ZYAnFm4gMFob
-         SGwQAd+JWX6wsLqjr9V4UXCKsBkrO6/s1MT1FJcjDjR0RhV1HnH8M/padgIYfYI3iT
-         50AKfuQ1Ba3eH+A3TeCdkft2SWR53hIVATzxttJnSld1dtaOLY6XNcMPkiIrdtp3w+
-         UMgZy7XJf81pa8iQgs3v7vGfymFo80jGgmK2T6kIjmEHcqRaAvCUmLi8QnIHmVmDpT
-         pZFJemBst7t+w==
-Message-ID: <c4eaff9389fe63ec4e29404ec0d1181b74935426.camel@kernel.org>
-Subject: Re: [PATCH v2 00/89] fs: new accessors for inode->i_ctime
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     jk@ozlabs.org, arnd@arndb.de, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
-        maco@android.com, joel@joelfernandes.org, cmllamas@google.com,
-        surenb@google.com, dennis.dalessandro@cornelisnetworks.com,
-        jgg@ziepe.ca, leon@kernel.org, bwarrum@linux.ibm.com,
-        rituagar@linux.ibm.com, ericvh@kernel.org, lucho@ionkov.net,
-        asmadeus@codewreck.org, linux_oss@crudebyte.com, dsterba@suse.com,
-        dhowells@redhat.com, marc.dionne@auristor.com,
-        viro@zeniv.linux.org.uk, raven@themaw.net, luisbg@kernel.org,
-        salah.triki@gmail.com, aivazian.tigran@gmail.com,
-        ebiederm@xmission.com, keescook@chromium.org, clm@fb.com,
-        josef@toxicpanda.com, xiubli@redhat.com, idryomov@gmail.com,
-        jaharkes@cs.cmu.edu, coda@cs.cmu.edu, jlbec@evilplan.org,
-        hch@lst.de, nico@fluxnic.net, rafael@kernel.org, code@tyhicks.com,
-        ardb@kernel.org, xiang@kernel.org, chao@kernel.org,
-        huyue2@coolpad.com, jefflexu@linux.alibaba.com,
-        linkinjeon@kernel.org, sj1557.seo@samsung.com, jack@suse.com,
-        tytso@mit.edu, adilger.kernel@dilger.ca, jaegeuk@kernel.org,
-        hirofumi@mail.parknet.co.jp, miklos@szeredi.hu,
-        rpeterso@redhat.com, agruenba@redhat.com, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        mikulas@artax.karlin.mff.cuni.cz, mike.kravetz@oracle.com,
-        muchun.song@linux.dev, dwmw2@infradead.org, shaggy@kernel.org,
-        tj@kernel.org, trond.myklebust@hammerspace.com, anna@kernel.org,
-        chuck.lever@oracle.com, neilb@suse.de, kolga@netapp.com,
-        Dai.Ngo@oracle.com, tom@talpey.com, konishi.ryusuke@gmail.com,
-        anton@tuxera.com, almaz.alexandrovich@paragon-software.com,
-        mark@fasheh.com, joseph.qi@linux.alibaba.com, me@bobcopeland.com,
-        hubcap@omnibond.com, martin@omnibond.com, amir73il@gmail.com,
-        mcgrof@kernel.org, yzaikin@google.com, tony.luck@intel.com,
-        gpiccoli@igalia.com, al@alarsen.net, sfrench@samba.org,
-        pc@manguebit.com, lsahlber@redhat.com, sprasad@microsoft.com,
-        senozhatsky@chromium.org, phillip@squashfs.org.uk,
-        rostedt@goodmis.org, mhiramat@kernel.org, dushistov@mail.ru,
-        hdegoede@redhat.com, djwong@kernel.org, dlemoal@kernel.org,
-        naohiro.aota@wdc.com, jth@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, hughd@google.com, akpm@linux-foundation.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, john.johansen@canonical.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        jgross@suse.com, stern@rowland.harvard.edu, lrh2000@pku.edu.cn,
-        sebastian.reichel@collabora.com, wsa+renesas@sang-engineering.com,
-        quic_ugoswami@quicinc.com, quic_linyyuan@quicinc.com,
-        john@keeping.me.uk, error27@gmail.com, quic_uaggarwa@quicinc.com,
-        hayama@lineo.co.jp, jomajm@gmail.com, axboe@kernel.dk,
-        dhavale@google.com, dchinner@redhat.com, hannes@cmpxchg.org,
-        zhangpeng362@huawei.com, slava@dubeyko.com, gargaditya08@live.com,
-        penguin-kernel@I-love.SAKURA.ne.jp, yifeliu@cs.stonybrook.edu,
-        madkar@cs.stonybrook.edu, ezk@cs.stonybrook.edu,
-        yuzhe@nfschina.com, willy@infradead.org, okanatov@gmail.com,
-        jeffxu@chromium.org, linux@treblig.org, mirimmad17@gmail.com,
-        yijiangshan@kylinos.cn, yang.yang29@zte.com.cn,
-        xu.xin16@zte.com.cn, chengzhihao1@huawei.com, shr@devkernel.io,
-        Liam.Howlett@Oracle.com, adobriyan@gmail.com,
-        chi.minghao@zte.com.cn, roberto.sassu@huawei.com,
-        linuszeng@tencent.com, bvanassche@acm.org, zohar@linux.ibm.com,
-        yi.zhang@huawei.com, trix@redhat.com, fmdefrancesco@gmail.com,
-        ebiggers@google.com, princekumarmaurya06@gmail.com,
-        chenzhongjin@huawei.com, riel@surriel.com,
-        shaozhengchao@huawei.com, jingyuwang_vip@163.com,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-usb@vger.kernel.org, v9fs@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
-        autofs@vger.kernel.org, linux-mm@kvack.org,
-        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        codalist@coda.cs.cmu.edu, ecryptfs@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        cluster-devel@redhat.com, linux-um@lists.infradead.org,
-        linux-mtd@lists.infradead.org,
-        jfs-discussion@lists.sourceforge.net, linux-nfs@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev,
-        linux-karma-devel@lists.sourceforge.net, devel@lists.orangefs.org,
-        linux-unionfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org,
-        linux-trace-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org
-Date:   Mon, 10 Jul 2023 09:32:23 -0400
-In-Reply-To: <20230710-zudem-entkam-bb508cbd8c78@brauner>
-References: <20230705185812.579118-1-jlayton@kernel.org>
-         <5e40891f6423feb5b68f025e31f26e9a50ae9390.camel@kernel.org>
-         <20230710-zudem-entkam-bb508cbd8c78@brauner>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        Mon, 10 Jul 2023 21:53:49 -0400
+Received: from mail-pl1-f208.google.com (mail-pl1-f208.google.com [209.85.214.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E11AAB
+        for <reiserfs-devel@vger.kernel.org>; Mon, 10 Jul 2023 18:53:47 -0700 (PDT)
+Received: by mail-pl1-f208.google.com with SMTP id d9443c01a7336-1b8a7e21f15so78690015ad.0
+        for <reiserfs-devel@vger.kernel.org>; Mon, 10 Jul 2023 18:53:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689040426; x=1691632426;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MgFPXQ8D4Hg7lbUv1V/6m4r7uD/Fzh2LAEZUXUXNtBk=;
+        b=hltzF/hvJAhP2rCPqwwS7u+MefG4HRolDtiI9zp/phXWFvLsNPRQIk1XLPaR79twC1
+         3F+J/lR4MKSX1mpCM57SMJsojthMF3QB0kM1cIHIwUoWCvFI6oSE2Sr+Qd4xMAu9//hm
+         pD0+KsFWH+0/tE7atQ8cLmIwC+MEsbRZluN+BoZ4PG8PFyCsIOb7krRVZwCSETMpwTip
+         qY1H5NqWxpZIj+b0kAe/Gr5pxOPV68vL5o8/LYR7Vud4l9evDW5AN4ioFxPSRhPA90Kq
+         cYBxd/PVbez9xvYPHp1pbFpupHiG1SA9r5GHCC7SvIItSJSoLnKOwsNszhb3VIkh0aZX
+         W3/w==
+X-Gm-Message-State: ABy/qLYn6xI0m6su89Kf7Wzgh1jwLds5k4nOT8/uz6pesLIH8FfTRC7C
+        XC3GZtMoaTlSmyoyQG7z+jefvRAnNNn9jMKjN5M+AAE80At0
+X-Google-Smtp-Source: APBJJlENDWFc0+lL6ohczLjG5T+JNrFBua6b/Jrk5GfKVdt7O3MLJ2njSpp6SMyhG04IdPCd4ztN+pxqXN71CC6BPnoc6qF2TK7+
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a17:902:ab81:b0:1b9:e97b:99e9 with SMTP id
+ f1-20020a170902ab8100b001b9e97b99e9mr1701115plr.3.1689040426671; Mon, 10 Jul
+ 2023 18:53:46 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 18:53:46 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a4a46106002c5e42@google.com>
+Subject: [syzbot] [bpf?] [reiserfs?] WARNING: locking bug in corrupted (2)
+From:   syzbot <syzbot+3779764ddb7a3e19437f@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com,
+        hawk@kernel.org, jack@suse.cz, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luto@kernel.org, martin.lau@linux.dev, netdev@vger.kernel.org,
+        peterz@infradead.org, reiserfs-devel@vger.kernel.org,
+        sdf@google.com, song@kernel.org, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, yhs@fb.com, yukuai3@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Mon, 2023-07-10 at 14:35 +0200, Christian Brauner wrote:
-> On Fri, Jul 07, 2023 at 08:42:31AM -0400, Jeff Layton wrote:
-> > On Wed, 2023-07-05 at 14:58 -0400, Jeff Layton wrote:
-> > > v2:
-> > > - prepend patches to add missing ctime updates
-> > > - add simple_rename_timestamp helper function
-> > > - rename ctime accessor functions as inode_get_ctime/inode_set_ctime_=
-*
-> > > - drop individual inode_ctime_set_{sec,nsec} helpers
-> > >=20
-> >=20
-> > After review by Jan and others, and Jan's ext4 rework, the diff on top
-> > of the series I posted a couple of days ago is below. I don't really
-> > want to spam everyone with another ~100 patch v3 series, but I can if
-> > you think that's best.
-> >=20
-> > Christian, what would you like me to do here?
->=20
-> I picked up the series from the list and folded the fixups you posted
-> here into the respective fs conversion patches. I hope that helps you
-> avoid a resend. You should have received a separate "thank you" mail for
-> all of this.
->=20
-> To each patch that I folded one of the fixlets from below into I added a
-> git note that records a link to your mail here and the respective patch
-> hunk from this mail that I folded into the patch. git.kernel.org will
-> show notes by default. For example,
-> https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git/commit/?h=3Dv=
-fs.ctime&id=3D8b0e3c2e99004609a16ba145bcbdfdddb78e220e
-> should show you the note I added. You can also fetch them via
-> git fetch $remote refs/notes/*:refs/notes/*
-> (You probably know that ofc but jic.) if you're interested.
->=20
-> Based on v6.5-rc1 as of today.
->=20
+Hello,
 
-Many thanks!!! I'll get to work rebasing the multigrain timestamp series
-on top of that.
+syzbot found the following issue on:
 
-> Btw, both b4 and patchwork somehow treat the series in weird was.
-> IOW, based on the message id of the cover letter I was able to pull most
-> messages except for:
->=20
-> [07/92] fs: add ctime accessors infrastructure
-> [08/92] fs: new helper: simple_rename_timestamp
-> [92/92] fs: rename i_ctime field to __i_ctime
->=20
-> which I pulled in separately. Not sure what the cause of=A0
->=20
-> this is.
+HEAD commit:    c17414a273b8 Merge tag 'sh-for-v6.5-tag1' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13cc4baca80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7ad417033279f15a
+dashboard link: https://syzkaller.appspot.com/bug?extid=3779764ddb7a3e19437f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12bbd544a80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13fd50b0a80000
 
-Good to know.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ea495e93586c/disk-c17414a2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/bdb03e817e47/vmlinux-c17414a2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/20ba23616f1f/bzImage-c17414a2.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/98d086ce1a87/mount_0.gz
 
-I ended up doing the send in two phases: one for the cover letter and
-infrastructure patches that went to everyone, and one for the per-
-subsystem patches that went do individual maintainers and lists.
+The issue was bisected to:
 
-I suspect that screwed up the message IDs somehow. Hopefully I won't
-need to do a posting like that again soon, but I'll pay closer attention
-to the message id handling next time.
+commit 2acf15b94d5b8ea8392c4b6753a6ffac3135cd78
+Author: Yu Kuai <yukuai3@huawei.com>
+Date:   Fri Jul 2 04:07:43 2021 +0000
 
-Thanks again!
---=20
-Jeff Layton <jlayton@kernel.org>
+    reiserfs: add check for root_inode in reiserfs_fill_super
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=143b663ca80000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=163b663ca80000
+console output: https://syzkaller.appspot.com/x/log.txt?x=123b663ca80000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3779764ddb7a3e19437f@syzkaller.appspotmail.com
+Fixes: 2acf15b94d5b ("reiserfs: add check for root_inode in reiserfs_fill_super")
+
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(depth >= MAX_LOCK_DEPTH)
+WARNING: CPU: 0 PID: 0 at kernel/locking/lockdep.c:5045 __lock_acquire+0x164b/0x5e20 kernel/locking/lockdep.c:5045
+Modules linked in:
+CPU: 0 PID: 0 Comm:  Not tainted 6.4.0-syzkaller-12069-gc17414a273b8 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:__lock_acquire+0x164b/0x5e20 kernel/locking/lockdep.c:5045
+Code: d2 0f 85 be 47 00 00 44 8b 3d 0d b3 44 0d 45 85 ff 0f 85 40 f8 ff ff 48 c7 c6 40 9f 6c 8a 48 c7 c7 e0 6e 6c 8a e8 b5 46 e6 ff <0f> 0b e9 29 f8 ff ff 48 8d 7d f8 48 b8 00 00 00 00 00 fc ff df 48
+RSP: 0018:ffffc90000007ca8 EFLAGS: 00010082
+RAX: 0000000000000000 RBX: 1ffff92000000fc7 RCX: 0000000000000000
+RDX: ffff8880779d5940 RSI: ffffffff814c34f7 RDI: 0000000000000001
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: ffff8880779d5940
+R13: ffff8880b982b898 R14: 0000000000000000 R15: 0000000000000000
+FS:  00005555573b8300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffde3197000 CR3: 00000000173e2000 CR4: 0000000000350ef0
+Call Trace:
+ <IRQ>
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 0 at kernel/rcu/tree_plugin.h:431 arch_local_irq_enable arch/x86/include/asm/irqflags.h:78 [inline]
+WARNING: CPU: 0 PID: 0 at kernel/rcu/tree_plugin.h:431 arch_local_irq_restore arch/x86/include/asm/irqflags.h:135 [inline]
+WARNING: CPU: 0 PID: 0 at kernel/rcu/tree_plugin.h:431 rcu_read_unlock_special kernel/rcu/tree_plugin.h:678 [inline]
+WARNING: CPU: 0 PID: 0 at kernel/rcu/tree_plugin.h:431 __rcu_read_unlock+0x24b/0x570 kernel/rcu/tree_plugin.h:426
+Modules linked in:
+CPU: 0 PID: 0 Comm:  Not tainted 6.4.0-syzkaller-12069-gc17414a273b8 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:__rcu_read_unlock+0x24b/0x570 kernel/rcu/tree_plugin.h:431
+Code: 00 e8 49 4f df ff 4d 85 f6 74 05 e8 cf c3 1c 00 9c 58 f6 c4 02 0f 85 78 02 00 00 4d 85 f6 0f 84 83 fe ff ff fb e9 7d fe ff ff <0f> 0b 5b 5d 41 5c 41 5d 41 5e c3 e8 25 50 69 00 e9 2a fe ff ff e8
+RSP: 0018:ffffc900000079d8 EFLAGS: 00010096
+RAX: 00000000ffff8880 RBX: ffff8880779d5940 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8192bb90 RDI: ffff8880779d5d7c
+RBP: ffff8880779d5940 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: ffff8880779d5940
+R13: ffffc90000007bf8 R14: 0000000000000000 R15: ffffc90000007a98
+FS:  00005555573b8300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffde3197000 CR3: 00000000173e2000 CR4: 0000000000350ef0
+Call Trace:
+ <IRQ>
+ rcu_read_unlock include/linux/rcupdate.h:781 [inline]
+ is_bpf_text_address+0x85/0x1b0 kernel/bpf/core.c:721
+ kernel_text_address kernel/extable.c:125 [inline]
+ kernel_text_address+0x3d/0x80 kernel/extable.c:94
+ __kernel_text_address+0xd/0x30 kernel/extable.c:79
+ show_trace_log_lvl+0x1c7/0x390 arch/x86/kernel/dumpstack.c:259
+ __warn+0xe6/0x390 kernel/panic.c:671
+ __report_bug lib/bug.c:199 [inline]
+ report_bug+0x2da/0x500 lib/bug.c:219
+ handle_bug+0x3c/0x70 arch/x86/kernel/traps.c:324
+ exc_invalid_op+0x18/0x50 arch/x86/kernel/traps.c:345
+ asm_exc_invalid_op+0x1a/0x20 arch/x86/include/asm/idtentry.h:568
+RIP: 0010:__lock_acquire+0x164b/0x5e20 kernel/locking/lockdep.c:5045
+Code: d2 0f 85 be 47 00 00 44 8b 3d 0d b3 44 0d 45 85 ff 0f 85 40 f8 ff ff 48 c7 c6 40 9f 6c 8a 48 c7 c7 e0 6e 6c 8a e8 b5 46 e6 ff <0f> 0b e9 29 f8 ff ff 48 8d 7d f8 48 b8 00 00 00 00 00 fc ff df 48
+RSP: 0018:ffffc90000007ca8 EFLAGS: 00010082
+RAX: 0000000000000000 RBX: 1ffff92000000fc7 RCX: 0000000000000000
+RDX: ffff8880779d5940 RSI: ffffffff814c34f7 RDI: 0000000000000001
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: ffff8880779d5940
+R13: ffff8880b982b898 R14: 0000000000000000 R15: 0000000000000000
+ lock_acquire kernel/locking/lockdep.c:5761 [inline]
+ lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5726
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
+ hrtimer_interrupt+0x107/0x7b0 kernel/time/hrtimer.c:1795
+ local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1098 [inline]
+ __sysvec_apic_timer_interrupt+0x14a/0x430 arch/x86/kernel/apic/apic.c:1115
+ sysvec_apic_timer_interrupt+0x92/0xc0 arch/x86/kernel/apic/apic.c:1109
+ </IRQ>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
