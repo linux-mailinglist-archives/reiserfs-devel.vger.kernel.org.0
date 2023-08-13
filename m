@@ -2,80 +2,55 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6D6778F7A
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 11 Aug 2023 14:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 563F777A563
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 13 Aug 2023 09:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236537AbjHKM1e (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 11 Aug 2023 08:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
+        id S230194AbjHMHYM (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 13 Aug 2023 03:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235414AbjHKM1c (ORCPT
+        with ESMTP id S229451AbjHMHYM (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 11 Aug 2023 08:27:32 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E55FE60;
-        Fri, 11 Aug 2023 05:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=96Jyxa0hgrG24aZgu2ilDmsPaDJbIFT8CvAcqFGq7ak=; b=Lt8QMt/qiwPklQXJKNxAAayl50
-        ejm5z3TauQQgWXDYeiy6ev7CoxuktCUjLml+tQTXB0FrmwYo9bGjhm2G8bwiVtr2qWkYfM3c8FNl1
-        cPDaz7ayPa6vktH3ev1ZeHUse0hr9sV3dSKzn62142iTuA8TTM4tDaiYAHOFhJAm7nP3aQxRbODoe
-        cl8s2GHmVFeXScu6jrXcZHGDTmN2udO8XZ0pPwfpsd5QoOiRLOiFHXD6KYR9f2MEyvA/KeT9RzHmF
-        DIvDgADu/AxqynsuMYC3hcwdLyXOsBeZQBLnrFNVOoRqDCMnS+8kcWICKZ1ml8I/4TT3bYAOcmKWy
-        N15IsxAA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qUREm-00Abyw-17;
-        Fri, 11 Aug 2023 12:27:28 +0000
-Date:   Fri, 11 Aug 2023 05:27:28 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Alasdair Kergon <agk@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Kleikamp <shaggy@kernel.org>,
-        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        jfs-discussion@lists.sourceforge.net,
-        Joern Engel <joern@lazybastard.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-xfs@vger.kernel.org,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Song Liu <song@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v2 0/29] block: Make blkdev_get_by_*() return handle
-Message-ID: <ZNYpMPM5o4q1xcIt@infradead.org>
-References: <20230810171429.31759-1-jack@suse.cz>
+        Sun, 13 Aug 2023 03:24:12 -0400
+Received: from mail-pg1-f207.google.com (mail-pg1-f207.google.com [209.85.215.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3566B1702
+        for <reiserfs-devel@vger.kernel.org>; Sun, 13 Aug 2023 00:24:13 -0700 (PDT)
+Received: by mail-pg1-f207.google.com with SMTP id 41be03b00d2f7-564fa3b49e1so3413860a12.0
+        for <reiserfs-devel@vger.kernel.org>; Sun, 13 Aug 2023 00:24:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691911452; x=1692516252;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4ZDNLf1x53mQ0m7AfzRC5QKLe+W/WZUAtVRBH4vOaqU=;
+        b=d25biuZuOcXazTrESVaQH56Jx8krf5zF9X0xTMuN801y29joaiLYpDFKATfLV8yxo/
+         Q1Yr46IRGK5p7v7+XcNhxoNVLLui64l/bpbvy+ktRiWEXSVpe6iYyRpu4bEV77+Qpz29
+         T48kex0zfYZPbONp+u75g+1QCQowpSGRBIqhM74trkv4cGJ79FoS9bbSMD/Ll992AUe4
+         M6scGJUVz0hIZ1JYefQeXJt/OJ2FwcoE0XBMknrD9GN+UHZmIPm3CKfP69RzgDNXvyHe
+         nA3rMDjL5J/St2GFgJU9Bgbz+jDY4+aP0CVGUwqRm+ZdU72DO91znPeOrTj4vvRnGgUl
+         WyRA==
+X-Gm-Message-State: AOJu0Yzg2RrFKErGhgRBY+x/XTDWMDdVluMAnP0TQ7BahYAKTKRIAU1x
+        XuVufkCg9N3x7ypceo8rl5Y+sKCePWdWPnXoXPcMluBAZ1cD
+X-Google-Smtp-Source: AGHT+IHisSxAI0yURuRrjduklifwHsqlp0NIqF/tB6lRL3gAU/UHYKwzfNV5o0bPVPVnfREXasqCxkniWNxjDk22g7fQheD2sDZQ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230810171429.31759-1-jack@suse.cz>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Received: by 2002:a63:3e48:0:b0:564:6e43:a00d with SMTP id
+ l69-20020a633e48000000b005646e43a00dmr1088913pga.3.1691911452735; Sun, 13 Aug
+ 2023 00:24:12 -0700 (PDT)
+Date:   Sun, 13 Aug 2023 00:24:12 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000021c1240602c8d549@google.com>
+Subject: [syzbot] [dri?] [reiserfs?] WARNING: bad unlock balance in vkms_vblank_simulate
+From:   syzbot <syzbot+5671b8bcd5178fe56c23@syzkaller.appspotmail.com>
+To:     airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, hamohammed.sa@gmail.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mairacanal@riseup.net, melissa.srw@gmail.com,
+        reiserfs-devel@vger.kernel.org, rodrigosiqueiramelo@gmail.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,9 +58,131 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Except for a mostly cosmetic nitpick this looks good to me:
+Hello,
 
-Acked-by: Christoph Hellwig <hch@lst.de>
+syzbot found the following issue on:
 
-That's not eactly the deep review I'd like to do, but as I'm about to
-head out for vacation that's probably as good as it gets.
+HEAD commit:    71cd4fc492ec Add linux-next specific files for 20230808
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=11faa1eda80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e36b5ba725f7349d
+dashboard link: https://syzkaller.appspot.com/bug?extid=5671b8bcd5178fe56c23
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17a54d0ba80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13e2281ba80000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/5ea26a69f422/disk-71cd4fc4.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c4a6b00863bf/vmlinux-71cd4fc4.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/888c2025ec30/bzImage-71cd4fc4.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/3620b064e309/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5671b8bcd5178fe56c23@syzkaller.appspotmail.com
+
+=====================================
+WARNING: bad unlock balance detected!
+6.5.0-rc5-next-20230808-syzkaller #0 Not tainted
+-------------------------------------
+swapper/0/0 is trying to release lock (&vkms_out->enabled_lock) at:
+[<ffffffff852badf9>] vkms_vblank_simulate+0x159/0x3d0 drivers/gpu/drm/vkms/vkms_crtc.c:34
+but there are no more locks to release!
+
+other info that might help us debug this:
+no locks held by swapper/0/0.
+
+stack backtrace:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.5.0-rc5-next-20230808-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/26/2023
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x1b0 lib/dump_stack.c:106
+ __lock_release kernel/locking/lockdep.c:5438 [inline]
+ lock_release+0x4b5/0x680 kernel/locking/lockdep.c:5781
+ __mutex_unlock_slowpath+0xa3/0x640 kernel/locking/mutex.c:907
+ vkms_vblank_simulate+0x159/0x3d0 drivers/gpu/drm/vkms/vkms_crtc.c:34
+ __run_hrtimer kernel/time/hrtimer.c:1688 [inline]
+ __hrtimer_run_queues+0x203/0xc10 kernel/time/hrtimer.c:1752
+ hrtimer_interrupt+0x31b/0x800 kernel/time/hrtimer.c:1814
+ local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1098 [inline]
+ __sysvec_apic_timer_interrupt+0x14a/0x430 arch/x86/kernel/apic/apic.c:1115
+ sysvec_apic_timer_interrupt+0x8e/0xc0 arch/x86/kernel/apic/apic.c:1109
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
+RIP: 0010:native_irq_disable arch/x86/include/asm/irqflags.h:37 [inline]
+RIP: 0010:arch_local_irq_disable arch/x86/include/asm/irqflags.h:72 [inline]
+RIP: 0010:acpi_safe_halt+0x1b/0x20 drivers/acpi/processor_idle.c:113
+Code: ed c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 65 48 8b 04 25 c0 bc 03 00 48 8b 00 a8 08 75 0c 66 90 0f 00 2d 57 9d 99 00 fb f4 <fa> c3 0f 1f 00 0f b6 47 08 3c 01 74 0b 3c 02 74 05 8b 7f 04 eb 9f
+RSP: 0000:ffffffff8c607d70 EFLAGS: 00000246
+RAX: 0000000000004000 RBX: 0000000000000001 RCX: ffffffff8a3a232e
+RDX: 0000000000000001 RSI: ffff888144e77800 RDI: ffff888144e77864
+RBP: ffff888144e77864 R08: 0000000000000001 R09: ffffed1017306dbd
+R10: ffff8880b9836deb R11: 0000000000000000 R12: ffff888141ed8000
+R13: ffffffff8d45c680 R14: 0000000000000000 R15: 0000000000000000
+ acpi_idle_enter+0xc5/0x160 drivers/acpi/processor_idle.c:707
+ cpuidle_enter_state+0x82/0x500 drivers/cpuidle/cpuidle.c:267
+ cpuidle_enter+0x4e/0xa0 drivers/cpuidle/cpuidle.c:388
+ cpuidle_idle_call kernel/sched/idle.c:215 [inline]
+ do_idle+0x315/0x3f0 kernel/sched/idle.c:282
+ cpu_startup_entry+0x18/0x20 kernel/sched/idle.c:379
+ rest_init+0x16f/0x2b0 init/main.c:726
+ arch_call_rest_init+0x13/0x30 init/main.c:823
+ start_kernel+0x39f/0x480 init/main.c:1068
+ x86_64_start_reservations+0x18/0x30 arch/x86/kernel/head64.c:556
+ x86_64_start_kernel+0xb2/0xc0 arch/x86/kernel/head64.c:537
+ secondary_startup_64_no_verify+0x167/0x16b
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	ed                   	in     (%dx),%eax
+   1:	c3                   	ret
+   2:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+   9:	00 00 00 00
+   d:	66 90                	xchg   %ax,%ax
+   f:	65 48 8b 04 25 c0 bc 	mov    %gs:0x3bcc0,%rax
+  16:	03 00
+  18:	48 8b 00             	mov    (%rax),%rax
+  1b:	a8 08                	test   $0x8,%al
+  1d:	75 0c                	jne    0x2b
+  1f:	66 90                	xchg   %ax,%ax
+  21:	0f 00 2d 57 9d 99 00 	verw   0x999d57(%rip)        # 0x999d7f
+  28:	fb                   	sti
+  29:	f4                   	hlt
+* 2a:	fa                   	cli <-- trapping instruction
+  2b:	c3                   	ret
+  2c:	0f 1f 00             	nopl   (%rax)
+  2f:	0f b6 47 08          	movzbl 0x8(%rdi),%eax
+  33:	3c 01                	cmp    $0x1,%al
+  35:	74 0b                	je     0x42
+  37:	3c 02                	cmp    $0x2,%al
+  39:	74 05                	je     0x40
+  3b:	8b 7f 04             	mov    0x4(%rdi),%edi
+  3e:	eb 9f                	jmp    0xffffffdf
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
