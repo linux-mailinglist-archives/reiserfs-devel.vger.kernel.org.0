@@ -2,187 +2,115 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563F777A563
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 13 Aug 2023 09:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 300097818B9
+	for <lists+reiserfs-devel@lfdr.de>; Sat, 19 Aug 2023 12:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbjHMHYM (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sun, 13 Aug 2023 03:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
+        id S229592AbjHSKa2 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sat, 19 Aug 2023 06:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjHMHYM (ORCPT
+        with ESMTP id S229553AbjHSKa1 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sun, 13 Aug 2023 03:24:12 -0400
-Received: from mail-pg1-f207.google.com (mail-pg1-f207.google.com [209.85.215.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3566B1702
-        for <reiserfs-devel@vger.kernel.org>; Sun, 13 Aug 2023 00:24:13 -0700 (PDT)
-Received: by mail-pg1-f207.google.com with SMTP id 41be03b00d2f7-564fa3b49e1so3413860a12.0
-        for <reiserfs-devel@vger.kernel.org>; Sun, 13 Aug 2023 00:24:13 -0700 (PDT)
+        Sat, 19 Aug 2023 06:30:27 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9369812E67C
+        for <reiserfs-devel@vger.kernel.org>; Sat, 19 Aug 2023 02:05:54 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fe32016bc8so15758755e9.1
+        for <reiserfs-devel@vger.kernel.org>; Sat, 19 Aug 2023 02:05:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692435953; x=1693040753;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9kydyMnwD//o0quRqImkimRYfrWW9k+FT8t/oHoxyE8=;
+        b=EMeETWWtNYO53aIR7ilAQa+yRJPSCo/+ORHw27NtLDT57gTdmFSFiUErB2cRG//eup
+         lNb+IzEyL8PyqrE+BW0iemmdHZLbi0/kXxCUtBHfWtrdLQGULCCJDOhirrK8d2MOvtAT
+         UMyQiqOhw8NWIXzO6CnYKihOlmwI2FRiFVjYID1OiJeDzJNfrQwaUW73TX+Hzqhz/Al2
+         iTsLko5gRVA07tcQ76B4f1ImUjqR/IAJQkAdFnvKFsWVK1XdWbsoypm6Q3dXnHOcI0hf
+         iWgFggjRyCGl/j2QXaLXo5KLfJKjJCqdXiSeN7G7I5bw1SrLF+n/KP0tBC9bHgmzDAK9
+         f8jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691911452; x=1692516252;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4ZDNLf1x53mQ0m7AfzRC5QKLe+W/WZUAtVRBH4vOaqU=;
-        b=d25biuZuOcXazTrESVaQH56Jx8krf5zF9X0xTMuN801y29joaiLYpDFKATfLV8yxo/
-         Q1Yr46IRGK5p7v7+XcNhxoNVLLui64l/bpbvy+ktRiWEXSVpe6iYyRpu4bEV77+Qpz29
-         T48kex0zfYZPbONp+u75g+1QCQowpSGRBIqhM74trkv4cGJ79FoS9bbSMD/Ll992AUe4
-         M6scGJUVz0hIZ1JYefQeXJt/OJ2FwcoE0XBMknrD9GN+UHZmIPm3CKfP69RzgDNXvyHe
-         nA3rMDjL5J/St2GFgJU9Bgbz+jDY4+aP0CVGUwqRm+ZdU72DO91znPeOrTj4vvRnGgUl
-         WyRA==
-X-Gm-Message-State: AOJu0Yzg2RrFKErGhgRBY+x/XTDWMDdVluMAnP0TQ7BahYAKTKRIAU1x
-        XuVufkCg9N3x7ypceo8rl5Y+sKCePWdWPnXoXPcMluBAZ1cD
-X-Google-Smtp-Source: AGHT+IHisSxAI0yURuRrjduklifwHsqlp0NIqF/tB6lRL3gAU/UHYKwzfNV5o0bPVPVnfREXasqCxkniWNxjDk22g7fQheD2sDZQ
+        d=1e100.net; s=20221208; t=1692435953; x=1693040753;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9kydyMnwD//o0quRqImkimRYfrWW9k+FT8t/oHoxyE8=;
+        b=lGQpntHkKzQy22NQDWM9AdLbknLbO/CjF/ppstcKf7ZQeu/9zsllRR5A8rykRuWKft
+         CEwM0Ebwpo3y3m+D/LrlTWigBzS/srWiN1PjT2SNjJA7bVe0GW3mNsp1i9HjBvJqZDQl
+         V+VKT+28kZso1sfynoGOYi6jkqqiIHfBrWCm/KK4FrK+HNnw2w7ia6VEb8UcgIZM692U
+         SUfjKWr1PP7SAaKFteC77aM0olgaF9wSlWQzGgWqJouFFWjUa0JHDNVJ7XxBq+W9+iN4
+         IqRdTavozv23yPIOi9d9ryC17sgVc10vjT7AY7XHEc6i96a3kUtVD8yBHZLWoVuxgJOE
+         SS0w==
+X-Gm-Message-State: AOJu0YwuTJzcYWn0YUig072AyRtWoGTaSxCifDZIKqydNLD27RFEVG9+
+        wHiyJibuLIpy03IIrIg3nhSDf8RqqlNmyBkXmaU=
+X-Google-Smtp-Source: AGHT+IHtGTbu/b+xYZU7cRj71BSiH6aNczFAWS8B4Ty34hUlCQues71PeLQDMnW4GueEXENMzxlfaBPtJUIDGUaAP7Y=
+X-Received: by 2002:a05:600c:204b:b0:3fe:1dad:540f with SMTP id
+ p11-20020a05600c204b00b003fe1dad540fmr1011764wmg.10.1692435952890; Sat, 19
+ Aug 2023 02:05:52 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a63:3e48:0:b0:564:6e43:a00d with SMTP id
- l69-20020a633e48000000b005646e43a00dmr1088913pga.3.1691911452735; Sun, 13 Aug
- 2023 00:24:12 -0700 (PDT)
-Date:   Sun, 13 Aug 2023 00:24:12 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000021c1240602c8d549@google.com>
-Subject: [syzbot] [dri?] [reiserfs?] WARNING: bad unlock balance in vkms_vblank_simulate
-From:   syzbot <syzbot+5671b8bcd5178fe56c23@syzkaller.appspotmail.com>
-To:     airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, hamohammed.sa@gmail.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mairacanal@riseup.net, melissa.srw@gmail.com,
-        reiserfs-devel@vger.kernel.org, rodrigosiqueiramelo@gmail.com,
-        syzkaller-bugs@googlegroups.com
+Reply-To: razumkoykhailo@gmail.com
+Sender: wunionofficedept@gmail.com
+Received: by 2002:a05:6021:9115:b0:294:7fda:e13f with HTTP; Sat, 19 Aug 2023
+ 02:05:52 -0700 (PDT)
+From:   "Mr.Razum Khailo" <razumkoykhailo@gmail.com>
+Date:   Sat, 19 Aug 2023 02:05:52 -0700
+X-Google-Sender-Auth: 6-mWbQi2niAxocRLoYEGgHq41Gk
+Message-ID: <CAKheY8eOp1+nPwSLYeGcjp0PA6616BbtfuCFC6H7-0UgbO8DYA@mail.gmail.com>
+Subject: Greetings from Ukraine,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        MILLION_USD,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    71cd4fc492ec Add linux-next specific files for 20230808
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=11faa1eda80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e36b5ba725f7349d
-dashboard link: https://syzkaller.appspot.com/bug?extid=5671b8bcd5178fe56c23
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17a54d0ba80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13e2281ba80000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/5ea26a69f422/disk-71cd4fc4.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c4a6b00863bf/vmlinux-71cd4fc4.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/888c2025ec30/bzImage-71cd4fc4.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/3620b064e309/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5671b8bcd5178fe56c23@syzkaller.appspotmail.com
-
-=====================================
-WARNING: bad unlock balance detected!
-6.5.0-rc5-next-20230808-syzkaller #0 Not tainted
--------------------------------------
-swapper/0/0 is trying to release lock (&vkms_out->enabled_lock) at:
-[<ffffffff852badf9>] vkms_vblank_simulate+0x159/0x3d0 drivers/gpu/drm/vkms/vkms_crtc.c:34
-but there are no more locks to release!
-
-other info that might help us debug this:
-no locks held by swapper/0/0.
-
-stack backtrace:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.5.0-rc5-next-20230808-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/26/2023
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x1b0 lib/dump_stack.c:106
- __lock_release kernel/locking/lockdep.c:5438 [inline]
- lock_release+0x4b5/0x680 kernel/locking/lockdep.c:5781
- __mutex_unlock_slowpath+0xa3/0x640 kernel/locking/mutex.c:907
- vkms_vblank_simulate+0x159/0x3d0 drivers/gpu/drm/vkms/vkms_crtc.c:34
- __run_hrtimer kernel/time/hrtimer.c:1688 [inline]
- __hrtimer_run_queues+0x203/0xc10 kernel/time/hrtimer.c:1752
- hrtimer_interrupt+0x31b/0x800 kernel/time/hrtimer.c:1814
- local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1098 [inline]
- __sysvec_apic_timer_interrupt+0x14a/0x430 arch/x86/kernel/apic/apic.c:1115
- sysvec_apic_timer_interrupt+0x8e/0xc0 arch/x86/kernel/apic/apic.c:1109
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
-RIP: 0010:native_irq_disable arch/x86/include/asm/irqflags.h:37 [inline]
-RIP: 0010:arch_local_irq_disable arch/x86/include/asm/irqflags.h:72 [inline]
-RIP: 0010:acpi_safe_halt+0x1b/0x20 drivers/acpi/processor_idle.c:113
-Code: ed c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 65 48 8b 04 25 c0 bc 03 00 48 8b 00 a8 08 75 0c 66 90 0f 00 2d 57 9d 99 00 fb f4 <fa> c3 0f 1f 00 0f b6 47 08 3c 01 74 0b 3c 02 74 05 8b 7f 04 eb 9f
-RSP: 0000:ffffffff8c607d70 EFLAGS: 00000246
-RAX: 0000000000004000 RBX: 0000000000000001 RCX: ffffffff8a3a232e
-RDX: 0000000000000001 RSI: ffff888144e77800 RDI: ffff888144e77864
-RBP: ffff888144e77864 R08: 0000000000000001 R09: ffffed1017306dbd
-R10: ffff8880b9836deb R11: 0000000000000000 R12: ffff888141ed8000
-R13: ffffffff8d45c680 R14: 0000000000000000 R15: 0000000000000000
- acpi_idle_enter+0xc5/0x160 drivers/acpi/processor_idle.c:707
- cpuidle_enter_state+0x82/0x500 drivers/cpuidle/cpuidle.c:267
- cpuidle_enter+0x4e/0xa0 drivers/cpuidle/cpuidle.c:388
- cpuidle_idle_call kernel/sched/idle.c:215 [inline]
- do_idle+0x315/0x3f0 kernel/sched/idle.c:282
- cpu_startup_entry+0x18/0x20 kernel/sched/idle.c:379
- rest_init+0x16f/0x2b0 init/main.c:726
- arch_call_rest_init+0x13/0x30 init/main.c:823
- start_kernel+0x39f/0x480 init/main.c:1068
- x86_64_start_reservations+0x18/0x30 arch/x86/kernel/head64.c:556
- x86_64_start_kernel+0xb2/0xc0 arch/x86/kernel/head64.c:537
- secondary_startup_64_no_verify+0x167/0x16b
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	ed                   	in     (%dx),%eax
-   1:	c3                   	ret
-   2:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
-   9:	00 00 00 00
-   d:	66 90                	xchg   %ax,%ax
-   f:	65 48 8b 04 25 c0 bc 	mov    %gs:0x3bcc0,%rax
-  16:	03 00
-  18:	48 8b 00             	mov    (%rax),%rax
-  1b:	a8 08                	test   $0x8,%al
-  1d:	75 0c                	jne    0x2b
-  1f:	66 90                	xchg   %ax,%ax
-  21:	0f 00 2d 57 9d 99 00 	verw   0x999d57(%rip)        # 0x999d7f
-  28:	fb                   	sti
-  29:	f4                   	hlt
-* 2a:	fa                   	cli <-- trapping instruction
-  2b:	c3                   	ret
-  2c:	0f 1f 00             	nopl   (%rax)
-  2f:	0f b6 47 08          	movzbl 0x8(%rdi),%eax
-  33:	3c 01                	cmp    $0x1,%al
-  35:	74 0b                	je     0x42
-  37:	3c 02                	cmp    $0x2,%al
-  39:	74 05                	je     0x40
-  3b:	8b 7f 04             	mov    0x4(%rdi),%edi
-  3e:	eb 9f                	jmp    0xffffffdf
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+R3JlZXRpbmdzwqBmcm9twqBVa3JhaW5lLA0KDQpNci7CoFJhenVta292wqBNeWtoYWlsbyzCoGFu
+wqBlbnRyZXByZW5ldXLCoGJ1c2luZXNzbWFuwqBmcm9twqBPZGVzc2ENClVrcmFpbmUuwqBXaXRo
+aW7CoGHCoHllYXLCoHBsdXPCoHNvbWXCoG1vbnRoc8Kgbm93LMKgbW9yZcKgdGhhbsKgOC4ywqBt
+aWxsaW9uDQpwZW9wbGXCoGFyb3VuZMKgdGhlwqBjaXRpZXPCoG9mwqBtecKgY291bnRyecKgVWty
+YWluZcKgaGF2ZcKgYmVlbsKgZXZhY3VhdGVkwqB0bw0KYcKgc2FmZcKgbG9jYXRpb27CoGFuZMKg
+b3V0wqBvZsKgdGhlwqBjb3VudHJ5LMKgbW9zdMKgZXNwZWNpYWxsecKgY2hpbGRyZW7CoHdpdGgN
+CnRoZWlywqBwYXJlbnRzLMKgbnVyc2luZ8KgbW90aGVyc8KgYW5kwqBwcmVnbmFudMKgd29tZW4s
+wqBhbmTCoHRob3NlwqB3aG/CoGhhdmUNCmJlZW7CoHNlcmlvdXNsecKgd291bmRlZMKgYW5kwqBu
+ZWVkwqB1cmdlbnTCoG1lZGljYWzCoGF0dGVudGlvbi7CoEnCoHdhc8KgYW1vbmcNCnRob3NlwqB0
+aGF0wqB3ZXJlwqBhYmxlwqB0b8KgZXZhY3VhdGXCoHRvwqBvdXLCoG5laWdoYm91cmluZ8KgY291
+bnRyaWVzwqBhbmTCoEnigJltDQpub3fCoGluwqB0aGXCoHJlZnVnZWXCoGNhbXDCoG9mwqBUZXLC
+oEFwZWzCoEdyb25pbmdlbsKgaW7CoHRoZcKgTmV0aGVybGFuZHMuDQoNCknCoG5lZWTCoGHCoGZv
+cmVpZ27CoHBhcnRuZXLCoHRvwqBlbmFibGXCoG1lwqB0b8KgdHJhbnNwb3J0wqBtecKgaW52ZXN0
+bWVudA0KY2FwaXRhbMKgYW5kwqB0aGVuwqByZWxvY2F0ZcKgd2l0aMKgbXnCoGZhbWlseSzCoGhv
+bmVzdGx5wqBpwqB3aXNowqBJwqB3aWxsDQpkaXNjdXNzwqBtb3JlwqBhbmTCoGdldMKgYWxvbmcu
+wqBJwqBuZWVkwqBhwqBwYXJ0bmVywqBiZWNhdXNlwqBtecKgaW52ZXN0bWVudA0KY2FwaXRhbMKg
+aXPCoGluwqBtecKgaW50ZXJuYXRpb25hbMKgYWNjb3VudC7CoEnigJltwqBpbnRlcmVzdGVkwqBp
+bsKgYnV5aW5nDQpwcm9wZXJ0aWVzLMKgaG91c2VzLMKgYnVpbGRpbmfCoHJlYWzCoGVzdGF0ZXMs
+wqBtecKgY2FwaXRhbMKgZm9ywqBpbnZlc3RtZW50DQppc8KgKCQzMMKgTWlsbGlvbsKgVVNEKcKg
+LsKgVGhlwqBmaW5hbmNpYWzCoGluc3RpdHV0aW9uc8KgaW7CoG15wqBjb3VudHJ5DQpVa3JhaW5l
+wqBhcmXCoGFsbMKgc2hvdMKgZG93bsKgZHVlwqB0b8KgdGhlwqBjcmlzaXPCoG9mwqB0aGlzwqB3
+YXLCoG9uwqBVa3JhaW5lDQpzb2lswqBiecKgdGhlwqBSdXNzaWFuwqBmb3JjZXMuwqBNZWFud2hp
+bGUswqBpZsKgdGhlcmXCoGlzwqBhbnnCoHByb2ZpdGFibGUNCmludmVzdG1lbnTCoHRoYXTCoHlv
+dcKgaGF2ZcKgc2/CoG11Y2jCoGV4cGVyaWVuY2XCoGluwqB5b3VywqBjb3VudHJ5LMKgdGhlbsKg
+d2UNCmNhbsKgam9pbsKgdG9nZXRoZXLCoGFzwqBwYXJ0bmVyc8Kgc2luY2XCoEnigJltwqBhwqBm
+b3JlaWduZXIuDQoNCknCoGNhbWXCoGFjcm9zc8KgeW91csKgZS1tYWlswqBjb250YWN0wqB0aHJv
+dWdowqBwcml2YXRlwqBzZWFyY2jCoHdoaWxlwqBpbsKgbmVlZA0Kb2bCoHlvdXLCoGFzc2lzdGFu
+Y2XCoGFuZMKgScKgZGVjaWRlZMKgdG/CoGNvbnRhY3TCoHlvdcKgZGlyZWN0bHnCoHRvwqBhc2vC
+oHlvdcKgaWYNCnlvdcKga25vd8KgYW55wqBsdWNyYXRpdmXCoGJ1c2luZXNzwqBpbnZlc3RtZW50
+wqBpbsKgeW91csKgY291bnRyecKgacKgY2FuDQppbnZlc3TCoG15wqBtb25lecKgc2luY2XCoG15
+wqBjb3VudHJ5wqBVa3JhaW5lwqBzZWN1cml0ecKgYW5kwqBlY29ub21pYw0KaW5kZXBlbmRlbnTC
+oGhhc8KgbG9zdMKgdG/CoHRoZcKgZ3JlYXRlc3TCoGxvd2VywqBsZXZlbCzCoGFuZMKgb3VywqBj
+dWx0dXJlwqBoYXMNCmxvc3TCoGluY2x1ZGluZ8Kgb3VywqBoYXBwaW5lc3PCoGhhc8KgYmVlbsKg
+dGFrZW7CoGF3YXnCoGZyb23CoHVzLsKgT3VywqBjb3VudHJ5DQpoYXPCoGJlZW7CoG9uwqBmaXJl
+wqBmb3LCoG1vcmXCoHRoYW7CoGHCoHllYXLCoG5vdy4NCg0KSWbCoHlvdcKgYXJlwqBjYXBhYmxl
+wqBvZsKgaGFuZGxpbmfCoHRoaXPCoGJ1c2luZXNzwqBwYXJ0bmVyc2hpcCzCoGNvbnRhY3TCoG1l
+DQpmb3LCoG1vcmXCoGRldGFpbHMswqBJwqB3aWxswqBhcHByZWNpYXRlwqBpdMKgaWbCoHlvdcKg
+Y2FuwqBjb250YWN0wqBtZQ0KaW1tZWRpYXRlbHkuwqBZb3XCoG1hecKgYXPCoHdlbGzCoHRlbGzC
+oG1lwqBhwqBsaXR0bGXCoG1vcmXCoGFib3V0wqB5b3Vyc2VsZi4NCkNvbnRhY3TCoG1lwqB1cmdl
+bnRsecKgdG/CoGVuYWJsZcKgdXPCoHRvwqBwcm9jZWVkwqB3aXRowqB0aGXCoGJ1c2luZXNzLsKg
+ScKgd2lsbA0KYmXCoHdhaXRpbmfCoGZvcsKgeW91csKgcmVzcG9uc2UuwqBNecKgc2luY2VyZcKg
+YXBvbG9naWVzwqBmb3LCoHRoZQ0KaW5jb252ZW5pZW5jZS4NCg0KDQpUaGFua8KgeW91IQ0KDQpN
+ci4gUmF6dW1rb3bCoE15a2hhaWxvLg0K
