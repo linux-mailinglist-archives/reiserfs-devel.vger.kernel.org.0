@@ -2,198 +2,107 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA8C794525
-	for <lists+reiserfs-devel@lfdr.de>; Wed,  6 Sep 2023 23:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2375E79A0A1
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 11 Sep 2023 01:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjIFVfX (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 6 Sep 2023 17:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S229871AbjIJXb5 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 10 Sep 2023 19:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233000AbjIFVfV (ORCPT
+        with ESMTP id S229687AbjIJXb5 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 6 Sep 2023 17:35:21 -0400
-Received: from mail-pl1-f206.google.com (mail-pl1-f206.google.com [209.85.214.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D4C19A9
-        for <reiserfs-devel@vger.kernel.org>; Wed,  6 Sep 2023 14:35:15 -0700 (PDT)
-Received: by mail-pl1-f206.google.com with SMTP id d9443c01a7336-1bf525c269cso3631475ad.1
-        for <reiserfs-devel@vger.kernel.org>; Wed, 06 Sep 2023 14:35:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694036115; x=1694640915;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AF+QLvnv3Ner2dzu27pFKXA8E2NnGG2JZHcD6NYjSTI=;
-        b=jLT3j3qWNDUpCuyKHR4y6sTomIGr9GCyFOvFZTcaZrV55wDhyMq365NzMPBH2kcvax
-         8i143Jf8x6uHUYx67qU4i5iHt3aV5HHqrLOT7mKXrxO+B1vQBiB4Wd0UUtPRVF1I1ZHY
-         RUaWhc7Y48AzabcT9lQdCA/FNtRCxJ8a340OiiVbYI+DiE0R4reQMfXqk1yfrzLPzkHQ
-         Od+wBbgikVT28/8k0W9HIpK0fOCBQ+ImpMUGA8RA2/LiLiDEMPHTfzspiHj6rTmllVjW
-         LqTZz4rYx7IlIEhLWoPJcxUF9uOc3bFs6MjIVvHNRfa4HjYjhzK8yfxSjyTZ9ImRtmKn
-         zsog==
-X-Gm-Message-State: AOJu0YxAxXEzr8UNg5+OPpvWJJVKqdXP3DxNdVOSBSQzkgcJmYwDY9Jw
-        tJEuT11LUH9SAE8v1rycU+WuM9QN2y8TFTu6/Nym5rTLcMlt
-X-Google-Smtp-Source: AGHT+IH0jSaJ5gLdKHr1IhZJSXcBBHTZfRV9OrYpfiO+gssm8XYSHAYVpdiIXR6iEoGEJCxpEXIPZwNawlIAsLKG2kfYUYmzWVXN
-MIME-Version: 1.0
-X-Received: by 2002:a17:902:f686:b0:1c1:f00a:64d5 with SMTP id
- l6-20020a170902f68600b001c1f00a64d5mr5936399plg.4.1694036115176; Wed, 06 Sep
- 2023 14:35:15 -0700 (PDT)
-Date:   Wed, 06 Sep 2023 14:35:15 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e1c4c10604b7849d@google.com>
-Subject: [syzbot] [reiserfs?] BUG: unable to handle kernel paging request in mas_alloc_nodes
-From:   syzbot <syzbot+de4269ef04437bffcaa9@syzkaller.appspotmail.com>
-To:     bpf@vger.kernel.org, brauner@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Sun, 10 Sep 2023 19:31:57 -0400
+X-Greylist: delayed 300 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 10 Sep 2023 16:31:51 PDT
+Received: from aib29gb127.yyz1.oracleemaildelivery.com (aib29gb127.yyz1.oracleemaildelivery.com [192.29.72.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95ACD184
+        for <reiserfs-devel@vger.kernel.org>; Sun, 10 Sep 2023 16:31:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=oci-2023;
+ d=n8pjl.ca;
+ h=Date:To:From:Subject:Message-Id:MIME-Version:Sender;
+ bh=+QmQ39qJAAicmUv+YuxOplwYcssmPoT+fv3BqZix0gE=;
+ b=cMBY11lBX3zAl4jH/9XHe1TshHdQ0BSWyowOIHEDdyieM9cMzLpSPK6H9YanHCUCejmMOunI9bsK
+   NUCeaD+3x8l4ldoP8dhLEvcm9sImjxNB75pXo8CNP85B+2xhoIV/VcEYOmoQqNsAZBHBqDJYmPR/
+   mCHIFOflhAbPEVcdBrw9iNMY8Xb5U3OojMZLPwszO/qmcu3AuwLQcZDPznOTJbrZeAhCLeuI+OP1
+   R71zhBxnOaslxHng6s3oWyt6PCJJvLUmTW3M7yljwjE2PP/Kr6hXU6vdjsX4+vUYMseUmN6Zwli0
+   N+l+SNK7TlBSdx1H8V17aU40g4f16uWwMq9wqA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=prod-yyz-20200204;
+ d=yyz1.rp.oracleemaildelivery.com;
+ h=Date:To:From:Subject:Message-Id:MIME-Version:Sender;
+ bh=+QmQ39qJAAicmUv+YuxOplwYcssmPoT+fv3BqZix0gE=;
+ b=bDiI1zNIoUk8cjiNkOEbdjZuVYqPE7B7uX8RRd9Dj8jyktH4NuOZlssx0OOxWl6dk6WH/IzcFfnY
+   jKMddOsImgfCBFMKsqEoyLWp9/cklz51VkcWezVZjDQ27FYy+NBAaZr+DgURHL1/ac7F5KJ66+2w
+   LSCk+vU0oKr1CqSwjDsqE5OPR3mPfaeHlTDiMIT2LMyJ84vl3eAkLPv/i40jnsVbsPg1cwmjVBeL
+   5u+jeSvaxvNfPHtHTUYoBCj+qdpdL2GyHfpvzhlhwWWhv/Lzi+6CQIE0ngmWprNA6F6AxcybDvQK
+   F4NIZxrxZLfgDMKAa7E+fHs0pv/b1IZKITBCbw==
+Received: by omta-ad1-fd3-402-ca-toronto-1.omtaad1.vcndpyyz.oraclevcn.com
+ (Oracle Communications Messaging Server 8.1.0.1.20230808 64bit (built Aug  8
+ 2023))
+ with ESMTPS id <0S0S00DPFMGQKE40@omta-ad1-fd3-402-ca-toronto-1.omtaad1.vcndpyyz.oraclevcn.com> for
+ reiserfs-devel@vger.kernel.org; Sun, 10 Sep 2023 23:26:50 +0000 (GMT)
+From:   Peter Lafreniere <peter@n8pjl.ca>
+To:     linux-um@lists.infradead.org
+Cc:     Peter Lafreniere <peter@n8pjl.ca>, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        reiserfs-devel@vger.kernel.org, jack@suse.cz
+Subject: [PATCH] um: Remove CONFIG_REISERFS_FS from defconfig
+Date:   Sun, 10 Sep 2023 19:26:39 -0400
+Message-id: <20230910232640.113938-1-peter@n8pjl.ca>
+X-Mailer: git-send-email 2.42.0
+MIME-version: 1.0
+Content-transfer-encoding: 8bit
+Reporting-Meta: AAFqYSi/Nz3yT+WmCCacHVh+wGgnWcRssPo3r9AOwMYpK0BBDia596AYNaQBaKkJ
+ 65vPtlWjwOBoyR5SC1xZcTzSX7EZjvCw1YsYEW4xREVQk7eTwP7EJ27BdA45K66X
+ EYRTrzo6/yNxR7xCUuoraO/CpLE/vR+EBMH6JRea0126t6v66exACPWyRP4W+DlJ
+ fF51rWsL2NR8sh4NazMNTJP3LFjnMsPZpcpY7xFEwyceKwHl3ms6S3hgVPrXma/9
+ 3UbvhI0MW1yatcslYMH+VM2mDf2vRB5k1ajYVZcrJF50hEgXPRJzYQe2/VhRX2H4
+ XO2kYkSwvdyLxG8KpeZzTtu9/YnsbiDlBdGgyxRUjALd1VFT2oNrC73nbgdaqvjx
+ ad0ZGGD1HExp7a5fhET7W3v0A+nXBnAhv862HOAmQnG35a26IsU61YPNOctuDFGG 9mw=
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+ReiserFS has been deprecated for a year and a half, yet is still built
+as part of a defconfig UML kernel.
 
-syzbot found the following issue on:
+According to commit eb103a51640e ("reiserfs: Deprecate reiserfs"), the
+filesystem is slated to be removed in 2025. Remove it from the defconfig
+profile now, as part of its deprecation process.
 
-HEAD commit:    a47fc304d2b6 Add linux-next specific files for 20230831
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1709eb67a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6ecd2a74f20953b9
-dashboard link: https://syzkaller.appspot.com/bug?extid=de4269ef04437bffcaa9
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=103ea770680000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13206d04680000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/b2e8f4217527/disk-a47fc304.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ed6cdcc09339/vmlinux-a47fc304.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/bd9b2475bf5a/bzImage-a47fc304.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/2c0bbd58005c/mount_1.gz
-
-Bisection is inconclusive: the issue happens on the oldest tested release.
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=173b59afa80000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=14bb59afa80000
-console output: https://syzkaller.appspot.com/x/log.txt?x=10bb59afa80000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+de4269ef04437bffcaa9@syzkaller.appspotmail.com
-
-BUG: unable to handle page fault for address: 00000076000400c8
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 0 P4D 0 
-Oops: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 4494 Comm: udevd Not tainted 6.5.0-next-20230831-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/26/2023
-RIP: 0010:__kmem_cache_alloc_bulk mm/slub.c:3986 [inline]
-RIP: 0010:kmem_cache_alloc_bulk+0x16a/0x7c0 mm/slub.c:4049
-Code: 00 0f 85 1b 05 00 00 45 31 d2 4c 89 3c 24 65 48 8b 0c 25 c0 bc 03 00 4d 89 d7 48 89 4d 28 31 ed 48 89 4c 24 18 eb 2d 8b 43 28 <48> 8b 04 07 49 89 04 24 49 89 3b 0f 1f 44 00 00 4c 8b 1c 24 41 81
-RSP: 0018:ffffc900031af878 EFLAGS: 00010006
-
-RAX: 0000000000000080 RBX: ffff88801364d000 RCX: ffff88807d56bb80
-RDX: 0000000000000000 RSI: ffffffff8ae925a0 RDI: 0000007600040048
-RBP: 0000000000000000 R08: 0000000000000000 R09: fffffbfff1d9c40a
-R10: 0000000000000000 R11: ffff888073edee10 R12: ffff8880b9841830
-R13: 000000000000000e R14: ffff888073edee10 R15: 0000000000000000
-FS:  00007ff1acb30c80(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000076000400c8 CR3: 00000000290ce000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- mt_alloc_bulk lib/maple_tree.c:165 [inline]
- mas_alloc_nodes+0x39c/0x830 lib/maple_tree.c:1271
- mas_node_count_gfp+0x105/0x130 lib/maple_tree.c:1329
- mas_node_count lib/maple_tree.c:1343 [inline]
- mas_expected_entries+0x116/0x200 lib/maple_tree.c:5577
- vma_iter_bulk_alloc include/linux/mm.h:985 [inline]
- dup_mmap+0x4f8/0x1d80 kernel/fork.c:681
- dup_mm kernel/fork.c:1686 [inline]
- copy_mm kernel/fork.c:1735 [inline]
- copy_process+0x6c11/0x7400 kernel/fork.c:2501
- kernel_clone+0xfd/0x930 kernel/fork.c:2909
- __do_sys_clone+0xba/0x100 kernel/fork.c:3052
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7ff1ac6fca12
-Code: 41 5d 41 5e 41 5f c3 64 48 8b 04 25 10 00 00 00 45 31 c0 31 d2 31 f6 bf 11 00 20 01 4c 8d 90 d0 02 00 00 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 76 10 48 8b 15 e7 43 0f 00 f7 d8 64 89 02 48 83
-RSP: 002b:00007fffc6413228 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
-RAX: ffffffffffffffda RBX: 0000562ccc95ee01 RCX: 00007ff1ac6fca12
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000562ccc94b910
-R10: 00007ff1acb30f50 R11: 0000000000000246 R12: 0000562ccc973450
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000562ccc94b910
- </TASK>
-Modules linked in:
-CR2: 00000076000400c8
----[ end trace 0000000000000000 ]---
-RIP: 0010:__kmem_cache_alloc_bulk mm/slub.c:3986 [inline]
-RIP: 0010:kmem_cache_alloc_bulk+0x16a/0x7c0 mm/slub.c:4049
-Code: 00 0f 85 1b 05 00 00 45 31 d2 4c 89 3c 24 65 48 8b 0c 25 c0 bc 03 00 4d 89 d7 48 89 4d 28 31 ed 48 89 4c 24 18 eb 2d 8b 43 28 <48> 8b 04 07 49 89 04 24 49 89 3b 0f 1f 44 00 00 4c 8b 1c 24 41 81
-RSP: 0018:ffffc900031af878 EFLAGS: 00010006
-RAX: 0000000000000080 RBX: ffff88801364d000 RCX: ffff88807d56bb80
-RDX: 0000000000000000 RSI: ffffffff8ae925a0 RDI: 0000007600040048
-RBP: 0000000000000000 R08: 0000000000000000 R09: fffffbfff1d9c40a
-R10: 0000000000000000 R11: ffff888073edee10 R12: ffff8880b9841830
-R13: 000000000000000e R14: ffff888073edee10 R15: 0000000000000000
-FS:  00007ff1acb30c80(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000076000400c8 CR3: 00000000290ce000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	00 0f                	add    %cl,(%rdi)
-   2:	85 1b                	test   %ebx,(%rbx)
-   4:	05 00 00 45 31       	add    $0x31450000,%eax
-   9:	d2 4c 89 3c          	rorb   %cl,0x3c(%rcx,%rcx,4)
-   d:	24 65                	and    $0x65,%al
-   f:	48 8b 0c 25 c0 bc 03 	mov    0x3bcc0,%rcx
-  16:	00
-  17:	4d 89 d7             	mov    %r10,%r15
-  1a:	48 89 4d 28          	mov    %rcx,0x28(%rbp)
-  1e:	31 ed                	xor    %ebp,%ebp
-  20:	48 89 4c 24 18       	mov    %rcx,0x18(%rsp)
-  25:	eb 2d                	jmp    0x54
-  27:	8b 43 28             	mov    0x28(%rbx),%eax
-* 2a:	48 8b 04 07          	mov    (%rdi,%rax,1),%rax <-- trapping instruction
-  2e:	49 89 04 24          	mov    %rax,(%r12)
-  32:	49 89 3b             	mov    %rdi,(%r11)
-  35:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
-  3a:	4c 8b 1c 24          	mov    (%rsp),%r11
-  3e:	41                   	rex.B
-  3f:	81                   	.byte 0x81
-
-
+Signed-off-by: Peter Lafreniere <peter@n8pjl.ca>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ arch/um/configs/i386_defconfig   | 1 -
+ arch/um/configs/x86_64_defconfig | 1 -
+ 2 files changed, 2 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+diff --git a/arch/um/configs/i386_defconfig b/arch/um/configs/i386_defconfig
+index e543cbac8792..9c9c77f1255a 100644
+--- a/arch/um/configs/i386_defconfig
++++ b/arch/um/configs/i386_defconfig
+@@ -61,7 +61,6 @@ CONFIG_UML_NET_DAEMON=y
+ CONFIG_UML_NET_MCAST=y
+ CONFIG_UML_NET_SLIRP=y
+ CONFIG_EXT4_FS=y
+-CONFIG_REISERFS_FS=y
+ CONFIG_QUOTA=y
+ CONFIG_AUTOFS_FS=m
+ CONFIG_ISO9660_FS=m
+diff --git a/arch/um/configs/x86_64_defconfig b/arch/um/configs/x86_64_defconfig
+index 939cb12318ca..03b10d3f6816 100644
+--- a/arch/um/configs/x86_64_defconfig
++++ b/arch/um/configs/x86_64_defconfig
+@@ -59,7 +59,6 @@ CONFIG_UML_NET_DAEMON=y
+ CONFIG_UML_NET_MCAST=y
+ CONFIG_UML_NET_SLIRP=y
+ CONFIG_EXT4_FS=y
+-CONFIG_REISERFS_FS=y
+ CONFIG_QUOTA=y
+ CONFIG_AUTOFS_FS=m
+ CONFIG_ISO9660_FS=m
+-- 
+2.42.0
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
