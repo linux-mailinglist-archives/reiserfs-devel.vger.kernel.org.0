@@ -2,38 +2,39 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E40907A515A
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 18 Sep 2023 19:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD527A5161
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 18 Sep 2023 19:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjIRR5J (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 18 Sep 2023 13:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
+        id S229473AbjIRR5j (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 18 Sep 2023 13:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjIRR5J (ORCPT
+        with ESMTP id S229578AbjIRR5i (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 18 Sep 2023 13:57:09 -0400
-Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0E3112
-        for <reiserfs-devel@vger.kernel.org>; Mon, 18 Sep 2023 10:57:02 -0700 (PDT)
+        Mon, 18 Sep 2023 13:57:38 -0400
+Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A95FD
+        for <reiserfs-devel@vger.kernel.org>; Mon, 18 Sep 2023 10:57:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=n8pjl.ca;
-        s=protonmail2; t=1695059821; x=1695319021;
-        bh=Yd0bvX5251WFX63UM6X0Z6EzVJZWkj+aXTGkJOfZu6U=;
+        s=protonmail2; t=1695059850; x=1695319050;
+        bh=JDjRiSWJTFYH8PD2dsxNGLZbrcHGdPkUJwg1xfwDJyE=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=ofXoPLuUMhK4JdeUS4vvRz4GuIIRQp6MeRZvZbO+5A/X1NSr8my9m2nCu6xSqbkrK
-         1yoMNxmQBnzHy5+KBI1I6WAz1ddCRbzHn8bdzxUgVGCkZtCnFvRUcWmcgm+iiWvzqH
-         l9NOXeSD76DjzcoBlXur5aqWetOAxdmv7J2LEe1FVZwKdRMsNGg14jX4tZP6WLaHm4
-         XA0T7LEIid/4w95Ze2bgM29aezmymfggU3oje3HtoC3Ln4t8qLUlAY93yQ4CwSMK6W
-         GOaOKkb5UY0n3MZWMamAP/ypGPRtTRbdbz3AaBLfSlMiy5CKFN191xY9zGVWOpFe/t
-         h9qMbkrpvsVPw==
-Date:   Mon, 18 Sep 2023 17:56:55 +0000
-To:     linux-sh@vger.kernel.org
+        b=UiH8zlNQV4EfGcXtLn6o+BWQmdaIhHe4qkC+6PW4uRqWDrgWJSGYQSDSrmH/oh5gD
+         +743EUp4OvrK7/ue6YqnjeHRLVe2B1CX1EZO6PdNf0Gk3aHDaAw7tIvQPRvQ2jtpXx
+         7gIHr05bK6WuJ94pLuN6OXjUjWPYLslTC5lNqJ1/o2NwBQDtMs4ghs9cvXD2kT6+1Q
+         38lzm2a2O59naRzFSwTWF6isgSuFE146udcUPlWi+Z2ioT53DCSGVg7811Y7ig8akz
+         0sAFqzmU5cfcHYFBhvRRkvNLbIzN+nAwGyDNxqy0cD4MjeLxs9/lf8vix/RCFE90ie
+         tNsRzgDnfc+LA==
+Date:   Mon, 18 Sep 2023 17:57:10 +0000
+To:     linux-mips@vger.kernel.org
 From:   Peter Lafreniere <peter@n8pjl.ca>
 Cc:     Peter Lafreniere <peter@n8pjl.ca>, jack@suse.cz,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/7] arch: sh: remove ReiserFS from defconfig
-Message-ID: <20230918175529.19011-4-peter@n8pjl.ca>
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de
+Subject: [PATCH 4/7] arch: mips: remove ReiserFS from defconfig
+Message-ID: <20230918175529.19011-5-peter@n8pjl.ca>
 In-Reply-To: <20230918175529.19011-1-peter@n8pjl.ca>
 References: <20230918175529.19011-1-peter@n8pjl.ca>
 Feedback-ID: 53133685:user:proton
@@ -59,36 +60,126 @@ profiles now, as part of its deprecation process.
 
 Signed-off-by: Peter Lafreniere <peter@n8pjl.ca>
 ---
- arch/sh/configs/landisk_defconfig | 1 -
- arch/sh/configs/titan_defconfig   | 1 -
- 2 files changed, 2 deletions(-)
+ arch/mips/configs/fuloong2e_defconfig   | 1 -
+ arch/mips/configs/jazz_defconfig        | 4 ----
+ arch/mips/configs/lemote2f_defconfig    | 3 ---
+ arch/mips/configs/malta_defconfig       | 5 -----
+ arch/mips/configs/malta_kvm_defconfig   | 5 -----
+ arch/mips/configs/maltaup_xpa_defconfig | 5 -----
+ arch/mips/configs/rm200_defconfig       | 4 ----
+ 7 files changed, 27 deletions(-)
 
-diff --git a/arch/sh/configs/landisk_defconfig b/arch/sh/configs/landisk_de=
+diff --git a/arch/mips/configs/fuloong2e_defconfig b/arch/mips/configs/fulo=
+ong2e_defconfig
+index 1843468f84a3..00329bb5de5a 100644
+--- a/arch/mips/configs/fuloong2e_defconfig
++++ b/arch/mips/configs/fuloong2e_defconfig
+@@ -177,7 +177,6 @@ CONFIG_EXT2_FS=3Dy
+ CONFIG_EXT3_FS=3Dy
+ CONFIG_EXT4_FS_POSIX_ACL=3Dy
+ CONFIG_EXT4_FS_SECURITY=3Dy
+-CONFIG_REISERFS_FS=3Dm
+ CONFIG_AUTOFS_FS=3Dy
+ CONFIG_FUSE_FS=3Dy
+ CONFIG_ISO9660_FS=3Dm
+diff --git a/arch/mips/configs/jazz_defconfig b/arch/mips/configs/jazz_defc=
+onfig
+index fdf374574105..65adb538030d 100644
+--- a/arch/mips/configs/jazz_defconfig
++++ b/arch/mips/configs/jazz_defconfig
+@@ -70,10 +70,6 @@ CONFIG_FRAMEBUFFER_CONSOLE=3Dy
+ # CONFIG_HWMON is not set
+ CONFIG_EXT2_FS=3Dm
+ CONFIG_EXT3_FS=3Dy
+-CONFIG_REISERFS_FS=3Dm
+-CONFIG_REISERFS_FS_XATTR=3Dy
+-CONFIG_REISERFS_FS_POSIX_ACL=3Dy
+-CONFIG_REISERFS_FS_SECURITY=3Dy
+ CONFIG_XFS_FS=3Dm
+ CONFIG_XFS_QUOTA=3Dy
+ CONFIG_AUTOFS_FS=3Dm
+diff --git a/arch/mips/configs/lemote2f_defconfig b/arch/mips/configs/lemot=
+e2f_defconfig
+index 83d9a8ff4270..38f17b658421 100644
+--- a/arch/mips/configs/lemote2f_defconfig
++++ b/arch/mips/configs/lemote2f_defconfig
+@@ -229,9 +229,6 @@ CONFIG_EXT2_FS=3Dm
+ CONFIG_EXT3_FS=3Dy
+ CONFIG_EXT3_FS_POSIX_ACL=3Dy
+ CONFIG_EXT3_FS_SECURITY=3Dy
+-CONFIG_REISERFS_FS=3Dm
+-CONFIG_REISERFS_PROC_INFO=3Dy
+-CONFIG_REISERFS_FS_XATTR=3Dy
+ CONFIG_JFS_FS=3Dm
+ CONFIG_JFS_POSIX_ACL=3Dy
+ CONFIG_XFS_FS=3Dm
+diff --git a/arch/mips/configs/malta_defconfig b/arch/mips/configs/malta_de=
 fconfig
-index 541082090918..af1ab25227e3 100644
---- a/arch/sh/configs/landisk_defconfig
-+++ b/arch/sh/configs/landisk_defconfig
-@@ -94,7 +94,6 @@ CONFIG_USB_SISUSBVGA=3Dm
+index ae1a7793e810..6f8046024557 100644
+--- a/arch/mips/configs/malta_defconfig
++++ b/arch/mips/configs/malta_defconfig
+@@ -317,11 +317,6 @@ CONFIG_UIO=3Dm
+ CONFIG_UIO_CIF=3Dm
  CONFIG_EXT2_FS=3Dy
  CONFIG_EXT3_FS=3Dy
- # CONFIG_EXT3_DEFAULTS_TO_ORDERED is not set
--CONFIG_REISERFS_FS=3Dy
- CONFIG_ISO9660_FS=3Dm
- CONFIG_MSDOS_FS=3Dy
- CONFIG_VFAT_FS=3Dy
-diff --git a/arch/sh/configs/titan_defconfig b/arch/sh/configs/titan_defcon=
-fig
-index 871092753591..50e378adc4c5 100644
---- a/arch/sh/configs/titan_defconfig
-+++ b/arch/sh/configs/titan_defconfig
-@@ -221,7 +221,6 @@ CONFIG_EXT2_FS=3Dy
- CONFIG_EXT3_FS=3Dy
- # CONFIG_EXT3_DEFAULTS_TO_ORDERED is not set
- # CONFIG_EXT3_FS_XATTR is not set
 -CONFIG_REISERFS_FS=3Dm
+-CONFIG_REISERFS_PROC_INFO=3Dy
+-CONFIG_REISERFS_FS_XATTR=3Dy
+-CONFIG_REISERFS_FS_POSIX_ACL=3Dy
+-CONFIG_REISERFS_FS_SECURITY=3Dy
+ CONFIG_JFS_FS=3Dm
+ CONFIG_JFS_POSIX_ACL=3Dy
+ CONFIG_JFS_SECURITY=3Dy
+diff --git a/arch/mips/configs/malta_kvm_defconfig b/arch/mips/configs/malt=
+a_kvm_defconfig
+index c07e30f63d8b..16a91eeff67f 100644
+--- a/arch/mips/configs/malta_kvm_defconfig
++++ b/arch/mips/configs/malta_kvm_defconfig
+@@ -323,11 +323,6 @@ CONFIG_UIO=3Dm
+ CONFIG_UIO_CIF=3Dm
+ CONFIG_EXT2_FS=3Dy
+ CONFIG_EXT3_FS=3Dy
+-CONFIG_REISERFS_FS=3Dm
+-CONFIG_REISERFS_PROC_INFO=3Dy
+-CONFIG_REISERFS_FS_XATTR=3Dy
+-CONFIG_REISERFS_FS_POSIX_ACL=3Dy
+-CONFIG_REISERFS_FS_SECURITY=3Dy
+ CONFIG_JFS_FS=3Dm
+ CONFIG_JFS_POSIX_ACL=3Dy
+ CONFIG_JFS_SECURITY=3Dy
+diff --git a/arch/mips/configs/maltaup_xpa_defconfig b/arch/mips/configs/ma=
+ltaup_xpa_defconfig
+index 0a5701020d3f..264aba29ea4f 100644
+--- a/arch/mips/configs/maltaup_xpa_defconfig
++++ b/arch/mips/configs/maltaup_xpa_defconfig
+@@ -323,11 +323,6 @@ CONFIG_UIO=3Dm
+ CONFIG_UIO_CIF=3Dm
+ CONFIG_EXT2_FS=3Dy
+ CONFIG_EXT3_FS=3Dy
+-CONFIG_REISERFS_FS=3Dm
+-CONFIG_REISERFS_PROC_INFO=3Dy
+-CONFIG_REISERFS_FS_XATTR=3Dy
+-CONFIG_REISERFS_FS_POSIX_ACL=3Dy
+-CONFIG_REISERFS_FS_SECURITY=3Dy
+ CONFIG_JFS_FS=3Dm
+ CONFIG_JFS_POSIX_ACL=3Dy
+ CONFIG_JFS_SECURITY=3Dy
+diff --git a/arch/mips/configs/rm200_defconfig b/arch/mips/configs/rm200_de=
+fconfig
+index 5c5e2186210c..08e1c1f2f4de 100644
+--- a/arch/mips/configs/rm200_defconfig
++++ b/arch/mips/configs/rm200_defconfig
+@@ -310,10 +310,6 @@ CONFIG_USB_LD=3Dm
+ CONFIG_USB_TEST=3Dm
+ CONFIG_EXT2_FS=3Dm
+ CONFIG_EXT3_FS=3Dy
+-CONFIG_REISERFS_FS=3Dm
+-CONFIG_REISERFS_FS_XATTR=3Dy
+-CONFIG_REISERFS_FS_POSIX_ACL=3Dy
+-CONFIG_REISERFS_FS_SECURITY=3Dy
  CONFIG_XFS_FS=3Dm
- CONFIG_FUSE_FS=3Dm
- CONFIG_ISO9660_FS=3Dm
+ CONFIG_XFS_QUOTA=3Dy
+ CONFIG_AUTOFS_FS=3Dm
 --=20
 2.42.0
 
