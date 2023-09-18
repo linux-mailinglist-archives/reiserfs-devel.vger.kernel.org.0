@@ -2,39 +2,40 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29AE47A5167
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 18 Sep 2023 19:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ABC77A5169
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 18 Sep 2023 19:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjIRR6A (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Mon, 18 Sep 2023 13:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
+        id S229969AbjIRR6Q (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 18 Sep 2023 13:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjIRR5z (ORCPT
+        with ESMTP id S229901AbjIRR6P (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Mon, 18 Sep 2023 13:57:55 -0400
-Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D16B19D
-        for <reiserfs-devel@vger.kernel.org>; Mon, 18 Sep 2023 10:57:45 -0700 (PDT)
+        Mon, 18 Sep 2023 13:58:15 -0400
+X-Greylist: delayed 108 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 Sep 2023 10:58:10 PDT
+Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD90114;
+        Mon, 18 Sep 2023 10:58:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=n8pjl.ca;
-        s=protonmail2; t=1695059863; x=1695319063;
-        bh=I+KgQHw8hJyaw6uzs72VPeTNHvbX24xU2dGCApKFeAY=;
+        s=protonmail2; t=1695059888; x=1695319088;
+        bh=ptC3c+rBLEFTuyfQUK2LpgarFJRpP17fWUb7YzH2OCU=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=Ir6Sf8pqh4NJ2RuUSkDzy7LaLnRMiRCTJ/s7ocycKiKrNHTSWPDItcTujRIOkbkFX
-         Vk2pX+enOpdPlTlwQ6kqr6dokgxl3rBcUsv8ZxSBgzk3xrHyztOOl+vHxIBiBpqwuK
-         LNkszEU4TBgIaAyd82vnrU7TCjn6/ZRTftFdsyrpGNsHDe2toYRLoZL973gcdlbidb
-         libz0mgCxFQXnVX6BxCZLgdsbCcgsCy5UN3ebKJqxjLL6lhF6yBpPRpKLqmU8gH8cS
-         Z1NkSuBA0LZ4gJPN2/8nVfRbWUvoc7ZNc9vWb6T4nc7iWqU19hL/OKcL65Zl+1VEs9
-         soYUNb1hqOoIA==
-Date:   Mon, 18 Sep 2023 17:57:37 +0000
-To:     linux-arm-kernel@lists.infradead.org
+        b=EMcZEsPnJUce0c0lWk2Wy1trojsA85RROlQbVl35DU9YbGX3R4YpzXIAhCCgxxO+L
+         v5QTEw0CMQRbStH8pu42NrTxx/0VVeHa+8aZqfvpW/HKkR/2gNMKRiNxSitogLKbEU
+         5dNqVdnqzpb5qeKGWHbiZnIYyLEssofn3aXLaccS1Z1kgebT4t7QPKyC2GbwSlvFYV
+         9crlhMvz4L/wrhl6rOewJ2vCb3sUK8EvRnyv5lkl83ouZiK9m4nAEfNIAkJAL6Ab0o
+         tR2yGRBtRlvRPpYglYNl/5UMACjY299t/YPaRczHHkjyKFww93fJjZ/beaWXlJ1QuP
+         Iv1cqLrACOJaw==
+Date:   Mon, 18 Sep 2023 17:57:52 +0000
+To:     linux-alpha@vger.kernel.org
 From:   Peter Lafreniere <peter@n8pjl.ca>
 Cc:     Peter Lafreniere <peter@n8pjl.ca>, jack@suse.cz,
         reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk
-Subject: [PATCH 6/7] arch: arm: remove ReiserFS from defconfig
-Message-ID: <20230918175529.19011-7-peter@n8pjl.ca>
+        richard.henderson@linaro.org, ink@jurassic.park.msu.ru
+Subject: [PATCH 7/7] arch: alpha: remove ReiserFS from defconfig
+Message-ID: <20230918175529.19011-8-peter@n8pjl.ca>
 In-Reply-To: <20230918175529.19011-1-peter@n8pjl.ca>
 References: <20230918175529.19011-1-peter@n8pjl.ca>
 Feedback-ID: 53133685:user:proton
@@ -55,30 +56,26 @@ ReiserFS has been deprecated for a year and a half, yet is still built
 as part of a defconfig kernel.
 
 According to commit eb103a51640e ("reiserfs: Deprecate reiserfs"), the
-filesystem is slated to be removed in 2025. Remove it from the pxa=20
-defconfig profile now, as part of its deprecation process.
+filesystem is slated to be removed in 2025. Remove it from the defconfig
+profile now, as part of its deprecation process.
 
 Signed-off-by: Peter Lafreniere <peter@n8pjl.ca>
 ---
- arch/arm/configs/pxa_defconfig | 4 ----
- 1 file changed, 4 deletions(-)
+ arch/alpha/configs/defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfi=
-g
-index 23c131b0854b..607420f7ea27 100644
---- a/arch/arm/configs/pxa_defconfig
-+++ b/arch/arm/configs/pxa_defconfig
-@@ -584,10 +584,6 @@ CONFIG_EXT2_FS_SECURITY=3Dy
- CONFIG_EXT3_FS=3Dy
- CONFIG_EXT3_FS_POSIX_ACL=3Dy
- CONFIG_EXT3_FS_SECURITY=3Dy
+diff --git a/arch/alpha/configs/defconfig b/arch/alpha/configs/defconfig
+index 1816c1dc22b1..3280bd9e6578 100644
+--- a/arch/alpha/configs/defconfig
++++ b/arch/alpha/configs/defconfig
+@@ -51,7 +51,6 @@ CONFIG_SERIAL_8250_CONSOLE=3Dy
+ CONFIG_RTC_CLASS=3Dy
+ CONFIG_RTC_DRV_CMOS=3Dy
+ CONFIG_EXT2_FS=3Dy
 -CONFIG_REISERFS_FS=3Dm
--CONFIG_REISERFS_FS_XATTR=3Dy
--CONFIG_REISERFS_FS_POSIX_ACL=3Dy
--CONFIG_REISERFS_FS_SECURITY=3Dy
- CONFIG_XFS_FS=3Dm
- CONFIG_AUTOFS_FS=3Dm
- CONFIG_FUSE_FS=3Dm
+ CONFIG_ISO9660_FS=3Dy
+ CONFIG_MSDOS_FS=3Dy
+ CONFIG_VFAT_FS=3Dy
 --=20
 2.42.0
 
