@@ -2,64 +2,64 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CABB87A6E9C
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 20 Sep 2023 00:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BAB67A6EA3
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 20 Sep 2023 00:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjISW2P (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 19 Sep 2023 18:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
+        id S233520AbjISW3Y (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 19 Sep 2023 18:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjISW2P (ORCPT
+        with ESMTP id S229690AbjISW3X (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 19 Sep 2023 18:28:15 -0400
+        Tue, 19 Sep 2023 18:29:23 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10F2BA
-        for <reiserfs-devel@vger.kernel.org>; Tue, 19 Sep 2023 15:27:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21300C5
+        for <reiserfs-devel@vger.kernel.org>; Tue, 19 Sep 2023 15:28:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695162443;
+        s=mimecast20190719; t=1695162512;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ji3zY74AAdaK/amC610EHUTsu6YY14D+u0Ic8yX0wF0=;
-        b=JIKpQWfA49zpIKNtrg5Aph4lwwQGKJyFRgdwxUCJ0InrRAD5FWx1T+ciJE1C8hKiRHPv3P
-        N4I9EzBRdj1TpDKuIhQtdk3XTLExEikRFq8LiUw3hM3kL2ErxwOpVSdhFTxsy736+LLqjC
-        uqBPqkyvq/H6WeXWITbuZLE5MbqQvm4=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=9cF5FIFh22usSjm39Z5xoUee1aW1ZyPpmGmyoy2xhnY=;
+        b=gdjePfiLYaj5E1li0cfkqDNx92o4DRV/au1ym3/Lgjuoxw6HWP1bCmmbHYgjrb4M+mzBB3
+        73R0j21Hp70T2FdNcD3Krsj9U4dOwA8aUpL5COTGRDPN0kHKGU2UKSFrIOn/3laJJaiHIM
+        qHDLoVN551zwI6VAwZwDLA2ouxNyogU=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-439-XkXwC7mvM9-3lPWyAqrwPA-1; Tue, 19 Sep 2023 18:27:21 -0400
-X-MC-Unique: XkXwC7mvM9-3lPWyAqrwPA-1
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-68fe22b77b6so5359610b3a.1
-        for <reiserfs-devel@vger.kernel.org>; Tue, 19 Sep 2023 15:27:21 -0700 (PDT)
+ us-mta-367-A8K4OUs4Mcm4hKsW1ivwwA-1; Tue, 19 Sep 2023 18:28:31 -0400
+X-MC-Unique: A8K4OUs4Mcm4hKsW1ivwwA-1
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-276a0d99409so1213983a91.3
+        for <reiserfs-devel@vger.kernel.org>; Tue, 19 Sep 2023 15:28:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695162440; x=1695767240;
+        d=1e100.net; s=20230601; t=1695162510; x=1695767310;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ji3zY74AAdaK/amC610EHUTsu6YY14D+u0Ic8yX0wF0=;
-        b=UIswuI0Jpc3T4xiz3M3Hhl1Zr229mvquwrZEBQzetC87QlHwocrMV9NsKG4deBMact
-         yLFHS5P/A44/bI72pfYbfyNKPNrNDMutyinpI0RQr1bNaWgIdgpLAZItfoUOTcCEDErv
-         sM7ZuIPWUrusBDtgGcdaYY3jqxceFTYW4Z3fE/fLDmHZ/HhXMfgFoYFQEk2tdrEhMuqS
-         /pD6GXkasCQHnKgS6/UHH0EW/4S31Rv/HWYMWnJo7sXwbggpItlE/ksL5k8dVz3Tz2Ly
-         LdDKnKMQNF/QQrx8anXnL89Pa6LE9c+6KkcesqamAR1CswLdDd3A2Rl9gCAJJgUaDnL7
-         0i9Q==
-X-Gm-Message-State: AOJu0YwtGrjCVBJ1xsL/bdfteeoxTVtzayhIrNV32ojsEKqAp5bTJ4T9
-        LlIBljgAPi+14swQ/rO3SRyQQ4DV/P89XUDzP+GIdgkyH3XLglNTeMG2V+ciTDUkDj2ENEWE4MW
-        LUvmo9sA/SKPupXstMRWBCvncyYMUAe4o00r7faFCkGY=
-X-Received: by 2002:a05:6a21:7895:b0:13d:5b8e:db83 with SMTP id bf21-20020a056a21789500b0013d5b8edb83mr970430pzc.9.1695162440764;
-        Tue, 19 Sep 2023 15:27:20 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGvdFAMQ3u88UkWAe1LyDTaTZ9DZaFRmPuZojxyrc2071D47l1IiQLEM8pi3uRxKzn4ewwGY98liyEB7kMo1sI=
-X-Received: by 2002:a05:6a21:7895:b0:13d:5b8e:db83 with SMTP id
- bf21-20020a056a21789500b0013d5b8edb83mr970415pzc.9.1695162440533; Tue, 19 Sep
- 2023 15:27:20 -0700 (PDT)
+        bh=9cF5FIFh22usSjm39Z5xoUee1aW1ZyPpmGmyoy2xhnY=;
+        b=GHjD4UqjYN4KivBU0QKNmi/lb4BrVHeQdyHxeTfS7Om9qaeJVD+h1NUvqVUsdlcIC/
+         2f/RMdXPSt6R1Nv79otaj5xtzF1K5ITaXHmddYe0gA1nLQw+dvVKWxTSAx1oJSaJlE7L
+         WmSolhgdrtRE081GmgA3g2yj0vU6dTBn0lz6HTdsvhtKz9pMlC01pe4jWCjqjzgFAhXh
+         l5kHRepwcZaLWvIRDxpRjIrKYIhDv4CCFJJqdSVrQ+/gYscHBWWnT/H6I4Qv1pGhusNg
+         Y3mBjn/PJwv2rCEpvAT2HY+tlccrFLlNv6x6gl2nMd6wT0AhupBIR85exqaDLG3l36LI
+         rnpA==
+X-Gm-Message-State: AOJu0Yw67udMSMZq8NCnKV7DHZzjiUeBADEtOBWCaP0ZbmSDlGUtcd6z
+        k00HkL5TJqUWjlKb4yN3xHZnQhx8wroA2VpDgpmRtD6DkCRDG0d1Jwxea+YLOwr9BWEm4N20uWu
+        ytbHQyF3YNwe8oF+rg91Zo19ohVNYeWhNj7JeDht+xJ8=
+X-Received: by 2002:a17:902:da8f:b0:1bb:a522:909a with SMTP id j15-20020a170902da8f00b001bba522909amr986884plx.37.1695162510069;
+        Tue, 19 Sep 2023 15:28:30 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHpbtgLZQnmIFpoycfoBrG7qrX9HqojmUsDe+wFjYsm20sUgmgqY2dFFCaMUztlbeAKetFEUenxQQWdQ1mbOy0=
+X-Received: by 2002:a17:902:da8f:b0:1bb:a522:909a with SMTP id
+ j15-20020a170902da8f00b001bba522909amr986862plx.37.1695162509799; Tue, 19 Sep
+ 2023 15:28:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230919045135.3635437-1-willy@infradead.org> <20230919045135.3635437-8-willy@infradead.org>
-In-Reply-To: <20230919045135.3635437-8-willy@infradead.org>
+References: <20230919045135.3635437-1-willy@infradead.org> <20230919045135.3635437-6-willy@infradead.org>
+In-Reply-To: <20230919045135.3635437-6-willy@infradead.org>
 From:   Andreas Gruenbacher <agruenba@redhat.com>
-Date:   Wed, 20 Sep 2023 00:27:08 +0200
-Message-ID: <CAHc6FU4-RSAsc-LWw2OuLDecofapd30OZhxyjVKLXzJNwh-ZoA@mail.gmail.com>
-Subject: Re: [PATCH 07/26] gfs2; Convert gfs2_getjdatabuf to use a folio
+Date:   Wed, 20 Sep 2023 00:28:18 +0200
+Message-ID: <CAHc6FU7S8pC7yZETf9y0j2c+BS2QSK0370WoDcw+AwxLUgfobA@mail.gmail.com>
+Subject: Re: [PATCH 05/26] gfs2: Convert inode unstuffing to use a folio
 To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-fsdevel@vger.kernel.org, gfs2@lists.linux.dev,
@@ -79,72 +79,142 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Thanks,
-
-but this patch has an unwanted semicolon in the subject.
-
 On Tue, Sep 19, 2023 at 7:00=E2=80=AFAM Matthew Wilcox (Oracle)
 <willy@infradead.org> wrote:
->
-> Use the folio APIs, saving four hidden calls to compound_head().
+> Use the folio APIs, removing numerous hidden calls to compound_head().
+> Also remove the stale comment about the page being looked up if it's NULL=
+.
 >
 > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 > ---
->  fs/gfs2/meta_io.c | 22 ++++++++--------------
->  1 file changed, 8 insertions(+), 14 deletions(-)
+>  fs/gfs2/bmap.c | 48 +++++++++++++++++++++++-------------------------
+>  1 file changed, 23 insertions(+), 25 deletions(-)
 >
-> diff --git a/fs/gfs2/meta_io.c b/fs/gfs2/meta_io.c
-> index f1fac1b45059..b28196015543 100644
-> --- a/fs/gfs2/meta_io.c
-> +++ b/fs/gfs2/meta_io.c
-> @@ -400,26 +400,20 @@ static struct buffer_head *gfs2_getjdatabuf(struct =
-gfs2_inode *ip, u64 blkno)
+> diff --git a/fs/gfs2/bmap.c b/fs/gfs2/bmap.c
+> index ef7017fb6951..247d2c16593c 100644
+> --- a/fs/gfs2/bmap.c
+> +++ b/fs/gfs2/bmap.c
+> @@ -43,53 +43,51 @@ struct metapath {
+>  static int punch_hole(struct gfs2_inode *ip, u64 offset, u64 length);
+>
+>  /**
+> - * gfs2_unstuffer_page - unstuff a stuffed inode into a block cached by =
+a page
+> + * gfs2_unstuffer_folio - unstuff a stuffed inode into a block cached by=
+ a folio
+>   * @ip: the inode
+>   * @dibh: the dinode buffer
+>   * @block: the block number that was allocated
+> - * @page: The (optional) page. This is looked up if @page is NULL
+> + * @folio: The folio.
+>   *
+>   * Returns: errno
+>   */
+> -
+> -static int gfs2_unstuffer_page(struct gfs2_inode *ip, struct buffer_head=
+ *dibh,
+> -                              u64 block, struct page *page)
+> +static int gfs2_unstuffer_folio(struct gfs2_inode *ip, struct buffer_hea=
+d *dibh,
+> +                              u64 block, struct folio *folio)
 >  {
->         struct address_space *mapping =3D ip->i_inode.i_mapping;
->         struct gfs2_sbd *sdp =3D GFS2_SB(&ip->i_inode);
-> -       struct page *page;
-> +       struct folio *folio;
->         struct buffer_head *bh;
->         unsigned int shift =3D PAGE_SHIFT - sdp->sd_sb.sb_bsize_shift;
->         unsigned long index =3D blkno >> shift; /* convert block to page =
-*/
->         unsigned int bufnum =3D blkno - (index << shift);
+>         struct inode *inode =3D &ip->i_inode;
 >
-> -       page =3D find_get_page_flags(mapping, index, FGP_LOCK|FGP_ACCESSE=
-D);
-> -       if (!page)
-> -               return NULL;
-> -       if (!page_has_buffers(page)) {
-> -               unlock_page(page);
-> -               put_page(page);
-> +       folio =3D __filemap_get_folio(mapping, index, FGP_LOCK | FGP_ACCE=
-SSED, 0);
-> +       if (IS_ERR(folio))
->                 return NULL;
-> -       }
-> -       /* Locate header for our buffer within our page */
-> -       for (bh =3D page_buffers(page); bufnum--; bh =3D bh->b_this_page)
-> -               /* Do nothing */;
-> -       get_bh(bh);
-> -       unlock_page(page);
-> -       put_page(page);
-> +       bh =3D folio_buffers(folio);
-> +       if (bh)
-> +               get_nth_bh(bh, bufnum);
-
-And we need this here:
-
-    bh =3D get_nth_bh(bh, bufnum);
-
-> +       folio_unlock(folio);
-> +       folio_put(folio);
->         return bh;
+> -       if (!PageUptodate(page)) {
+> -               void *kaddr =3D kmap(page);
+> +       if (!folio_test_uptodate(folio)) {
+> +               void *kaddr =3D kmap_local_folio(folio, 0);
+>                 u64 dsize =3D i_size_read(inode);
+>
+>                 memcpy(kaddr, dibh->b_data + sizeof(struct gfs2_dinode), =
+dsize);
+> -               memset(kaddr + dsize, 0, PAGE_SIZE - dsize);
+> -               kunmap(page);
+> +               memset(kaddr + dsize, 0, folio_size(folio) - dsize);
+> +               kunmap_local(kaddr);
+>
+> -               SetPageUptodate(page);
+> +               folio_mark_uptodate(folio);
+>         }
+>
+>         if (gfs2_is_jdata(ip)) {
+> -               struct buffer_head *bh;
+> +               struct buffer_head *bh =3D folio_buffers(folio);
+>
+> -               if (!page_has_buffers(page))
+> -                       create_empty_buffers(page, BIT(inode->i_blkbits),
+> -                                            BIT(BH_Uptodate));
+> +               if (!bh)
+> +                       bh =3D folio_create_empty_buffers(folio,
+> +                               BIT(inode->i_blkbits), BIT(BH_Uptodate));
+>
+> -               bh =3D page_buffers(page);
+>                 if (!buffer_mapped(bh))
+>                         map_bh(bh, inode->i_sb, block);
+>
+>                 set_buffer_uptodate(bh);
+>                 gfs2_trans_add_data(ip->i_gl, bh);
+>         } else {
+> -               set_page_dirty(page);
+> +               folio_mark_dirty(folio);
+>                 gfs2_ordered_add_inode(ip);
+>         }
+>
+>         return 0;
 >  }
 >
+> -static int __gfs2_unstuff_inode(struct gfs2_inode *ip, struct page *page=
+)
+> +static int __gfs2_unstuff_inode(struct gfs2_inode *ip, struct folio *fol=
+io)
+>  {
+>         struct buffer_head *bh, *dibh;
+>         struct gfs2_dinode *di;
+> @@ -118,7 +116,7 @@ static int __gfs2_unstuff_inode(struct gfs2_inode *ip=
+, struct page *page)
+>                                               dibh, sizeof(struct gfs2_di=
+node));
+>                         brelse(bh);
+>                 } else {
+> -                       error =3D gfs2_unstuffer_page(ip, dibh, block, pa=
+ge);
+> +                       error =3D gfs2_unstuffer_folio(ip, dibh, block, f=
+olio);
+>                         if (error)
+>                                 goto out_brelse;
+>                 }
+> @@ -157,17 +155,17 @@ static int __gfs2_unstuff_inode(struct gfs2_inode *=
+ip, struct page *page)
+>  int gfs2_unstuff_dinode(struct gfs2_inode *ip)
+>  {
+>         struct inode *inode =3D &ip->i_inode;
+> -       struct page *page;
+> +       struct folio *folio;
+>         int error;
+>
+>         down_write(&ip->i_rw_mutex);
+> -       page =3D grab_cache_page(inode->i_mapping, 0);
+> -       error =3D -ENOMEM;
+> -       if (!page)
+> +       folio =3D filemap_grab_folio(inode->i_mapping, 0);
+> +       error =3D PTR_ERR(folio);
+> +       if (IS_ERR(folio))
+>                 goto out;
+> -       error =3D __gfs2_unstuff_inode(ip, page);
+> -       unlock_page(page);
+> -       put_page(page);
+> +       error =3D __gfs2_unstuff_inode(ip, folio);
+> +       folio_unlock(folio);
+> +       folio_put(folio);
+>  out:
+>         up_write(&ip->i_rw_mutex);
+>         return error;
 > --
 > 2.40.1
 >
->
 
 Reviewed-by: Andreas Gruenbacher <agruenba@redhat.com>
+
+Thanks,
+Andreas
 
