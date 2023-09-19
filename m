@@ -2,98 +2,208 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E687A5ABA
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 19 Sep 2023 09:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A397A6435
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 19 Sep 2023 15:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbjISHUP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 19 Sep 2023 03:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49666 "EHLO
+        id S232305AbjISNBv (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 19 Sep 2023 09:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbjISHUP (ORCPT
+        with ESMTP id S232207AbjISNBu (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 19 Sep 2023 03:20:15 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826F7102;
-        Tue, 19 Sep 2023 00:20:09 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-59ec6d7bb89so10536687b3.2;
-        Tue, 19 Sep 2023 00:20:09 -0700 (PDT)
+        Tue, 19 Sep 2023 09:01:50 -0400
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6032FF3;
+        Tue, 19 Sep 2023 06:01:45 -0700 (PDT)
+Received: by mail-vk1-xa2e.google.com with SMTP id 71dfb90a1353d-493a661d7b6so4314512e0c.1;
+        Tue, 19 Sep 2023 06:01:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695128504; x=1695733304; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2w/wQ8V2E6A/A9h71MT3wsUIExlrWO06vblA9KgaYVM=;
+        b=JASdwCEnfgAb+ft+LfrupnfREkabkKh+Q1dnk9x5iaDpzTEIn8g+Rj7oPgJzQ8eVPI
+         xg2l6e4Dnao6cNTgfXTivP2PHl0y+4qrBJv9qR5mbmjQtcJDrwc96/mMH6f1p0AkxsIE
+         4JFcBiviHvGRtepNJ9KhkaYdVyKkMOSJrXz1UwwW8iyt7j9onZnZvHZ5iWdsxyXbyoVj
+         /uh6X5OdInRxukWgUCQpBur9qkyAt5HiCjPWKCMj+3O5jtpkPo3ifd8D/1TbTgxHxBGG
+         KXck9S9Pad0T3ogphS3h3xF4elhUJvTuJbqeHhddq4oQ9xWhklKXWV4Be+6uR1UqGkDw
+         bPxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695108008; x=1695712808;
+        d=1e100.net; s=20230601; t=1695128504; x=1695733304;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Oo6GeNFpLlGOQI2skflDC69t+uMur/RFCpLqTRniHYk=;
-        b=TyGGjzmSGJZEldzjehK54K/s8hzTrWAPt+d4jVGaWDh72hx84pyS+GgRbl7DdIhchp
-         ZvDFVk5SmGy9HhNoGY7Riz0P2sktiIM4c+q3z6rP2XynxEVYUiK8Ti6i4tHP3fOtVkGj
-         UNHIWbFYhUKB/Wp/zjIyigkqP2aOQhMuOUWXijtidKh+Fl2fy+wWNctbKAXlIpYJns1W
-         zojJa0asrSqcQihHsk9XatgJU20kFOZY7vtctX2LtfKg6McEBRRAVYd/aC5RE3txxod2
-         0yivDbaXEKBYoNJ9gbKt9ZoTreSa1DjuFbG6D6V9BhfCHcCkLzrGGvVY8XiCNcWG+FHy
-         Hvpw==
-X-Gm-Message-State: AOJu0YxPVpojtEnpjYq6lZjH5dh0uVy26vbchi+u0ISDkEBpCDI2DQF3
-        INfN18qgGWyEloxCSVddZ1nIsxDS0nZCEw==
-X-Google-Smtp-Source: AGHT+IGr3jxIj37/Mu4rv7iXYA2sJBS9RCoxRtz3Y3n/qoElqL6+yqJVOSi28j1UqGOVjpbbAJ2CUg==
-X-Received: by 2002:a81:df06:0:b0:599:b570:2db7 with SMTP id c6-20020a81df06000000b00599b5702db7mr10420183ywn.30.1695108008315;
-        Tue, 19 Sep 2023 00:20:08 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id j124-20020a0dc782000000b0059af121d0b8sm3080319ywd.52.2023.09.19.00.20.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Sep 2023 00:20:08 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-59e8d963adbso22485717b3.0;
-        Tue, 19 Sep 2023 00:20:08 -0700 (PDT)
-X-Received: by 2002:a0d:db50:0:b0:59b:cda7:893e with SMTP id
- d77-20020a0ddb50000000b0059bcda7893emr11229694ywe.15.1695108008002; Tue, 19
- Sep 2023 00:20:08 -0700 (PDT)
+        bh=2w/wQ8V2E6A/A9h71MT3wsUIExlrWO06vblA9KgaYVM=;
+        b=MtRlPiicBBBmoQDbCs43hreygZhYpXFPx4eCvFUZ3VljODGSd+tnRu70ntEOaV0nwG
+         3CBkocKZPLBHwLacMSD3j2pQckjz0Dsbxyi9BMk/vbDJbhez3Tbjo9lZtn4I6HwlZlpK
+         ZE9fpNS8RIaS+GA+mfY4Ddri7kjnOznY5SgH2IxYzT+1DU1aC3tbfr0bgmP1RdOKCrKr
+         qrAe2v/j04XmStVyoaFwNd7nPQm6qQ+Tks9dtxJ7T71RQLclIgkq9RNzvDYJhbQV7WD3
+         usyRRDxBZvbaGPpHGD2Pj4wPZjyMbe/kGyxIGIM1xuNR7GPdjtUldYb+zzv+qcRFz8Go
+         Lrwg==
+X-Gm-Message-State: AOJu0YwKjqlqe8fOkMq4e0CAVpFmOXAeQKRVO5ZI2nPAPRh7E0cX/ZgV
+        9BVLcVyzuSHADv0pPYZj99KoxS1oV+K6EFdBiwk=
+X-Google-Smtp-Source: AGHT+IGt+cH+gF//llikjpiYbxgkUAmOFr3hKUulbwUJC348hXuZy75vYMRDDJ/wPMR9xuIT1pMOSxpCoePjUW6q3X0=
+X-Received: by 2002:a05:6122:3657:b0:496:2d54:e6f0 with SMTP id
+ dv23-20020a056122365700b004962d54e6f0mr921811vkb.6.1695128503713; Tue, 19 Sep
+ 2023 06:01:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230918175529.19011-1-peter@n8pjl.ca> <20230918175529.19011-6-peter@n8pjl.ca>
-In-Reply-To: <20230918175529.19011-6-peter@n8pjl.ca>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 19 Sep 2023 09:19:56 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVQaBBZgSsgZyNR2HxMsck2fWNjG6fK93eBFFeyDz0Hkw@mail.gmail.com>
-Message-ID: <CAMuHMdVQaBBZgSsgZyNR2HxMsck2fWNjG6fK93eBFFeyDz0Hkw@mail.gmail.com>
-Subject: Re: [PATCH 5/7] arch: m68k: remove ReiserFS from defconfig
-To:     Peter Lafreniere <peter@n8pjl.ca>
-Cc:     linux-m68k@lists.linux-m68k.org, jack@suse.cz,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230919045135.3635437-1-willy@infradead.org> <20230919045135.3635437-12-willy@infradead.org>
+In-Reply-To: <20230919045135.3635437-12-willy@infradead.org>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Tue, 19 Sep 2023 22:01:27 +0900
+Message-ID: <CAKFNMonjfsWBageg6vfWok9vvNEzjhXiqCCb+=cDFuwnTER95A@mail.gmail.com>
+Subject: Re: [PATCH 11/26] nilfs2: Convert nilfs_copy_page() to nilfs_copy_folio()
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, gfs2@lists.linux.dev,
+        linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev,
+        reiserfs-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        Pankaj Raghav <p.raghav@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hi Peter,
+Hi,
 
-On Mon, Sep 18, 2023 at 7:57 PM Peter Lafreniere <peter@n8pjl.ca> wrote:
-> ReiserFS has been deprecated for a year and a half, yet is still built
-> as part of a defconfig kernel.
+On Tue, Sep 19, 2023 at 1:56=E2=80=AFPM Matthew Wilcox (Oracle) wrote:
 >
-> According to commit eb103a51640e ("reiserfs: Deprecate reiserfs"), the
-> filesystem is slated to be removed in 2025. Remove it from the defconfig
-> profiles now, as part of its deprecation process.
+> Both callers already have a folio, so pass it in and use it directly.
+> Removes a lot of hidden calls to compound_head().
 >
-> Signed-off-by: Peter Lafreniere <peter@n8pjl.ca>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  fs/nilfs2/page.c | 50 +++++++++++++++++++++++++-----------------------
+>  1 file changed, 26 insertions(+), 24 deletions(-)
+>
+> diff --git a/fs/nilfs2/page.c b/fs/nilfs2/page.c
+> index 1c075bd906c9..696215d899bf 100644
+> --- a/fs/nilfs2/page.c
+> +++ b/fs/nilfs2/page.c
+> @@ -184,30 +184,32 @@ void nilfs_page_bug(struct page *page)
+>  }
+>
+>  /**
+> - * nilfs_copy_page -- copy the page with buffers
+> - * @dst: destination page
+> - * @src: source page
+> - * @copy_dirty: flag whether to copy dirty states on the page's buffer h=
+eads.
+> + * nilfs_copy_folio -- copy the folio with buffers
+> + * @dst: destination folio
+> + * @src: source folio
+> + * @copy_dirty: flag whether to copy dirty states on the folio's buffer =
+heads.
+>   *
+> - * This function is for both data pages and btnode pages.  The dirty fla=
+g
+> - * should be treated by caller.  The page must not be under i/o.
+> - * Both src and dst page must be locked
+> + * This function is for both data folios and btnode folios.  The dirty f=
+lag
+> + * should be treated by caller.  The folio must not be under i/o.
+> + * Both src and dst folio must be locked
+>   */
+> -static void nilfs_copy_page(struct page *dst, struct page *src, int copy=
+_dirty)
+> +static void nilfs_copy_folio(struct folio *dst, struct folio *src,
+> +               bool copy_dirty)
+>  {
+>         struct buffer_head *dbh, *dbufs, *sbh;
+>         unsigned long mask =3D NILFS_BUFFER_INHERENT_BITS;
+>
+> -       BUG_ON(PageWriteback(dst));
+> +       BUG_ON(folio_test_writeback(dst));
+>
+> -       sbh =3D page_buffers(src);
+> -       if (!page_has_buffers(dst))
+> -               create_empty_buffers(dst, sbh->b_size, 0);
+> +       sbh =3D folio_buffers(src);
+> +       dbh =3D folio_buffers(dst);
+> +       if (!dbh)
+> +               dbh =3D folio_create_empty_buffers(dst, sbh->b_size, 0);
+>
+>         if (copy_dirty)
+>                 mask |=3D BIT(BH_Dirty);
+>
+> -       dbh =3D dbufs =3D page_buffers(dst);
+> +       dbufs =3D dbh;
+>         do {
+>                 lock_buffer(sbh);
+>                 lock_buffer(dbh);
+> @@ -218,16 +220,16 @@ static void nilfs_copy_page(struct page *dst, struc=
+t page *src, int copy_dirty)
+>                 dbh =3D dbh->b_this_page;
+>         } while (dbh !=3D dbufs);
+>
+> -       copy_highpage(dst, src);
+> +       folio_copy(dst, src);
+>
+> -       if (PageUptodate(src) && !PageUptodate(dst))
+> -               SetPageUptodate(dst);
+> -       else if (!PageUptodate(src) && PageUptodate(dst))
+> -               ClearPageUptodate(dst);
+> -       if (PageMappedToDisk(src) && !PageMappedToDisk(dst))
+> -               SetPageMappedToDisk(dst);
+> -       else if (!PageMappedToDisk(src) && PageMappedToDisk(dst))
+> -               ClearPageMappedToDisk(dst);
+> +       if (folio_test_uptodate(src) && !folio_test_uptodate(dst))
+> +               folio_mark_uptodate(dst);
+> +       else if (!folio_test_uptodate(src) && folio_test_uptodate(dst))
+> +               folio_clear_uptodate(dst);
+> +       if (folio_test_mappedtodisk(src) && !folio_test_mappedtodisk(dst)=
+)
+> +               folio_set_mappedtodisk(dst);
+> +       else if (!folio_test_mappedtodisk(src) && folio_test_mappedtodisk=
+(dst))
+> +               folio_clear_mappedtodisk(dst);
+>
+>         do {
+>                 unlock_buffer(sbh);
+> @@ -269,7 +271,7 @@ int nilfs_copy_dirty_pages(struct address_space *dmap=
+,
+>                         NILFS_PAGE_BUG(&folio->page,
+>                                        "found empty page in dat page cach=
+e");
+>
+> -               nilfs_copy_page(&dfolio->page, &folio->page, 1);
+> +               nilfs_copy_folio(dfolio, folio, true);
+>                 filemap_dirty_folio(folio_mapping(dfolio), dfolio);
+>
+>                 folio_unlock(dfolio);
+> @@ -314,7 +316,7 @@ void nilfs_copy_back_pages(struct address_space *dmap=
+,
+>                 if (!IS_ERR(dfolio)) {
+>                         /* overwrite existing folio in the destination ca=
+che */
+>                         WARN_ON(folio_test_dirty(dfolio));
+> -                       nilfs_copy_page(&dfolio->page, &folio->page, 0);
+> +                       nilfs_copy_folio(dfolio, folio, false);
+>                         folio_unlock(dfolio);
+>                         folio_put(dfolio);
+>                         /* Do we not need to remove folio from smap here?=
+ */
+> --
+> 2.40.1
 
-Thanks for your patch!
+When I tried to test the patchset against 6.6-rc2, I encountered the
+following error during the build:
 
-Given these defconfigs enable ReiserFS as a module (not built-in),
-and that ReiserFS is still available upstream, and enabled by distros
-like Debian, I would like to keep it that way.
-The m68k defconfigs will be updated after the removal of ReiserFS,
-as part of the regular defconfig resync.
+ ERROR: modpost: "folio_copy" [fs/nilfs2/nilfs2.ko] undefined!
 
-Gr{oetje,eeting}s,
+It looks like "folio_copy" is not exported to modules.
 
-                        Geert
+I'll correct this manually for now and proceed with the review and
+testing, but could you please fix this build issue in some way ?
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+Ryusuke Konishi
