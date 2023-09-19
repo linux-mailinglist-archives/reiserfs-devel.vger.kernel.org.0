@@ -2,69 +2,76 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531BB7A6B08
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 19 Sep 2023 21:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CABB87A6E9C
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 20 Sep 2023 00:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232648AbjISTAT (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 19 Sep 2023 15:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
+        id S230370AbjISW2P (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 19 Sep 2023 18:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232590AbjISTAP (ORCPT
+        with ESMTP id S229887AbjISW2P (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 19 Sep 2023 15:00:15 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC824E1;
-        Tue, 19 Sep 2023 12:00:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695150008; x=1726686008;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+sS+JNmoHLMHmoY3ifeSMQHL71aCGWfQ89oWz/WEOJ8=;
-  b=ETTUoSNAXPPAvG8swhEPsOwglhdQntT1XVbkJPUP0KDenTGinZGI6lPY
-   Fx9rlzrbj+0XKkYtcjm45U624bB0t1jHvpx1T2Nfo48+bV/J+PEDI6VEj
-   w52Hfd0kXdoW2TsVsSMM5UtcQ2iaLjBWHoT2F9OLO3AYJ3OxayEAwUjBb
-   be/Wj6GT9eUgxCVlPcYRPA4qxGZyUstXALgpHPi65vcCF5PbVxvUqD/vM
-   XM5Zz2Impag0SC63yaXBq7jrpRtC16fO0Wa3jlDq+WiJpnDi1DzNeqCW/
-   N9ZF2lFEUz4eEiZ/7ig70LZRVnzj42/LJYGml8mwSbHEQzTyOayRqxSdI
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="377335257"
-X-IronPort-AV: E=Sophos;i="6.02,160,1688454000"; 
-   d="scan'208";a="377335257"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 12:00:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="749601584"
-X-IronPort-AV: E=Sophos;i="6.02,160,1688454000"; 
-   d="scan'208";a="749601584"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 19 Sep 2023 12:00:05 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qifx4-0007oq-2w;
-        Tue, 19 Sep 2023 19:00:02 +0000
-Date:   Wed, 20 Sep 2023 02:59:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Tue, 19 Sep 2023 18:28:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10F2BA
+        for <reiserfs-devel@vger.kernel.org>; Tue, 19 Sep 2023 15:27:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1695162443;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ji3zY74AAdaK/amC610EHUTsu6YY14D+u0Ic8yX0wF0=;
+        b=JIKpQWfA49zpIKNtrg5Aph4lwwQGKJyFRgdwxUCJ0InrRAD5FWx1T+ciJE1C8hKiRHPv3P
+        N4I9EzBRdj1TpDKuIhQtdk3XTLExEikRFq8LiUw3hM3kL2ErxwOpVSdhFTxsy736+LLqjC
+        uqBPqkyvq/H6WeXWITbuZLE5MbqQvm4=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-439-XkXwC7mvM9-3lPWyAqrwPA-1; Tue, 19 Sep 2023 18:27:21 -0400
+X-MC-Unique: XkXwC7mvM9-3lPWyAqrwPA-1
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-68fe22b77b6so5359610b3a.1
+        for <reiserfs-devel@vger.kernel.org>; Tue, 19 Sep 2023 15:27:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695162440; x=1695767240;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ji3zY74AAdaK/amC610EHUTsu6YY14D+u0Ic8yX0wF0=;
+        b=UIswuI0Jpc3T4xiz3M3Hhl1Zr229mvquwrZEBQzetC87QlHwocrMV9NsKG4deBMact
+         yLFHS5P/A44/bI72pfYbfyNKPNrNDMutyinpI0RQr1bNaWgIdgpLAZItfoUOTcCEDErv
+         sM7ZuIPWUrusBDtgGcdaYY3jqxceFTYW4Z3fE/fLDmHZ/HhXMfgFoYFQEk2tdrEhMuqS
+         /pD6GXkasCQHnKgS6/UHH0EW/4S31Rv/HWYMWnJo7sXwbggpItlE/ksL5k8dVz3Tz2Ly
+         LdDKnKMQNF/QQrx8anXnL89Pa6LE9c+6KkcesqamAR1CswLdDd3A2Rl9gCAJJgUaDnL7
+         0i9Q==
+X-Gm-Message-State: AOJu0YwtGrjCVBJ1xsL/bdfteeoxTVtzayhIrNV32ojsEKqAp5bTJ4T9
+        LlIBljgAPi+14swQ/rO3SRyQQ4DV/P89XUDzP+GIdgkyH3XLglNTeMG2V+ciTDUkDj2ENEWE4MW
+        LUvmo9sA/SKPupXstMRWBCvncyYMUAe4o00r7faFCkGY=
+X-Received: by 2002:a05:6a21:7895:b0:13d:5b8e:db83 with SMTP id bf21-20020a056a21789500b0013d5b8edb83mr970430pzc.9.1695162440764;
+        Tue, 19 Sep 2023 15:27:20 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGvdFAMQ3u88UkWAe1LyDTaTZ9DZaFRmPuZojxyrc2071D47l1IiQLEM8pi3uRxKzn4ewwGY98liyEB7kMo1sI=
+X-Received: by 2002:a05:6a21:7895:b0:13d:5b8e:db83 with SMTP id
+ bf21-20020a056a21789500b0013d5b8edb83mr970415pzc.9.1695162440533; Tue, 19 Sep
+ 2023 15:27:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230919045135.3635437-1-willy@infradead.org> <20230919045135.3635437-8-willy@infradead.org>
+In-Reply-To: <20230919045135.3635437-8-willy@infradead.org>
+From:   Andreas Gruenbacher <agruenba@redhat.com>
+Date:   Wed, 20 Sep 2023 00:27:08 +0200
+Message-ID: <CAHc6FU4-RSAsc-LWw2OuLDecofapd30OZhxyjVKLXzJNwh-ZoA@mail.gmail.com>
+Subject: Re: [PATCH 07/26] gfs2; Convert gfs2_getjdatabuf to use a folio
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-fsdevel@vger.kernel.org, gfs2@lists.linux.dev,
         linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
         ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev,
         reiserfs-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
         Pankaj Raghav <p.raghav@samsung.com>
-Subject: Re: [PATCH 11/26] nilfs2: Convert nilfs_copy_page() to
- nilfs_copy_folio()
-Message-ID: <202309200252.NpD8SUsn-lkp@intel.com>
-References: <20230919045135.3635437-12-willy@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230919045135.3635437-12-willy@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,134 +79,72 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hi Matthew,
+Thanks,
 
-kernel test robot noticed the following build errors:
+but this patch has an unwanted semicolon in the subject.
 
-[auto build test ERROR on next-20230918]
-[also build test ERROR on v6.6-rc2]
-[cannot apply to konis-nilfs2/upstream gfs2/for-next tytso-ext4/dev linus/master v6.6-rc2 v6.6-rc1 v6.5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Tue, Sep 19, 2023 at 7:00=E2=80=AFAM Matthew Wilcox (Oracle)
+<willy@infradead.org> wrote:
+>
+> Use the folio APIs, saving four hidden calls to compound_head().
+>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  fs/gfs2/meta_io.c | 22 ++++++++--------------
+>  1 file changed, 8 insertions(+), 14 deletions(-)
+>
+> diff --git a/fs/gfs2/meta_io.c b/fs/gfs2/meta_io.c
+> index f1fac1b45059..b28196015543 100644
+> --- a/fs/gfs2/meta_io.c
+> +++ b/fs/gfs2/meta_io.c
+> @@ -400,26 +400,20 @@ static struct buffer_head *gfs2_getjdatabuf(struct =
+gfs2_inode *ip, u64 blkno)
+>  {
+>         struct address_space *mapping =3D ip->i_inode.i_mapping;
+>         struct gfs2_sbd *sdp =3D GFS2_SB(&ip->i_inode);
+> -       struct page *page;
+> +       struct folio *folio;
+>         struct buffer_head *bh;
+>         unsigned int shift =3D PAGE_SHIFT - sdp->sd_sb.sb_bsize_shift;
+>         unsigned long index =3D blkno >> shift; /* convert block to page =
+*/
+>         unsigned int bufnum =3D blkno - (index << shift);
+>
+> -       page =3D find_get_page_flags(mapping, index, FGP_LOCK|FGP_ACCESSE=
+D);
+> -       if (!page)
+> -               return NULL;
+> -       if (!page_has_buffers(page)) {
+> -               unlock_page(page);
+> -               put_page(page);
+> +       folio =3D __filemap_get_folio(mapping, index, FGP_LOCK | FGP_ACCE=
+SSED, 0);
+> +       if (IS_ERR(folio))
+>                 return NULL;
+> -       }
+> -       /* Locate header for our buffer within our page */
+> -       for (bh =3D page_buffers(page); bufnum--; bh =3D bh->b_this_page)
+> -               /* Do nothing */;
+> -       get_bh(bh);
+> -       unlock_page(page);
+> -       put_page(page);
+> +       bh =3D folio_buffers(folio);
+> +       if (bh)
+> +               get_nth_bh(bh, bufnum);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/buffer-Make-folio_create_empty_buffers-return-a-buffer_head/20230919-125330
-base:   next-20230918
-patch link:    https://lore.kernel.org/r/20230919045135.3635437-12-willy%40infradead.org
-patch subject: [PATCH 11/26] nilfs2: Convert nilfs_copy_page() to nilfs_copy_folio()
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20230920/202309200252.NpD8SUsn-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230920/202309200252.NpD8SUsn-lkp@intel.com/reproduce)
+And we need this here:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309200252.NpD8SUsn-lkp@intel.com/
+    bh =3D get_nth_bh(bh, bufnum);
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+> +       folio_unlock(folio);
+> +       folio_put(folio);
+>         return bh;
+>  }
+>
+> --
+> 2.40.1
+>
+>
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/amt.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/macvtap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/tap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/ppp/ppp_generic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/ppp/ppp_async.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/ppp/bsd_comp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/ppp/ppp_deflate.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/ppp/ppp_synctty.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/net/slip/slhc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cdrom/cdrom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/s390/cio/vfio_ccw.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/s390/block/dcssblk.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/s390/net/lcs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/802/garp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/act_gate.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_htb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_hfsc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_red.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_gred.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_ingress.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_sfq.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_tbf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_teql.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_prio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_multiq.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_netem.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_drr.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_plug.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_ets.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_mqprio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_mqprio_lib.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_choke.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/sch_qfq.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/cls_u32.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/cls_route.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/cls_fw.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/cls_basic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netlink/netlink_diag.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nfnetlink_osf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nf_conntrack.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nf_conntrack_netlink.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nf_conntrack_broadcast.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nf_nat.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nf_tables.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nft_fib.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/nft_chain_nat.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_rr.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_wrr.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_lc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_wlc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_lblc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_lblcr.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_dh.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_sh.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_sed.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_nq.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_twos.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_ftp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_pe_sip.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/nf_defrag_ipv4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/nf_reject_ipv4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/iptable_nat.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/iptable_raw.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_tunnel.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ipip.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_gre.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/udp_tunnel.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_vti.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ah4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/esp4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/xfrm4_tunnel.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/tunnel4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/inet_diag.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/tcp_diag.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/udp_diag.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/xfrm/xfrm_algo.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/xfrm/xfrm_user.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/unix/unix_diag.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/netfilter/ip6table_raw.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/netfilter/ip6table_nat.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/netfilter/nf_defrag_ipv6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/netfilter/nf_reject_ipv6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/ah6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/esp6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/xfrm6_tunnel.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/tunnel6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/mip6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/sit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/ip6_udp_tunnel.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/packet/af_packet_diag.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/8021q/8021q.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/mptcp/mptcp_diag.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/key/af_key.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sunrpc/sunrpc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sunrpc/auth_gss/auth_rpcgss.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sunrpc/auth_gss/rpcsec_gss_krb5.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sctp/sctp_diag.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/smc/smc_diag.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/vmw_vsock/vsock_diag.o
->> ERROR: modpost: "folio_copy" [fs/nilfs2/nilfs2.ko] undefined!
+Reviewed-by: Andreas Gruenbacher <agruenba@redhat.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
