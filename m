@@ -2,57 +2,57 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE8A7A77BA
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 20 Sep 2023 11:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1687A780D
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 20 Sep 2023 11:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234114AbjITJkG (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 20 Sep 2023 05:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
+        id S234276AbjITJy7 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 20 Sep 2023 05:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233968AbjITJkE (ORCPT
+        with ESMTP id S234269AbjITJy5 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 20 Sep 2023 05:40:04 -0400
+        Wed, 20 Sep 2023 05:54:57 -0400
 Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8040FA9
-        for <reiserfs-devel@vger.kernel.org>; Wed, 20 Sep 2023 02:39:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67872CE
+        for <reiserfs-devel@vger.kernel.org>; Wed, 20 Sep 2023 02:54:50 -0700 (PDT)
 Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230920093953euoutp01e04f45617fc000995a13fce704e7c1db~GkfWVVEeO1214712147euoutp01_
-        for <reiserfs-devel@vger.kernel.org>; Wed, 20 Sep 2023 09:39:53 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230920093953euoutp01e04f45617fc000995a13fce704e7c1db~GkfWVVEeO1214712147euoutp01_
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230920095448euoutp019ecf5b574153cf6b686e80a33f9c9778~GksXXPKAN2854528545euoutp013
+        for <reiserfs-devel@vger.kernel.org>; Wed, 20 Sep 2023 09:54:48 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230920095448euoutp019ecf5b574153cf6b686e80a33f9c9778~GksXXPKAN2854528545euoutp013
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1695202793;
-        bh=8FReEKvP2/9isPLe8nU44iPC4r0J6E6Ai2YqflXjyCw=;
+        s=mail20170921; t=1695203688;
+        bh=FdSyQmvYuBWOq4bw3GT24G1UfEtiREjPwKS1idfELH8=;
         h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=uaT+CpPyHBwpdMTbYTG9qjqIoJ4UjIlkSvhYzSUimcVVo9AJql9kekFLgl5327hHh
-         ygOlYrCF+RHeFYZ6AABShpEMUEqTaJanfheZ26NoUsEe7TmmlqriAXfYygmxVFdmXA
-         HaefDCueGx1VstS842F9y1awIj3Ars2LP4C4JJyk=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        b=Ec8Eu9Iotlyy+vzC6ecrgZzOSbmNawykSDCZ2cEBLkYqnG552ZivaqgvQmFroqojZ
+         0apmrP10brCQuzJWbLuDqQ/m/OCs03Y9oTFH+rTTz7yeywA47UT5brzZRjGEVW2c2j
+         kJ2e6On5KmXgwTHbwVh+Jh+mUcosu6Z+XJ+n2OoA=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
         eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230920093953eucas1p2e4ddd2dff879f9e82eb8f372d4047ebe~GkfV6bAqd1033110331eucas1p29;
-        Wed, 20 Sep 2023 09:39:53 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id DE.F3.42423.9EDBA056; Wed, 20
-        Sep 2023 10:39:53 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230920093952eucas1p1f37c688dc553d6a85882cae29861a870~GkfVfnlkC1425614256eucas1p1o;
-        Wed, 20 Sep 2023 09:39:52 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230920093952eusmtrp19fb74615e090c3af0b84edd4126d7846~GkfVe4grm3119431194eusmtrp1F;
-        Wed, 20 Sep 2023 09:39:52 +0000 (GMT)
-X-AuditID: cbfec7f2-a3bff7000002a5b7-f9-650abde910e3
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 80.32.14344.8EDBA056; Wed, 20
-        Sep 2023 10:39:52 +0100 (BST)
+        20230920095447eucas1p2d07e0c21866187f0fb17c2566f12038b~GksW6VjCX0152901529eucas1p27;
+        Wed, 20 Sep 2023 09:54:47 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id D8.14.11320.761CA056; Wed, 20
+        Sep 2023 10:54:47 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230920095447eucas1p2fee0541ad835331ff6b4c5143122c341~GksWaVgbe1485014850eucas1p2P;
+        Wed, 20 Sep 2023 09:54:47 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230920095447eusmtrp2dd75109d9e2e8aefd7e741d6c783b243~GksWYuar-2278922789eusmtrp2k;
+        Wed, 20 Sep 2023 09:54:47 +0000 (GMT)
+X-AuditID: cbfec7f4-993ff70000022c38-c3-650ac1672e0f
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 30.89.10549.761CA056; Wed, 20
+        Sep 2023 10:54:47 +0100 (BST)
 Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230920093952eusmtip20633d16fabb312d639378e5ebaaa4d6a~GkfVNjSlQ3193531935eusmtip2V;
-        Wed, 20 Sep 2023 09:39:52 +0000 (GMT)
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230920095446eusmtip1058762671c78d44496b0673bff114cfd~GksWO0MFl2214322143eusmtip10;
+        Wed, 20 Sep 2023 09:54:46 +0000 (GMT)
 Received: from localhost (106.110.32.140) by CAMSVWEXC02.scsc.local
-        (106.1.227.72) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 20 Sep
-        2023 10:39:51 +0100
-Date:   Wed, 20 Sep 2023 11:39:50 +0200
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Wed, 20 Sep 2023 10:54:46 +0100
+Date:   Wed, 20 Sep 2023 11:54:45 +0200
 From:   Pankaj Raghav <p.raghav@samsung.com>
 To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
 CC:     Andrew Morton <akpm@linux-foundation.org>,
@@ -61,56 +61,56 @@ CC:     Andrew Morton <akpm@linux-foundation.org>,
         <linux-ntfs-dev@lists.sourceforge.net>, <ntfs3@lists.linux.dev>,
         <ocfs2-devel@lists.linux.dev>, <reiserfs-devel@vger.kernel.org>,
         <linux-ext4@vger.kernel.org>, <p.raghav@samsung.com>
-Subject: Re: [PATCH 01/26] buffer: Make folio_create_empty_buffers() return
- a buffer_head
-Message-ID: <20230920093950.b6lyvcs2tz22po3y@localhost>
+Subject: Re: [PATCH 02/26] mpage: Convert map_buffer_to_folio() to
+ folio_create_empty_buffers()
+Message-ID: <20230920095428.kxlv7gplxyy7wqpb@localhost>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230919045135.3635437-2-willy@infradead.org>
+In-Reply-To: <20230919045135.3635437-3-willy@infradead.org>
 X-Originating-IP: [106.110.32.140]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (106.1.227.71) To
-        CAMSVWEXC02.scsc.local (106.1.227.72)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNKsWRmVeSWpSXmKPExsWy7djPc7ov93KlGkx5xG4xZ/0aNovd0/+x
-        Wsycd4fNYs/ekywWf6abWLR3zGG0WPl4K5PFoXtXWS1mb13BbPH7xxw2By6PzSu0PE7M+M3i
-        8WLzTEaP3Qs+M3l83iQXwBrFZZOSmpNZllqkb5fAlXHt72mWgp/MFQ8W3WFuYOxn7mLk4JAQ
-        MJGYuJKti5GLQ0hgBaPEi9mXGSGcL4wSu57dYIFwPjNKfF20hr2LkROso3dzOztEYjmjxKGL
-        V9jgqrbvf84Il9lzegorSAuLgKrE+3dXWUAWsgloSTR2gk0SETCWmLh8P1gzs8BxJom9136B
-        1QgLREss3xgDUsMrYC7Re7aFBcIWlDg58wmYzSygI7Fg9yc2kHJmAWmJ5f84QMKcAtYSuz4f
-        ZoQ4VEmiYfMZFgg7WaLlz18mkFUSAj84JHace8AG8b+LxPtrgRA1whKvjm+BelJG4vTkHqje
-        aomnN34zQ/S2MEr071wP1Wst0XcmB8J0lLj0rQ7C5JO48VYQ4kg+iUnbpkMDmleio00IYqCa
-        xOp7b1gmMCrPQvLWLCRvzUJ4awEj8ypG8dTS4tz01GLDvNRyveLE3OLSvHS95PzcTYzA9HP6
-        3/FPOxjnvvqod4iRiYPxEKMEB7OSCG+uGleqEG9KYmVValF+fFFpTmrxIUZpDhYlcV5t25PJ
-        QgLpiSWp2ampBalFMFkmDk6pBiZXq5Lv23ZMjZnY6O1/9jp//bvkwgtv440aVRkXL+1K2+au
-        tE8ywrJz4TwBlqqLfDKP3sQ07TiyYsNbUQZ3m4ATi+KLvcPkDtRn2oeo3Yv97XFSx2hnwqT7
-        qlaTxYuKpWdrTNl34dn0F5ss/i2beF2R/xfrZyWj9DNm5ZWvbtaL5+9+/OH3Mpa7jMY7Xk/5
-        Hvl307UQkWD3uXyZWqf5OK9r7buivHHOp8sTlLUyy+OrLY6Ysfg3HHBcZiykZOnOPudioVhM
-        U/arDQ/6lp5fHCLM+vidlMyk0v6vv3bX2ITd231D/f9+7T1HXiToX7n4/ObkLIMX2cXrI3a3
-        Jc/oZzrJsrWAd1spO7ev+3S718FKLMUZiYZazEXFiQAyel5drgMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDIsWRmVeSWpSXmKPExsVy+t/xe7ov9nKlGry6oGExZ/0aNovd0/+x
-        Wsycd4fNYs/ekywWf6abWLR3zGG0WPl4K5PFoXtXWS1mb13BbPH7xxw2By6PzSu0PE7M+M3i
-        8WLzTEaP3Qs+M3l83iQXwBqlZ1OUX1qSqpCRX1xiqxRtaGGkZ2hpoWdkYqlnaGwea2VkqqRv
-        Z5OSmpNZllqkb5egl3Ht72mWgp/MFQ8W3WFuYOxn7mLk5JAQMJHo3dzO3sXIxSEksJRR4kHf
-        ciaIhIzExi9XWSFsYYk/17rYIIo+Mkqc2rQXylnOKLGyfQYbSBWLgKrE+3dXWboYOTjYBLQk
-        GjvZQcIiAsYSE5fvB6tnFjjOJLH32i8WkISwQLTE/5UbwIp4Bcwles+2gMWFBLIljh/bwgQR
-        F5Q4OfMJWJxZQEdiwe5PbCDzmQWkJZb/4wAJcwpYS+z6fJgR4lAliYbNZ1gg7GSJSXt+MU5g
-        FJ6FZNIsJJNmIUxawMi8ilEktbQ4Nz232EivODG3uDQvXS85P3cTIzAatx37uWUH48pXH/UO
-        MTJxMB5ilOBgVhLhzVXjShXiTUmsrEotyo8vKs1JLT7EaAoMiYnMUqLJ+cB0kFcSb2hmYGpo
-        YmZpYGppZqwkzutZ0JEoJJCeWJKanZpakFoE08fEwSnVwKTesrBXPXed+WtuKX7TQtsjacuN
-        g1KXLwvVaWD6pfg3883fGB2D7aoZx6f/q/SJDtvv8OmtosZyQ86vUfVO5wQ+55y68/U8C9+U
-        7Xff9eiVKEy8WcnYcra2w20ny4Za2ykKDxcWrr0TsOmdXegbXQ676sn9y0yyfnAvrD87x+SZ
-        sBB3SOajW1vNErT83//kW7OQ5VB8+/GWK4fWMq2S2Kdxekei2rpvSZbXpn1YuF6+KKSTye70
-        7ov8+t1F3eE3ZjyXOyvpyPzmdE/hmriit6/0/YV0JJKeafVc/nNgYfZZ650pLleWbG2V4Mj9
-        XyrlUHE5+H3jBxuFmzsWienF3DWZEu/oMn+9IE/5mdK2g0osxRmJhlrMRcWJAGnrtghPAwAA
-X-CMS-MailID: 20230920093952eucas1p1f37c688dc553d6a85882cae29861a870
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDKsWRmVeSWpSXmKPExsWy7djP87rpB7lSDc7NVLKYs34Nm8Xu6f9Y
+        LWbOu8NmsWfvSRaLP9NNLNo75jBarHy8lcni0L2rrBazt65gtvj9Yw6bA5fH5hVaHidm/Gbx
+        eLF5JqPH7gWfmTw+b5ILYI3isklJzcksSy3St0vgyuj5c5Wp4CRTxezZs5kbGCcwdTFyckgI
+        mEjsmNfJ1sXIxSEksIJRYu2hg+wQzhdGiX/LpjFBOJ8ZJfau+csM03Li2itWiMRyRom2Y/fB
+        EmBV/15nQiS2MErcObuCDSTBIqAq0bP0CVAHBwebgJZEYyc7SFhEwFhi4vL9YLuZBY4zSey9
+        9osFJCEskChx8d1CMJtXwFzif8tFNghbUOLkzCdgcWYBHYkFuz+xgcxkFpCWWP6PAyTMKWAt
+        sb1lFjvEoUoSDZvPsEDYtRKnttyC+vkHh8Tlz1EQtovEyUOPGCFsYYlXx7dA9cpI/N85H6q+
+        WuLpjd/MIHdKCLQwSvTvXA+2VwJoWd+ZHAjTUeLY9GoIk0/ixltBiCP5JCZtm84MEeaV6GgT
+        ghioJrH63huWCYzKs5C8NQvJW7MQ3lrAyLyKUTy1tDg3PbXYKC+1XK84Mbe4NC9dLzk/dxMj
+        MAGd/nf8yw7G5a8+6h1iZOJgPMQowcGsJMKbq8aVKsSbklhZlVqUH19UmpNafIhRmoNFSZxX
+        2/ZkspBAemJJanZqakFqEUyWiYNTqoFpVW7s4i0nIt8XSn8+VGMk65rTv/vJ/70/I9sn/wv3
+        jzKc18t+cPfsGS+l1DbNZzVsLu6wSRBOmTKt6dWlW7bb1wkfMv0UNf1OvL/eoopQw+YdF171
+        auwT/nF0ud7U4/Mzf5lcPtZyf7JYa72r/r1dM6efu8aq/eqfT3TKKs1Pv6sdkvOd5Od27bI5
+        tuR6r784zyVFgaJ+QX7PV+HMjgx+q/9pl5xfZmOZ92xioPjnIs/oHxOuK75otmJeln1B8lLi
+        t0+hew0Kje03/2pK3Oy7cWLLV5E3jGyWDFssY79umfB3wro5z9OdP6odcpsZ7LUgq7cvof1W
+        26ZJG5nD50x7qcYuYVVY+WG20J1y5W1ySizFGYmGWsxFxYkAfDcpZK8DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDIsWRmVeSWpSXmKPExsVy+t/xu7rpB7lSDQ7eZLGYs34Nm8Xu6f9Y
+        LWbOu8NmsWfvSRaLP9NNLNo75jBarHy8lcni0L2rrBazt65gtvj9Yw6bA5fH5hVaHidm/Gbx
+        eLF5JqPH7gWfmTw+b5ILYI3SsynKLy1JVcjILy6xVYo2tDDSM7S00DMysdQzNDaPtTIyVdK3
+        s0lJzcksSy3St0vQy+j5c5Wp4CRTxezZs5kbGCcwdTFyckgImEicuPaKtYuRi0NIYCmjxIqF
+        X6ESMhIbv1xlhbCFJf5c62KDKPrIKPH4WQMLhLOFUWLuqc0sIFUsAqoSPUufAHVwcLAJaEk0
+        drKDhEUEjCUmLt8P1swscJxJYu+1X2D1wgKJEhffLQSzeQXMJf63XGQDsYUEsiXuLV0DFReU
+        ODnzCZjNLKAjsWD3JzaQ+cwC0hLL/3GAhDkFrCW2t8xihzhUSaJh8xkWCLtW4vPfZ4wTGIVn
+        IZk0C8mkWQiTFjAyr2IUSS0tzk3PLTbUK07MLS7NS9dLzs/dxAiMxm3Hfm7ewTjv1Ue9Q4xM
+        HIyHGCU4mJVEeHPVuFKFeFMSK6tSi/Lji0pzUosPMZoCQ2Iis5Rocj4wHeSVxBuaGZgamphZ
+        GphamhkrifN6FnQkCgmkJ5akZqemFqQWwfQxcXBKNTBZmOjwBKh/dLxzIJGzs+eBYcppHcHK
+        F+xCh79FFH1xkea6KL/YU8f1yytpr8vzf+Re52TbtbVv7umt96J/iTJejt8mIltdOO9O1KYX
+        L3pTklQsFv1qaGduCLDSYd8//Zvbpu8cTjPF0p5M6i8pCVA6uE08alLyyQ7+F1teh9xz/eT7
+        qWJVhEauw2LuqumrnhxOYF3oIfjjyFehX1WrT3PMv7MyT//eOsmLPNm3Uu7fb2TfJdx5uqlp
+        lWZv2jOGV55qVyXsJoqfdBGx2rTRR39T4LftIs9jbkQ8z/oiY5x9xMEs7Rd79mxZjgvMq43F
+        pl24pHNNc+K3tx1y7X1vNnK7PLARTwqXP7jst3Tzn9dKLMUZiYZazEXFiQDprdM9TwMAAA==
+X-CMS-MailID: 20230920095447eucas1p2fee0541ad835331ff6b4c5143122c341
 X-Msg-Generator: CA
-X-RootMTR: 20230920093952eucas1p1f37c688dc553d6a85882cae29861a870
+X-RootMTR: 20230920095447eucas1p2fee0541ad835331ff6b4c5143122c341
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20230920093952eucas1p1f37c688dc553d6a85882cae29861a870
+X-CMS-RootMailID: 20230920095447eucas1p2fee0541ad835331ff6b4c5143122c341
 References: <20230919045135.3635437-1-willy@infradead.org>
-        <20230919045135.3635437-2-willy@infradead.org>
-        <CGME20230920093952eucas1p1f37c688dc553d6a85882cae29861a870@eucas1p1.samsung.com>
+        <20230919045135.3635437-3-willy@infradead.org>
+        <CGME20230920095447eucas1p2fee0541ad835331ff6b4c5143122c341@eucas1p2.samsung.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
@@ -121,15 +121,12 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Tue, Sep 19, 2023 at 05:51:10AM +0100, Matthew Wilcox (Oracle) wrote:
-> Almost all callers want to know the first BH that was allocated
-> for this folio.  We already have that handy, so return it.
+On Tue, Sep 19, 2023 at 05:51:11AM +0100, Matthew Wilcox (Oracle) wrote:
+> Saves a folio->page->folio conversion.
 > 
 > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 > ---
->  fs/buffer.c                 | 24 +++++++++++++-----------
->  include/linux/buffer_head.h |  4 ++--
->  2 files changed, 15 insertions(+), 13 deletions(-)
-> 
+>  fs/mpage.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 Looks good,
 Reviewed-by: Pankaj Raghav <p.raghav@samsung.com>
