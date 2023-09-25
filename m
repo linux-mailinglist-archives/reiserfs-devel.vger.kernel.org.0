@@ -2,54 +2,55 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 721AA7AC5F0
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 24 Sep 2023 02:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD9E7ACFD2
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 25 Sep 2023 08:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjIXACb (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sat, 23 Sep 2023 20:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46104 "EHLO
+        id S232052AbjIYGEp (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 25 Sep 2023 02:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjIXACa (ORCPT
+        with ESMTP id S231985AbjIYGEm (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sat, 23 Sep 2023 20:02:30 -0400
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB592139
-        for <reiserfs-devel@vger.kernel.org>; Sat, 23 Sep 2023 17:02:23 -0700 (PDT)
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-3a831831118so7586707b6e.0
-        for <reiserfs-devel@vger.kernel.org>; Sat, 23 Sep 2023 17:02:23 -0700 (PDT)
+        Mon, 25 Sep 2023 02:04:42 -0400
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BC5DF
+        for <reiserfs-devel@vger.kernel.org>; Sun, 24 Sep 2023 23:04:35 -0700 (PDT)
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-3ae4cefdee5so602898b6e.0
+        for <reiserfs-devel@vger.kernel.org>; Sun, 24 Sep 2023 23:04:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695513743; x=1696118543;
+        d=1e100.net; s=20230601; t=1695621875; x=1696226675;
         h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TRTLhAaHmBf6L92pgz9HMkE8lNZQYMRgmuo+q5ZisvY=;
-        b=CTpj+JPftTnNnY/Q7GSpI3byaPV3iWSrG/nH/JAS6uSLHYVe5U4yRZtTd/v+mj3UVL
-         3kgAE4EzPNKQG8QoG7C6jgKNCgcRIUBSP98Iil1VOGvPPA3hO/MC/rYkPb3oyuqPSVOm
-         1BSRNx7ZBP7nFdQeZ1BEipDL0MujY+vZHlCJ27fUQa7PpIiM/Ls3o+1NZUo+jq2G849y
-         gHAAFtpz1hyL5lUDs8wTbmXLyY3mRNa794Flbd+mTl/Kz1eencON3B8EM5pohrYU6wCe
-         qEZbDvXZiMnfSyL+Q/78Kkjwd1bsj3pb2RuiZMyo05Wf/5uvZxXUy1GTn7uEKQ37VdCe
-         UmmQ==
-X-Gm-Message-State: AOJu0YyYt19Yw5EZ5jKBJ3riicH0rX3wGfnSdDaJsuLHKSBZiq18b/zO
-        Sjc0j/Lh1mRHx+NN0mi1HUQaMxUy5y7KcoQRz/6d/6k3/Gd8
-X-Google-Smtp-Source: AGHT+IGfx89OEM0dgcl6E42YsvcsU1YHXoQ79b1Iq0lAsZKrrx1aIx1LBPvW3hRAJipQ9VuzTrj5v2LLTyX1cbAPAO3EopyoxB0h
+        bh=khHBmXA2nIs3RhLksCBbFyOHEO223Qv5mG+a8oCpCJQ=;
+        b=fsKXb3lclzEzO2Ki9oWYukV//WlBUuyh4UnTO5ZvL84lCgidHi3URQPt5U79fGk6/D
+         1qJt9EIWGpgKUbZghKoBCxeZTDwIn6MHqU9+Fyp4V2ldAfXCgwmrmkiUEXbYitja4Ogc
+         HItop/P9XgPSrr+Dw4Yk/6l/ivKNlFSq5m7kuEHcLeG/4PgaV5uZKjYOgZQD4I7vVAua
+         I5THflM8MEwKpQmc0wnUOq3Z2NF7HCqqkbHSXkbvECdAXplKWHbQeuUa+Csc8PagQ8eI
+         NNCuPneRaOV5fSwCUwaIKDk6axfnDENd69ZxIq38mMpJ+lBTUQFodSvWN6egCKWHIkfe
+         P8PQ==
+X-Gm-Message-State: AOJu0YwxFalKPLToDJsQG1MdgLoVOmrbz+Zxo26jpou1q5Yn+zEVz5sj
+        WRQmqn9R5xiSD0H8t5CvlO7Mut3WSo3Thc1k59CRkyJwp2Uy
+X-Google-Smtp-Source: AGHT+IE485Egvd8Rw1szIweDcKYzID3+yJ1Zs3+MB+PybtfzFp8nFtfcYXSU3GYVqtn8I5orYLBFoL1j+GIQC7zKRp855KirTrKA
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:1786:b0:3ad:f6ad:b9cc with SMTP id
- bg6-20020a056808178600b003adf6adb9ccmr1827021oib.10.1695513743310; Sat, 23
- Sep 2023 17:02:23 -0700 (PDT)
-Date:   Sat, 23 Sep 2023 17:02:23 -0700
-In-Reply-To: <0000000000007fcc9c05f909f7f3@google.com>
+X-Received: by 2002:a05:6808:209d:b0:3ae:17ed:fdc9 with SMTP id
+ s29-20020a056808209d00b003ae17edfdc9mr3280617oiw.9.1695621875117; Sun, 24 Sep
+ 2023 23:04:35 -0700 (PDT)
+Date:   Sun, 24 Sep 2023 23:04:35 -0700
+In-Reply-To: <000000000000964cb905f5e876ff@google.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000061c35a06060f8eb3@google.com>
-Subject: Re: [syzbot] [reiserfs?] KASAN: null-ptr-deref Read in fix_nodes
-From:   syzbot <syzbot+5184326923f180b9d11a@syzkaller.appspotmail.com>
-To:     jack@suse.cz, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        rkovhaev@gmail.com, syzkaller-bugs@googlegroups.com
+Message-ID: <0000000000008a3693060628bb0b@google.com>
+Subject: Re: [syzbot] [reiserfs?] possible deadlock in delete_one_xattr (2)
+From:   syzbot <syzbot+7a278bf8bfa794494110@syzkaller.appspotmail.com>
+To:     amir73il@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        miklos@szeredi.hu, mszeredi@redhat.com,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,23 +59,23 @@ X-Mailing-List: reiserfs-devel@vger.kernel.org
 
 syzbot has bisected this issue to:
 
-commit d24396c5290ba8ab04ba505176874c4e04a2d53c
-Author: Rustam Kovhaev <rkovhaev@gmail.com>
-Date:   Sun Nov 1 14:09:58 2020 +0000
+commit 9df085f3c9a2d4658a9fe323d70c200aa00ede93
+Author: Amir Goldstein <amir73il@gmail.com>
+Date:   Mon Sep 3 06:12:09 2018 +0000
 
-    reiserfs: add check for an invalid ih_entry_count
+    ovl: relax requirement for non null uuid of lower fs
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15244cfa680000
-start commit:   b6dad5178cea Merge tag 'nios2_fix_v6.4' of git://git.kerne..
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1711e75a680000
+start commit:   ac9a78681b92 Linux 6.4-rc1
 git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=17244cfa680000
-console output: https://syzkaller.appspot.com/x/log.txt?x=13244cfa680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ac246111fb601aec
-dashboard link: https://syzkaller.appspot.com/bug?extid=5184326923f180b9d11a
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10bbc887280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c9558b280000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1491e75a680000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1091e75a680000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8bc832f563d8bf38
+dashboard link: https://syzkaller.appspot.com/bug?extid=7a278bf8bfa794494110
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1295e4b8280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=140af20a280000
 
-Reported-by: syzbot+5184326923f180b9d11a@syzkaller.appspotmail.com
-Fixes: d24396c5290b ("reiserfs: add check for an invalid ih_entry_count")
+Reported-by: syzbot+7a278bf8bfa794494110@syzkaller.appspotmail.com
+Fixes: 9df085f3c9a2 ("ovl: relax requirement for non null uuid of lower fs")
 
 For information about bisection process see: https://goo.gl/tpsmEJ#bisection
