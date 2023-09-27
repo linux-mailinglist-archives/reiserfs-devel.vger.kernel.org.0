@@ -2,194 +2,275 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6437B004B
-	for <lists+reiserfs-devel@lfdr.de>; Wed, 27 Sep 2023 11:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 207ED7B0068
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 27 Sep 2023 11:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbjI0Je4 (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 27 Sep 2023 05:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
+        id S231206AbjI0JfL (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 27 Sep 2023 05:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbjI0Jes (ORCPT
+        with ESMTP id S231156AbjI0JfA (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 27 Sep 2023 05:34:48 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9157A193;
-        Wed, 27 Sep 2023 02:34:45 -0700 (PDT)
+        Wed, 27 Sep 2023 05:35:00 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E38C0;
+        Wed, 27 Sep 2023 02:34:49 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 967601FD5E;
-        Wed, 27 Sep 2023 09:34:43 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3CEDB21979;
+        Wed, 27 Sep 2023 09:34:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1695807283; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=8yq/EWr5xgyIq2expGTOm/a8E50tdoL6jyUvlCURtkA=;
-        b=AFBlD5DhZEt1NESHiYyz8SkegLzofp7eJ1WULrYqvNawr6FwYRs8YvfnxMMuueLH4oaPAr
-        4/E8CfUtgD9JCSYdgqDNPTGf3WDqWggCkDqswdM4bg88sfMPDeWHH5NIlB2Bfj+JpMt9FG
-        ZcOWlzLEUXG/bpJ8Kbaqy4vRi+qRmpA=
+        t=1695807285; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SkE0nBE3ekp4wWEprUTLV2dWy7NnEc7cLcQScx2yoGI=;
+        b=IwPiI3Vv0KcD+Eeo+MwSDj0bQx15KCIo3PR2Wvtl5AbOcU1N95+DPniG3qjhRgmVlT8nlD
+        8/kV6XVEO76+sPWnqyrcQYm4W+CrmiVIvALu4gD1sJRuxK8H1t6W1zeOzBzvFCOUPk7QIQ
+        EuktnodbUoojvTKMPT1mqH+XnSM3Ztk=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1695807283;
+        s=susede2_ed25519; t=1695807285;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=8yq/EWr5xgyIq2expGTOm/a8E50tdoL6jyUvlCURtkA=;
-        b=mg4W9cwL1b35dhDAXFy+IpXoqDtwwHWZKy46oqV5YDeY2A866tqG4ZHrqCDezVtTxVLjRN
-        B2SqzI+xFxiJavDw==
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SkE0nBE3ekp4wWEprUTLV2dWy7NnEc7cLcQScx2yoGI=;
+        b=4Lp/SS4tDvj3uJuP/heCSJKskEbzaKjQ/aPBnzS2ebCv+NaIFRuNV0RcLmBcJp0eWNpzme
+        1gKbHCDadW9bgyAA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 779CF13A74;
-        Wed, 27 Sep 2023 09:34:43 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2C1AD13A74;
+        Wed, 27 Sep 2023 09:34:45 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id YqW3HDP3E2X+EgAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 27 Sep 2023 09:34:43 +0000
+        id UQjFCjX3E2U/EwAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 27 Sep 2023 09:34:45 +0000
 Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id DAA33A07C9; Wed, 27 Sep 2023 11:34:42 +0200 (CEST)
+        id B2A7CA0801; Wed, 27 Sep 2023 11:34:43 +0200 (CEST)
 From:   Jan Kara <jack@suse.cz>
 To:     Christian Brauner <brauner@kernel.org>
 Cc:     <linux-fsdevel@vger.kernel.org>, <linux-block@vger.kernel.org>,
         Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
-        Alasdair Kergon <agk@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Kleikamp <shaggy@kernel.org>,
-        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        jfs-discussion@lists.sourceforge.net,
-        Joern Engel <joern@lazybastard.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-xfs@vger.kernel.org,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Song Liu <song@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        xen-devel@lists.xenproject.org
-Subject: [PATCH v4 0/29] block: Make blkdev_get_by_*() return handle
-Date:   Wed, 27 Sep 2023 11:34:06 +0200
-Message-Id: <20230818123232.2269-1-jack@suse.cz>
+        reiserfs-devel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Subject: [PATCH 27/29] reiserfs: Convert to bdev_open_by_dev/path()
+Date:   Wed, 27 Sep 2023 11:34:33 +0200
+Message-Id: <20230927093442.25915-27-jack@suse.cz>
 X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20230818123232.2269-1-jack@suse.cz>
+References: <20230818123232.2269-1-jack@suse.cz>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3761; i=jack@suse.cz; h=from:subject:message-id; bh=szriGynEGZ/XhMNms+k06ASpRGig2ulDzrbrydRWx/Q=; b=owEBbQGS/pANAwAIAZydqgc/ZEDZAcsmYgBlE/cIrHCVKGuvNFZzgT9xiRfuRKr6Es2Qs4om7G7p jp8k2rmJATMEAAEIAB0WIQSrWdEr1p4yirVVKBycnaoHP2RA2QUCZRP3CAAKCRCcnaoHP2RA2XGWB/ 4+O+K19fPnUyIouL+A+izJvDBxQbTCWLdn5TEMu5YdIMbi0dvnwAfknt+NWIhJaTQX2oqlgt3Z+UIT peMYb+jQZabj8X4xHMMy3Sfq64tRwodJHlZby5Ux9AfTZe49zDp4M4B3yxQqarEhmz6e4FJUGDaSej vcJmLz6AuSnYuAh4QK/3jCXQrEElZRTjarZjfbunWocM/2dQ7CB+rOSwKJcRMoDpqntU8QyArxca4l q6I2pBMNjnYMgjtG+ABGSBtTrj87TuJSTB3V8qtI38sfCYjMVVEoQiJKuUm1GMh2sPOFelwVMXMCJH mKs8UbSjcFd3wsbJXc8EOKLxzYparl
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7626; i=jack@suse.cz; h=from:subject; bh=V4+hXDElzIJHCMJBQJ1hg4NZl5WPvmzUt2CR1zRKHDA=; b=owEBbQGS/pANAwAIAZydqgc/ZEDZAcsmYgBlE/coBG+ExYrSrx7R4V5N6xD/bbFOW7Aui6vDQUzg lM43JoKJATMEAAEIAB0WIQSrWdEr1p4yirVVKBycnaoHP2RA2QUCZRP3KAAKCRCcnaoHP2RA2QOmB/ sEK2G3V0JomYSvtb4RoiVBlhzQCmeLbwM+kYcu9injCuWPwxyGpfyUD9ThttktKk3tDe8tY6E7biwS 31TMQGnf+HjhYGS3Tf0fsBZzIbVMCteJ3mc3k0vmKoDWjK4i+fDWKh0x3iOpAHek0IAEUxQqYm5Dvj rt32dQQcsq67fCYh5bFfxuGwSbthpJmm0jgpZ9y/pmEqg2mytm8M3xVjepa9X8jCUVh4isIqo5t8cn LKnjCPAvH9QA0AEjGiuVaVQTlBIOoj39GYLR3QvKpF9NFh/u5eEgo4X8Dw3MqB3VHpl6KaRqld0LHs xaiOsqWD/NDGTPDQ4y7hou9DMlaSAj
 X-Developer-Key: i=jack@suse.cz; a=openpgp; fpr=93C6099A142276A28BBE35D815BC833443038D8C
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
+Convert reiserfs to use bdev_open_by_dev/path() and pass the handle
+around.
 
-this is a v3 of the patch series which implements the idea of blkdev_get_by_*()
-calls returning bdev_handle which is then passed to blkdev_put() [1]. This
-makes the get and put calls for bdevs more obviously matching and allows us to
-propagate context from get to put without having to modify all the users
-(again!). In particular I need to propagate used open flags to blkdev_put() to
-be able count writeable opens and add support for blocking writes to mounted
-block devices. I'll send that series separately.
-
-The series is based on Btrfs tree's for-next branch [2] as of today as the
-series depends on Christoph's changes to btrfs device handling.  Patches have
-passed some reasonable testing - I've tested block changes, md, dm, bcache,
-xfs, btrfs, ext4, swap. More testing or review is always welcome. Thanks! I've
-pushed out the full branch to:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git bdev_handle
-
-to ease review / testing. Christian, can you pull the patches to your tree
-to get some exposure in linux-next as well? Thanks!
-
-Changes since v3:
-* Rebased on top on btrfs tree
-
-Changes since v2:
-* Rebased on top of current vfs tree
-* Added some acks
-* Reflected minor nits from Christoph
-* Added missing conversion of blkdev_put() calls in cramfs and erofs
-* Fixed possible leak of bdev handle in xfs if logdev is the same as fs dev
-
-Changes since v1:
-* Rebased on top of current vfs tree
-* Renamed final functions to bdev_open_by_*() and bdev_release()
-* Fixed detection of exclusive open in blkdev_ioctl() and blkdev_fallocate()
-* Fixed swap conversion to properly reinitialize swap_info->bdev_handle
-* Fixed xfs conversion to not oops with rtdev without logdev
-* Couple other minor fixups
-
-								Honza
-
-[1] https://lore.kernel.org/all/ZJGNsVDhZx0Xgs2H@infradead.org
-[2] git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
-
-CC: Alasdair Kergon <agk@redhat.com>
-CC: Andrew Morton <akpm@linux-foundation.org>
-CC: Anna Schumaker <anna@kernel.org>
-CC: Chao Yu <chao@kernel.org>
-CC: Christian Borntraeger <borntraeger@linux.ibm.com>
-CC: Coly Li <colyli@suse.de
-CC: "Darrick J. Wong" <djwong@kernel.org>
-CC: Dave Kleikamp <shaggy@kernel.org>
-CC: David Sterba <dsterba@suse.com>
-CC: dm-devel@redhat.com
-CC: drbd-dev@lists.linbit.com
-CC: Gao Xiang <xiang@kernel.org>
-CC: Jack Wang <jinpu.wang@ionos.com>
-CC: Jaegeuk Kim <jaegeuk@kernel.org>
-CC: jfs-discussion@lists.sourceforge.net
-CC: Joern Engel <joern@lazybastard.org>
-CC: Joseph Qi <joseph.qi@linux.alibaba.com>
-CC: Kent Overstreet <kent.overstreet@gmail.com>
-CC: linux-bcache@vger.kernel.org
-CC: linux-btrfs@vger.kernel.org
-CC: linux-erofs@lists.ozlabs.org
-CC: <linux-ext4@vger.kernel.org>
-CC: linux-f2fs-devel@lists.sourceforge.net
-CC: linux-mm@kvack.org
-CC: linux-mtd@lists.infradead.org
-CC: linux-nfs@vger.kernel.org
-CC: linux-nilfs@vger.kernel.org
-CC: linux-nvme@lists.infradead.org
-CC: linux-pm@vger.kernel.org
-CC: linux-raid@vger.kernel.org
-CC: linux-s390@vger.kernel.org
-CC: linux-scsi@vger.kernel.org
-CC: linux-xfs@vger.kernel.org
-CC: "Md. Haris Iqbal" <haris.iqbal@ionos.com>
-CC: Mike Snitzer <snitzer@kernel.org>
-CC: Minchan Kim <minchan@kernel.org>
-CC: ocfs2-devel@oss.oracle.com
 CC: reiserfs-devel@vger.kernel.org
-CC: Sergey Senozhatsky <senozhatsky@chromium.org>
-CC: Song Liu <song@kernel.org>
-CC: Sven Schnelle <svens@linux.ibm.com>
-CC: target-devel@vger.kernel.org
-CC: Ted Tso <tytso@mit.edu>
-CC: Trond Myklebust <trond.myklebust@hammerspace.com>
-CC: xen-devel@lists.xenproject.org
+Acked-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Christian Brauner <brauner@kernel.org>
+Signed-off-by: Jan Kara <jack@suse.cz>
+---
+ fs/reiserfs/journal.c  | 56 +++++++++++++++++++-----------------------
+ fs/reiserfs/procfs.c   |  2 +-
+ fs/reiserfs/reiserfs.h | 11 ++++++---
+ 3 files changed, 33 insertions(+), 36 deletions(-)
 
-Previous versions:
-Link: http://lore.kernel.org/r/20230629165206.383-1-jack@suse.cz # v1
-Link: http://lore.kernel.org/r/20230810171429.31759-1-jack@suse.cz # v2
+diff --git a/fs/reiserfs/journal.c b/fs/reiserfs/journal.c
+index 015bfe4e4524..171c912af50f 100644
+--- a/fs/reiserfs/journal.c
++++ b/fs/reiserfs/journal.c
+@@ -90,8 +90,7 @@ static int flush_commit_list(struct super_block *s,
+ static int can_dirty(struct reiserfs_journal_cnode *cn);
+ static int journal_join(struct reiserfs_transaction_handle *th,
+ 			struct super_block *sb);
+-static void release_journal_dev(struct super_block *super,
+-			       struct reiserfs_journal *journal);
++static void release_journal_dev(struct reiserfs_journal *journal);
+ static void dirty_one_transaction(struct super_block *s,
+ 				 struct reiserfs_journal_list *jl);
+ static void flush_async_commits(struct work_struct *work);
+@@ -1893,7 +1892,7 @@ static void free_journal_ram(struct super_block *sb)
+ 	 * j_header_bh is on the journal dev, make sure
+ 	 * not to release the journal dev until we brelse j_header_bh
+ 	 */
+-	release_journal_dev(sb, journal);
++	release_journal_dev(journal);
+ 	vfree(journal);
+ }
+ 
+@@ -2387,7 +2386,7 @@ static int journal_read(struct super_block *sb)
+ 
+ 	cur_dblock = SB_ONDISK_JOURNAL_1st_BLOCK(sb);
+ 	reiserfs_info(sb, "checking transaction log (%pg)\n",
+-		      journal->j_dev_bd);
++		      journal->j_bdev_handle->bdev);
+ 	start = ktime_get_seconds();
+ 
+ 	/*
+@@ -2448,7 +2447,7 @@ static int journal_read(struct super_block *sb)
+ 		 * device and journal device to be the same
+ 		 */
+ 		d_bh =
+-		    reiserfs_breada(journal->j_dev_bd, cur_dblock,
++		    reiserfs_breada(journal->j_bdev_handle->bdev, cur_dblock,
+ 				    sb->s_blocksize,
+ 				    SB_ONDISK_JOURNAL_1st_BLOCK(sb) +
+ 				    SB_ONDISK_JOURNAL_SIZE(sb));
+@@ -2587,17 +2586,11 @@ static void journal_list_init(struct super_block *sb)
+ 	SB_JOURNAL(sb)->j_current_jl = alloc_journal_list(sb);
+ }
+ 
+-static void release_journal_dev(struct super_block *super,
+-			       struct reiserfs_journal *journal)
++static void release_journal_dev(struct reiserfs_journal *journal)
+ {
+-	if (journal->j_dev_bd != NULL) {
+-		void *holder = NULL;
+-
+-		if (journal->j_dev_bd->bd_dev != super->s_dev)
+-			holder = journal;
+-
+-		blkdev_put(journal->j_dev_bd, holder);
+-		journal->j_dev_bd = NULL;
++	if (journal->j_bdev_handle) {
++		bdev_release(journal->j_bdev_handle);
++		journal->j_bdev_handle = NULL;
+ 	}
+ }
+ 
+@@ -2612,7 +2605,7 @@ static int journal_init_dev(struct super_block *super,
+ 
+ 	result = 0;
+ 
+-	journal->j_dev_bd = NULL;
++	journal->j_bdev_handle = NULL;
+ 	jdev = SB_ONDISK_JOURNAL_DEVICE(super) ?
+ 	    new_decode_dev(SB_ONDISK_JOURNAL_DEVICE(super)) : super->s_dev;
+ 
+@@ -2623,36 +2616,37 @@ static int journal_init_dev(struct super_block *super,
+ 	if ((!jdev_name || !jdev_name[0])) {
+ 		if (jdev == super->s_dev)
+ 			holder = NULL;
+-		journal->j_dev_bd = blkdev_get_by_dev(jdev, blkdev_mode, holder,
+-						      NULL);
+-		if (IS_ERR(journal->j_dev_bd)) {
+-			result = PTR_ERR(journal->j_dev_bd);
+-			journal->j_dev_bd = NULL;
++		journal->j_bdev_handle = bdev_open_by_dev(jdev, blkdev_mode,
++							  holder, NULL);
++		if (IS_ERR(journal->j_bdev_handle)) {
++			result = PTR_ERR(journal->j_bdev_handle);
++			journal->j_bdev_handle = NULL;
+ 			reiserfs_warning(super, "sh-458",
+ 					 "cannot init journal device unknown-block(%u,%u): %i",
+ 					 MAJOR(jdev), MINOR(jdev), result);
+ 			return result;
+ 		} else if (jdev != super->s_dev)
+-			set_blocksize(journal->j_dev_bd, super->s_blocksize);
++			set_blocksize(journal->j_bdev_handle->bdev,
++				      super->s_blocksize);
+ 
+ 		return 0;
+ 	}
+ 
+-	journal->j_dev_bd = blkdev_get_by_path(jdev_name, blkdev_mode, holder,
+-					       NULL);
+-	if (IS_ERR(journal->j_dev_bd)) {
+-		result = PTR_ERR(journal->j_dev_bd);
+-		journal->j_dev_bd = NULL;
++	journal->j_bdev_handle = bdev_open_by_path(jdev_name, blkdev_mode,
++						   holder, NULL);
++	if (IS_ERR(journal->j_bdev_handle)) {
++		result = PTR_ERR(journal->j_bdev_handle);
++		journal->j_bdev_handle = NULL;
+ 		reiserfs_warning(super, "sh-457",
+ 				 "journal_init_dev: Cannot open '%s': %i",
+ 				 jdev_name, result);
+ 		return result;
+ 	}
+ 
+-	set_blocksize(journal->j_dev_bd, super->s_blocksize);
++	set_blocksize(journal->j_bdev_handle->bdev, super->s_blocksize);
+ 	reiserfs_info(super,
+ 		      "journal_init_dev: journal device: %pg\n",
+-		      journal->j_dev_bd);
++		      journal->j_bdev_handle->bdev);
+ 	return 0;
+ }
+ 
+@@ -2810,7 +2804,7 @@ int journal_init(struct super_block *sb, const char *j_dev_name,
+ 				 "journal header magic %x (device %pg) does "
+ 				 "not match to magic found in super block %x",
+ 				 jh->jh_journal.jp_journal_magic,
+-				 journal->j_dev_bd,
++				 journal->j_bdev_handle->bdev,
+ 				 sb_jp_journal_magic(rs));
+ 		brelse(bhjh);
+ 		goto free_and_return;
+@@ -2834,7 +2828,7 @@ int journal_init(struct super_block *sb, const char *j_dev_name,
+ 	reiserfs_info(sb, "journal params: device %pg, size %u, "
+ 		      "journal first block %u, max trans len %u, max batch %u, "
+ 		      "max commit age %u, max trans age %u\n",
+-		      journal->j_dev_bd,
++		      journal->j_bdev_handle->bdev,
+ 		      SB_ONDISK_JOURNAL_SIZE(sb),
+ 		      SB_ONDISK_JOURNAL_1st_BLOCK(sb),
+ 		      journal->j_trans_max,
+diff --git a/fs/reiserfs/procfs.c b/fs/reiserfs/procfs.c
+index 3dba8acf4e83..83cb9402e0f9 100644
+--- a/fs/reiserfs/procfs.c
++++ b/fs/reiserfs/procfs.c
+@@ -354,7 +354,7 @@ static int show_journal(struct seq_file *m, void *unused)
+ 		   "prepare: \t%12lu\n"
+ 		   "prepare_retry: \t%12lu\n",
+ 		   DJP(jp_journal_1st_block),
+-		   SB_JOURNAL(sb)->j_dev_bd,
++		   SB_JOURNAL(sb)->j_bdev_handle->bdev,
+ 		   DJP(jp_journal_dev),
+ 		   DJP(jp_journal_size),
+ 		   DJP(jp_journal_trans_max),
+diff --git a/fs/reiserfs/reiserfs.h b/fs/reiserfs/reiserfs.h
+index 7d12b8c5b2fa..8ad41271c256 100644
+--- a/fs/reiserfs/reiserfs.h
++++ b/fs/reiserfs/reiserfs.h
+@@ -299,7 +299,7 @@ struct reiserfs_journal {
+ 	/* oldest journal block.  start here for traverse */
+ 	struct reiserfs_journal_cnode *j_first;
+ 
+-	struct block_device *j_dev_bd;
++	struct bdev_handle *j_bdev_handle;
+ 
+ 	/* first block on s_dev of reserved area journal */
+ 	int j_1st_reserved_block;
+@@ -2809,9 +2809,12 @@ struct reiserfs_journal_header {
+ #define journal_hash(t,sb,block) ((t)[_jhashfn((sb),(block)) & JBH_HASH_MASK])
+ 
+ /* We need these to make journal.c code more readable */
+-#define journal_find_get_block(s, block) __find_get_block(SB_JOURNAL(s)->j_dev_bd, block, s->s_blocksize)
+-#define journal_getblk(s, block) __getblk(SB_JOURNAL(s)->j_dev_bd, block, s->s_blocksize)
+-#define journal_bread(s, block) __bread(SB_JOURNAL(s)->j_dev_bd, block, s->s_blocksize)
++#define journal_find_get_block(s, block) __find_get_block(\
++		SB_JOURNAL(s)->j_bdev_handle->bdev, block, s->s_blocksize)
++#define journal_getblk(s, block) __getblk(SB_JOURNAL(s)->j_bdev_handle->bdev,\
++		block, s->s_blocksize)
++#define journal_bread(s, block) __bread(SB_JOURNAL(s)->j_bdev_handle->bdev,\
++		block, s->s_blocksize)
+ 
+ enum reiserfs_bh_state_bits {
+ 	BH_JDirty = BH_PrivateStart,	/* buffer is in current transaction */
+-- 
+2.35.3
+
