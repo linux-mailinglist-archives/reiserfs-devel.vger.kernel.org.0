@@ -2,43 +2,189 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D915F7B8C5E
-	for <lists+reiserfs-devel@lfdr.de>; Wed,  4 Oct 2023 21:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A90E7B8C8A
+	for <lists+reiserfs-devel@lfdr.de>; Wed,  4 Oct 2023 21:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244853AbjJDS7O (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Wed, 4 Oct 2023 14:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
+        id S245057AbjJDTEx (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Wed, 4 Oct 2023 15:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244842AbjJDS5e (ORCPT
+        with ESMTP id S245333AbjJDTBA (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Wed, 4 Oct 2023 14:57:34 -0400
+        Wed, 4 Oct 2023 15:01:00 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DDC19BE;
-        Wed,  4 Oct 2023 11:55:05 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4825C433CD;
-        Wed,  4 Oct 2023 18:55:04 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1F12130;
+        Wed,  4 Oct 2023 11:55:47 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BD6BC433C9;
+        Wed,  4 Oct 2023 18:55:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696445705;
-        bh=yAeLI7C8FS/jnlSR3OJ6c14X/tE7zEDbA+SFSmoaVbg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ShDFwKFrVrXVS+LxoFsHhwRpQx8Tw1iTmkncpeqoXnUU9c7aDmKet/YOTimS4BWLn
-         4Jo+BqokYM+2say+UPeM9bRKV/f5Uf2VfHVX7SgDnZ2FHXVgBgg0FCVDuTAwHVhPAj
-         JGA0T5G/2Zjvrd1NeZlEzJRUt8kiVVqO/3/RLb9nMBwNze3NyWVqxUVX09zsmVNl+g
-         VyLTWQ5uw6lNmUX5opUQNHely2hX+27HZfmZKkXuvFehdXFmTmAi9FXLE3d0Y/FdAz
-         v/onLQ9z0j73UA3bna7MkC2Xo8fqGw37upFMNSptQi7M7c7krzHPBQINufhFcBIWjW
-         +4nenb+58VyHA==
+        s=k20201202; t=1696445746;
+        bh=g/yzBkH2Lp29tPfDBqNp+9Elc+zqCeoJYNIVCamPD2Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=U4cHhSwb0LbjLA0qPOmmG7XGfwhLrdUKNdOP6jb0JmroYvkDlGxxFYbdBHNbhzXNH
+         iovfoJxTxBNF3fgWoxKD5rhfozOY+7XT8L1cOwcimaEFAuQea9kFSm7ljzuINveJng
+         8O/TRaYWLsMFAu0WZqR+Ej7+BaviQVOBsP8mffc2SqReX6OXjtiZTmCmLoR9/saHwB
+         c5rjkuCRPMb/Q55YD3oJLDC2dFLpMza5Y6vaUnEAxOls8VOQTB4gdTGSQ3fEJfeL1x
+         KMOBQbkmXFBlyX1vgIb23wb+t56+wSAOGwpJ/lOlOTTFlZfD0AdwHSMDPWo5mfkyr4
+         HgGj4IVfBzhTQ==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     reiserfs-devel@vger.kernel.org
-Subject: [PATCH v2 66/89] reiserfs: convert to new timestamp accessors
-Date:   Wed,  4 Oct 2023 14:52:51 -0400
-Message-ID: <20231004185347.80880-64-jlayton@kernel.org>
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Sterba <dsterba@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>, Jeremy Kerr <jk@ozlabs.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Mattia Dongili <malattia@linux.it>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Brad Warrum <bwarrum@linux.ibm.com>,
+        Ritu Agarwal <rituagar@linux.ibm.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Eric Van Hensbergen <ericvh@kernel.org>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        David Sterba <dsterba@suse.com>,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Ian Kent <raven@themaw.net>,
+        Luis de Bethencourt <luisbg@kernel.org>,
+        Salah Triki <salah.triki@gmail.com>,
+        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu,
+        Joel Becker <jlbec@evilplan.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>, Gao Xiang <xiang@kernel.org>,
+        Chao Yu <chao@kernel.org>, Yue Hu <huyue2@coolpad.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        Jan Kara <jack@suse.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Christoph Hellwig <hch@infradead.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>, Jan Kara <jack@suse.cz>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Dave Kleikamp <shaggy@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Neil Brown <neilb@suse.de>,
+        Olga Kornievskaia <kolga@netapp.com>,
+        Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        Anton Altaparmakov <anton@tuxera.com>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        Mark Fasheh <mark@fasheh.com>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Bob Copeland <me@bobcopeland.com>,
+        Mike Marshall <hubcap@omnibond.com>,
+        Martin Brandenburg <martin@omnibond.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Anders Larsen <al@alarsen.net>,
+        Steve French <sfrench@samba.org>,
+        Paulo Alcantara <pc@manguebit.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Phillip Lougher <phillip@squashfs.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Evgeniy Dushistov <dushistov@mail.ru>,
+        Chandan Babu R <chandan.babu@oracle.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        Johannes Thumshirn <jth@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Brian Foster <bfoster@redhat.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, v9fs@lists.linux.dev,
+        linux-afs@lists.infradead.org, autofs@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        codalist@coda.cs.cmu.edu, linux-efi@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, gfs2@lists.linux.dev,
+        linux-um@lists.infradead.org, linux-mtd@lists.infradead.org,
+        jfs-discussion@lists.sourceforge.net, linux-nfs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev,
+        linux-karma-devel@lists.sourceforge.net, devel@lists.orangefs.org,
+        linux-unionfs@vger.kernel.org, linux-hardening@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org,
+        linux-trace-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-bcachefs@vger.kernel.org
+Subject: [PATCH v2 87/89] fs: rename inode i_atime and i_mtime fields
+Date:   Wed,  4 Oct 2023 14:55:28 -0400
+Message-ID: <20231004185530.82088-1-jlayton@kernel.org>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231004185347.80880-1-jlayton@kernel.org>
-References: <20231004185221.80802-1-jlayton@kernel.org>
- <20231004185347.80880-1-jlayton@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -50,152 +196,85 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Convert to using the new inode timestamp accessor functions.
+Rename these two fields to discourage direct access (and to help ensure
+that we mop up any leftover direct accesses).
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- fs/reiserfs/inode.c | 26 +++++++++++---------------
- fs/reiserfs/namei.c |  8 ++++----
- fs/reiserfs/stree.c |  5 +++--
- fs/reiserfs/super.c |  2 +-
- 4 files changed, 19 insertions(+), 22 deletions(-)
+ include/linux/fs.h | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/fs/reiserfs/inode.c b/fs/reiserfs/inode.c
-index 86e55d4bb10d..c8572346556f 100644
---- a/fs/reiserfs/inode.c
-+++ b/fs/reiserfs/inode.c
-@@ -1257,11 +1257,9 @@ static void init_inode(struct inode *inode, struct treepath *path)
- 		i_uid_write(inode, sd_v1_uid(sd));
- 		i_gid_write(inode, sd_v1_gid(sd));
- 		inode->i_size = sd_v1_size(sd);
--		inode->i_atime.tv_sec = sd_v1_atime(sd);
--		inode->i_mtime.tv_sec = sd_v1_mtime(sd);
-+		inode_set_atime(inode, sd_v1_atime(sd), 0);
-+		inode_set_mtime(inode, sd_v1_mtime(sd), 0);
- 		inode_set_ctime(inode, sd_v1_ctime(sd), 0);
--		inode->i_atime.tv_nsec = 0;
--		inode->i_mtime.tv_nsec = 0;
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 3ca610d42176..84fdaf399fbe 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -671,8 +671,8 @@ struct inode {
+ 	};
+ 	dev_t			i_rdev;
+ 	loff_t			i_size;
+-	struct timespec64	i_atime;
+-	struct timespec64	i_mtime;
++	struct timespec64	__i_atime;
++	struct timespec64	__i_mtime;
+ 	struct timespec64	__i_ctime; /* use inode_*_ctime accessors! */
+ 	spinlock_t		i_lock;	/* i_blocks, i_bytes, maybe i_size */
+ 	unsigned short          i_bytes;
+@@ -1517,23 +1517,23 @@ struct timespec64 inode_set_ctime_current(struct inode *inode);
  
- 		inode->i_blocks = sd_v1_blocks(sd);
- 		inode->i_generation = le32_to_cpu(INODE_PKEY(inode)->k_dir_id);
-@@ -1311,11 +1309,9 @@ static void init_inode(struct inode *inode, struct treepath *path)
- 		i_uid_write(inode, sd_v2_uid(sd));
- 		inode->i_size = sd_v2_size(sd);
- 		i_gid_write(inode, sd_v2_gid(sd));
--		inode->i_mtime.tv_sec = sd_v2_mtime(sd);
--		inode->i_atime.tv_sec = sd_v2_atime(sd);
-+		inode_set_mtime(inode, sd_v2_mtime(sd), 0);
-+		inode_set_atime(inode, sd_v2_atime(sd), 0);
- 		inode_set_ctime(inode, sd_v2_ctime(sd), 0);
--		inode->i_mtime.tv_nsec = 0;
--		inode->i_atime.tv_nsec = 0;
- 		inode->i_blocks = sd_v2_blocks(sd);
- 		rdev = sd_v2_rdev(sd);
- 		if (S_ISCHR(inode->i_mode) || S_ISBLK(inode->i_mode))
-@@ -1370,9 +1366,9 @@ static void inode2sd(void *sd, struct inode *inode, loff_t size)
- 	set_sd_v2_uid(sd_v2, i_uid_read(inode));
- 	set_sd_v2_size(sd_v2, size);
- 	set_sd_v2_gid(sd_v2, i_gid_read(inode));
--	set_sd_v2_mtime(sd_v2, inode->i_mtime.tv_sec);
--	set_sd_v2_atime(sd_v2, inode->i_atime.tv_sec);
--	set_sd_v2_ctime(sd_v2, inode_get_ctime(inode).tv_sec);
-+	set_sd_v2_mtime(sd_v2, inode_get_mtime_sec(inode));
-+	set_sd_v2_atime(sd_v2, inode_get_atime_sec(inode));
-+	set_sd_v2_ctime(sd_v2, inode_get_ctime_sec(inode));
- 	set_sd_v2_blocks(sd_v2, to_fake_used_blocks(inode, SD_V2_SIZE));
- 	if (S_ISCHR(inode->i_mode) || S_ISBLK(inode->i_mode))
- 		set_sd_v2_rdev(sd_v2, new_encode_dev(inode->i_rdev));
-@@ -1391,9 +1387,9 @@ static void inode2sd_v1(void *sd, struct inode *inode, loff_t size)
- 	set_sd_v1_gid(sd_v1, i_gid_read(inode));
- 	set_sd_v1_nlink(sd_v1, inode->i_nlink);
- 	set_sd_v1_size(sd_v1, size);
--	set_sd_v1_atime(sd_v1, inode->i_atime.tv_sec);
--	set_sd_v1_ctime(sd_v1, inode_get_ctime(inode).tv_sec);
--	set_sd_v1_mtime(sd_v1, inode->i_mtime.tv_sec);
-+	set_sd_v1_atime(sd_v1, inode_get_atime_sec(inode));
-+	set_sd_v1_ctime(sd_v1, inode_get_ctime_sec(inode));
-+	set_sd_v1_mtime(sd_v1, inode_get_mtime_sec(inode));
- 
- 	if (S_ISCHR(inode->i_mode) || S_ISBLK(inode->i_mode))
- 		set_sd_v1_rdev(sd_v1, new_encode_dev(inode->i_rdev));
-@@ -1984,7 +1980,7 @@ int reiserfs_new_inode(struct reiserfs_transaction_handle *th,
- 
- 	/* uid and gid must already be set by the caller for quota init */
- 
--	inode->i_mtime = inode->i_atime = inode_set_ctime_current(inode);
-+	simple_inode_init_ts(inode);
- 	inode->i_size = i_size;
- 	inode->i_blocks = 0;
- 	inode->i_bytes = 0;
-diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
-index 9c5704be2435..994d6e6995ab 100644
---- a/fs/reiserfs/namei.c
-+++ b/fs/reiserfs/namei.c
-@@ -572,7 +572,7 @@ static int reiserfs_add_entry(struct reiserfs_transaction_handle *th,
- 	}
- 
- 	dir->i_size += paste_size;
--	dir->i_mtime = inode_set_ctime_current(dir);
-+	inode_set_mtime_to_ts(dir, inode_set_ctime_current(dir));
- 	if (!S_ISDIR(inode->i_mode) && visible)
- 		/* reiserfs_mkdir or reiserfs_rename will do that by itself */
- 		reiserfs_update_sd(th, dir);
-@@ -966,8 +966,8 @@ static int reiserfs_rmdir(struct inode *dir, struct dentry *dentry)
- 			       inode->i_nlink);
- 
- 	clear_nlink(inode);
--	dir->i_mtime = inode_set_ctime_to_ts(dir,
--					     inode_set_ctime_current(inode));
-+	inode_set_mtime_to_ts(dir,
-+			      inode_set_ctime_to_ts(dir, inode_set_ctime_current(inode)));
- 	reiserfs_update_sd(&th, inode);
- 
- 	DEC_DIR_INODE_NLINK(dir)
-@@ -1075,7 +1075,7 @@ static int reiserfs_unlink(struct inode *dir, struct dentry *dentry)
- 	reiserfs_update_sd(&th, inode);
- 
- 	dir->i_size -= (de.de_entrylen + DEH_SIZE);
--	dir->i_mtime = inode_set_ctime_current(dir);
-+	inode_set_mtime_to_ts(dir, inode_set_ctime_current(dir));
- 	reiserfs_update_sd(&th, dir);
- 
- 	if (!savelink)
-diff --git a/fs/reiserfs/stree.c b/fs/reiserfs/stree.c
-index 3676e02a0232..2138ee7d271d 100644
---- a/fs/reiserfs/stree.c
-+++ b/fs/reiserfs/stree.c
-@@ -2003,7 +2003,8 @@ int reiserfs_do_truncate(struct reiserfs_transaction_handle *th,
- 			pathrelse(&s_search_path);
- 
- 			if (update_timestamps) {
--				inode->i_mtime = current_time(inode);
-+				inode_set_mtime_to_ts(inode,
-+						      current_time(inode));
- 				inode_set_ctime_current(inode);
- 			}
- 			reiserfs_update_sd(th, inode);
-@@ -2028,7 +2029,7 @@ int reiserfs_do_truncate(struct reiserfs_transaction_handle *th,
- update_and_out:
- 	if (update_timestamps) {
- 		/* this is truncate, not file closing */
--		inode->i_mtime = current_time(inode);
-+		inode_set_mtime_to_ts(inode, current_time(inode));
- 		inode_set_ctime_current(inode);
- 	}
- 	reiserfs_update_sd(th, inode);
-diff --git a/fs/reiserfs/super.c b/fs/reiserfs/super.c
-index 7eaf36b3de12..67b5510beded 100644
---- a/fs/reiserfs/super.c
-+++ b/fs/reiserfs/super.c
-@@ -2587,7 +2587,7 @@ static ssize_t reiserfs_quota_write(struct super_block *sb, int type,
- 		return err;
- 	if (inode->i_size < off + len - towrite)
- 		i_size_write(inode, off + len - towrite);
--	inode->i_mtime = inode_set_ctime_current(inode);
-+	inode_set_mtime_to_ts(inode, inode_set_ctime_current(inode));
- 	mark_inode_dirty(inode);
- 	return len - towrite;
+ static inline time64_t inode_get_atime_sec(const struct inode *inode)
+ {
+-	return inode->i_atime.tv_sec;
++	return inode->__i_atime.tv_sec;
  }
+ 
+ static inline long inode_get_atime_nsec(const struct inode *inode)
+ {
+-	return inode->i_atime.tv_nsec;
++	return inode->__i_atime.tv_nsec;
+ }
+ 
+ static inline struct timespec64 inode_get_atime(const struct inode *inode)
+ {
+-	return inode->i_atime;
++	return inode->__i_atime;
+ }
+ 
+ static inline struct timespec64 inode_set_atime_to_ts(struct inode *inode,
+ 						      struct timespec64 ts)
+ {
+-	inode->i_atime = ts;
++	inode->__i_atime = ts;
+ 	return ts;
+ }
+ 
+@@ -1547,23 +1547,23 @@ static inline struct timespec64 inode_set_atime(struct inode *inode,
+ 
+ static inline time64_t inode_get_mtime_sec(const struct inode *inode)
+ {
+-	return inode->i_mtime.tv_sec;
++	return inode->__i_mtime.tv_sec;
+ }
+ 
+ static inline long inode_get_mtime_nsec(const struct inode *inode)
+ {
+-	return inode->i_mtime.tv_nsec;
++	return inode->__i_mtime.tv_nsec;
+ }
+ 
+ static inline struct timespec64 inode_get_mtime(const struct inode *inode)
+ {
+-	return inode->i_mtime;
++	return inode->__i_mtime;
+ }
+ 
+ static inline struct timespec64 inode_set_mtime_to_ts(struct inode *inode,
+ 						      struct timespec64 ts)
+ {
+-	inode->i_mtime = ts;
++	inode->__i_mtime = ts;
+ 	return ts;
+ }
+ 
 -- 
 2.41.0
 
