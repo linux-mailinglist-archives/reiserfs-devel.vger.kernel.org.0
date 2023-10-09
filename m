@@ -2,61 +2,56 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040987BD1DA
-	for <lists+reiserfs-devel@lfdr.de>; Mon,  9 Oct 2023 04:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 230E07BDC27
+	for <lists+reiserfs-devel@lfdr.de>; Mon,  9 Oct 2023 14:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344903AbjJICFg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sun, 8 Oct 2023 22:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
+        id S1376284AbjJIMek (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 9 Oct 2023 08:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232956AbjJICFf (ORCPT
+        with ESMTP id S1346653AbjJIMeb (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sun, 8 Oct 2023 22:05:35 -0400
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com [209.85.160.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637D2B3
-        for <reiserfs-devel@vger.kernel.org>; Sun,  8 Oct 2023 19:05:33 -0700 (PDT)
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-1dd053fb4f0so6335073fac.2
-        for <reiserfs-devel@vger.kernel.org>; Sun, 08 Oct 2023 19:05:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696817132; x=1697421932;
-        h=content-transfer-encoding:to:from:subject:message-id:in-reply-to
-         :date:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cb8BJFOfJt/1KSmkcKeu7s/bXsY2CA0V26Ucc8VKgjw=;
-        b=mUcscmPchWICGrtqe/nS8dn1wRMZjE9G/uz3NJ0VT8xSkEYoAXjL7f/3kF5ndqkWsL
-         msxWG3oyfRo8l4gL3S7a4OZwqP+HBSzUI7Ygl83ECbizrEAhDYVdiFgs+ShtJgubuDgZ
-         idHwbFOqcPxLzVJRGHjUNP+DMHjDqEHMhKhEuTZfb04v6bk6NnWY2YYVqK0mpVyH9CNU
-         vXyX1dLP8Q3RQVVjI6URtqwV0NCaOoDahpjnNJV824VVjR6Lx+yZlieSbEEZuDCIFkDW
-         mQIaB+FcS+qFieZnHzogSdREBmobBu9gHINgyZ6qHAg0G+aoD4AAE9ldbaKV8gPX8GxI
-         rf4w==
-X-Gm-Message-State: AOJu0Yyhep7GnVPpSviUL5w38ZMw0lpfaS08ok7wvuKOFSYh+XMjjgD+
-        QzPUi2DH2aNfSaOOd2sa1orwbc6qJ5nseRTbr+TpX9CkGKSY
-X-Google-Smtp-Source: AGHT+IELFqFN7QoMVYfsIY7r0QeAGPzrcev1WXJ9FLIcjCL1sovTwvIQxukZvcnCCdk9WKGEwgiUlAPYacJT+fS5YBjM7tUk1k16
+        Mon, 9 Oct 2023 08:34:31 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F8B94;
+        Mon,  9 Oct 2023 05:33:54 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF703C433C8;
+        Mon,  9 Oct 2023 12:33:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696854833;
+        bh=+SRAskbzj+WuL5QfXRR/Rcg3XnDfBhy4j0r6EkkPZfc=;
+        h=From:Subject:Date:To:Cc:From;
+        b=fsCcN47Lm9Lc2q6WMgDyuDZCLlj4uOU3LcvT3bin1ZdHHIUM97DAmXCJt5yhWIYcs
+         uzSBjMYnroJU3djz8fVy4cvCvHmZ/dz7qvQRywLIEpJ1u8YYC3FoQUX/mrm88smYNP
+         IBVpiSARw8X28srB5deu3uja7LochyCPV0oXTCCQKeeCU+2yfwa3B1D7FioZyj0UgT
+         qLLAPVWDEvcq6EHCAJ+AJTA5xabvPLgRqbQJjx53/LNGa1lgYJ++pJNkDqUg6qkFjj
+         aa7IAToKkGe7QjoK6TvLUydK6gFYnN3yNQsQk+V6etPYe5Qhg13jBIevRQH12Zwho9
+         f2gU8AlkDlUfA==
+From:   Christian Brauner <brauner@kernel.org>
+Subject: [PATCH 0/4] reiserfs: fixes
+Date:   Mon, 09 Oct 2023 14:33:37 +0200
+Message-Id: <20231009-vfs-fixes-reiserfs-v1-0-723a2f1132ce@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6871:3208:b0:1d5:a24a:c33 with SMTP id
- mo8-20020a056871320800b001d5a24a0c33mr5413341oac.8.1696817132668; Sun, 08 Oct
- 2023 19:05:32 -0700 (PDT)
-Date:   Sun, 08 Oct 2023 19:05:32 -0700
-In-Reply-To: <0000000000001825ce06047bf2a6@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000071133306073f06ca@google.com>
-Subject: Re: [syzbot] [reiserfs?] possible deadlock in super_lock
-From:   syzbot <syzbot+062317ea1d0a6d5e29e7@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, brauner@kernel.org, chao@kernel.org,
-        daniel.vetter@ffwll.ch, hdanton@sina.com, jack@suse.cz,
-        jaegeuk@kernel.org, jinpu.wang@ionos.com,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mairacanal@riseup.net, mcanal@igalia.com,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        terrelln@fb.com, willy@infradead.org, yukuai3@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACHzI2UC/yWMQQqDQBAEvyJzzoR1FYL5Sshh1/TGuawyAxIQ/
+ +5Ej0V31UYGFRg9m40Uq5jM1aG9NTROqX7B8nGmGGLXhjDwWoyL/GCsEJcduz7EgkfKeejJxUV
+ xPtx7vZ1zMnDWVMfpn/LC/dr3/QCjVU+jgAAAAA==
+To:     Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>
+Cc:     reiserfs-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        syzbot+062317ea1d0a6d5e29e7@syzkaller.appspotmail.com
+X-Mailer: b4 0.13-dev-0438c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=434; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=+SRAskbzj+WuL5QfXRR/Rcg3XnDfBhy4j0r6EkkPZfc=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQqf9aX3zX5uqZ89PGPzufvL1jssfiVu2LKFKuA/2ejmBnX
+ 2yS2dJSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEzkXibDf+/CA9tuMc5MunLjss90xR
+ THZezR8ueaxV77nOeofXaFZz0jQ/+5Xfe+84vdZ7qUy97o/MnFZzNjgoZlo5HPPtHaY9eVuQE=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,24 +59,20 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-syzbot has bisected this issue to:
+Hey Christoph & Jan,
 
-commit 7908632f2927b65f7486ae6b67c24071666ba43f
-Author: Maíra Canal <mcanal@igalia.com>
-Date:   Thu Sep 14 10:19:02 2023 +0000
+A series of smaller fixes for reiserfs including one deadlock reported
+by syzbot (albeit with a bogus bisection). Plan would be to get this
+merged within -rc6.
 
-    Revert "drm/vkms: Fix race-condition between the hrtimer and the atomic commit"
+I've actually tested all this with xfstests. With and without this
+patch series the same 18 tests fail.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17fc0565680000
-start commit:   2cf0f7156238 Merge tag 'nfs-for-6.6-2' of git://git.linux-..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=14020565680000
-console output: https://syzkaller.appspot.com/x/log.txt?x=10020565680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=710dc49bece494df
-dashboard link: https://syzkaller.appspot.com/bug?extid=062317ea1d0a6d5e29e7
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=107e9518680000
+Thanks!
+Christian
 
-Reported-by: syzbot+062317ea1d0a6d5e29e7@syzkaller.appspotmail.com
-Fixes: 7908632f2927 ("Revert "drm/vkms: Fix race-condition between the hrtimer and the atomic commit"")
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+---
+base-commit: 94f6f0550c625fab1f373bb86a6669b45e9748b3
+change-id: 20231009-vfs-fixes-reiserfs-3402fe7abb94
+
