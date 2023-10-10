@@ -2,74 +2,52 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1A87BFBA6
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 10 Oct 2023 14:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1737C04C7
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 10 Oct 2023 21:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbjJJMmA (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 10 Oct 2023 08:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32800 "EHLO
+        id S231596AbjJJTir (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Tue, 10 Oct 2023 15:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjJJMl7 (ORCPT
+        with ESMTP id S1343928AbjJJTiq (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 10 Oct 2023 08:41:59 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B45CA9;
-        Tue, 10 Oct 2023 05:41:58 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E8EDE1F6E6;
-        Tue, 10 Oct 2023 12:41:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1696941716; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0pwsG/zAmRt+eyqpV9jl1kWUP1l3z7gh21JzbEhzESM=;
-        b=EiJYiiH7GA1WrbbPpRe/c1AX8Xc3zUvTf6bk3OY7frH5aDbjVg29W1uT3MogT+DWfC+kuq
-        aim6Dw+eS+gOXUGkhnTNCAwVcamXOYyVRHRzfFBZnbPrGmqG9Ot+Uz3kNnq83cMoQaBZQl
-        OR3KEgqCb8sGYI7/7sd8ggWBJ4QX6cU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1696941716;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0pwsG/zAmRt+eyqpV9jl1kWUP1l3z7gh21JzbEhzESM=;
-        b=S74DSRTmOUtRdAHL6gyawrdtccvqW5Xpiw7FcgjwKAFSA4I+g0dZwDMwPzTN87nX8S4WBW
-        ZvvO6xo+J9LZygBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CE6EE1348E;
-        Tue, 10 Oct 2023 12:41:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ophZMpRGJWVCVAAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 10 Oct 2023 12:41:56 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 61C41A061C; Tue, 10 Oct 2023 14:41:56 +0200 (CEST)
-Date:   Tue, 10 Oct 2023 14:41:56 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Christian Brauner <christian@brauner.io>
-Cc:     Jan Kara <jack@suse.cz>, Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, reiserfs-devel@vger.kernel.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        syzbot+062317ea1d0a6d5e29e7@syzkaller.appspotmail.com
-Subject: Re: [PATCH 4/4] reiserfs: fix journal device opening
-Message-ID: <20231010124156.fqy2ysppc7ickeed@quack3>
-References: <20231009-vfs-fixes-reiserfs-v1-0-723a2f1132ce@kernel.org>
- <20231009-vfs-fixes-reiserfs-v1-4-723a2f1132ce@kernel.org>
- <20231009-sachfragen-kurativ-cb5af158d8ab@brauner>
- <20231009163353.jh7ptcnyl3wd7xbd@quack3>
- <CAHrFyr6sjz+MM4vAzwHKwasuQi=_dhGM+3JAJkp8A0Hu4gDtbg@mail.gmail.com>
+        Tue, 10 Oct 2023 15:38:46 -0400
+Received: from mail-oi1-f208.google.com (mail-oi1-f208.google.com [209.85.167.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F79AF
+        for <reiserfs-devel@vger.kernel.org>; Tue, 10 Oct 2023 12:38:43 -0700 (PDT)
+Received: by mail-oi1-f208.google.com with SMTP id 5614622812f47-3af5a2a0c8fso10078852b6e.3
+        for <reiserfs-devel@vger.kernel.org>; Tue, 10 Oct 2023 12:38:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696966723; x=1697571523;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KyVaqlX6OagJqZRcmPYALwnKUIfCaD9oKeX/SFNHo7Q=;
+        b=w/In9O1domBc83dGWtxrjYiN54IjfZ7aAvKqW+MP3IMzJyyomK3K95UHdKyRBq91yt
+         uIT9Dugj7JXKtfLVSYxSJQrU+ob6I2U9mWxwrOEmeunS81MSeEBzW8DzqyMtQWkM1W3F
+         lxQuhm/jkyTgK4FbmnacDnnh3TnyJ1SeH0eGtlVnih5v2VtPAVW5+BFu8Gd9y34g2TPc
+         9jcx3dXRpN58gRfJujqSwpgEfn/VyuUXTCIigGbNKgtrG/FnfUgcgW7sh6lVAMZWoWqr
+         XzwakETQpga8T1IgAhBLsJnFQ5RBKvSTVi7dYnVxEwH+RNV0p3xZsbvcvMgJ+R0Q9vMr
+         RTGA==
+X-Gm-Message-State: AOJu0YzRZzP/12E8pgO3/cYZ6YwAQCCidx+AhRveTJQXAaYTX+an0UDX
+        ZdQ0hNZsD86qfOUvw/q+f3yZd406ll/AP6b+v6i4qlHc3Zri
+X-Google-Smtp-Source: AGHT+IEBEfxxJ6eHhBGa9pXZ2nwIOCfyK/amQ/eC4kdaZM0L2vuzz1YFUICrlFQBwWX1pHcCO+vU+N6gjjwEJIndGyXJGKfK54dG
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHrFyr6sjz+MM4vAzwHKwasuQi=_dhGM+3JAJkp8A0Hu4gDtbg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Received: by 2002:a05:6808:208a:b0:3ae:11ee:b66f with SMTP id
+ s10-20020a056808208a00b003ae11eeb66fmr10438498oiw.3.1696966722911; Tue, 10
+ Oct 2023 12:38:42 -0700 (PDT)
+Date:   Tue, 10 Oct 2023 12:38:42 -0700
+In-Reply-To: <000000000000cc15ee05ed0ca085@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b70395060761da97@google.com>
+Subject: Re: [syzbot] [reiserfs?] possible deadlock in filename_create
+From:   syzbot <syzbot+95cb07e3840546a4827b@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,34 +55,157 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Tue 10-10-23 11:43:59, Christian Brauner wrote:
-> On Mon, Oct 9, 2023, 18:34 Jan Kara <jack@suse.cz> wrote:
-> 
-> > On Mon 09-10-23 18:16:45, Christian Brauner wrote:
-> > > On Mon, Oct 09, 2023 at 02:33:41PM +0200, Christian Brauner wrote:
-> > > > We can't open devices with s_umount held without risking deadlocks.
-> > > > So drop s_umount and reacquire it when opening the journal device.
-> > > >
-> > > > Reported-by: syzbot+062317ea1d0a6d5e29e7@syzkaller.appspotmail.com
-> > > > Signed-off-by: Christian Brauner <brauner@kernel.org>
-> > > > ---
-> > >
-> > > Groan, I added a dumb bug in here.
-> >
-> > Which one? I went through the patch again but I still don't see it...
-> >
-> 
-> (Sorry, from phone.)
-> 
-> I'm dropping s_umount across a lot of work
-> instead of just over device opening which is really the wrong way of doing
-> this.
-> I should just drop it over journal_dev_init().
+syzbot has found a reproducer for the following issue on:
 
-So I was kind of suspecting that but I couldn't figure out how it would
-exactly matter when SB_BORN still is not set...
+HEAD commit:    19af4a4ed414 Merge branch 'for-next/core', remote-tracking..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=15da0ec9680000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=80eedef55cd21fa4
+dashboard link: https://syzkaller.appspot.com/bug?extid=95cb07e3840546a4827b
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11957c65680000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1304e6ba680000
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/702d996331e0/disk-19af4a4e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/2a48ce0aeb32/vmlinux-19af4a4e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/332eb4a803d2/Image-19af4a4e.gz.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/a4536cf3a09f/mount_0.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/88a36e03ffba/mount_3.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+95cb07e3840546a4827b@syzkaller.appspotmail.com
+
+REISERFS (device loop0): Created .reiserfs_priv - reserved for xattr storage.
+======================================================
+WARNING: possible circular locking dependency detected
+6.6.0-rc4-syzkaller-g19af4a4ed414 #0 Not tainted
+------------------------------------------------------
+syz-executor324/6098 is trying to acquire lock:
+ffff0000dd376640 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:837 [inline]
+ffff0000dd376640 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: filename_create+0x204/0x468 fs/namei.c:3889
+
+but task is already holding lock:
+ffff0000d494e410 (sb_writers#8){.+.+}-{0:0}, at: mnt_want_write+0x44/0x9c fs/namespace.c:403
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (sb_writers#8){.+.+}-{0:0}:
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1571 [inline]
+       sb_start_write+0x60/0x2ec include/linux/fs.h:1646
+       mnt_want_write_file+0x64/0x1e8 fs/namespace.c:447
+       reiserfs_ioctl+0x188/0x42c fs/reiserfs/ioctl.c:103
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:871 [inline]
+       __se_sys_ioctl fs/ioctl.c:857 [inline]
+       __arm64_sys_ioctl+0x14c/0x1c8 fs/ioctl.c:857
+       __invoke_syscall arch/arm64/kernel/syscall.c:37 [inline]
+       invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:51
+       el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:136
+       do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:155
+       el0_svc+0x58/0x16c arch/arm64/kernel/entry-common.c:678
+       el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:696
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:595
+
+-> #1 (&sbi->lock){+.+.}-{3:3}:
+       __mutex_lock_common+0x190/0x21a0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x2c/0x38 kernel/locking/mutex.c:799
+       reiserfs_write_lock+0x7c/0xe8 fs/reiserfs/lock.c:27
+       reiserfs_lookup+0x128/0x45c fs/reiserfs/namei.c:364
+       lookup_one_qstr_excl+0x108/0x230 fs/namei.c:1608
+       filename_create+0x230/0x468 fs/namei.c:3890
+       do_mkdirat+0xac/0x610 fs/namei.c:4135
+       __do_sys_mkdirat fs/namei.c:4158 [inline]
+       __se_sys_mkdirat fs/namei.c:4156 [inline]
+       __arm64_sys_mkdirat+0x90/0xa8 fs/namei.c:4156
+       __invoke_syscall arch/arm64/kernel/syscall.c:37 [inline]
+       invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:51
+       el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:136
+       do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:155
+       el0_svc+0x58/0x16c arch/arm64/kernel/entry-common.c:678
+       el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:696
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:595
+
+-> #0 (
+&type->i_mutex_dir_key#6/1){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3134 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3253 [inline]
+       validate_chain kernel/locking/lockdep.c:3868 [inline]
+       __lock_acquire+0x3370/0x75e8 kernel/locking/lockdep.c:5136
+       lock_acquire+0x23c/0x71c kernel/locking/lockdep.c:5753
+       down_write_nested+0x58/0xcc kernel/locking/rwsem.c:1689
+       inode_lock_nested include/linux/fs.h:837 [inline]
+       filename_create+0x204/0x468 fs/namei.c:3889
+       do_mkdirat+0xac/0x610 fs/namei.c:4135
+       __do_sys_mkdirat fs/namei.c:4158 [inline]
+       __se_sys_mkdirat fs/namei.c:4156 [inline]
+       __arm64_sys_mkdirat+0x90/0xa8 fs/namei.c:4156
+       __invoke_syscall arch/arm64/kernel/syscall.c:37 [inline]
+       invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:51
+       el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:136
+       do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:155
+       el0_svc+0x58/0x16c arch/arm64/kernel/entry-common.c:678
+       el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:696
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:595
+
+other info that might help us debug this:
+
+Chain exists of:
+  &type->i_mutex_dir_key#6/1 --> &sbi->lock --> sb_writers#8
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  rlock(sb_writers#8);
+                               lock(&sbi->lock);
+                               lock(sb_writers#8);
+  lock(&type->i_mutex_dir_key#6/1);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor324/6098:
+ #0: ffff0000d494e410 (sb_writers#8){.+.+}-{0:0}, at: mnt_want_write+0x44/0x9c fs/namespace.c:403
+
+stack backtrace:
+CPU: 1 PID: 6098 Comm: syz-executor324 Not tainted 6.6.0-rc4-syzkaller-g19af4a4ed414 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/06/2023
+Call trace:
+ dump_backtrace+0x1b8/0x1e4 arch/arm64/kernel/stacktrace.c:233
+ show_stack+0x2c/0x44 arch/arm64/kernel/stacktrace.c:240
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
+ dump_stack+0x1c/0x28 lib/dump_stack.c:113
+ print_circular_bug+0x150/0x1b8 kernel/locking/lockdep.c:2060
+ check_noncircular+0x310/0x404 kernel/locking/lockdep.c:2187
+ check_prev_add kernel/locking/lockdep.c:3134 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3253 [inline]
+ validate_chain kernel/locking/lockdep.c:3868 [inline]
+ __lock_acquire+0x3370/0x75e8 kernel/locking/lockdep.c:5136
+ lock_acquire+0x23c/0x71c kernel/locking/lockdep.c:5753
+ down_write_nested+0x58/0xcc kernel/locking/rwsem.c:1689
+ inode_lock_nested include/linux/fs.h:837 [inline]
+ filename_create+0x204/0x468 fs/namei.c:3889
+ do_mkdirat+0xac/0x610 fs/namei.c:4135
+ __do_sys_mkdirat fs/namei.c:4158 [inline]
+ __se_sys_mkdirat fs/namei.c:4156 [inline]
+ __arm64_sys_mkdirat+0x90/0xa8 fs/namei.c:4156
+ __invoke_syscall arch/arm64/kernel/syscall.c:37 [inline]
+ invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:51
+ el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:136
+ do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:155
+ el0_svc+0x58/0x16c arch/arm64/kernel/entry-common.c:678
+ el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:696
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:595
+
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
