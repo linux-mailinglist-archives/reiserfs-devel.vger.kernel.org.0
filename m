@@ -2,210 +2,75 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1737C04C7
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 10 Oct 2023 21:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9CA77C989B
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 15 Oct 2023 12:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231596AbjJJTir (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 10 Oct 2023 15:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
+        id S230315AbjJOKGf (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Sun, 15 Oct 2023 06:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343928AbjJJTiq (ORCPT
+        with ESMTP id S230156AbjJOKG3 (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 10 Oct 2023 15:38:46 -0400
-Received: from mail-oi1-f208.google.com (mail-oi1-f208.google.com [209.85.167.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F79AF
-        for <reiserfs-devel@vger.kernel.org>; Tue, 10 Oct 2023 12:38:43 -0700 (PDT)
-Received: by mail-oi1-f208.google.com with SMTP id 5614622812f47-3af5a2a0c8fso10078852b6e.3
-        for <reiserfs-devel@vger.kernel.org>; Tue, 10 Oct 2023 12:38:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696966723; x=1697571523;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KyVaqlX6OagJqZRcmPYALwnKUIfCaD9oKeX/SFNHo7Q=;
-        b=w/In9O1domBc83dGWtxrjYiN54IjfZ7aAvKqW+MP3IMzJyyomK3K95UHdKyRBq91yt
-         uIT9Dugj7JXKtfLVSYxSJQrU+ob6I2U9mWxwrOEmeunS81MSeEBzW8DzqyMtQWkM1W3F
-         lxQuhm/jkyTgK4FbmnacDnnh3TnyJ1SeH0eGtlVnih5v2VtPAVW5+BFu8Gd9y34g2TPc
-         9jcx3dXRpN58gRfJujqSwpgEfn/VyuUXTCIigGbNKgtrG/FnfUgcgW7sh6lVAMZWoWqr
-         XzwakETQpga8T1IgAhBLsJnFQ5RBKvSTVi7dYnVxEwH+RNV0p3xZsbvcvMgJ+R0Q9vMr
-         RTGA==
-X-Gm-Message-State: AOJu0YzRZzP/12E8pgO3/cYZ6YwAQCCidx+AhRveTJQXAaYTX+an0UDX
-        ZdQ0hNZsD86qfOUvw/q+f3yZd406ll/AP6b+v6i4qlHc3Zri
-X-Google-Smtp-Source: AGHT+IEBEfxxJ6eHhBGa9pXZ2nwIOCfyK/amQ/eC4kdaZM0L2vuzz1YFUICrlFQBwWX1pHcCO+vU+N6gjjwEJIndGyXJGKfK54dG
+        Sun, 15 Oct 2023 06:06:29 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D34D102;
+        Sun, 15 Oct 2023 03:06:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1697364383;
+        bh=lQ471ge3JT3D/IyXiBK6OqZg4gy00/Wz1cpF1NMX1CI=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Jgv8/cUxgQM27y6U//UT8VctmRJrqlUlqIr1QQTvvhugWnDzvcBYSj+SLZifK2jTQ
+         owmdqqRmmp8iY6chJq2Mlnpjbq6RAj8jt0kTavOSSUm2KQgIWHKXgDY5hnkI1rXRb9
+         NIdVXDDuIe1rtwQ5evX8B8s9Peo+r//MyCvLnEJu3WQv7amCnhXoAL+d5jvpc0YjYY
+         35406tFs9oyMdUOOMphj3mCWt3yUm5zVp0ckK6CxgcejWbG+0vkHDPW3MGFNsWQ5DX
+         tEUDQT8EKLC+kMhx0X8thKh1EhRV8sMxpXYvKiRh1qX2qbrIMTQ4XvICpOiJdoeKvz
+         ZQx5NpTCbYS3w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S7bVc4t2xz4wnw;
+        Sun, 15 Oct 2023 21:06:16 +1100 (AEDT)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     reiserfs-devel@vger.kernel.org, Peter Lafreniere <peter@n8pjl.ca>
+Cc:     jack@suse.cz, linux-kernel@vger.kernel.org, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        linuxppc-dev@lists.ozlabs.org, linux-um@lists.infradead.org,
+        linux-sh@vger.kernel.org, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        geert@linux-m68k.org, linux-arm-kernel@lists.infradead.org,
+        linux@armlinux.org.uk, linux-alpha@vger.kernel.org,
+        richard.henderson@linaro.org, ink@jurassic.park.msu.ru
+In-Reply-To: <20230918175529.19011-1-peter@n8pjl.ca>
+References: <20230918175529.19011-1-peter@n8pjl.ca>
+Subject: Re: (subset) [PATCH 0/7] arch/*: config: Remove ReiserFS from defconfig
+Message-Id: <169736429854.960528.1442206910501555108.b4-ty@ellerman.id.au>
+Date:   Sun, 15 Oct 2023 21:04:58 +1100
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:208a:b0:3ae:11ee:b66f with SMTP id
- s10-20020a056808208a00b003ae11eeb66fmr10438498oiw.3.1696966722911; Tue, 10
- Oct 2023 12:38:42 -0700 (PDT)
-Date:   Tue, 10 Oct 2023 12:38:42 -0700
-In-Reply-To: <000000000000cc15ee05ed0ca085@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b70395060761da97@google.com>
-Subject: Re: [syzbot] [reiserfs?] possible deadlock in filename_create
-From:   syzbot <syzbot+95cb07e3840546a4827b@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Mon, 18 Sep 2023 17:56:09 +0000, Peter Lafreniere wrote:
+> ReiserFS has been considered deprecated for 19 months since commit
+> eb103a51640e ("reiserfs: Deprecate reiserfs"). However, there are
+> several architectures that still build it into their defconfig kernels.
+> 
+> As ReiserFS will be removed in 2025, delete all ReiserFS-related options
+> from defconfig files before the filesystem's removal.
+> 
+> [...]
 
-HEAD commit:    19af4a4ed414 Merge branch 'for-next/core', remote-tracking..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=15da0ec9680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=80eedef55cd21fa4
-dashboard link: https://syzkaller.appspot.com/bug?extid=95cb07e3840546a4827b
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11957c65680000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1304e6ba680000
+Applied to powerpc/next.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/702d996331e0/disk-19af4a4e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2a48ce0aeb32/vmlinux-19af4a4e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/332eb4a803d2/Image-19af4a4e.gz.xz
-mounted in repro #1: https://storage.googleapis.com/syzbot-assets/a4536cf3a09f/mount_0.gz
-mounted in repro #2: https://storage.googleapis.com/syzbot-assets/88a36e03ffba/mount_3.gz
+[2/7] arch: powerpc: remove ReiserFS from defconfig
+      https://git.kernel.org/powerpc/c/c945e6f453a361b0e9daddd2be9c099d1b80d6f8
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+95cb07e3840546a4827b@syzkaller.appspotmail.com
-
-REISERFS (device loop0): Created .reiserfs_priv - reserved for xattr storage.
-======================================================
-WARNING: possible circular locking dependency detected
-6.6.0-rc4-syzkaller-g19af4a4ed414 #0 Not tainted
-------------------------------------------------------
-syz-executor324/6098 is trying to acquire lock:
-ffff0000dd376640 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:837 [inline]
-ffff0000dd376640 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: filename_create+0x204/0x468 fs/namei.c:3889
-
-but task is already holding lock:
-ffff0000d494e410 (sb_writers#8){.+.+}-{0:0}, at: mnt_want_write+0x44/0x9c fs/namespace.c:403
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (sb_writers#8){.+.+}-{0:0}:
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1571 [inline]
-       sb_start_write+0x60/0x2ec include/linux/fs.h:1646
-       mnt_want_write_file+0x64/0x1e8 fs/namespace.c:447
-       reiserfs_ioctl+0x188/0x42c fs/reiserfs/ioctl.c:103
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:871 [inline]
-       __se_sys_ioctl fs/ioctl.c:857 [inline]
-       __arm64_sys_ioctl+0x14c/0x1c8 fs/ioctl.c:857
-       __invoke_syscall arch/arm64/kernel/syscall.c:37 [inline]
-       invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:51
-       el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:136
-       do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:155
-       el0_svc+0x58/0x16c arch/arm64/kernel/entry-common.c:678
-       el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:696
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:595
-
--> #1 (&sbi->lock){+.+.}-{3:3}:
-       __mutex_lock_common+0x190/0x21a0 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x2c/0x38 kernel/locking/mutex.c:799
-       reiserfs_write_lock+0x7c/0xe8 fs/reiserfs/lock.c:27
-       reiserfs_lookup+0x128/0x45c fs/reiserfs/namei.c:364
-       lookup_one_qstr_excl+0x108/0x230 fs/namei.c:1608
-       filename_create+0x230/0x468 fs/namei.c:3890
-       do_mkdirat+0xac/0x610 fs/namei.c:4135
-       __do_sys_mkdirat fs/namei.c:4158 [inline]
-       __se_sys_mkdirat fs/namei.c:4156 [inline]
-       __arm64_sys_mkdirat+0x90/0xa8 fs/namei.c:4156
-       __invoke_syscall arch/arm64/kernel/syscall.c:37 [inline]
-       invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:51
-       el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:136
-       do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:155
-       el0_svc+0x58/0x16c arch/arm64/kernel/entry-common.c:678
-       el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:696
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:595
-
--> #0 (
-&type->i_mutex_dir_key#6/1){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3134 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3253 [inline]
-       validate_chain kernel/locking/lockdep.c:3868 [inline]
-       __lock_acquire+0x3370/0x75e8 kernel/locking/lockdep.c:5136
-       lock_acquire+0x23c/0x71c kernel/locking/lockdep.c:5753
-       down_write_nested+0x58/0xcc kernel/locking/rwsem.c:1689
-       inode_lock_nested include/linux/fs.h:837 [inline]
-       filename_create+0x204/0x468 fs/namei.c:3889
-       do_mkdirat+0xac/0x610 fs/namei.c:4135
-       __do_sys_mkdirat fs/namei.c:4158 [inline]
-       __se_sys_mkdirat fs/namei.c:4156 [inline]
-       __arm64_sys_mkdirat+0x90/0xa8 fs/namei.c:4156
-       __invoke_syscall arch/arm64/kernel/syscall.c:37 [inline]
-       invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:51
-       el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:136
-       do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:155
-       el0_svc+0x58/0x16c arch/arm64/kernel/entry-common.c:678
-       el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:696
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:595
-
-other info that might help us debug this:
-
-Chain exists of:
-  &type->i_mutex_dir_key#6/1 --> &sbi->lock --> sb_writers#8
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  rlock(sb_writers#8);
-                               lock(&sbi->lock);
-                               lock(sb_writers#8);
-  lock(&type->i_mutex_dir_key#6/1);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor324/6098:
- #0: ffff0000d494e410 (sb_writers#8){.+.+}-{0:0}, at: mnt_want_write+0x44/0x9c fs/namespace.c:403
-
-stack backtrace:
-CPU: 1 PID: 6098 Comm: syz-executor324 Not tainted 6.6.0-rc4-syzkaller-g19af4a4ed414 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/06/2023
-Call trace:
- dump_backtrace+0x1b8/0x1e4 arch/arm64/kernel/stacktrace.c:233
- show_stack+0x2c/0x44 arch/arm64/kernel/stacktrace.c:240
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
- dump_stack+0x1c/0x28 lib/dump_stack.c:113
- print_circular_bug+0x150/0x1b8 kernel/locking/lockdep.c:2060
- check_noncircular+0x310/0x404 kernel/locking/lockdep.c:2187
- check_prev_add kernel/locking/lockdep.c:3134 [inline]
- check_prevs_add kernel/locking/lockdep.c:3253 [inline]
- validate_chain kernel/locking/lockdep.c:3868 [inline]
- __lock_acquire+0x3370/0x75e8 kernel/locking/lockdep.c:5136
- lock_acquire+0x23c/0x71c kernel/locking/lockdep.c:5753
- down_write_nested+0x58/0xcc kernel/locking/rwsem.c:1689
- inode_lock_nested include/linux/fs.h:837 [inline]
- filename_create+0x204/0x468 fs/namei.c:3889
- do_mkdirat+0xac/0x610 fs/namei.c:4135
- __do_sys_mkdirat fs/namei.c:4158 [inline]
- __se_sys_mkdirat fs/namei.c:4156 [inline]
- __arm64_sys_mkdirat+0x90/0xa8 fs/namei.c:4156
- __invoke_syscall arch/arm64/kernel/syscall.c:37 [inline]
- invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:51
- el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:136
- do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:155
- el0_svc+0x58/0x16c arch/arm64/kernel/entry-common.c:678
- el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:696
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:595
-
-
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+cheers
