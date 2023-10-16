@@ -2,75 +2,129 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9CA77C989B
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 15 Oct 2023 12:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E7E7CB426
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 16 Oct 2023 22:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjJOKGf (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Sun, 15 Oct 2023 06:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
+        id S233685AbjJPUMd (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Mon, 16 Oct 2023 16:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjJOKG3 (ORCPT
+        with ESMTP id S234215AbjJPULd (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Sun, 15 Oct 2023 06:06:29 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D34D102;
-        Sun, 15 Oct 2023 03:06:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1697364383;
-        bh=lQ471ge3JT3D/IyXiBK6OqZg4gy00/Wz1cpF1NMX1CI=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Jgv8/cUxgQM27y6U//UT8VctmRJrqlUlqIr1QQTvvhugWnDzvcBYSj+SLZifK2jTQ
-         owmdqqRmmp8iY6chJq2Mlnpjbq6RAj8jt0kTavOSSUm2KQgIWHKXgDY5hnkI1rXRb9
-         NIdVXDDuIe1rtwQ5evX8B8s9Peo+r//MyCvLnEJu3WQv7amCnhXoAL+d5jvpc0YjYY
-         35406tFs9oyMdUOOMphj3mCWt3yUm5zVp0ckK6CxgcejWbG+0vkHDPW3MGFNsWQ5DX
-         tEUDQT8EKLC+kMhx0X8thKh1EhRV8sMxpXYvKiRh1qX2qbrIMTQ4XvICpOiJdoeKvz
-         ZQx5NpTCbYS3w==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4S7bVc4t2xz4wnw;
-        Sun, 15 Oct 2023 21:06:16 +1100 (AEDT)
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     reiserfs-devel@vger.kernel.org, Peter Lafreniere <peter@n8pjl.ca>
-Cc:     jack@suse.cz, linux-kernel@vger.kernel.org, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        linuxppc-dev@lists.ozlabs.org, linux-um@lists.infradead.org,
-        linux-sh@vger.kernel.org, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        geert@linux-m68k.org, linux-arm-kernel@lists.infradead.org,
-        linux@armlinux.org.uk, linux-alpha@vger.kernel.org,
-        richard.henderson@linaro.org, ink@jurassic.park.msu.ru
-In-Reply-To: <20230918175529.19011-1-peter@n8pjl.ca>
-References: <20230918175529.19011-1-peter@n8pjl.ca>
-Subject: Re: (subset) [PATCH 0/7] arch/*: config: Remove ReiserFS from defconfig
-Message-Id: <169736429854.960528.1442206910501555108.b4-ty@ellerman.id.au>
-Date:   Sun, 15 Oct 2023 21:04:58 +1100
+        Mon, 16 Oct 2023 16:11:33 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765F613A;
+        Mon, 16 Oct 2023 13:11:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=ww/KyQmZLUBfrbCXL0JtfwVQmCdaEySGJqhTjl+W3Yo=; b=eeeHRWZP6iP9MVTlau71wh1/Ye
+        hlycThR6DJpI5xME/aBZpsTFNev59ay9bJK87wFSeA/jaREIoxsm5TmSB5aLFhypZskVPhq4ZK5UZ
+        Si/5VKLeA8v80BgmswicOKx5uUhehBheDVu6DXV0XV0Jr3qlhyyUJcihl/bO/xFX+ctpRIDgqomBZ
+        QoUiabWvLs+fRull59qucgK0UmE1F1lDqFNomWYWr5GTuwXIEqxIZ6wAFj9OUZgzSG+OY7piO6nHZ
+        b2uwk8N0YRur7vAl2YSviS8Hfwr+Pq0lfH/b5av3RhPPEkLcmOR+GFIAZB9X6/45o50IMX/G3gQ8V
+        xwHgURaA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qsTvo-0085aK-FF; Mon, 16 Oct 2023 20:11:16 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, gfs2@lists.linux.dev,
+        linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev,
+        reiserfs-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        Pankaj Raghav <p.raghav@samsung.com>
+Subject: [PATCH v2 00/27] Finish the create_empty_buffers() transition
+Date:   Mon, 16 Oct 2023 21:10:47 +0100
+Message-Id: <20231016201114.1928083-1-willy@infradead.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Mon, 18 Sep 2023 17:56:09 +0000, Peter Lafreniere wrote:
-> ReiserFS has been considered deprecated for 19 months since commit
-> eb103a51640e ("reiserfs: Deprecate reiserfs"). However, there are
-> several architectures that still build it into their defconfig kernels.
-> 
-> As ReiserFS will be removed in 2025, delete all ReiserFS-related options
-> from defconfig files before the filesystem's removal.
-> 
-> [...]
+Pankaj recently added folio_create_empty_buffers() as the folio
+equivalent to create_empty_buffers().  This patch set finishes
+the conversion by first converting all remaining filesystems
+to call folio_create_empty_buffers(), then renaming it back
+to create_empty_buffers().  I took the opportunity to make a few
+simplifications like making folio_create_empty_buffers() return the head
+buffer and extracting get_nth_bh() from nilfs2.
 
-Applied to powerpc/next.
+A few of the patches in this series aren't directly related to
+create_empty_buffers(), but I saw them while I was working on this and
+thought they'd be easy enough to add to this series.  Compile-tested only,
+other than ext4.
 
-[2/7] arch: powerpc: remove ReiserFS from defconfig
-      https://git.kernel.org/powerpc/c/c945e6f453a361b0e9daddd2be9c099d1b80d6f8
+v2:
+ - Added the patch to fix the return type from grow_dev_page()
+ - Fixed typo in subject line noticed by Andreas
+ - Fixed missed assignment to 'bh' spotted by Andreas
+ - Exported folio_copy() spotted by Ryusuke
+ - Added various Reviewed-by tags from Pankaj, Ryusuke & Andreas
 
-cheers
+Matthew Wilcox (Oracle) (27):
+  buffer: Return bool from grow_dev_folio()
+  buffer: Make folio_create_empty_buffers() return a buffer_head
+  mpage: Convert map_buffer_to_folio() to folio_create_empty_buffers()
+  ext4: Convert to folio_create_empty_buffers
+  buffer: Add get_nth_bh()
+  gfs2: Convert inode unstuffing to use a folio
+  gfs2: Convert gfs2_getbuf() to folios
+  gfs2: Convert gfs2_getjdatabuf to use a folio
+  gfs2: Convert gfs2_write_buf_to_page() to use a folio
+  nilfs2: Convert nilfs_mdt_freeze_buffer to use a folio
+  nilfs2: Convert nilfs_grab_buffer() to use a folio
+  nilfs2: Convert nilfs_copy_page() to nilfs_copy_folio()
+  nilfs2: Convert nilfs_mdt_forget_block() to use a folio
+  nilfs2: Convert nilfs_mdt_get_frozen_buffer to use a folio
+  nilfs2: Remove nilfs_page_get_nth_block
+  nilfs2: Convert nilfs_lookup_dirty_data_buffers to use
+    folio_create_empty_buffers
+  ntfs: Convert ntfs_read_block() to use a folio
+  ntfs: Convert ntfs_writepage to use a folio
+  ntfs: Convert ntfs_prepare_pages_for_non_resident_write() to folios
+  ntfs3: Convert ntfs_zero_range() to use a folio
+  ocfs2: Convert ocfs2_map_page_blocks to use a folio
+  reiserfs: Convert writepage to use a folio
+  ufs: Add ufs_get_locked_folio and ufs_put_locked_folio
+  ufs: Use ufs_get_locked_folio() in ufs_alloc_lastblock()
+  ufs; Convert ufs_change_blocknr() to use folios
+  ufs: Remove ufs_get_locked_page()
+  buffer: Remove folio_create_empty_buffers()
+
+ fs/buffer.c                 |  68 +++++-----
+ fs/ext4/inode.c             |  14 +-
+ fs/ext4/move_extent.c       |  11 +-
+ fs/gfs2/aops.c              |   2 +-
+ fs/gfs2/bmap.c              |  48 ++++---
+ fs/gfs2/meta_io.c           |  61 ++++-----
+ fs/gfs2/quota.c             |  37 +++---
+ fs/mpage.c                  |   3 +-
+ fs/nilfs2/mdt.c             |  66 +++++-----
+ fs/nilfs2/page.c            |  76 +++++------
+ fs/nilfs2/page.h            |  11 --
+ fs/nilfs2/segment.c         |   7 +-
+ fs/ntfs/aops.c              | 255 +++++++++++++++++-------------------
+ fs/ntfs/file.c              |  89 ++++++-------
+ fs/ntfs3/file.c             |  31 ++---
+ fs/ocfs2/aops.c             |  19 +--
+ fs/reiserfs/inode.c         |  80 +++++------
+ fs/ufs/balloc.c             |  20 ++-
+ fs/ufs/inode.c              |  25 ++--
+ fs/ufs/util.c               |  34 +++--
+ fs/ufs/util.h               |  10 +-
+ include/linux/buffer_head.h |  28 +++-
+ mm/util.c                   |   1 +
+ 23 files changed, 481 insertions(+), 515 deletions(-)
+
+-- 
+2.40.1
+
