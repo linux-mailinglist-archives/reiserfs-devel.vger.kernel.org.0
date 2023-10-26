@@ -2,48 +2,67 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141007D59E7
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 24 Oct 2023 19:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF7B7D8333
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 26 Oct 2023 14:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344074AbjJXRpy (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Tue, 24 Oct 2023 13:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
+        id S230505AbjJZM5M (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Thu, 26 Oct 2023 08:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234315AbjJXRpx (ORCPT
+        with ESMTP id S230330AbjJZM5M (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Tue, 24 Oct 2023 13:45:53 -0400
-Received: from mail-4317.proton.ch (mail-4317.proton.ch [185.70.43.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C20133;
-        Tue, 24 Oct 2023 10:45:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=n8pjl.ca;
-        s=protonmail2; t=1698169547; x=1698428747;
-        bh=HHciNy/AbfyXudhfNKmKsZ25qvRkcAc7dw1aJ5aSv7I=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=qmbzoAH5CdPB4IIlR00Gcfs4zMM6zlybEScBkoyZAKc7USQS6V5k5TC6CLMrwq0ib
-         QQ3RpVGfQD377Xyp5SCGl5Gz1O1qAk66xbSmzQghbBN1pEoLwK+IMDVIId+0vBvEU2
-         HEcYgH/yS3xZv88m2O+Gl72kqWbdbDjLlPbA7u+v05uJLQNzaKT1el749XLtZVHbo+
-         nwPuiHgWglFiHIYufX8zYkv5iTTDY4kMHP0qgZe60nK2mp5/mHn/nqWAIPCeFWEAQN
-         fzmi4SvZei0ZhLHITU0EzxKNSldCHPk9i19rP8OWWpwRGCDvLF+zZeNor9Y/3fvPuK
-         AAVhmNkCrcVsg==
-Date:   Tue, 24 Oct 2023 17:45:43 +0000
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-From:   Peter Lafreniere <peter@n8pjl.ca>
-Cc:     linux-sh@vger.kernel.org, jack@suse.cz,
-        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Lafreniere <peter@n8pjl.ca>
-Subject: Re: [PATCH 3/7] arch: sh: remove ReiserFS from defconfig
-Message-ID: <4hN-jE1ySe2eSmIJ6qWQKPQtp9vdgV2x0ek_nz20azJUyv5FLi5gioHV8YnJHTHHwZKvjSkvnPBhzmFJ2gQIeNnmaRA3cJ_GyhDqz2SJJkw=@n8pjl.ca>
-In-Reply-To: <ee30c656c3e3b027edcfa4bc2947cea192f5cd2d.camel@physik.fu-berlin.de>
-References: <20230918175529.19011-1-peter@n8pjl.ca> <20230918175529.19011-4-peter@n8pjl.ca> <ee30c656c3e3b027edcfa4bc2947cea192f5cd2d.camel@physik.fu-berlin.de>
-Feedback-ID: 53133685:user:proton
+        Thu, 26 Oct 2023 08:57:12 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A21A191;
+        Thu, 26 Oct 2023 05:57:09 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id 98e67ed59e1d1-27d5fe999caso693702a91.1;
+        Thu, 26 Oct 2023 05:57:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698325029; x=1698929829; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NAq/h84hoL+UwBKjrluHqm+iW3Vp6ePG/aMBZRWLHC0=;
+        b=WsrHlVcX97gZ26IwJlEBLHZDxFdQOjxlQs+3RCmOVsMzvax2Q19GbFPyEUYZKMoosc
+         88vIMtPnVy/vN+AxdQsh/D2p1THupDD3+XTPrDuGMbTlpLRYOeaeNQR0K4kMu40RyWnE
+         WXxTEVy/xUN4mAGqWqdcm2unZO7ew9ftP19tzJYqvj5o9ULn/ReCB4zSuYuOgpdOpjJC
+         NplywUJz1vpBmcKg/HeyeEtWBf5rqRrpYCLFOc5LmhaLrWvB3FmyqFyzt8cmUJ/m1LLz
+         FhxrhvUzgw8rn8k1Jv3qU9w/iRGeQyGDCzono5XUZNI7QCem/HGzOYdSrUYf4or4EmdP
+         I5ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698325029; x=1698929829;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NAq/h84hoL+UwBKjrluHqm+iW3Vp6ePG/aMBZRWLHC0=;
+        b=B+6ksZ4PL7lXnsbhwH8/Y3kklj/IHVQj7KoByMLlKrzgjJ2g1XriI4Z5SnBsj6bfhT
+         HHgFBzGG6JqyuTv+sL2zcPX5GrXKWptxDeU57Yqq3685Kgv6hPC/BEFXDBdR8rDCoUSB
+         MZmR1Q5eyCxc0bS5NYRFd7TZFJWPq/3k0BZBD+qoGkJPB6+JJYFTL7CaVgOn4lXmzvmL
+         cPQITNPSEal2mHii6W82qfboSz82f3KAThZFPv+ZSXyHQSujkz/IkpTQOclPtyA7fKVO
+         xaaKVaemW8yEZf4LWlr+akvdUWPlDx/0CsQAOFkvDBNgVNZQRshkMq0kBIrGx9AEuGN3
+         u8sg==
+X-Gm-Message-State: AOJu0YzOrLLhpVWnhHC9aEB3L0KR4JGNCwpwNCYcKrlAmuvOpuW7EK06
+        GGM9eevOiFZJGwjAkvR8DOcUpnflBc5OeQ==
+X-Google-Smtp-Source: AGHT+IF6Zjz6CCP32+qe+ctnaMcuAFd07y2irysyeokfPZ6D/F458guLdKgInFI2yQDBd2b73WDJ6A==
+X-Received: by 2002:a17:90b:5287:b0:27d:1c70:23d4 with SMTP id si7-20020a17090b528700b0027d1c7023d4mr14494564pjb.44.1698325028805;
+        Thu, 26 Oct 2023 05:57:08 -0700 (PDT)
+Received: from brag-vm.. ([2409:40f4:13:48d5:f085:e875:d528:fe4c])
+        by smtp.gmail.com with ESMTPSA id g2-20020a17090a714200b002777001ee76sm1565513pjs.18.2023.10.26.05.57.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Oct 2023 05:57:08 -0700 (PDT)
+From:   Bragatheswaran Manickavel <bragathemanick0908@gmail.com>
+To:     reiserfs-devel@vger.kernel.org
+Cc:     Bragatheswaran Manickavel <bragathemanick0908@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        syzbot+e5bb9eb00a5a5ed2a9a2@syzkaller.appspotmail.com
+Subject: [PATCH] reiserfs: UBSAN: array-index-out-of-bounds in direntry_create_vi
+Date:   Thu, 26 Oct 2023 18:26:16 +0530
+Message-Id: <20231026125616.1859-1-bragathemanick0908@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,74 +70,31 @@ Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-On Tue, Oct 24, 2023 at 12:46, John Paul Adrian Glaubitz wrote:
-> Hi Peter!
->=20
-> On Mon, 2023-09-18 at 17:56 +0000, Peter Lafreniere wrote:
->=20
-> > ReiserFS has been deprecated for a year and a half, yet is still built
-> > as part of a defconfig kernel.
-> >=20
-> > According to commit eb103a51640e ("reiserfs: Deprecate reiserfs"), the
-> > filesystem is slated to be removed in 2025. Remove it from the defconfi=
-g
-> > profiles now, as part of its deprecation process.
-> >=20
-> > Signed-off-by: Peter Lafreniere peter@n8pjl.ca
-> > ---
-> > arch/sh/configs/landisk_defconfig | 1 -
-> > arch/sh/configs/titan_defconfig | 1 -
-> > 2 files changed, 2 deletions(-)
-> >=20
-> > diff --git a/arch/sh/configs/landisk_defconfig b/arch/sh/configs/landis=
-k_defconfig
-> > index 541082090918..af1ab25227e3 100644
-> > --- a/arch/sh/configs/landisk_defconfig
-> > +++ b/arch/sh/configs/landisk_defconfig
-> > @@ -94,7 +94,6 @@ CONFIG_USB_SISUSBVGA=3Dm
-> > CONFIG_EXT2_FS=3Dy
-> > CONFIG_EXT3_FS=3Dy
-> > # CONFIG_EXT3_DEFAULTS_TO_ORDERED is not set
-> > -CONFIG_REISERFS_FS=3Dy
-> > CONFIG_ISO9660_FS=3Dm
-> > CONFIG_MSDOS_FS=3Dy
-> > CONFIG_VFAT_FS=3Dy
-> > diff --git a/arch/sh/configs/titan_defconfig b/arch/sh/configs/titan_de=
-fconfig
-> > index 871092753591..50e378adc4c5 100644
-> > --- a/arch/sh/configs/titan_defconfig
-> > +++ b/arch/sh/configs/titan_defconfig
-> > @@ -221,7 +221,6 @@ CONFIG_EXT2_FS=3Dy
-> > CONFIG_EXT3_FS=3Dy
-> > # CONFIG_EXT3_DEFAULTS_TO_ORDERED is not set
-> > # CONFIG_EXT3_FS_XATTR is not set
-> > -CONFIG_REISERFS_FS=3Dm
-> > CONFIG_XFS_FS=3Dm
-> > CONFIG_FUSE_FS=3Dm
-> > CONFIG_ISO9660_FS=3Dm
->=20
->=20
-> What has been the feedback so far on this? Do most maintainer remove it o=
-r not?
+deh defined as an array of type __u16[], and issue is
+triggered when it's trying to access an element at
+index 1, which is out of bounds because the array
+has only one element at index 0.
 
-AFAICT, it's been picked up by mips and powerpc. I thought that it got pick=
-ed up by UML too,
-but I can't find any signs of that actually happening.
+Reported-by: syzbot+e5bb9eb00a5a5ed2a9a2@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=e5bb9eb00a5a5ed2a9a2
+Signed-off-by: Bragatheswaran Manickavel <bragathemanick0908@gmail.com>
+---
+ fs/reiserfs/item_ops.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->=20
-> I don't have a strong opinion on this, but I tend to keep it in defconfig=
- until
-> ReiserFS has been completely removed from the kernel.
-
-Is convenience more important than a slim defconfig? I don't think it is in=
- this case,
-but Geert (for example) thinks it is. In the end the fs will be gone for go=
-od, and
-none of this will really have mattered.
-
->=20
-> Adrian
-
-Cheers,
-Peter
+diff --git a/fs/reiserfs/item_ops.c b/fs/reiserfs/item_ops.c
+index 3a5a752d96c7..ccf547c5e8e1 100644
+--- a/fs/reiserfs/item_ops.c
++++ b/fs/reiserfs/item_ops.c
+@@ -484,7 +484,7 @@ static int direntry_create_vi(struct virtual_node *vn,
+ 				  vn->vn_mode);
+ 		dir_u->entry_sizes[i] =
+ 		    (j ? deh_location(&deh[j - 1]) : ih_item_len(vi->vi_ih)) -
+-		    deh_location(&deh[j]) + DEH_SIZE;
++		    deh_location(&deh[j - 1]) + DEH_SIZE;
+ 	}
+ 
+ 	size += (dir_u->entry_count * sizeof(short));
+-- 
+2.34.1
 
