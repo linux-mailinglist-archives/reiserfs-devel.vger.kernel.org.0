@@ -2,235 +2,70 @@ Return-Path: <reiserfs-devel-owner@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C9E27E8120
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 10 Nov 2023 19:24:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A787E88F0
+	for <lists+reiserfs-devel@lfdr.de>; Sat, 11 Nov 2023 04:21:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344458AbjKJSYU (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
-        Fri, 10 Nov 2023 13:24:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S230356AbjKKDVK (ORCPT <rfc822;lists+reiserfs-devel@lfdr.de>);
+        Fri, 10 Nov 2023 22:21:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344362AbjKJSXY (ORCPT
+        with ESMTP id S230124AbjKKDVH (ORCPT
         <rfc822;reiserfs-devel@vger.kernel.org>);
-        Fri, 10 Nov 2023 13:23:24 -0500
-Received: from mail-pg1-f206.google.com (mail-pg1-f206.google.com [209.85.215.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD57934801
-        for <reiserfs-devel@vger.kernel.org>; Fri, 10 Nov 2023 04:38:28 -0800 (PST)
-Received: by mail-pg1-f206.google.com with SMTP id 41be03b00d2f7-5be0d708b04so1686603a12.1
-        for <reiserfs-devel@vger.kernel.org>; Fri, 10 Nov 2023 04:38:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699619908; x=1700224708;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n4jYcXhSccrT1hloG9/QX759NTdojbCoAe1uWt2G6uA=;
-        b=XSo+jmMuJETtRYkTqhMJxu0q/NJzmfawZAu3TCKyuBzprO9rqOASX1wlR2XY6sdWXy
-         Ddy08os/8Rrxc2n+lA/p/mokTg0RPKun/ogm8g3T33YVyO0UUOIeTvev2AaNSNiLT6Zy
-         q3xVNTSYZSg8Ko/yw68W+66Az4jsaQ18/R6SNik7ZTBAp/5c0sBBuDs7A+HyG7gdunZe
-         rT5PeTaMbVkTxzGxWWz0vNMLfpMSj5gR6CLkfZ2XVc4O4qsL/Pg8OOotrJzrxwu5LdHb
-         Pyx+px1xFTdteHfB+8N5x/Q7T3SVeJH51RMBk6GKRwCHz47BjR0Qi+eRChmQeMsUNBl1
-         PKGg==
-X-Gm-Message-State: AOJu0Yz4b8Kx4scQ7ed3gdkjQgZ60T1iOw0TjuIPjU6kAlYxHP9Y70vj
-        b5CvCtrvYOxtIQhHyTu3Oa2nZLAh4+AHO5+umBLbl4jBw21V
-X-Google-Smtp-Source: AGHT+IHFmnI3m63V8A1f5olDym/aDP2+pSV6x5M2ggCKhXDdUCHt4WRgkKdME66otbr8ngKjPyLeWqR56HCqbEnnprOhZ1HaK2zY
+        Fri, 10 Nov 2023 22:21:07 -0500
+X-Greylist: delayed 4931 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Nov 2023 19:21:03 PST
+Received: from mail.maprial.com (mail.maprial.com [190.181.35.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8533C2F;
+        Fri, 10 Nov 2023 19:21:03 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.maprial.com (Postfix) with ESMTP id 9DF5487B2FC5;
+        Fri, 10 Nov 2023 19:04:06 -0400 (-04)
+Received: from mail.maprial.com ([127.0.0.1])
+        by localhost (mail.maprial.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id iOJr9-IbkM37; Fri, 10 Nov 2023 19:04:06 -0400 (-04)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.maprial.com (Postfix) with ESMTP id 8C12587B2FCC;
+        Fri, 10 Nov 2023 17:54:03 -0400 (-04)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.maprial.com 8C12587B2FCC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maprial.com;
+        s=8A254412-65B9-11ED-A564-8B9C10001A2B; t=1699653243;
+        bh=WOZURJ77pkiMUL2pPLC14ifVPRvyTQIBEQmxuN1ezAA=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=pmRhZyY+GavFN9jLYLr61x+xBxUcDfuFDQuPoOUorO7mXw/JnPclGAPk5rWHRxzYX
+         rDk7G7S7xtdodSWF6/6gvJaIt0ka7RgT8trsGoMeganGDPD6FHpq+y+yJGCDDYWh+w
+         egORbO5w1voIPHYkhS987JQNeDh6hVLJduitwMWI=
+X-Virus-Scanned: amavisd-new at mail.maprial.com
+Received: from mail.maprial.com ([127.0.0.1])
+        by localhost (mail.maprial.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id QRvMpYbWfNVU; Fri, 10 Nov 2023 17:54:03 -0400 (-04)
+Received: from [192.168.1.152] (unknown [51.179.104.230])
+        by mail.maprial.com (Postfix) with ESMTPSA id A2AF77222E1A;
+        Fri, 10 Nov 2023 17:04:36 -0400 (-04)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Received: by 2002:a17:902:f54a:b0:1cc:20c8:323a with SMTP id
- h10-20020a170902f54a00b001cc20c8323amr1458437plf.1.1699619908297; Fri, 10 Nov
- 2023 04:38:28 -0800 (PST)
-Date:   Fri, 10 Nov 2023 04:38:28 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e32f3c0609cb98d0@google.com>
-Subject: [syzbot] [reiserfs?] possible deadlock in chmod_common (2)
-From:   syzbot <syzbot+83693dbba860b4f2e549@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?b?4oKsIDEwMC4wMDAuMDAwPw==?=
+To:     Recipients <gvalencia@maprial.com>
+From:   gvalencia@maprial.com
+Date:   Fri, 10 Nov 2023 22:04:27 +0100
+Reply-To: joliushk@gmail.com
+Message-Id: <20231110210437.A2AF77222E1A@mail.maprial.com>
+X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <reiserfs-devel.vger.kernel.org>
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    8de1e7afcc1c Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=136e2560e80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3e6feaeda5dcbc27
-dashboard link: https://syzkaller.appspot.com/bug?extid=83693dbba860b4f2e549
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-userspace arch: arm64
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0f00907f9764/disk-8de1e7af.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/0502fe78c60d/vmlinux-8de1e7af.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/192135168cc0/Image-8de1e7af.gz.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+83693dbba860b4f2e549@syzkaller.appspotmail.com
-
-REISERFS (device loop5): Using tea hash to sort names
-REISERFS (device loop5): Created .reiserfs_priv - reserved for xattr storage.
-======================================================
-WARNING: possible circular locking dependency detected
-6.6.0-rc7-syzkaller-g8de1e7afcc1c #0 Not tainted
-------------------------------------------------------
-syz-executor.5/10863 is trying to acquire lock:
-ffff00012f979d60 (&type->i_mutex_dir_key#18){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:802 [inline]
-ffff00012f979d60 (&type->i_mutex_dir_key#18){+.+.}-{3:3}, at: chmod_common+0x17c/0x418 fs/open.c:637
-
-but task is already holding lock:
-ffff00012d90a410 (sb_writers#26){.+.+}-{0:0}, at: mnt_want_write+0x44/0x9c fs/namespace.c:403
-
-which lock already depends on the new lock.
+Goededag,
+Ik ben mevrouw Joanna Liu en een medewerker van Citi Bank Hong Kong.
+Kan ik =E2=82=AC 100.000.000 aan u overmaken? Kan ik je vertrouwen
 
 
-the existing dependency chain (in reverse order) is:
-
--> #2 (sb_writers#26){.+.+}-{0:0}:
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1571 [inline]
-       sb_start_write+0x60/0x2ec include/linux/fs.h:1646
-       mnt_want_write_file+0x64/0x1e8 fs/namespace.c:447
-       reiserfs_ioctl+0x188/0x42c fs/reiserfs/ioctl.c:103
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:871 [inline]
-       __se_sys_ioctl fs/ioctl.c:857 [inline]
-       __arm64_sys_ioctl+0x14c/0x1c8 fs/ioctl.c:857
-       __invoke_syscall arch/arm64/kernel/syscall.c:37 [inline]
-       invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:51
-       el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:136
-       do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:155
-       el0_svc+0x54/0x158 arch/arm64/kernel/entry-common.c:678
-       el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:696
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:595
-
--> #1 (&sbi->lock){+.+.}-{3:3}:
-       __mutex_lock_common+0x190/0x21a0 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x2c/0x38 kernel/locking/mutex.c:799
-       reiserfs_write_lock+0x7c/0xe8 fs/reiserfs/lock.c:27
-       reiserfs_lookup+0x128/0x45c fs/reiserfs/namei.c:364
-       __lookup_slow+0x250/0x374 fs/namei.c:1694
-       lookup_one_len+0x178/0x28c fs/namei.c:2746
-       reiserfs_lookup_privroot+0x8c/0x184 fs/reiserfs/xattr.c:977
-       reiserfs_fill_super+0x1bc0/0x2028 fs/reiserfs/super.c:2174
-       mount_bdev+0x1e8/0x2b4 fs/super.c:1629
-       get_super_block+0x44/0x58 fs/reiserfs/super.c:2601
-       legacy_get_tree+0xd4/0x16c fs/fs_context.c:662
-       vfs_get_tree+0x90/0x288 fs/super.c:1750
-       do_new_mount+0x25c/0x8c8 fs/namespace.c:3335
-       path_mount+0x590/0xe04 fs/namespace.c:3662
-       do_mount fs/namespace.c:3675 [inline]
-       __do_sys_mount fs/namespace.c:3884 [inline]
-       __se_sys_mount fs/namespace.c:3861 [inline]
-       __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3861
-       __invoke_syscall arch/arm64/kernel/syscall.c:37 [inline]
-       invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:51
-       el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:136
-       do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:155
-       el0_svc+0x54/0x158 arch/arm64/kernel/entry-common.c:678
-       el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:696
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:595
-
--> #0 (&type->i_mutex_dir_key#18){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3134 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3253 [inline]
-       validate_chain kernel/locking/lockdep.c:3868 [inline]
-       __lock_acquire+0x3370/0x75e8 kernel/locking/lockdep.c:5136
-       lock_acquire+0x23c/0x71c kernel/locking/lockdep.c:5753
-       down_write+0x50/0xc0 kernel/locking/rwsem.c:1573
-       inode_lock include/linux/fs.h:802 [inline]
-       chmod_common+0x17c/0x418 fs/open.c:637
-       vfs_fchmod fs/open.c:659 [inline]
-       __do_sys_fchmod fs/open.c:668 [inline]
-       __se_sys_fchmod fs/open.c:662 [inline]
-       __arm64_sys_fchmod+0xe0/0x150 fs/open.c:662
-       __invoke_syscall arch/arm64/kernel/syscall.c:37 [inline]
-       invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:51
-       el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:136
-       do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:155
-       el0_svc+0x54/0x158 arch/arm64/kernel/entry-common.c:678
-       el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:696
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:595
-
-other info that might help us debug this:
-
-Chain exists of:
-  &type->i_mutex_dir_key#18 --> &sbi->lock --> sb_writers#26
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  rlock(sb_writers#26);
-                               lock(&sbi->lock);
-                               lock(sb_writers#26);
-  lock(&type->i_mutex_dir_key#18);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor.5/10863:
- #0: ffff00012d90a410 (sb_writers#26){.+.+}-{0:0}, at: mnt_want_write+0x44/0x9c fs/namespace.c:403
-
-stack backtrace:
-CPU: 1 PID: 10863 Comm: syz-executor.5 Not tainted 6.6.0-rc7-syzkaller-g8de1e7afcc1c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/09/2023
-Call trace:
- dump_backtrace+0x1b8/0x1e4 arch/arm64/kernel/stacktrace.c:233
- show_stack+0x2c/0x44 arch/arm64/kernel/stacktrace.c:240
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
- dump_stack+0x1c/0x28 lib/dump_stack.c:113
- print_circular_bug+0x150/0x1b8 kernel/locking/lockdep.c:2060
- check_noncircular+0x310/0x404 kernel/locking/lockdep.c:2187
- check_prev_add kernel/locking/lockdep.c:3134 [inline]
- check_prevs_add kernel/locking/lockdep.c:3253 [inline]
- validate_chain kernel/locking/lockdep.c:3868 [inline]
- __lock_acquire+0x3370/0x75e8 kernel/locking/lockdep.c:5136
- lock_acquire+0x23c/0x71c kernel/locking/lockdep.c:5753
- down_write+0x50/0xc0 kernel/locking/rwsem.c:1573
- inode_lock include/linux/fs.h:802 [inline]
- chmod_common+0x17c/0x418 fs/open.c:637
- vfs_fchmod fs/open.c:659 [inline]
- __do_sys_fchmod fs/open.c:668 [inline]
- __se_sys_fchmod fs/open.c:662 [inline]
- __arm64_sys_fchmod+0xe0/0x150 fs/open.c:662
- __invoke_syscall arch/arm64/kernel/syscall.c:37 [inline]
- invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:51
- el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:136
- do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:155
- el0_svc+0x54/0x158 arch/arm64/kernel/entry-common.c:678
- el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:696
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:595
-netlink: 12 bytes leftover after parsing attributes in process `syz-executor.5'.
-netlink: 32 bytes leftover after parsing attributes in process `syz-executor.5'.
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Ik wacht op jullie reacties
+Met vriendelijke groeten
+mevrouw Joanna Liu
