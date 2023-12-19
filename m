@@ -1,448 +1,139 @@
-Return-Path: <reiserfs-devel+bounces-11-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <reiserfs-devel+bounces-12-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E71088161D7
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 17 Dec 2023 20:50:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45A02818F38
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 19 Dec 2023 19:06:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4328D282888
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 17 Dec 2023 19:50:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9595BB2545F
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 19 Dec 2023 18:06:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B71F481A5;
-	Sun, 17 Dec 2023 19:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20BB38DFC;
+	Tue, 19 Dec 2023 18:06:31 +0000 (UTC)
 X-Original-To: reiserfs-devel@vger.kernel.org
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87E1E47F7D
-	for <reiserfs-devel@vger.kernel.org>; Sun, 17 Dec 2023 19:50:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7420438DE9
+	for <reiserfs-devel@vger.kernel.org>; Tue, 19 Dec 2023 18:06:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7b7aacf6534so265094439f.0
-        for <reiserfs-devel@vger.kernel.org>; Sun, 17 Dec 2023 11:50:24 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7b7f996e118so73201739f.3
+        for <reiserfs-devel@vger.kernel.org>; Tue, 19 Dec 2023 10:06:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702842623; x=1703447423;
+        d=1e100.net; s=20230601; t=1703009188; x=1703613988;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=UnxmCXdu8X8my6WRLXsEZ8nqurme9ZtqlNqBhv3jdoM=;
-        b=LJEnTOYIpzTiQ+5gXo3gNtttJqy8acvIRyWSNiB1/CYeD4nDFDCi/lKXrzx9S+BktN
-         mPBotcJN1f2WCiQq5SH3OjqD5qzNNjrOaB6OShaUNWeGVNYi7npg5mz5u8xibTmrvd0D
-         uNa0ucZj02XKStAAglqdIgEPifC+F+Ihqt8Ql7apHsIv8f0JM6sIHb10KivZuiu7TbjZ
-         s3vRoo+xuKgiKlowmthqtfxrnZ04EUzyAAJQV4rBMsBKHHC51mK9yMlXF9SsVpdbKnOW
-         oaTMWxH8giUYmGsPpODvglwIsgLKmghbfVNWdDGvg8EUT/byRnZ92M7zqGDIGReJQmYZ
-         HAlA==
-X-Gm-Message-State: AOJu0YxeFp/+Lew31MDGsDUIny74RWA1zzwSJViSpbeYUsxG44c6Fz8g
-	pWvrrK1mXwm2MtMeccCW5jIv2gVWv0sSycpGIzFwtEzjjXHC
-X-Google-Smtp-Source: AGHT+IE4DXKTsu02yWpMJAhWG0+ahgC5cQurqYWLK3RNddMAzr7ACcgqjNLNG0af2JpObw/Szh2/alVlk3IJH3M/i0oiudm/hNqi
+        bh=3UbpdPske9+0a0Vc1FEcrTZ1/WyUsWYEAt/9ne5SDRo=;
+        b=R9YAw32UPsLoyEALg28+ErKTppPwsaJaDnWpU+dGOWsqRiPNHP9FzH7OLFHZykHHz2
+         ooegwux3ncgbKHwFE6NtV/Hz9c7aWzV8Mo1/KikYPCcXweI8ro92wZAxcWV9U5FxhUEh
+         1y5bYJyODBfWUY5G3OGMSf3VgQIGyB9n9wcp+QdJTokrI9OaEHjLKW1bHdoumEvR81hW
+         iaMvGuoYZGDtwNZ3OFBgpF/6OZaaXHBcR7qU6wRkJNEsddPBk2s8lF94u6lQaPokhVjZ
+         D1SD7b1ESyMg8jXhS6UN8QSybb2TYDBm6qUmvrao15EEkEITyh2wuwgyaab8lmu0nclF
+         j92g==
+X-Gm-Message-State: AOJu0Yw0JmNsG2UVte9DMB1SLwjS7Hd6V+Y7Yzsm1RzUVKZRxCZmCaxI
+	//zlnnatuPq1CHQ+QC1i4kGNFjTI8gPBjIaaga0LnMtUofv+
+X-Google-Smtp-Source: AGHT+IE3CDj7nVBlj5XGQASnYOsOUQ3b+aTPpzcoXF820SJjjKjOaghaMz82PmSJt/AbH5rPN5jaSoVN3dI8sT91mjxQDaOFtDxO
 Precedence: bulk
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 List-Id: <reiserfs-devel.vger.kernel.org>
 List-Subscribe: <mailto:reiserfs-devel+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:reiserfs-devel+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:33a9:b0:469:22db:6827 with SMTP id
- h41-20020a05663833a900b0046922db6827mr498993jav.6.1702842623746; Sun, 17 Dec
- 2023 11:50:23 -0800 (PST)
-Date: Sun, 17 Dec 2023 11:50:23 -0800
+X-Received: by 2002:a05:6e02:1d09:b0:35f:a338:44ae with SMTP id
+ i9-20020a056e021d0900b0035fa33844aemr835304ila.3.1703009188670; Tue, 19 Dec
+ 2023 10:06:28 -0800 (PST)
+Date: Tue, 19 Dec 2023 10:06:28 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b26907060cb9f1f5@google.com>
-Subject: [syzbot] [reiserfs?] possible deadlock in __run_timers
-From: syzbot <syzbot+a3981d3c93cde53224be@syzkaller.appspotmail.com>
-To: bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, mingo@redhat.com, 
-	reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com, 
-	tglx@linutronix.de, x86@kernel.org
+Message-ID: <000000000000bd76a8060ce0b9a5@google.com>
+Subject: [syzbot] [reiserfs?] kernel BUG in flush_commit_list (2)
+From: syzbot <syzbot+99bd43b50bec81a1e6e3@syzkaller.appspotmail.com>
+To: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 
 Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    88035e5694a8 Merge tag 'hid-for-linus-2023121201' of git:/..
+HEAD commit:    3f7168591ebf Merge tag '6.7-rc5-smb3-client-fixes' of git:..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13467cc6e80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=be2bd0a72b52d4da
-dashboard link: https://syzkaller.appspot.com/bug?extid=a3981d3c93cde53224be
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15befbfee80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17b20006e80000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16940dc1e80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=53ec3da1d259132f
+dashboard link: https://syzkaller.appspot.com/bug?extid=99bd43b50bec81a1e6e3
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+
+Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ce88672b9863/disk-88035e56.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7509f7d0b113/vmlinux-88035e56.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/7465dc030e58/bzImage-88035e56.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/a5134eb638e9/mount_0.gz
+disk image: https://storage.googleapis.com/syzbot-assets/adeb888d7857/disk-3f716859.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a6ed44d5ad04/vmlinux-3f716859.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a04c379bea2a/bzImage-3f716859.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a3981d3c93cde53224be@syzkaller.appspotmail.com
+Reported-by: syzbot+99bd43b50bec81a1e6e3@syzkaller.appspotmail.com
 
 ------------[ cut here ]------------
-======================================================
-WARNING: possible circular locking dependency detected
-6.7.0-rc5-syzkaller-00042-g88035e5694a8 #0 Not tainted
-------------------------------------------------------
-syz-executor221/5060 is trying to acquire lock:
-ffffffff8ceb8ea0 (console_owner){..-.}-{0:0}, at: console_trylock_spinning kernel/printk/printk.c:1962 [inline]
-ffffffff8ceb8ea0 (console_owner){..-.}-{0:0}, at: vprintk_emit+0x313/0x5f0 kernel/printk/printk.c:2302
-
-but task is already holding lock:
-ffff8880b98297d8 (&base->lock){-.-.}-{2:2}, at: expire_timers kernel/time/timer.c:1752 [inline]
-ffff8880b98297d8 (&base->lock){-.-.}-{2:2}, at: __run_timers+0x76c/0xb20 kernel/time/timer.c:2022
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #4 (&base->lock){-.-.}-{2:2}:
-       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-       _raw_spin_lock_irqsave+0x3a/0x50 kernel/locking/spinlock.c:162
-       lock_timer_base+0x5d/0x200 kernel/time/timer.c:999
-       __mod_timer+0x420/0xea0 kernel/time/timer.c:1080
-       worker_enter_idle+0x404/0x550 kernel/workqueue.c:945
-       create_worker+0x467/0x730 kernel/workqueue.c:2213
-       maybe_create_worker kernel/workqueue.c:2459 [inline]
-       manage_workers kernel/workqueue.c:2511 [inline]
-       worker_thread+0xca1/0x1290 kernel/workqueue.c:2756
-       kthread+0x2c6/0x3a0 kernel/kthread.c:388
-       ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
-       ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:242
-
--> #3 (&pool->lock){-.-.}-{2:2}:
-       __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
-       _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
-       __queue_work+0x399/0x11d0 kernel/workqueue.c:1760
-       queue_work_on+0xed/0x110 kernel/workqueue.c:1831
-       queue_work include/linux/workqueue.h:562 [inline]
-       rpm_suspend+0x121b/0x16f0 drivers/base/power/runtime.c:660
-       rpm_idle+0x578/0x6e0 drivers/base/power/runtime.c:534
-       __pm_runtime_idle+0xbe/0x160 drivers/base/power/runtime.c:1102
-       pm_runtime_put include/linux/pm_runtime.h:460 [inline]
-       __device_attach+0x382/0x4b0 drivers/base/dd.c:1048
-       bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
-       device_add+0x117e/0x1aa0 drivers/base/core.c:3625
-       serial_base_port_add+0x353/0x4b0 drivers/tty/serial/serial_base_bus.c:178
-       serial_core_port_device_add drivers/tty/serial/serial_core.c:3316 [inline]
-       serial_core_register_port+0x137/0x1af0 drivers/tty/serial/serial_core.c:3357
-       serial8250_register_8250_port+0x140d/0x2080 drivers/tty/serial/8250/8250_core.c:1139
-       serial_pnp_probe+0x47d/0x880 drivers/tty/serial/8250/8250_pnp.c:478
-       pnp_device_probe+0x2a3/0x4c0 drivers/pnp/driver.c:111
-       call_driver_probe drivers/base/dd.c:579 [inline]
-       really_probe+0x234/0xc90 drivers/base/dd.c:658
-       __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
-       driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
-       __driver_attach+0x274/0x570 drivers/base/dd.c:1216
-       bus_for_each_dev+0x13c/0x1d0 drivers/base/bus.c:368
-       bus_add_driver+0x2e9/0x630 drivers/base/bus.c:673
-       driver_register+0x15c/0x4a0 drivers/base/driver.c:246
-       serial8250_init+0xba/0x4b0 drivers/tty/serial/8250/8250_core.c:1240
-       do_one_initcall+0x11c/0x650 init/main.c:1236
-       do_initcall_level init/main.c:1298 [inline]
-       do_initcalls init/main.c:1314 [inline]
-       do_basic_setup init/main.c:1333 [inline]
-       kernel_init_freeable+0x687/0xc10 init/main.c:1551
-       kernel_init+0x1c/0x2a0 init/main.c:1441
-       ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
-       ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:242
-
--> #2 (&dev->power.lock){-...}-{2:2}:
-       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-       _raw_spin_lock_irqsave+0x3a/0x50 kernel/locking/spinlock.c:162
-       __pm_runtime_resume+0xab/0x170 drivers/base/power/runtime.c:1169
-       pm_runtime_get include/linux/pm_runtime.h:408 [inline]
-       __uart_start+0x1b2/0x470 drivers/tty/serial/serial_core.c:148
-       uart_write+0x2ff/0x5b0 drivers/tty/serial/serial_core.c:616
-       process_output_block drivers/tty/n_tty.c:574 [inline]
-       n_tty_write+0x422/0x1130 drivers/tty/n_tty.c:2379
-       iterate_tty_write drivers/tty/tty_io.c:1021 [inline]
-       file_tty_write.constprop.0+0x519/0x9b0 drivers/tty/tty_io.c:1092
-       tty_write drivers/tty/tty_io.c:1113 [inline]
-       redirected_tty_write drivers/tty/tty_io.c:1136 [inline]
-       redirected_tty_write+0xa6/0xc0 drivers/tty/tty_io.c:1116
-       call_write_iter include/linux/fs.h:2020 [inline]
-       new_sync_write fs/read_write.c:491 [inline]
-       vfs_write+0x64f/0xdf0 fs/read_write.c:584
-       ksys_write+0x12f/0x250 fs/read_write.c:637
-       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-       do_syscall_64+0x40/0x110 arch/x86/entry/common.c:83
-       entry_SYSCALL_64_after_hwframe+0x63/0x6b
-
--> #1 (&port_lock_key){-...}-{2:2}:
-       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-       _raw_spin_lock_irqsave+0x3a/0x50 kernel/locking/spinlock.c:162
-       uart_port_lock_irqsave include/linux/serial_core.h:616 [inline]
-       serial8250_console_write+0xa7c/0x1060 drivers/tty/serial/8250/8250_port.c:3403
-       console_emit_next_record kernel/printk/printk.c:2901 [inline]
-       console_flush_all+0x4d5/0xd60 kernel/printk/printk.c:2967
-       console_unlock+0x10c/0x260 kernel/printk/printk.c:3036
-       vprintk_emit+0x17f/0x5f0 kernel/printk/printk.c:2303
-       vprintk+0x7b/0x90 kernel/printk/printk_safe.c:45
-       _printk+0xc8/0x100 kernel/printk/printk.c:2328
-       register_console+0xa74/0x1060 kernel/printk/printk.c:3542
-       univ8250_console_init+0x35/0x50 drivers/tty/serial/8250/8250_core.c:717
-       console_init+0xba/0x5d0 kernel/printk/printk.c:3688
-       start_kernel+0x25a/0x480 init/main.c:1008
-       x86_64_start_reservations+0x18/0x30 arch/x86/kernel/head64.c:555
-       x86_64_start_kernel+0xb2/0xc0 arch/x86/kernel/head64.c:536
-       secondary_startup_64_no_verify+0x166/0x16b
-
--> #0 (console_owner){..-.}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:3134 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3253 [inline]
-       validate_chain kernel/locking/lockdep.c:3869 [inline]
-       __lock_acquire+0x2433/0x3b20 kernel/locking/lockdep.c:5137
-       lock_acquire kernel/locking/lockdep.c:5754 [inline]
-       lock_acquire+0x1ae/0x520 kernel/locking/lockdep.c:5719
-       console_trylock_spinning kernel/printk/printk.c:1962 [inline]
-       vprintk_emit+0x328/0x5f0 kernel/printk/printk.c:2302
-       vprintk+0x7b/0x90 kernel/printk/printk_safe.c:45
-       _printk+0xc8/0x100 kernel/printk/printk.c:2328
-       __report_bug lib/bug.c:195 [inline]
-       report_bug+0x4a8/0x580 lib/bug.c:219
-       handle_bug+0x3d/0x70 arch/x86/kernel/traps.c:237
-       exc_invalid_op+0x17/0x40 arch/x86/kernel/traps.c:258
-       asm_exc_invalid_op+0x1a/0x20 arch/x86/include/asm/idtentry.h:568
-       expire_timers kernel/time/timer.c:1738 [inline]
-       __run_timers+0x8d2/0xb20 kernel/time/timer.c:2022
-       run_timer_softirq+0x58/0xd0 kernel/time/timer.c:2035
-       __do_softirq+0x21a/0x8de kernel/softirq.c:553
-       invoke_softirq kernel/softirq.c:427 [inline]
-       __irq_exit_rcu kernel/softirq.c:632 [inline]
-       irq_exit_rcu+0xb7/0x120 kernel/softirq.c:644
-       sysvec_apic_timer_interrupt+0x95/0xb0 arch/x86/kernel/apic/apic.c:1076
-       asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:649
-       memmove+0x44/0x1b0 arch/x86/lib/memmove_64.S:67
-       leaf_insert_into_buf+0x303/0xa30 fs/reiserfs/lbalance.c:933
-       balance_leaf_new_nodes_insert fs/reiserfs/do_balan.c:1001 [inline]
-       balance_leaf_new_nodes fs/reiserfs/do_balan.c:1243 [inline]
-       balance_leaf+0x2ff4/0xcda0 fs/reiserfs/do_balan.c:1450
-       do_balance+0x337/0x840 fs/reiserfs/do_balan.c:1888
-       reiserfs_insert_item+0xadd/0xe20 fs/reiserfs/stree.c:2260
-       indirect2direct+0x6d8/0xa20 fs/reiserfs/tail_conversion.c:283
-       maybe_indirect_to_direct fs/reiserfs/stree.c:1585 [inline]
-       reiserfs_cut_from_item+0xa82/0x1a10 fs/reiserfs/stree.c:1692
-       reiserfs_do_truncate+0x672/0x10b0 fs/reiserfs/stree.c:1971
-       reiserfs_truncate_file+0x1bf/0x940 fs/reiserfs/inode.c:2302
-       reiserfs_file_release+0xae3/0xc40 fs/reiserfs/file.c:109
-       __fput+0x270/0xbb0 fs/file_table.c:394
-       task_work_run+0x14d/0x240 kernel/task_work.c:180
-       exit_task_work include/linux/task_work.h:38 [inline]
-       do_exit+0xa92/0x2ae0 kernel/exit.c:871
-       do_group_exit+0xd4/0x2a0 kernel/exit.c:1021
-       __do_sys_exit_group kernel/exit.c:1032 [inline]
-       __se_sys_exit_group kernel/exit.c:1030 [inline]
-       __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1030
-       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-       do_syscall_64+0x40/0x110 arch/x86/entry/common.c:83
-       entry_SYSCALL_64_after_hwframe+0x63/0x6b
-
-other info that might help us debug this:
-
-Chain exists of:
-  console_owner --> &pool->lock --> &base->lock
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&base->lock);
-                               lock(&pool->lock);
-                               lock(&base->lock);
-  lock(console_owner);
-
- *** DEADLOCK ***
-
-3 locks held by syz-executor221/5060:
- #0: ffff8880766e0df8 (&ei->tailpack){+.+.}-{3:3}, at: reiserfs_file_release+0xdd/0xc40 fs/reiserfs/file.c:41
- #1: ffff888078f6b090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock_nested+0x69/0xe0 fs/reiserfs/lock.c:78
- #2: ffff8880b98297d8 (&base->lock){-.-.}-{2:2}, at: expire_timers kernel/time/timer.c:1752 [inline]
- #2: ffff8880b98297d8 (&base->lock){-.-.}-{2:2}, at: __run_timers+0x76c/0xb20 kernel/time/timer.c:2022
-
-stack backtrace:
-CPU: 0 PID: 5060 Comm: syz-executor221 Not tainted 6.7.0-rc5-syzkaller-00042-g88035e5694a8 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/10/2023
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x1b0 lib/dump_stack.c:106
- check_noncircular+0x317/0x400 kernel/locking/lockdep.c:2187
- check_prev_add kernel/locking/lockdep.c:3134 [inline]
- check_prevs_add kernel/locking/lockdep.c:3253 [inline]
- validate_chain kernel/locking/lockdep.c:3869 [inline]
- __lock_acquire+0x2433/0x3b20 kernel/locking/lockdep.c:5137
- lock_acquire kernel/locking/lockdep.c:5754 [inline]
- lock_acquire+0x1ae/0x520 kernel/locking/lockdep.c:5719
- console_trylock_spinning kernel/printk/printk.c:1962 [inline]
- vprintk_emit+0x328/0x5f0 kernel/printk/printk.c:2302
- vprintk+0x7b/0x90 kernel/printk/printk_safe.c:45
- _printk+0xc8/0x100 kernel/printk/printk.c:2328
- __report_bug lib/bug.c:195 [inline]
- report_bug+0x4a8/0x580 lib/bug.c:219
- handle_bug+0x3d/0x70 arch/x86/kernel/traps.c:237
- exc_invalid_op+0x17/0x40 arch/x86/kernel/traps.c:258
- asm_exc_invalid_op+0x1a/0x20 arch/x86/include/asm/idtentry.h:568
-RIP: 0010:expire_timers kernel/time/timer.c:1738 [inline]
-RIP: 0010:__run_timers+0x8d2/0xb20 kernel/time/timer.c:2022
-Code: 6f 48 e8 91 9d 11 00 89 de 31 ff 83 eb 01 e8 f5 98 11 00 8b 44 24 18 85 c0 0f 85 50 fc ff ff e9 50 fb ff ff e8 6f 9d 11 00 90 <0f> 0b 90 e9 b3 fc ff ff e8 61 9d 11 00 90 0f 0b 90 e9 37 fd ff ff
-RSP: 0018:ffffc90000007d88 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: ffff88807e909300 RCX: ffffffff8175f032
-RDX: ffff888023565940 RSI: ffffffff8175f091 RDI: ffff88807e909318
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000003 R12: ffffc90000007e60
-R13: ffffc90000007e60 R14: dffffc0000000000 R15: ffff8880b98297c0
- run_timer_softirq+0x58/0xd0 kernel/time/timer.c:2035
- __do_softirq+0x21a/0x8de kernel/softirq.c:553
- invoke_softirq kernel/softirq.c:427 [inline]
- __irq_exit_rcu kernel/softirq.c:632 [inline]
- irq_exit_rcu+0xb7/0x120 kernel/softirq.c:644
- sysvec_apic_timer_interrupt+0x95/0xb0 arch/x86/kernel/apic/apic.c:1076
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:649
-RIP: 0010:memmove+0x44/0x1b0 arch/x86/lib/memmove_64.S:68
-Code: 00 48 83 fa 20 0f 82 01 01 00 00 66 0f 1f 44 00 00 48 81 fa a8 02 00 00 72 05 40 38 fe 74 47 48 83 ea 20 48 83 ea 20 4c 8b 1e <4c> 8b 56 08 4c 8b 4e 10 4c 8b 46 18 48 8d 76 20 4c 89 1f 4c 89 57
-RSP: 0018:ffffc900039feb60 EFLAGS: 00000282
-RAX: ffff88807c4ac0c0 RBX: 0000000000000006 RCX: 0000000000000000
-RDX: ffffffffe7ab3e98 RSI: ffff8880949f9040 RDI: ffff8880949f8100
-RBP: 00000000000000c0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000f18
-R13: ffff8880765cd938 R14: 0000000000000000 R15: ffff88807c4ac0a8
- leaf_insert_into_buf+0x303/0xa30 fs/reiserfs/lbalance.c:933
- balance_leaf_new_nodes_insert fs/reiserfs/do_balan.c:1001 [inline]
- balance_leaf_new_nodes fs/reiserfs/do_balan.c:1243 [inline]
- balance_leaf+0x2ff4/0xcda0 fs/reiserfs/do_balan.c:1450
- do_balance+0x337/0x840 fs/reiserfs/do_balan.c:1888
- reiserfs_insert_item+0xadd/0xe20 fs/reiserfs/stree.c:2260
- indirect2direct+0x6d8/0xa20 fs/reiserfs/tail_conversion.c:283
- maybe_indirect_to_direct fs/reiserfs/stree.c:1585 [inline]
- reiserfs_cut_from_item+0xa82/0x1a10 fs/reiserfs/stree.c:1692
- reiserfs_do_truncate+0x672/0x10b0 fs/reiserfs/stree.c:1971
- reiserfs_truncate_file+0x1bf/0x940 fs/reiserfs/inode.c:2302
- reiserfs_file_release+0xae3/0xc40 fs/reiserfs/file.c:109
- __fput+0x270/0xbb0 fs/file_table.c:394
- task_work_run+0x14d/0x240 kernel/task_work.c:180
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xa92/0x2ae0 kernel/exit.c:871
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1021
- __do_sys_exit_group kernel/exit.c:1032 [inline]
- __se_sys_exit_group kernel/exit.c:1030 [inline]
- __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1030
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0x40/0x110 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x63/0x6b
-RIP: 0033:0x7fb4f48ae339
-Code: Unable to access opcode bytes at 0x7fb4f48ae30f.
-RSP: 002b:00007fff27e4b078 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fb4f48ae339
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 00007fb4f49292b0 R08: ffffffffffffffb8 R09: 00007fb4f487bbf0
-R10: 00007fff27e4b028 R11: 0000000000000246 R12: 00007fb4f49292b0
-R13: 0000000000000000 R14: 00007fb4f492a020 R15: 00007fb4f487cc70
- </TASK>
-WARNING: CPU: 0 PID: 5060 at kernel/time/timer.c:1738 expire_timers kernel/time/timer.c:1738 [inline]
-WARNING: CPU: 0 PID: 5060 at kernel/time/timer.c:1738 __run_timers+0x8d2/0xb20 kernel/time/timer.c:2022
-Modules linked in:
-CPU: 0 PID: 5060 Comm: syz-executor221 Not tainted 6.7.0-rc5-syzkaller-00042-g88035e5694a8 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/10/2023
-RIP: 0010:expire_timers kernel/time/timer.c:1738 [inline]
-RIP: 0010:__run_timers+0x8d2/0xb20 kernel/time/timer.c:2022
-Code: 6f 48 e8 91 9d 11 00 89 de 31 ff 83 eb 01 e8 f5 98 11 00 8b 44 24 18 85 c0 0f 85 50 fc ff ff e9 50 fb ff ff e8 6f 9d 11 00 90 <0f> 0b 90 e9 b3 fc ff ff e8 61 9d 11 00 90 0f 0b 90 e9 37 fd ff ff
-RSP: 0018:ffffc90000007d88 EFLAGS: 00010046
-
-RAX: 0000000000000000 RBX: ffff88807e909300 RCX: ffffffff8175f032
-RDX: ffff888023565940 RSI: ffffffff8175f091 RDI: ffff88807e909318
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000003 R12: ffffc90000007e60
-R13: ffffc90000007e60 R14: dffffc0000000000 R15: ffff8880b98297c0
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+kernel BUG at fs/reiserfs/journal.c:1107!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 17565 Comm: syz-executor.3 Not tainted 6.7.0-rc5-syzkaller-00134-g3f7168591ebf #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/17/2023
+RIP: 0010:flush_commit_list+0x1c1e/0x1c50 fs/reiserfs/journal.c:1107
+Code: ff 90 0f 0b e8 73 54 54 ff 90 0f 0b e8 6b 54 54 ff 90 0f 0b e8 63 54 54 ff 90 0f 0b e8 5b 54 54 ff 90 0f 0b e8 53 54 54 ff 90 <0f> 0b e8 4b 54 54 ff 90 0f 0b 44 89 f1 80 e1 07 80 c1 03 38 c1 0f
+RSP: 0018:ffffc90014caf2e0 EFLAGS: 00010246
+RAX: ffffffff823a28ed RBX: ffff888027da34d0 RCX: 0000000000040000
+RDX: ffffc9000b8bc000 RSI: 000000000003ffff RDI: 0000000000040000
+RBP: 0000000000000002 R08: ffffffff823a1d75 R09: 1ffff11006ed153f
+R10: dffffc0000000000 R11: ffffed1006ed1540 R12: ffff888027da341c
+R13: dffffc0000000000 R14: ffff888142a78000 R15: 1ffff11004fb469a
+FS:  00007f607875e6c0(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fb4f48f7d08 CR3: 000000000cd77000 CR4: 0000000000350ef0
+CR2: 0000555555a40978 CR3: 0000000012d8a000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
- <IRQ>
- run_timer_softirq+0x58/0xd0 kernel/time/timer.c:2035
- __do_softirq+0x21a/0x8de kernel/softirq.c:553
- invoke_softirq kernel/softirq.c:427 [inline]
- __irq_exit_rcu kernel/softirq.c:632 [inline]
- irq_exit_rcu+0xb7/0x120 kernel/softirq.c:644
- sysvec_apic_timer_interrupt+0x95/0xb0 arch/x86/kernel/apic/apic.c:1076
- </IRQ>
  <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:649
-RIP: 0010:memmove+0x44/0x1b0 arch/x86/lib/memmove_64.S:68
-Code: 00 48 83 fa 20 0f 82 01 01 00 00 66 0f 1f 44 00 00 48 81 fa a8 02 00 00 72 05 40 38 fe 74 47 48 83 ea 20 48 83 ea 20 4c 8b 1e <4c> 8b 56 08 4c 8b 4e 10 4c 8b 46 18 48 8d 76 20 4c 89 1f 4c 89 57
-RSP: 0018:ffffc900039feb60 EFLAGS: 00000282
-
-RAX: ffff88807c4ac0c0 RBX: 0000000000000006 RCX: 0000000000000000
-RDX: ffffffffe7ab3e98 RSI: ffff8880949f9040 RDI: ffff8880949f8100
-RBP: 00000000000000c0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000f18
-R13: ffff8880765cd938 R14: 0000000000000000 R15: ffff88807c4ac0a8
- leaf_insert_into_buf+0x303/0xa30 fs/reiserfs/lbalance.c:933
- balance_leaf_new_nodes_insert fs/reiserfs/do_balan.c:1001 [inline]
- balance_leaf_new_nodes fs/reiserfs/do_balan.c:1243 [inline]
- balance_leaf+0x2ff4/0xcda0 fs/reiserfs/do_balan.c:1450
- do_balance+0x337/0x840 fs/reiserfs/do_balan.c:1888
- reiserfs_insert_item+0xadd/0xe20 fs/reiserfs/stree.c:2260
- indirect2direct+0x6d8/0xa20 fs/reiserfs/tail_conversion.c:283
- maybe_indirect_to_direct fs/reiserfs/stree.c:1585 [inline]
- reiserfs_cut_from_item+0xa82/0x1a10 fs/reiserfs/stree.c:1692
- reiserfs_do_truncate+0x672/0x10b0 fs/reiserfs/stree.c:1971
- reiserfs_truncate_file+0x1bf/0x940 fs/reiserfs/inode.c:2302
- reiserfs_file_release+0xae3/0xc40 fs/reiserfs/file.c:109
- __fput+0x270/0xbb0 fs/file_table.c:394
- task_work_run+0x14d/0x240 kernel/task_work.c:180
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xa92/0x2ae0 kernel/exit.c:871
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1021
- __do_sys_exit_group kernel/exit.c:1032 [inline]
- __se_sys_exit_group kernel/exit.c:1030 [inline]
- __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1030
+ flush_journal_list+0x2a8/0x1c80 fs/reiserfs/journal.c:1390
+ flush_used_journal_lists+0x1256/0x15d0 fs/reiserfs/journal.c:1828
+ do_journal_end+0x3d51/0x4b40
+ do_journal_begin_r+0x970/0x1030
+ journal_begin+0x14c/0x360 fs/reiserfs/journal.c:3254
+ reiserfs_remount+0xf6f/0x18f0 fs/reiserfs/super.c:1559
+ reconfigure_super+0x440/0x870 fs/super.c:1143
+ vfs_cmd_reconfigure fs/fsopen.c:267 [inline]
+ vfs_fsconfig_locked fs/fsopen.c:296 [inline]
+ __do_sys_fsconfig fs/fsopen.c:476 [inline]
+ __se_sys_fsconfig+0xab5/0xec0 fs/fsopen.c:349
  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0x40/0x110 arch/x86/entry/common.c:83
+ do_syscall_64+0x45/0x110 arch/x86/entry/common.c:83
  entry_SYSCALL_64_after_hwframe+0x63/0x6b
-RIP: 0033:0x7fb4f48ae339
-Code: Unable to access opcode bytes at 0x7fb4f48ae30f.
-RSP: 002b:00007fff27e4b078 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fb4f48ae339
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 00007fb4f49292b0 R08: ffffffffffffffb8 R09: 00007fb4f487bbf0
-R10: 00007fff27e4b028 R11: 0000000000000246 R12: 00007fb4f49292b0
-R13: 0000000000000000 R14: 00007fb4f492a020 R15: 00007fb4f487cc70
+RIP: 0033:0x7f6077a7cba9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 20 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f607875e0c8 EFLAGS: 00000246 ORIG_RAX: 00000000000001af
+RAX: ffffffffffffffda RBX: 00007f6077b9bf80 RCX: 00007f6077a7cba9
+RDX: 0000000000000000 RSI: 0000000000000007 RDI: 0000000000000004
+RBP: 00007f6077ac847a R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 000000000000000b R14: 00007f6077b9bf80 R15: 00007ffcea3279c8
  </TASK>
-irq event stamp: 46901
-hardirqs last  enabled at (46900): [<ffffffff8a83b6ee>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (46900): [<ffffffff8a83b6ee>] _raw_spin_unlock_irqrestore+0x4e/0x70 kernel/locking/spinlock.c:194
-hardirqs last disabled at (46901): [<ffffffff8a83b445>] __raw_spin_lock_irq include/linux/spinlock_api_smp.h:117 [inline]
-hardirqs last disabled at (46901): [<ffffffff8a83b445>] _raw_spin_lock_irq+0x45/0x50 kernel/locking/spinlock.c:170
-softirqs last  enabled at (46892): [<ffffffff8a83e307>] softirq_handle_end kernel/softirq.c:399 [inline]
-softirqs last  enabled at (46892): [<ffffffff8a83e307>] __do_softirq+0x597/0x8de kernel/softirq.c:582
-softirqs last disabled at (46895): [<ffffffff814f9757>] invoke_softirq kernel/softirq.c:427 [inline]
-softirqs last disabled at (46895): [<ffffffff814f9757>] __irq_exit_rcu kernel/softirq.c:632 [inline]
-softirqs last disabled at (46895): [<ffffffff814f9757>] irq_exit_rcu+0xb7/0x120 kernel/softirq.c:644
+Modules linked in:
 ---[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	48 83 fa 20          	cmp    $0x20,%rdx
-   4:	0f 82 01 01 00 00    	jb     0x10b
-   a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
-  10:	48 81 fa a8 02 00 00 	cmp    $0x2a8,%rdx
-  17:	72 05                	jb     0x1e
-  19:	40 38 fe             	cmp    %dil,%sil
-  1c:	74 47                	je     0x65
-  1e:	48 83 ea 20          	sub    $0x20,%rdx
-  22:	48 83 ea 20          	sub    $0x20,%rdx
-  26:	4c 8b 1e             	mov    (%rsi),%r11
-* 29:	4c 8b 56 08          	mov    0x8(%rsi),%r10 <-- trapping instruction
-  2d:	4c 8b 4e 10          	mov    0x10(%rsi),%r9
-  31:	4c 8b 46 18          	mov    0x18(%rsi),%r8
-  35:	48 8d 76 20          	lea    0x20(%rsi),%rsi
-  39:	4c 89 1f             	mov    %r11,(%rdi)
-  3c:	4c                   	rex.WR
-  3d:	89                   	.byte 0x89
-  3e:	57                   	push   %rdi
+RIP: 0010:flush_commit_list+0x1c1e/0x1c50 fs/reiserfs/journal.c:1107
+Code: ff 90 0f 0b e8 73 54 54 ff 90 0f 0b e8 6b 54 54 ff 90 0f 0b e8 63 54 54 ff 90 0f 0b e8 5b 54 54 ff 90 0f 0b e8 53 54 54 ff 90 <0f> 0b e8 4b 54 54 ff 90 0f 0b 44 89 f1 80 e1 07 80 c1 03 38 c1 0f
+RSP: 0018:ffffc90014caf2e0 EFLAGS: 00010246
+RAX: ffffffff823a28ed RBX: ffff888027da34d0 RCX: 0000000000040000
+RDX: ffffc9000b8bc000 RSI: 000000000003ffff RDI: 0000000000040000
+RBP: 0000000000000002 R08: ffffffff823a1d75 R09: 1ffff11006ed153f
+R10: dffffc0000000000 R11: ffffed1006ed1540 R12: ffff888027da341c
+R13: dffffc0000000000 R14: ffff888142a78000 R15: 1ffff11004fb469a
+FS:  00007f607875e6c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4f92bfe000 CR3: 0000000012d8a000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
 ---
@@ -455,10 +146,6 @@ https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
 If the report is already addressed, let syzbot know by replying with:
 #syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
 
 If you want to overwrite report's subsystems, reply with:
 #syz set subsystems: new-subsystem
