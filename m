@@ -1,159 +1,90 @@
-Return-Path: <reiserfs-devel+bounces-12-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <reiserfs-devel+bounces-13-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45A02818F38
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 19 Dec 2023 19:06:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1666E819815
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 20 Dec 2023 06:27:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9595BB2545F
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 19 Dec 2023 18:06:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7C5F288350
+	for <lists+reiserfs-devel@lfdr.de>; Wed, 20 Dec 2023 05:27:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20BB38DFC;
-	Tue, 19 Dec 2023 18:06:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7426EFBE1;
+	Wed, 20 Dec 2023 05:27:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="Kydx1Amz"
 X-Original-To: reiserfs-devel@vger.kernel.org
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7420438DE9
-	for <reiserfs-devel@vger.kernel.org>; Tue, 19 Dec 2023 18:06:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7b7f996e118so73201739f.3
-        for <reiserfs-devel@vger.kernel.org>; Tue, 19 Dec 2023 10:06:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703009188; x=1703613988;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3UbpdPske9+0a0Vc1FEcrTZ1/WyUsWYEAt/9ne5SDRo=;
-        b=R9YAw32UPsLoyEALg28+ErKTppPwsaJaDnWpU+dGOWsqRiPNHP9FzH7OLFHZykHHz2
-         ooegwux3ncgbKHwFE6NtV/Hz9c7aWzV8Mo1/KikYPCcXweI8ro92wZAxcWV9U5FxhUEh
-         1y5bYJyODBfWUY5G3OGMSf3VgQIGyB9n9wcp+QdJTokrI9OaEHjLKW1bHdoumEvR81hW
-         iaMvGuoYZGDtwNZ3OFBgpF/6OZaaXHBcR7qU6wRkJNEsddPBk2s8lF94u6lQaPokhVjZ
-         D1SD7b1ESyMg8jXhS6UN8QSybb2TYDBm6qUmvrao15EEkEITyh2wuwgyaab8lmu0nclF
-         j92g==
-X-Gm-Message-State: AOJu0Yw0JmNsG2UVte9DMB1SLwjS7Hd6V+Y7Yzsm1RzUVKZRxCZmCaxI
-	//zlnnatuPq1CHQ+QC1i4kGNFjTI8gPBjIaaga0LnMtUofv+
-X-Google-Smtp-Source: AGHT+IE3CDj7nVBlj5XGQASnYOsOUQ3b+aTPpzcoXF820SJjjKjOaghaMz82PmSJt/AbH5rPN5jaSoVN3dI8sT91mjxQDaOFtDxO
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FAA9DDC6;
+	Wed, 20 Dec 2023 05:27:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=MKbXRaLjiBc1kAHTStOXxlXCDpKMYpV44rac/unVwhM=; b=Kydx1AmzbnGZcl9uMOWlWoingO
+	jTdF88DJvYRufhXaxmBMv5YFwuEwIlkWw2V9dAnRORk5XnWkM8vqS1lQi8cs1+JjwcTzVyMvj6jIH
+	8zEcAB9mSwlQILmnpGCEs/PO4PtYgNAAwzJXpCzxpuuyDEYJzP1qcbQNJUyKe7VNEr6zTCeDkXBc2
+	LLa7muC547oQm5e4RQd8XQqXieyZuUcibev02sYcoTPZRjDqnAXaIeWVnL0PFOImVfN3zaeBHFcJK
+	aQmwXC3DAGSO9eKRatWt7yRAtQ3wFihXc/CtHw03Gy1FkcvGsOTkZal6F6wx6eSkFhlQd5eKcB3fY
+	Bvu7Q7pg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1rFp7O-00HJJZ-1W;
+	Wed, 20 Dec 2023 05:27:42 +0000
+Date: Wed, 20 Dec 2023 05:27:42 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-fsdevel@vger.kernel.org
+Cc: reiserfs-devel@vger.kernel.org
+Subject: [PATCH 15/22] reiserfs_add_entry(): get rid of pointless namelen
+ checks
+Message-ID: <20231220052742.GN1674809@ZenIV>
+References: <20231220051348.GY1674809@ZenIV>
 Precedence: bulk
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 List-Id: <reiserfs-devel.vger.kernel.org>
 List-Subscribe: <mailto:reiserfs-devel+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:reiserfs-devel+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1d09:b0:35f:a338:44ae with SMTP id
- i9-20020a056e021d0900b0035fa33844aemr835304ila.3.1703009188670; Tue, 19 Dec
- 2023 10:06:28 -0800 (PST)
-Date: Tue, 19 Dec 2023 10:06:28 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bd76a8060ce0b9a5@google.com>
-Subject: [syzbot] [reiserfs?] kernel BUG in flush_commit_list (2)
-From: syzbot <syzbot+99bd43b50bec81a1e6e3@syzkaller.appspotmail.com>
-To: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231220051348.GY1674809@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Hello,
+In all cases namelen is ->d_name.len of some dentry; moreover, a dentry
+that has passed ->lookup() without triggering ENAMETOOLONG check there.
+The comment next to these checks is either a rudiment of some other
+check that used to be there once upon a time, or an attempt to come up
+with the possible reason for that check (well, more like "why does
+ext3 do it?")
 
-syzbot found the following issue on:
-
-HEAD commit:    3f7168591ebf Merge tag '6.7-rc5-smb3-client-fixes' of git:..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16940dc1e80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=53ec3da1d259132f
-dashboard link: https://syzkaller.appspot.com/bug?extid=99bd43b50bec81a1e6e3
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/adeb888d7857/disk-3f716859.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a6ed44d5ad04/vmlinux-3f716859.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a04c379bea2a/bzImage-3f716859.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+99bd43b50bec81a1e6e3@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-kernel BUG at fs/reiserfs/journal.c:1107!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 17565 Comm: syz-executor.3 Not tainted 6.7.0-rc5-syzkaller-00134-g3f7168591ebf #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/17/2023
-RIP: 0010:flush_commit_list+0x1c1e/0x1c50 fs/reiserfs/journal.c:1107
-Code: ff 90 0f 0b e8 73 54 54 ff 90 0f 0b e8 6b 54 54 ff 90 0f 0b e8 63 54 54 ff 90 0f 0b e8 5b 54 54 ff 90 0f 0b e8 53 54 54 ff 90 <0f> 0b e8 4b 54 54 ff 90 0f 0b 44 89 f1 80 e1 07 80 c1 03 38 c1 0f
-RSP: 0018:ffffc90014caf2e0 EFLAGS: 00010246
-RAX: ffffffff823a28ed RBX: ffff888027da34d0 RCX: 0000000000040000
-RDX: ffffc9000b8bc000 RSI: 000000000003ffff RDI: 0000000000040000
-RBP: 0000000000000002 R08: ffffffff823a1d75 R09: 1ffff11006ed153f
-R10: dffffc0000000000 R11: ffffed1006ed1540 R12: ffff888027da341c
-R13: dffffc0000000000 R14: ffff888142a78000 R15: 1ffff11004fb469a
-FS:  00007f607875e6c0(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000555555a40978 CR3: 0000000012d8a000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- flush_journal_list+0x2a8/0x1c80 fs/reiserfs/journal.c:1390
- flush_used_journal_lists+0x1256/0x15d0 fs/reiserfs/journal.c:1828
- do_journal_end+0x3d51/0x4b40
- do_journal_begin_r+0x970/0x1030
- journal_begin+0x14c/0x360 fs/reiserfs/journal.c:3254
- reiserfs_remount+0xf6f/0x18f0 fs/reiserfs/super.c:1559
- reconfigure_super+0x440/0x870 fs/super.c:1143
- vfs_cmd_reconfigure fs/fsopen.c:267 [inline]
- vfs_fsconfig_locked fs/fsopen.c:296 [inline]
- __do_sys_fsconfig fs/fsopen.c:476 [inline]
- __se_sys_fsconfig+0xab5/0xec0 fs/fsopen.c:349
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0x45/0x110 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x63/0x6b
-RIP: 0033:0x7f6077a7cba9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 20 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f607875e0c8 EFLAGS: 00000246 ORIG_RAX: 00000000000001af
-RAX: ffffffffffffffda RBX: 00007f6077b9bf80 RCX: 00007f6077a7cba9
-RDX: 0000000000000000 RSI: 0000000000000007 RDI: 0000000000000004
-RBP: 00007f6077ac847a R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 000000000000000b R14: 00007f6077b9bf80 R15: 00007ffcea3279c8
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:flush_commit_list+0x1c1e/0x1c50 fs/reiserfs/journal.c:1107
-Code: ff 90 0f 0b e8 73 54 54 ff 90 0f 0b e8 6b 54 54 ff 90 0f 0b e8 63 54 54 ff 90 0f 0b e8 5b 54 54 ff 90 0f 0b e8 53 54 54 ff 90 <0f> 0b e8 4b 54 54 ff 90 0f 0b 44 89 f1 80 e1 07 80 c1 03 38 c1 0f
-RSP: 0018:ffffc90014caf2e0 EFLAGS: 00010246
-RAX: ffffffff823a28ed RBX: ffff888027da34d0 RCX: 0000000000040000
-RDX: ffffc9000b8bc000 RSI: 000000000003ffff RDI: 0000000000040000
-RBP: 0000000000000002 R08: ffffffff823a1d75 R09: 1ffff11006ed153f
-R10: dffffc0000000000 R11: ffffed1006ed1540 R12: ffff888027da341c
-R13: dffffc0000000000 R14: ffff888142a78000 R15: 1ffff11004fb469a
-FS:  00007f607875e6c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f4f92bfe000 CR3: 0000000012d8a000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ fs/reiserfs/namei.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
+index 994d6e6995ab..c5f233b4a27f 100644
+--- a/fs/reiserfs/namei.c
++++ b/fs/reiserfs/namei.c
+@@ -451,13 +451,6 @@ static int reiserfs_add_entry(struct reiserfs_transaction_handle *th,
+ 
+ 	BUG_ON(!th->t_trans_id);
+ 
+-	/* cannot allow items to be added into a busy deleted directory */
+-	if (!namelen)
+-		return -EINVAL;
+-
+-	if (namelen > REISERFS_MAX_NAME(dir->i_sb->s_blocksize))
+-		return -ENAMETOOLONG;
+-
+ 	/* each entry has unique key. compose it */
+ 	make_cpu_key(&entry_key, dir,
+ 		     get_third_component(dir->i_sb, name, namelen),
+-- 
+2.39.2
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
 
