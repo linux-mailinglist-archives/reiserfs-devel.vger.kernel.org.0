@@ -1,100 +1,84 @@
-Return-Path: <reiserfs-devel+bounces-20-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <reiserfs-devel+bounces-21-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F28CA81E59A
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 26 Dec 2023 08:22:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B983B81F70E
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 28 Dec 2023 11:50:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE96B282DD7
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 26 Dec 2023 07:22:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E7621F233D7
+	for <lists+reiserfs-devel@lfdr.de>; Thu, 28 Dec 2023 10:50:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 601834C607;
-	Tue, 26 Dec 2023 07:22:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01FF36ABA;
+	Thu, 28 Dec 2023 10:50:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="eT1wPAVg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rU23jokB"
 X-Original-To: reiserfs-devel@vger.kernel.org
-Received: from out203-205-251-59.mail.qq.com (out203-205-251-59.mail.qq.com [203.205.251.59])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBDCC4C3DD;
-	Tue, 26 Dec 2023 07:22:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1703575342; bh=wDSHVDigzFATqQyESr8XDuZAlMa8xKB4R2CE0qELoo8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=eT1wPAVgM7R5seU2RlNax8gpAO/H214MJdWDJaSjyxhr6Zi0L7ZSVlqj7zA3YS8XS
-	 cnMy82iJFSqMVyji6QtixjgCznzvWImqWES92XPXM5r5KXMqY62K1oAIgu3X8tO4o+
-	 zqt5i4dstg3lLW2kTOng+5O8W8NcyagM59mU4z2U=
-Received: from pek-lxu-l1.wrs.com ([111.198.225.215])
-	by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
-	id 40902CF1; Tue, 26 Dec 2023 15:16:09 +0800
-X-QQ-mid: xmsmtpt1703574969tmhlgnqaf
-Message-ID: <tencent_9EA7E746DE92DBC66049A62EDF6ED64CA706@qq.com>
-X-QQ-XMAILINFO: NKv2G1wnhDBnH0jOC261k90JCg//lbwJX/8/EDGnYlBvstu5hGpamjVET6kJWy
-	 YW5lVulxZv+VlJDUOaIWt0vtQ0hEigHgtdmkpfQtwYEW1KPWIjI1fMfL/b92ooqSSUFn+lKlq7Pq
-	 QZBizuEI7mVZoD9OeIFNGmHy9YBbUGGDtG6Xoyb+QIyUDnI3XoUr5o6nxRi2qeNoD+82nFRwguLZ
-	 zX4/XvBOLnBCLMqGYqm1PJw9g+a5DXWdP7M91MlPchL0kQQN1erk3mgtVfVdQVfEymLPZ9AS5Uwc
-	 YbZw8WwVNwFz8jWZmGTKDX/19h/YHydNvR+zC2h0TSOA5v9N0RlnBCkvZyMFr/YtLflAqIGVeOkr
-	 OFIkJJYnmtFNYTAohCLpanizs5eKxfgAespSyyXnDRuHGG4SlHV7wjNINj68bms+C+H3SFg1gMdb
-	 +ufIdQ3M3mTOjF1WNV/eM91Y5FPYv1ux0kYr8WRQQkpYT4QaF8bCbCEeg+olmHxsX38a+bl++jkB
-	 SuCTtAYD+FSvXRNxxpewFybcHKqGRKc6+9A5cZbWrFR16GUYj8kwCsMxA03S9JfFlHQZl0EBcRRI
-	 S2gsc1XkBWggP77AEnT4pSu8ArckIb21038GuUDgJarLPkjNIPVYxeghf0hhnt9xTNcu/PXDjJ57
-	 biYCuQDLOkfkEW7TchZfkp5YDG575tNDOA0GSva1HhH2KC+6885PN9iWsKJxUpzTKVFerwy5nHhS
-	 VEaBFZVbv0PAZZ5oQJ7t3cmJuzFlVTvhBt4YjnSxUaRzPiBqzMXddqz0HfRCSWxOP/avvVysRlys
-	 u13k6K8r6CgzOyakd3qa5yc25x6uGK4LgBSVubvArCSsyjccZz/1FgZIDwH/0CeudB8EeM7it9Ub
-	 eWKpvZ35t25FPank5bt54nP9meduanQhdWahGHpg8jR1jYUtYCQUQKDlwxFtMIdnrW6iYlXIrZ
-X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
-From: Edward Adam Davis <eadavis@qq.com>
-To: syzbot+b3b14fb9f8a14c5d0267@syzkaller.appspotmail.com
-Cc: akpm@linux-foundation.org,
-	axboe@kernel.dk,
-	bvanassche@acm.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	reiserfs-devel@vger.kernel.org,
-	song@kernel.org,
-	syzkaller-bugs@googlegroups.com,
-	yi.zhang@huawei.com
-Subject: [PATCH] reiserfs: fix uninit-value in comp_keys
-Date: Tue, 26 Dec 2023 15:16:09 +0800
-X-OQ-MSGID: <20231226071608.1262673-2-eadavis@qq.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <000000000000434c71060d5b6808@google.com>
-References: <000000000000434c71060d5b6808@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F5A6AA4;
+	Thu, 28 Dec 2023 10:50:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8D88C433C7;
+	Thu, 28 Dec 2023 10:50:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703760639;
+	bh=BPxPOKTaZnluFeSzgfExNeB7kZWJYat+UJLHwDn2Rig=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rU23jokBsrTIsxPfYmNIo9Xnj10xyocVaTrcpX7nEltRKTr9sMmIM31539OQOErIB
+	 wO+EI/Dce0SrS+TxgxagIadHeq/btyUM2L+r8H6fEZ/QXeBYe3GjB+ddI7ky/zdFpu
+	 Jbww5cKdCaPPzkFsrvcoteN2n2cntNKgN+lFQv8GHWelw6dM65ZJJAg9Y5AydqbxG6
+	 AuiZhSW1ZKkZa5dc6cjkyyzWDqSPHv2/W4TMSgg73kHZ4YUkw/nG5BrvE22SX05hbz
+	 kEUVX9gV0khXZsUJ+czZTzndgCJ6ysMkFwXN6KOspnN8ujArhc6D4iLx2p+u3PT/zu
+	 Pi9T8etG2rnDA==
+Date: Thu, 28 Dec 2023 11:50:32 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: syzbot <syzbot+062317ea1d0a6d5e29e7@syzkaller.appspotmail.com>
+Cc: axboe@kernel.dk, chao@kernel.org, christian@brauner.io,
+	daniel.vetter@ffwll.ch, hch@lst.de, hdanton@sina.com, jack@suse.cz,
+	jaegeuk@kernel.org, jinpu.wang@ionos.com,
+	linux-f2fs-devel@lists.sourceforge.net,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	mairacanal@riseup.net, mcanal@igalia.com,
+	reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+	terrelln@fb.com, willy@infradead.org, yukuai3@huawei.com
+Subject: Re: [syzbot] [reiserfs?] possible deadlock in super_lock
+Message-ID: <20231228-arterien-nachmachen-d74aec52820e@brauner>
+References: <0000000000001825ce06047bf2a6@google.com>
+ <00000000000007d6a9060d441adc@google.com>
 Precedence: bulk
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 List-Id: <reiserfs-devel.vger.kernel.org>
 List-Subscribe: <mailto:reiserfs-devel+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:reiserfs-devel+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <00000000000007d6a9060d441adc@google.com>
 
-The cpu_key was not initialized in reiserfs_delete_solid_item(), which triggered
-this issue.
+On Sun, Dec 24, 2023 at 08:40:05AM -0800, syzbot wrote:
+> syzbot suspects this issue was fixed by commit:
+> 
+> commit fd1464105cb37a3b50a72c1d2902e97a71950af8
+> Author: Jan Kara <jack@suse.cz>
+> Date:   Wed Oct 18 15:29:24 2023 +0000
+> 
+>     fs: Avoid grabbing sb->s_umount under bdev->bd_holder_lock
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14639595e80000
+> start commit:   2cf0f7156238 Merge tag 'nfs-for-6.6-2' of git://git.linux-..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=710dc49bece494df
+> dashboard link: https://syzkaller.appspot.com/bug?extid=062317ea1d0a6d5e29e7
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=107e9518680000
+> 
+> If the result looks correct, please mark the issue as fixed by replying with:
+> 
+> #syz fix: fs: Avoid grabbing sb->s_umount under bdev->bd_holder_lock
+> 
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-Reported-and-tested-by: syzbot+b3b14fb9f8a14c5d0267@syzkaller.appspotmail.com
-Signed-off-by: Edward Adam Davis <eadavis@qq.com>
----
- fs/reiserfs/stree.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/reiserfs/stree.c b/fs/reiserfs/stree.c
-index 2138ee7d271d..5faf702f8d15 100644
---- a/fs/reiserfs/stree.c
-+++ b/fs/reiserfs/stree.c
-@@ -1407,7 +1407,7 @@ void reiserfs_delete_solid_item(struct reiserfs_transaction_handle *th,
- 	INITIALIZE_PATH(path);
- 	int item_len = 0;
- 	int tb_init = 0;
--	struct cpu_key cpu_key;
-+	struct cpu_key cpu_key = {};
- 	int retval;
- 	int quota_cut_bytes = 0;
- 
--- 
-2.43.0
-
+Fwiw, this was always a false-positive. But we also reworked the locking
+that even the false-positive cannot be triggered anymore. So yay!
 
