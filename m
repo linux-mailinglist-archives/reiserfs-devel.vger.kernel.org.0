@@ -1,91 +1,92 @@
-Return-Path: <reiserfs-devel+bounces-42-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <reiserfs-devel+bounces-43-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 613C9831BA5
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 18 Jan 2024 15:41:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06DB983544E
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 21 Jan 2024 04:17:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14EE71F241B2
-	for <lists+reiserfs-devel@lfdr.de>; Thu, 18 Jan 2024 14:41:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95E771F21F46
+	for <lists+reiserfs-devel@lfdr.de>; Sun, 21 Jan 2024 03:17:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A457E28E0D;
-	Thu, 18 Jan 2024 14:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GsE7mzch"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0481336114;
+	Sun, 21 Jan 2024 03:17:05 +0000 (UTC)
 X-Original-To: reiserfs-devel@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7948628DBC;
-	Thu, 18 Jan 2024 14:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB6A2EB0C
+	for <reiserfs-devel@vger.kernel.org>; Sun, 21 Jan 2024 03:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705588807; cv=none; b=ZQhhGJglnEoUlmqSp5nqkoSZupY4KhEo5aXnSA3G2OLiDMFi3MPhdQzluZqSGCc3F12h7pJmChwO9r+AbPeqzpS9094xxCNNaIj72hoDlO8XX6FBSIQiZ1ubMI0BE1p1MlR4lJM0jT7QTKzIme/nLzHU8/3xuIdtCbE7N/5Uv3M=
+	t=1705807024; cv=none; b=bp5OgNsdnR2QnYQMlPPfp6z4aqp0+I8aEiKiT05XRzeVuQ3MJXNWsFOV/yTGPMiCT6yGZIF9ut6/skgzNKehl3d57IfArrIget8a38Tgxbmnass1GDkXsHlOIxW/12OFUkNYTfn+giVTg1KTPo5sars/Y2rr3Ro3+4RQmFmEFXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705588807; c=relaxed/simple;
-	bh=1nGWSp2zbP5zgxUJ8GSxRXbppy2TjMZIkx7qciwfVuU=;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To; b=o//1jMTVITXsIuyxpxsqKkcxCG6g5nsyHgR3i+YS0ipzCmfCs4uD2JtgwPYl7WsRfZq1BnOdfClcg6NfjSc3wRBaoFSJEYgErx8ddj0aTHST22A4TrGUGucYKZP4XK8UkV2Rrrf3z0rUNLvp10SVgeTMtmXZuF7Ni/e8b1ody7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GsE7mzch; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2121C43390;
-	Thu, 18 Jan 2024 14:40:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705588807;
-	bh=1nGWSp2zbP5zgxUJ8GSxRXbppy2TjMZIkx7qciwfVuU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GsE7mzchC2s7r2VpOmfcp3QvxQXlGFOFsAYC1iBrR1oMYD65tocIuxZi9vVBxClP9
-	 zamWGzAShyLQR2o7kN43PX4G8bW0Mt5KeNWLDdvgcAtvnEtk7WvwjLrBFX7MJon/fI
-	 kJSJMgLaikOopKrzAbwN0pURT2XHAUSByDaIBTXBlVhqnvRSHdawO1Ch9g3p6jd3ws
-	 KOLiND4rWH2eO/mpzC7Odx1TrajDypR960RTn/CZ62UIOrMZNUpgoQ94mUtZJrSHJ7
-	 g3/DDUqiePBG4u/MGqU7DCH5sCdvw/Eg6ghChp59ZRSkdE2a8DwxacaNSDxqOVXJbb
-	 sn9k2EPFf6RZA==
-Date: Thu, 18 Jan 2024 15:40:02 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Jan Kara <jack@suse.cz>
-Cc: syzbot <syzbot+3abaeed5039cc1c49c7c@syzkaller.appspotmail.com>, 
-	axboe@kernel.dk, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [reiserfs?] possible deadlock in chown_common
-Message-ID: <20240118-badeverbot-gemustert-e87bd2a23bfc@brauner>
-References: <0000000000006308a805eaa57d87@google.com>
- <000000000000b5b973060f269eb3@google.com>
- <20240117165236.kcmlvjedoae6yd76@quack3>
+	s=arc-20240116; t=1705807024; c=relaxed/simple;
+	bh=Y3U3gmSoBpPBqejzWBvJi7czCL1r6vTqCtRFhtN/0lc=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=F4NC99S3N0jvoP8dB+CuY76Ceb03HgrVye1KZA4DMXHsiim21wMNHcPxbuRWwZQYPfQaHOmsguctYejeO37bQAjgZyNhplp9r/PvtfGoH85J9VEL5I3NkoY4tPVngbKX+/giS/xJOcYvjUagYS1JPN6e43nHq5P69xzORoAsTEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-361a5c2e84eso21381565ab.3
+        for <reiserfs-devel@vger.kernel.org>; Sat, 20 Jan 2024 19:17:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705807023; x=1706411823;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O5EGxrXRJliwproW9XKS8xWAASP6Q517tHhuqRHfHFo=;
+        b=Wn3LlPwf13IO0D0nTkySjSOazxauzjC/ECbDytHcurx6Za5BxK3SnNS+lOlCWoTQhv
+         N8tgG8m89bmdNquD9J/RC7sYMqe5O1nmcjCZPdcopxjIKcI/sjZ/xZMlAyNgm2MPJlSC
+         +Bf2CQ0KiYYQzMAyT2kkHL3J2wy/NpQ9zuciXn3aAP29ZCGOp1HZ0826AaFTyMQgfbsr
+         YLMsbWEn/fCdTXLobIM3kJ7UFEqqfba+f38vu8fbz0HRnV0AgmdWTlYjKpg09NfVKoL0
+         tGXH9oBHnMa9rQnlqfbugvmrfflXb7AF9ahJcIcQjyom3MDPT62Xt5sf5LW7AijhdaU0
+         5OaA==
+X-Gm-Message-State: AOJu0YzzgO1HfTczZmG7nKWnkXVA1jqGgE59Pw5hvDqUvAL5xm8AzTYp
+	hb990fMypeNOUUzAjlGstBZbh9rZ4aoDIbRjUz/9WGZs9Bl6h7Gtm5I+52RdSh/li9c/ofP2OwQ
+	RLcs0G/i/NEoekVC9Jpa+6TO9NQKjvQAyWXa02dELeyL0mDKyE8OvRBk=
+X-Google-Smtp-Source: AGHT+IGRGmSbpZOAandnep2TjFNdtBtmS5GbpJlBkr8Y1TPC2FaHN1DScWFyE7Braf3ZajxeC1wTuTX0WO0vt0Bcv1KhDuzrh6nD
 Precedence: bulk
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 List-Id: <reiserfs-devel.vger.kernel.org>
 List-Subscribe: <mailto:reiserfs-devel+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:reiserfs-devel+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240117165236.kcmlvjedoae6yd76@quack3>
+X-Received: by 2002:a05:6e02:1d88:b0:360:d7:186b with SMTP id
+ h8-20020a056e021d8800b0036000d7186bmr274095ila.0.1705807022976; Sat, 20 Jan
+ 2024 19:17:02 -0800 (PST)
+Date: Sat, 20 Jan 2024 19:17:02 -0800
+In-Reply-To: <0000000000001eae4605f16be009@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a8f68a060f6c259f@google.com>
+Subject: Re: [syzbot] [reiserfs?] kernel BUG in balance_leaf
+From: syzbot <syzbot+6a0877ace12bfad107fc@syzkaller.appspotmail.com>
+To: axboe@kernel.dk, brauner@kernel.org, jack@suse.cz, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com, 
+	yijiangshan@kylinos.cn
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Jan 17, 2024 at 05:52:36PM +0100, Jan Kara wrote:
-> On Wed 17-01-24 08:20:06, syzbot wrote:
-> > syzbot suspects this issue was fixed by commit:
-> > 
-> > commit 6f861765464f43a71462d52026fbddfc858239a5
-> > Author: Jan Kara <jack@suse.cz>
-> > Date:   Wed Nov 1 17:43:10 2023 +0000
-> > 
-> >     fs: Block writes to mounted block devices
-> > 
-> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14ecbc83e80000
-> > start commit:   2bca25eaeba6 Merge tag 'spi-v6.1' of git://git.kernel.org/..
-> > git tree:       upstream
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=9df203be43a870b5
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3abaeed5039cc1c49c7c
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1539e7b8880000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c6cb32880000
-> > 
-> > If the result looks correct, please mark the issue as fixed by replying with:
-> 
-> Makes sense:
-> 
-> #syz fix: fs: Block writes to mounted block devices
+syzbot suspects this issue was fixed by commit:
 
-I remember once trying to chase that bug down and being very confused.
+commit 6f861765464f43a71462d52026fbddfc858239a5
+Author: Jan Kara <jack@suse.cz>
+Date:   Wed Nov 1 17:43:10 2023 +0000
+
+    fs: Block writes to mounted block devices
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10cc8ee7e80000
+start commit:   88603b6dc419 Linux 6.2-rc2
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9babfdc3dd4772d0
+dashboard link: https://syzkaller.appspot.com/bug?extid=6a0877ace12bfad107fc
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12bdb82a480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=108acc94480000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: fs: Block writes to mounted block devices
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
