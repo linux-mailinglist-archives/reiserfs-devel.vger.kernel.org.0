@@ -1,46 +1,46 @@
-Return-Path: <reiserfs-devel+bounces-47-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <reiserfs-devel+bounces-48-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20BD683668A
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 22 Jan 2024 16:04:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73C90836862
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 22 Jan 2024 16:35:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52E141C21AF7
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 22 Jan 2024 15:04:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25E6E1F21615
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 22 Jan 2024 15:35:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FBF63D97C;
-	Mon, 22 Jan 2024 14:56:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8FAC481C0;
+	Mon, 22 Jan 2024 15:04:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WBbmmMWG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iKCRNF7j"
 X-Original-To: reiserfs-devel@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1511D47F71;
-	Mon, 22 Jan 2024 14:56:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B045B60897;
+	Mon, 22 Jan 2024 15:04:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705935383; cv=none; b=FlLrFsTACv9xIM0X7filAS3jTsIFp86e6sXGueKbgt5s0qA1Nza8XPbVB1oXfSORST7Gyjik+4bQHCY/vJH6rAM+PS/s5D8whUM71OHSMpRZlvqSA2ViF+7FxhU3Vs5vs2m7WzespFXbOrV8sNnmzMrosOajLvPYIX0BLxgTxOw=
+	t=1705935885; cv=none; b=ILOiYYq0H8QsDcfUE2rcAr2B7tULf/nYMPdJ/RDDkJDOLcaLwO3t4KEpK2+HukYMnnGKODCQ41jAe1hwDPzUNGyqfuuE2br72bLhxKx+033tFefeP1eNXSOYLKlAnCF0XiMaRSm/WeK/Q0+43FwbVoSExOEGRA+tUGXdduWO+sw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705935383; c=relaxed/simple;
-	bh=UfSQJPEG+xfaNS9uQ5cM7UdlCpx4CwPBbRHccoBKfyg=;
+	s=arc-20240116; t=1705935885; c=relaxed/simple;
+	bh=Ilao1wFuUXYFDWjWipfSlhMGNNDHHGQPbzbxse6p9as=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n5oA8XK4Gco1I4dBscxeUN37X5Ho+0Wypq08nCl0C1UNntfdSK1JwlioBurZonMr6d4txeO96rIXPAtSlnQkns9hNyecJEgK5ASkbye4v+b9+vO1hQG2qZNJtOZckurDkB27l/gakO3YqlD4pCiimD1SE/3YzqogA7t3TlsjPN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WBbmmMWG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81153C433C7;
-	Mon, 22 Jan 2024 14:56:21 +0000 (UTC)
+	 MIME-Version; b=Rdx9IVzfUo8B4xVFOu185/14l4Fz35yTaLCCZ1v8h8QCjtE1DfGBl67Jmkzh3+a5j1I9RJEZihnuaK0R4A8A1WrJPqs8+3PjFLfmuvrvJuaGVSLteSQWSJ1pfwyHb3joyX8RSi5j9q7OH7hBVVVeLBy/n7sl5/hdlTNkiby9Pcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iKCRNF7j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84E1CC433A6;
+	Mon, 22 Jan 2024 15:04:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705935382;
-	bh=UfSQJPEG+xfaNS9uQ5cM7UdlCpx4CwPBbRHccoBKfyg=;
+	s=k20201202; t=1705935885;
+	bh=Ilao1wFuUXYFDWjWipfSlhMGNNDHHGQPbzbxse6p9as=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WBbmmMWGpuQxbynYHD0N7UV6AQqDi0coBbbXxP68m3v0aJ6YQzCG57WSKYM2jjGDt
-	 wGyIxhLwrmsUv2YFhkDNmzKJ8Nst6otd/r8GQJi4Ta80Q5FIeDPxcbdq84zpFuMBOC
-	 TUaexJ4NFuSVnJfKk6vmodDfxAhOd7YNRAK8J7kcCX1HvNr78HnO+18uOtSWvmgMpv
-	 v+TfRenEa2XwbK2XUA3wZoDuLk/MSNr3VQeZJ9T1IuA3kgqGJlLXvENDSbwzqWOnYj
-	 2CWoRR7+xDtmPZ/nVaXqVSOG+k+wmHBHDhf2SLcElbCRT6UlMBfPrf0cr3j2bFi4fV
-	 UcJS4Yp677ZMQ==
+	b=iKCRNF7j4/csY+66Xg39xpvQCb27cC2GjRvY+MQPbipNBtXITJ5pO57EaPEgZtQLk
+	 EpKp540epikql0rl9NyB4JzrEr3txRU5ZKw9nHud/3JD0ZWhHHihAwXBHUijwOhTvJ
+	 9cbnQ3lU8d5BImamX5GtYc+px737miCY3u28b/7IEhdcphxxhYRviMaWc+RMUglxqp
+	 +oZsvouo2lrQ1qrWcHzuhPHGmlna8gShuDo2rGOKqB8G1ICHqY6F/AN1+0gT3AgtqO
+	 ax0UX4sVLcV6pCIxs4dNCxM5Xft1e64Xf8bJLrUAFaSHfosP/T5xpMVilbURSbI2X1
+	 MpahVmQUvueNw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -50,12 +50,12 @@ Cc: Jan Kara <jack@suse.cz>,
 	brauner@kernel.org,
 	jlayton@kernel.org,
 	reiserfs-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.7 06/88] reiserfs: Avoid touching renamed directory if parent does not change
-Date: Mon, 22 Jan 2024 09:50:39 -0500
-Message-ID: <20240122145608.990137-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 06/73] reiserfs: Avoid touching renamed directory if parent does not change
+Date: Mon, 22 Jan 2024 10:01:20 -0500
+Message-ID: <20240122150432.992458-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240122145608.990137-1-sashal@kernel.org>
-References: <20240122145608.990137-1-sashal@kernel.org>
+In-Reply-To: <20240122150432.992458-1-sashal@kernel.org>
+References: <20240122150432.992458-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 List-Id: <reiserfs-devel.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:reiserfs-devel+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.7.1
+X-stable-base: Linux 6.6.13
 Content-Transfer-Encoding: 8bit
 
 From: Jan Kara <jack@suse.cz>
@@ -84,7 +84,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 29 insertions(+), 25 deletions(-)
 
 diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
-index 994d6e6995ab..5996197ba40c 100644
+index 9c5704be2435..889341c6b8f0 100644
 --- a/fs/reiserfs/namei.c
 +++ b/fs/reiserfs/namei.c
 @@ -1324,8 +1324,8 @@ static int reiserfs_rename(struct mnt_idmap *idmap,
