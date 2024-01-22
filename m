@@ -1,208 +1,163 @@
-Return-Path: <reiserfs-devel+bounces-48-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <reiserfs-devel+bounces-49-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73C90836862
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 22 Jan 2024 16:35:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5F03837354
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 22 Jan 2024 20:57:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25E6E1F21615
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 22 Jan 2024 15:35:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 62E9FB221F5
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 22 Jan 2024 19:54:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8FAC481C0;
-	Mon, 22 Jan 2024 15:04:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0CF03FE27;
+	Mon, 22 Jan 2024 19:54:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iKCRNF7j"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="dFP10img";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="QZ/Dtf1l";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="dFP10img";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="QZ/Dtf1l"
 X-Original-To: reiserfs-devel@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B045B60897;
-	Mon, 22 Jan 2024 15:04:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB8F3FB1E;
+	Mon, 22 Jan 2024 19:54:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705935885; cv=none; b=ILOiYYq0H8QsDcfUE2rcAr2B7tULf/nYMPdJ/RDDkJDOLcaLwO3t4KEpK2+HukYMnnGKODCQ41jAe1hwDPzUNGyqfuuE2br72bLhxKx+033tFefeP1eNXSOYLKlAnCF0XiMaRSm/WeK/Q0+43FwbVoSExOEGRA+tUGXdduWO+sw=
+	t=1705953270; cv=none; b=uiEcmyUjAkT69ROMUn8oFOBdFq1t9x8Z6XLb5QaFNV8xSyYGsZlfFH3zdtIgu2vSVaMjrZWwHhmBBBNAgsy5SqbTBO1oSQU1uVFVvBi7adL/zqfmzBNGZ6C0R9gYQSNxkBlDoF+KTP5AwcjPWJhxpqnz7kTh3zLYY21FgzIdyiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705935885; c=relaxed/simple;
-	bh=Ilao1wFuUXYFDWjWipfSlhMGNNDHHGQPbzbxse6p9as=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Rdx9IVzfUo8B4xVFOu185/14l4Fz35yTaLCCZ1v8h8QCjtE1DfGBl67Jmkzh3+a5j1I9RJEZihnuaK0R4A8A1WrJPqs8+3PjFLfmuvrvJuaGVSLteSQWSJ1pfwyHb3joyX8RSi5j9q7OH7hBVVVeLBy/n7sl5/hdlTNkiby9Pcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iKCRNF7j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84E1CC433A6;
-	Mon, 22 Jan 2024 15:04:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705935885;
-	bh=Ilao1wFuUXYFDWjWipfSlhMGNNDHHGQPbzbxse6p9as=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iKCRNF7j4/csY+66Xg39xpvQCb27cC2GjRvY+MQPbipNBtXITJ5pO57EaPEgZtQLk
-	 EpKp540epikql0rl9NyB4JzrEr3txRU5ZKw9nHud/3JD0ZWhHHihAwXBHUijwOhTvJ
-	 9cbnQ3lU8d5BImamX5GtYc+px737miCY3u28b/7IEhdcphxxhYRviMaWc+RMUglxqp
-	 +oZsvouo2lrQ1qrWcHzuhPHGmlna8gShuDo2rGOKqB8G1ICHqY6F/AN1+0gT3AgtqO
-	 ax0UX4sVLcV6pCIxs4dNCxM5Xft1e64Xf8bJLrUAFaSHfosP/T5xpMVilbURSbI2X1
-	 MpahVmQUvueNw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Jan Kara <jack@suse.cz>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Sasha Levin <sashal@kernel.org>,
-	brauner@kernel.org,
-	jlayton@kernel.org,
-	reiserfs-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 06/73] reiserfs: Avoid touching renamed directory if parent does not change
-Date: Mon, 22 Jan 2024 10:01:20 -0500
-Message-ID: <20240122150432.992458-6-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240122150432.992458-1-sashal@kernel.org>
-References: <20240122150432.992458-1-sashal@kernel.org>
+	s=arc-20240116; t=1705953270; c=relaxed/simple;
+	bh=i1B7kKkGPxHTcsk33Z8XJqC9IbrP4KlqaJmncPv16y8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oiP6JnBellhLogIna7nc1qEGavuiYq7QJC962uTp+0ajF3HaJAu8o1UdNZM7rTwgNqwrog0uqrPBNNvN5I9On6Tbh1vqdDH2skBwtFWUtYymVFbxEr1YATUVGx0EyQe8m6ZarDTzElrlBTuYDIEjGf2q1MVPWrw2B7uY0GNOIik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=dFP10img; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=QZ/Dtf1l; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=dFP10img; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=QZ/Dtf1l; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 11F9521F90;
+	Mon, 22 Jan 2024 19:54:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1705953267; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vx5KP9WvB2n2v4NgVdU3sYb+/jhVLCOVyTS0uakstFU=;
+	b=dFP10imgNaRtvioUzNMGkTKC5oFVN7Q38tjfuJc2o+5jCDTB68/OOI0KNBTAFx9BxzN7Nw
+	6wKEbSmTw2mcKR5agje9tuBpnkKdkOFkMdFq62DAnQg3u42aDY0b3w8u9rDwbiDw88Xeoh
+	IlyZVFFP6PFn+VPjQWP8KhPY0CPqNJ4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1705953267;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vx5KP9WvB2n2v4NgVdU3sYb+/jhVLCOVyTS0uakstFU=;
+	b=QZ/Dtf1l8ttro/rS/gasA8apm4AINK+aug5FesMn69g3GU7IU8Uv0YPudFGjMruEwxGbDT
+	wMSCbyIChDRoEDAg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1705953267; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vx5KP9WvB2n2v4NgVdU3sYb+/jhVLCOVyTS0uakstFU=;
+	b=dFP10imgNaRtvioUzNMGkTKC5oFVN7Q38tjfuJc2o+5jCDTB68/OOI0KNBTAFx9BxzN7Nw
+	6wKEbSmTw2mcKR5agje9tuBpnkKdkOFkMdFq62DAnQg3u42aDY0b3w8u9rDwbiDw88Xeoh
+	IlyZVFFP6PFn+VPjQWP8KhPY0CPqNJ4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1705953267;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vx5KP9WvB2n2v4NgVdU3sYb+/jhVLCOVyTS0uakstFU=;
+	b=QZ/Dtf1l8ttro/rS/gasA8apm4AINK+aug5FesMn69g3GU7IU8Uv0YPudFGjMruEwxGbDT
+	wMSCbyIChDRoEDAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 05BE413995;
+	Mon, 22 Jan 2024 19:54:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 4XtlAfPHrmW5OAAAD6G6ig
+	(envelope-from <jack@suse.cz>); Mon, 22 Jan 2024 19:54:27 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 785B8A0803; Mon, 22 Jan 2024 20:54:22 +0100 (CET)
+Date: Mon, 22 Jan 2024 20:54:22 +0100
+From: Jan Kara <jack@suse.cz>
+To: syzbot <syzbot+6a0877ace12bfad107fc@syzkaller.appspotmail.com>
+Cc: axboe@kernel.dk, brauner@kernel.org, jack@suse.cz,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+	yijiangshan@kylinos.cn
+Subject: Re: [syzbot] [reiserfs?] kernel BUG in balance_leaf
+Message-ID: <20240122195422.45jfvwcu7pdscv3u@quack3>
+References: <0000000000001eae4605f16be009@google.com>
+ <000000000000a8f68a060f6c259f@google.com>
 Precedence: bulk
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 List-Id: <reiserfs-devel.vger.kernel.org>
 List-Subscribe: <mailto:reiserfs-devel+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:reiserfs-devel+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.13
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000a8f68a060f6c259f@google.com>
+Authentication-Results: smtp-out1.suse.de;
+	none
+X-Spam-Level: *
+X-Spam-Score: 1.69
+X-Spamd-Result: default: False [1.69 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 BAYES_HAM(-0.01)[47.77%];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=9babfdc3dd4772d0];
+	 TAGGED_RCPT(0.00)[6a0877ace12bfad107fc];
+	 MIME_GOOD(-0.10)[text/plain];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 RCPT_COUNT_SEVEN(0.00)[9];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 MID_RHS_NOT_FQDN(0.50)[];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[];
+	 SUBJECT_HAS_QUESTION(0.00)[]
+X-Spam-Flag: NO
 
-From: Jan Kara <jack@suse.cz>
+On Sat 20-01-24 19:17:02, syzbot wrote:
+> syzbot suspects this issue was fixed by commit:
+> 
+> commit 6f861765464f43a71462d52026fbddfc858239a5
+> Author: Jan Kara <jack@suse.cz>
+> Date:   Wed Nov 1 17:43:10 2023 +0000
+> 
+>     fs: Block writes to mounted block devices
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10cc8ee7e80000
+> start commit:   88603b6dc419 Linux 6.2-rc2
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=9babfdc3dd4772d0
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6a0877ace12bfad107fc
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12bdb82a480000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=108acc94480000
+> 
+> If the result looks correct, please mark the issue as fixed by replying with:
 
-[ Upstream commit 49db9b1b86a82448dfaf3fcfefcf678dee56c8ed ]
+Makes sense:
+ 
+#syz fix: fs: Block writes to mounted block devices
 
-The VFS will not be locking moved directory if its parent does not
-change. Change reiserfs rename code to avoid touching renamed directory
-if its parent does not change as without locking that can corrupt the
-filesystem.
-
-Signed-off-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/reiserfs/namei.c | 54 ++++++++++++++++++++++++---------------------
- 1 file changed, 29 insertions(+), 25 deletions(-)
-
-diff --git a/fs/reiserfs/namei.c b/fs/reiserfs/namei.c
-index 9c5704be2435..889341c6b8f0 100644
---- a/fs/reiserfs/namei.c
-+++ b/fs/reiserfs/namei.c
-@@ -1324,8 +1324,8 @@ static int reiserfs_rename(struct mnt_idmap *idmap,
- 	struct inode *old_inode, *new_dentry_inode;
- 	struct reiserfs_transaction_handle th;
- 	int jbegin_count;
--	umode_t old_inode_mode;
- 	unsigned long savelink = 1;
-+	bool update_dir_parent = false;
- 
- 	if (flags & ~RENAME_NOREPLACE)
- 		return -EINVAL;
-@@ -1375,8 +1375,7 @@ static int reiserfs_rename(struct mnt_idmap *idmap,
- 		return -ENOENT;
- 	}
- 
--	old_inode_mode = old_inode->i_mode;
--	if (S_ISDIR(old_inode_mode)) {
-+	if (S_ISDIR(old_inode->i_mode)) {
- 		/*
- 		 * make sure that directory being renamed has correct ".."
- 		 * and that its new parent directory has not too many links
-@@ -1389,24 +1388,28 @@ static int reiserfs_rename(struct mnt_idmap *idmap,
- 			}
- 		}
- 
--		/*
--		 * directory is renamed, its parent directory will be changed,
--		 * so find ".." entry
--		 */
--		dot_dot_de.de_gen_number_bit_string = NULL;
--		retval =
--		    reiserfs_find_entry(old_inode, "..", 2, &dot_dot_entry_path,
-+		if (old_dir != new_dir) {
-+			/*
-+			 * directory is renamed, its parent directory will be
-+			 * changed, so find ".." entry
-+			 */
-+			dot_dot_de.de_gen_number_bit_string = NULL;
-+			retval =
-+			    reiserfs_find_entry(old_inode, "..", 2,
-+					&dot_dot_entry_path,
- 					&dot_dot_de);
--		pathrelse(&dot_dot_entry_path);
--		if (retval != NAME_FOUND) {
--			reiserfs_write_unlock(old_dir->i_sb);
--			return -EIO;
--		}
-+			pathrelse(&dot_dot_entry_path);
-+			if (retval != NAME_FOUND) {
-+				reiserfs_write_unlock(old_dir->i_sb);
-+				return -EIO;
-+			}
- 
--		/* inode number of .. must equal old_dir->i_ino */
--		if (dot_dot_de.de_objectid != old_dir->i_ino) {
--			reiserfs_write_unlock(old_dir->i_sb);
--			return -EIO;
-+			/* inode number of .. must equal old_dir->i_ino */
-+			if (dot_dot_de.de_objectid != old_dir->i_ino) {
-+				reiserfs_write_unlock(old_dir->i_sb);
-+				return -EIO;
-+			}
-+			update_dir_parent = true;
- 		}
- 	}
- 
-@@ -1486,7 +1489,7 @@ static int reiserfs_rename(struct mnt_idmap *idmap,
- 
- 		reiserfs_prepare_for_journal(old_inode->i_sb, new_de.de_bh, 1);
- 
--		if (S_ISDIR(old_inode->i_mode)) {
-+		if (update_dir_parent) {
- 			if ((retval =
- 			     search_by_entry_key(new_dir->i_sb,
- 						 &dot_dot_de.de_entry_key,
-@@ -1534,14 +1537,14 @@ static int reiserfs_rename(struct mnt_idmap *idmap,
- 							 new_de.de_bh);
- 			reiserfs_restore_prepared_buffer(old_inode->i_sb,
- 							 old_de.de_bh);
--			if (S_ISDIR(old_inode_mode))
-+			if (update_dir_parent)
- 				reiserfs_restore_prepared_buffer(old_inode->
- 								 i_sb,
- 								 dot_dot_de.
- 								 de_bh);
- 			continue;
- 		}
--		if (S_ISDIR(old_inode_mode)) {
-+		if (update_dir_parent) {
- 			if (item_moved(&dot_dot_ih, &dot_dot_entry_path) ||
- 			    !entry_points_to_object("..", 2, &dot_dot_de,
- 						    old_dir)) {
-@@ -1559,7 +1562,7 @@ static int reiserfs_rename(struct mnt_idmap *idmap,
- 			}
- 		}
- 
--		RFALSE(S_ISDIR(old_inode_mode) &&
-+		RFALSE(update_dir_parent &&
- 		       !buffer_journal_prepared(dot_dot_de.de_bh), "");
- 
- 		break;
-@@ -1592,11 +1595,12 @@ static int reiserfs_rename(struct mnt_idmap *idmap,
- 		savelink = new_dentry_inode->i_nlink;
- 	}
- 
--	if (S_ISDIR(old_inode_mode)) {
-+	if (update_dir_parent) {
- 		/* adjust ".." of renamed directory */
- 		set_ino_in_dir_entry(&dot_dot_de, INODE_PKEY(new_dir));
- 		journal_mark_dirty(&th, dot_dot_de.de_bh);
--
-+	}
-+	if (S_ISDIR(old_inode->i_mode)) {
- 		/*
- 		 * there (in new_dir) was no directory, so it got new link
- 		 * (".."  of renamed directory)
+								Honza
 -- 
-2.43.0
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
 
