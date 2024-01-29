@@ -1,91 +1,171 @@
-Return-Path: <reiserfs-devel+bounces-53-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <reiserfs-devel+bounces-54-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03E9983F49E
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 28 Jan 2024 09:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 152B08401E4
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 29 Jan 2024 10:39:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE730283C15
-	for <lists+reiserfs-devel@lfdr.de>; Sun, 28 Jan 2024 08:33:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1CC7282DF4
+	for <lists+reiserfs-devel@lfdr.de>; Mon, 29 Jan 2024 09:39:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70895DDAB;
-	Sun, 28 Jan 2024 08:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8330A55777;
+	Mon, 29 Jan 2024 09:39:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="QqwMqmKw";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="OCJJC7if";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="v2txEFOd";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="NfJqAgE9"
 X-Original-To: reiserfs-devel@vger.kernel.org
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7DB28F1
-	for <reiserfs-devel@vger.kernel.org>; Sun, 28 Jan 2024 08:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B801C55765;
+	Mon, 29 Jan 2024 09:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706430788; cv=none; b=u44H4WEI69drXZjhGuhgkrscjKzgfQe6sXzlBvV3NMPtRI++idzT3V1crYlgD6ubL5UdkcE/vWiDXt0plDOkeW9uwrtaGaL10aCUbl263d2p4sj5ZmAl7Pn8GP6G28IgeFNxnAZS/CjrNaiM7044+WF65V6uzNagYCj0ClYfXEg=
+	t=1706521166; cv=none; b=ght2K2Bw6r7nGFgNuzfYWBoPMIbfPuW3sRyaQy9/cO9sdCdet+Ps9WC+pn2Q2mNEjmuxzES0esH38VVyqFl3x3sdcMf/EfL4xSxBrt8bKRJHiQjG3F9pioUX1mQ/YykpJPX/w6cMsVSvSUrshq2cCtubGrePOEL3yDNkAUAn9kY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706430788; c=relaxed/simple;
-	bh=hGMR4U5K86JxyB4kr5e3ZACsI7Q2evvli8q8yzSoiSw=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=HvD4tH4VyJlZZG3ai6IBQ22/yNx+DvJoqaH2XrzNrY89GWwRjWWGiwyvoUjGmwbwSEHKl93Y6NRGomFA6jjafgex6P+5rZvEBuTCwdoUkPQQRvg3VpZ+JXbORKRlyj/3VyYxJ9VJwaqNGaJrxh58oTXpboqrJWWkrBgsj01nYqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7becfc75cd4so133106639f.3
-        for <reiserfs-devel@vger.kernel.org>; Sun, 28 Jan 2024 00:33:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706430786; x=1707035586;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PNN5KLkPHS0YIYwzI5Jykoe2YGdKNWga1jxyVuOp7+s=;
-        b=QTEvdyu9NI+4uGcifhgjHMNQHliXHqa15UZQRTOIHpW+Q3GmMvoN78803crzpHNomD
-         +t8bCTMki7ImGxmDajBRvwZd4IyT5AMH9ABk6sKpYQZPoy0ewqb//L9N/ntdTbh8hzUo
-         wlVB1jlJr3t03mhjKj9EaENsMU7CrzrJmuGVNiTrd3Jrk+fM52NPhcKn53fo8UKHw0e0
-         GhWGypp7zbw5DLPY775cl+0B4KaNRHWN+TkoWydN55wUcVjp7jQcoSm1fqZ0/YcJqn6J
-         HGpQjWvhfaAK1iLKgtVAxnta1c+GFrkM9Y9UW/fuLiYixNHejq0Vl/KYeyQGBxBY5GZT
-         JgBA==
-X-Gm-Message-State: AOJu0YwGuF+20ab4SXOs6Oxt5E7I7q6J1R3gv316MJhHmNucXAOj8m0n
-	s/WbUHkyXQQfao/jlv814E7khkAtbK2OJtbIqUfYyi06gVAcDmJVuvzPAcYjRhWWGcsAN/wGQIF
-	dNuh9JEQN+gIfgSOCjqZESig4+J4YfZEFr7pISu6GPO4rAZh2B6shU3Y=
-X-Google-Smtp-Source: AGHT+IE5JhByvi0HswZNtB6u5bhB0ZD545GFOO2qLdKbRVHFiQgOaj511OOcYmw4/xBkKyELGhEbtSg6NtbI2umtY2tG+8LtTdM6
+	s=arc-20240116; t=1706521166; c=relaxed/simple;
+	bh=aWQKANCB/jJlxRlIU3TNvJO3vbpQJA7QbcB8gMmUMn0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GKFfxoPpw9ngggyZuYlkNNoOwYks6ox3yDg+W4I8nYl+KkFcsPwXMRQC8rovMBqt5zqlE+zm3w1Bztlrfrl4pjOrMY+TNKuOLOVWQ5YG8TW4kSI6cWihBBLCYitij1iGvMRB/sftXngQdPy9hyRmg0eHBcm5AyhteRxsMg38oWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=QqwMqmKw; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=OCJJC7if; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=v2txEFOd; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=NfJqAgE9; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id F0EB01F7D9;
+	Mon, 29 Jan 2024 09:39:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1706521163; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vP4ZRnNJagh1Jnd//oHgKH6RzaoD7F7RB0IJxLI/4+w=;
+	b=QqwMqmKwn8G+sV4alb5J5Zb6QNYpHkBtse++XJGocEIXkwAQQR6VBMUFkrwIenXSWeenRy
+	3EvYzQZ2omC1XO3k8b/2TLJGa5zrgnD44aEd3c1zld8/CCxSKrxhSvUINEDViYXaKSALNf
+	yocKEbGJSGRnkqT+YOH/zen44ioq7N0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1706521163;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vP4ZRnNJagh1Jnd//oHgKH6RzaoD7F7RB0IJxLI/4+w=;
+	b=OCJJC7ifMExXqfg03eA10zHyBgtoOnmuHsTgr60bTaUC87QvCt1IJrkpCzPrmKGgIicDp/
+	0QFU9yihX6SSmKDA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1706521161; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vP4ZRnNJagh1Jnd//oHgKH6RzaoD7F7RB0IJxLI/4+w=;
+	b=v2txEFOdGNP2le+AkjHqbQhAGL2WIIj9h42Q6mMdqF1Mhpu8eUpn5/Z7p6KlO6Qjksdzt7
+	P7t9OTFNGs+alMjFO8u2+3z87x31/K7X1ZKez9L1tsAds7BTfg1Nhttc9NdvZN3R9nRjjJ
+	eBK9zg0ouhwoaHOOG+jXpOC4OuohzLE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1706521161;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vP4ZRnNJagh1Jnd//oHgKH6RzaoD7F7RB0IJxLI/4+w=;
+	b=NfJqAgE9a+kXY3BwphnUzsA8n9tWXWviIQIYbzIRjq/UApjtkBQiEJhXXM09ek3NlFWcQG
+	672vsJO1sGiwwMAA==
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id DD2C613911;
+	Mon, 29 Jan 2024 09:39:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id EezyNUhyt2UgRgAAn2gu4w
+	(envelope-from <jack@suse.cz>); Mon, 29 Jan 2024 09:39:20 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 74B6EA0807; Mon, 29 Jan 2024 10:39:20 +0100 (CET)
+Date: Mon, 29 Jan 2024 10:39:20 +0100
+From: Jan Kara <jack@suse.cz>
+To: syzbot <syzbot+500a5eabc2495aaeb60e@syzkaller.appspotmail.com>
+Cc: axboe@kernel.dk, brauner@kernel.org, jack@suse.cz,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	luto@kernel.org, peterz@infradead.org,
+	reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+	tglx@linutronix.de, yukuai3@huawei.com, yuran.pereira@hotmail.com
+Subject: Re: [syzbot] [kernel?] general protection fault in timerqueue_del (2)
+Message-ID: <20240129093920.tame7kmz46zmjpjf@quack3>
+References: <000000000000c6ec640601d95e6c@google.com>
+ <00000000000072355b060ffc546e@google.com>
 Precedence: bulk
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 List-Id: <reiserfs-devel.vger.kernel.org>
 List-Subscribe: <mailto:reiserfs-devel+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:reiserfs-devel+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a2f:b0:361:9a73:5a8f with SMTP id
- g15-20020a056e021a2f00b003619a735a8fmr398208ile.5.1706430784250; Sun, 28 Jan
- 2024 00:33:04 -0800 (PST)
-Date: Sun, 28 Jan 2024 00:33:04 -0800
-In-Reply-To: <0000000000007584ba05f80047bb@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000baabe1060ffd60b0@google.com>
-Subject: Re: [syzbot] [reiserfs?] KASAN: use-after-free Read in reiserfs_get_unused_objectid
-From: syzbot <syzbot+04e8b36eaa27ecf7f840@syzkaller.appspotmail.com>
-To: axboe@kernel.dk, brauner@kernel.org, jack@suse.cz, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00000000000072355b060ffc546e@google.com>
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=v2txEFOd;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=NfJqAgE9
+X-Spamd-Result: default: False [1.37 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:98:from];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[hotmail.com];
+	 URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=fa5bd4cd5ab6259d];
+	 TAGGED_RCPT(0.00)[500a5eabc2495aaeb60e];
+	 MIME_GOOD(-0.10)[text/plain];
+	 BAYES_HAM(-1.32)[90.27%];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 DKIM_TRACE(0.00)[suse.cz:+];
+	 MX_GOOD(-0.01)[];
+	 RCPT_COUNT_TWELVE(0.00)[13];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 MID_RHS_NOT_FQDN(0.50)[];
+	 FREEMAIL_CC(0.00)[kernel.dk,kernel.org,suse.cz,vger.kernel.org,infradead.org,googlegroups.com,linutronix.de,huawei.com,hotmail.com];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[];
+	 SUBJECT_HAS_QUESTION(0.00)[]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Score: 1.37
+X-Rspamd-Queue-Id: F0EB01F7D9
+X-Spam-Level: *
+X-Spam-Flag: NO
+X-Spamd-Bar: +
 
-syzbot suspects this issue was fixed by commit:
+On Sat 27-01-24 23:18:03, syzbot wrote:
+> syzbot suspects this issue was fixed by commit:
+> 
+> commit 6f861765464f43a71462d52026fbddfc858239a5
+> Author: Jan Kara <jack@suse.cz>
+> Date:   Wed Nov 1 17:43:10 2023 +0000
+> 
+>     fs: Block writes to mounted block devices
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=172204dfe80000
+> start commit:   4b954598a47b Merge tag 'exfat-for-6.5-rc5' of git://git.ke..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=fa5bd4cd5ab6259d
+> dashboard link: https://syzkaller.appspot.com/bug?extid=500a5eabc2495aaeb60e
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=169efdf6a80000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13733f31a80000
+> 
+> If the result looks correct, please mark the issue as fixed by replying with:
 
-commit 6f861765464f43a71462d52026fbddfc858239a5
-Author: Jan Kara <jack@suse.cz>
-Date:   Wed Nov 1 17:43:10 2023 +0000
-
-    fs: Block writes to mounted block devices
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=116501efe80000
-start commit:   1e760fa3596e Merge tag 'gfs2-v6.3-rc3-fix' of git://git.ke..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=acdb62bf488a8fe5
-dashboard link: https://syzkaller.appspot.com/bug?extid=04e8b36eaa27ecf7f840
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16d5c261c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=155eba51c80000
-
-If the result looks correct, please mark the issue as fixed by replying with:
-
+Makes sense:
+ 
 #syz fix: fs: Block writes to mounted block devices
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
 
