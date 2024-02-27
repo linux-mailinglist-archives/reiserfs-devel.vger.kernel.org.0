@@ -1,93 +1,100 @@
-Return-Path: <reiserfs-devel+bounces-84-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <reiserfs-devel+bounces-85-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B203A8681F7
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 26 Feb 2024 21:36:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76797868E22
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 27 Feb 2024 11:55:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CF7F28EFB3
-	for <lists+reiserfs-devel@lfdr.de>; Mon, 26 Feb 2024 20:36:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2D56B22686
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 27 Feb 2024 10:55:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 802BA130AC2;
-	Mon, 26 Feb 2024 20:36:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94F0E13956D;
+	Tue, 27 Feb 2024 10:54:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nDlxXaXT"
 X-Original-To: reiserfs-devel@vger.kernel.org
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A93405CE
-	for <reiserfs-devel@vger.kernel.org>; Mon, 26 Feb 2024 20:36:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C62C139567;
+	Tue, 27 Feb 2024 10:54:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708979764; cv=none; b=ILZO1oD8QTrbu7/U7acmuia9cTqi9vmiFr67q8U0tFaV1xZtCAxaGrFf6AmR4zxU52qZA5Reic8a+J/bXnC9SvU/hNqa42R+Jk1sXbspL0DqSdJRK0KN/UrJ6Ly8eI9GL5T4gyLhPViA8DHVeEEigrHXDB+SVjRG90V2R17+/Xc=
+	t=1709031252; cv=none; b=vDagJ8ReNHTNoGZ+sp+nVccP51KuzgY2NHMi4s7aAsYOw8VO9wA7MG1fMHKGp19t9yBFUhM+7pFEyKW77MRacWqhueEIJl69AcY14Pvb65LTXXaG/GUjvZFyEvKBKBfWULfBJ3ni+96heChVm4rLwKXNvJwocYuOLOdqmtSlx7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708979764; c=relaxed/simple;
-	bh=BOEgMivz/1Rmd9k9sx91BXGVLpMCPHRTptOTwKap2IE=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=EfWXeZkzFtPnEY9SsjWXk5kxKjlUd6NR27UOdCqn3rBWKrYY7Eh/937g4uZKiyB1BOp31u14OHt6fFtu04rxXdWfl1jmT/eywVGWYZLpgRLuf/og5Wl2UY0x9AXGOiGykMPD9x2cplBicGPkmEnvmwe0FCROuqHnhYLt6k/PZ9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-36424431577so31495585ab.3
-        for <reiserfs-devel@vger.kernel.org>; Mon, 26 Feb 2024 12:36:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708979762; x=1709584562;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SHBxOxrj9OB5gH5hKB3+4qa+fyj8XGTAPshoc6v4MfM=;
-        b=I7Asw1f96aaFbSolUEBZHysZzRnhFToCoFHu9ns2liBsjeNkrgDWYuff94DMMJcjUY
-         ldhpttISHexa9RDNtrWBd7Vud4b9Te8C/eBtagQQbc7NNUQxt1TvGqHXBgzelKI16J/y
-         5PuKEbNpYmrC2jVfRXNPInx1s++RMnu2PahgGl0MyzylAd64ABF4fWCh21q1BXGf9E2X
-         lZeIL2r+BeHKHO5Ni+pjnjsnJxjg7uBOjpMo8PdFqfohuJZpqersTbAVeCf9D4E1Glsi
-         cAVq/d9hIck9rOhv20qJREpJadSt0XJ0kOaectJ146ToVGMzFXgQG4ZCDg1Tbsspg5G5
-         LdvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU/f9ZVBz5t4+gEtrbfkmoI1B3r46AKq64DyD57pADg5213sbbNG5+9SSJuyZfoyB8W+Anf0ks7RNfXR9wUoK9kJZ69H2er6AWuU+r+tx4=
-X-Gm-Message-State: AOJu0YxaKxWbt6zkjyPJA64lhv7CUpy6uL8NiBDAtLyAmnlBbOyJCYUf
-	MQYB6FxkJnNoJcS5pdXCUWLet36j/yWGArPzxzVgrCydss65hCkpu2CaEpUgrxHplr/AD0hDhM7
-	Wn+LzaixKCP9MESgbyCU45YUu6dROwBilnRXi2qNDRQw6Txs6+y5tX+4=
-X-Google-Smtp-Source: AGHT+IGtnwxp3RnWyZGGR7Do0uKiVSBxo/NJeOMseplwOOWIl3jc0RvUIkBUNaLcVHUV1PEvQjpqhCWQHN4lOAuyylN+vXTAD3Ei
+	s=arc-20240116; t=1709031252; c=relaxed/simple;
+	bh=PwLisQd0EelziiSm3SmIZjWasG/wzOm57XHS0YJKHTg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fdU9PDNy48ZzaSLt+A7rJNT2E9kWfYPxfl5A4MpjANRy5fOZDWCSGtmYPGdDB4gTDAowUIu0qa8Eudas4TitT1sOn6jZBgSWyN6jmyVhaupjfe+xiAmk19ljIupLRBbFBrYN8uqjuG9dNGsXMT4zuMLG3WptQYXBoPYOhAmSaNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nDlxXaXT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABF8BC43390;
+	Tue, 27 Feb 2024 10:54:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709031252;
+	bh=PwLisQd0EelziiSm3SmIZjWasG/wzOm57XHS0YJKHTg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=nDlxXaXT+hEHByhmkXTKK9ngosXmGxEwZjh/bNcRmVh172231mNSYb6LcQ+XLHHTu
+	 EGrFeyw9MRq5VOaARrxI/XmOVrIoKdGqKrjp6A4USV9Q8Ru652SsMxE5KCc2lyTc05
+	 QvnE0XLDUQnvYraDbEHvUVKA3G8jmlLFOZ8FTqhfmTlnC9p6fOAgeNRGD1oTd7n0lA
+	 pTnekJzufj1zt0vXcCVl+OVklwJnmHlA+q/kNf0o5LHkZOHWPeH/X2SPegSWkU+JZg
+	 GmNZAm4mNWoa9R/vNBp8NffXj7ugj7vPpLp7X9R7uwHGb+xzrUCj40OyWmTfe4c6xl
+	 2Q5JMCgUEttTQ==
+From: Christian Brauner <brauner@kernel.org>
+To: jack@suse.cz,
+	jlayton@kernel.org,
+	zhouchengming@bytedance.com,
+	chengming.zhou@linux.dev
+Cc: Christian Brauner <brauner@kernel.org>,
+	reiserfs-devel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	vbabka@suse.cz,
+	roman.gushchin@linux.dev,
+	Xiongwei.Song@windriver.com
+Subject: Re: [PATCH] reiserfs: remove SLAB_MEM_SPREAD flag usage
+Date: Tue, 27 Feb 2024 11:52:50 +0100
+Message-ID: <20240227-molch-kanzlei-19a6f2a8c45d@brauner>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240224135126.830110-1-chengming.zhou@linux.dev>
+References: <20240224135126.830110-1-chengming.zhou@linux.dev>
 Precedence: bulk
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 List-Id: <reiserfs-devel.vger.kernel.org>
 List-Subscribe: <mailto:reiserfs-devel+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:reiserfs-devel+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c24a:0:b0:365:23c5:1bf7 with SMTP id
- k10-20020a92c24a000000b0036523c51bf7mr404754ilo.0.1708979762213; Mon, 26 Feb
- 2024 12:36:02 -0800 (PST)
-Date: Mon, 26 Feb 2024 12:36:02 -0800
-In-Reply-To: <00000000000065139305f0564e37@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a7bb7506124edb52@google.com>
-Subject: Re: [syzbot] [reiserfs?] INFO: task hung in reiserfs_sync_fs
-From: syzbot <syzbot+4dadbee41d087d9c6234@syzkaller.appspotmail.com>
-To: axboe@kernel.dk, brauner@kernel.org, hdanton@sina.com, jack@suse.cz, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	longman@redhat.com, penguin-kernel@i-love.sakura.ne.jp, 
-	reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1026; i=brauner@kernel.org; h=from:subject:message-id; bh=PwLisQd0EelziiSm3SmIZjWasG/wzOm57XHS0YJKHTg=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaTe3S/hnWcg7yG3bWvqqdxZvxnSPkgsYxBkCv6yhb1/+ cf8z9w2HaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABO5ZMjIMF917ZeAjqxVZmGc akK39l1ZsHtCjFehUK6V88frK7TnpTEy3D/45bHkxCeW3JGL7i3OqFzxQ9vOefl1vypHEUFTz95 OTgA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-syzbot suspects this issue was fixed by commit:
+On Sat, 24 Feb 2024 13:51:26 +0000, chengming.zhou@linux.dev wrote:
+> The SLAB_MEM_SPREAD flag is already a no-op as of 6.8-rc1, remove
+> its usage so we can delete it from slab. No functional change.
+> 
+> 
 
-commit 6f861765464f43a71462d52026fbddfc858239a5
-Author: Jan Kara <jack@suse.cz>
-Date:   Wed Nov 1 17:43:10 2023 +0000
+Updated commit message to point to slab removal.
 
-    fs: Block writes to mounted block devices
+---
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=111c20ca180000
-start commit:   692b7dc87ca6 Merge tag 'hyperv-fixes-signed-20230619' of g..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=24ce1b2abaee24cc
-dashboard link: https://syzkaller.appspot.com/bug?extid=4dadbee41d087d9c6234
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1208ab97280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1359d897280000
+Applied to the vfs.misc branch of the vfs/vfs.git tree.
+Patches in the vfs.misc branch should appear in linux-next soon.
 
-If the result looks correct, please mark the issue as fixed by replying with:
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-#syz fix: fs: Block writes to mounted block devices
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.misc
+
+[1/1] reiserfs: remove SLAB_MEM_SPREAD flag usage
+      https://git.kernel.org/vfs/vfs/c/e86aa34da713
 
