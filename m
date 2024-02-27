@@ -1,100 +1,95 @@
-Return-Path: <reiserfs-devel+bounces-85-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <reiserfs-devel+bounces-86-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76797868E22
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 27 Feb 2024 11:55:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91F8B869B8A
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 27 Feb 2024 17:05:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2D56B22686
-	for <lists+reiserfs-devel@lfdr.de>; Tue, 27 Feb 2024 10:55:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48E161F23296
+	for <lists+reiserfs-devel@lfdr.de>; Tue, 27 Feb 2024 16:05:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94F0E13956D;
-	Tue, 27 Feb 2024 10:54:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nDlxXaXT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A328F146912;
+	Tue, 27 Feb 2024 16:05:04 +0000 (UTC)
 X-Original-To: reiserfs-devel@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C62C139567;
-	Tue, 27 Feb 2024 10:54:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187AB535AE
+	for <reiserfs-devel@vger.kernel.org>; Tue, 27 Feb 2024 16:05:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709031252; cv=none; b=vDagJ8ReNHTNoGZ+sp+nVccP51KuzgY2NHMi4s7aAsYOw8VO9wA7MG1fMHKGp19t9yBFUhM+7pFEyKW77MRacWqhueEIJl69AcY14Pvb65LTXXaG/GUjvZFyEvKBKBfWULfBJ3ni+96heChVm4rLwKXNvJwocYuOLOdqmtSlx7c=
+	t=1709049904; cv=none; b=Oz/7ZkY7zYeJ4D2hMP/Mijwc9wF7xt1E69gjYNxbAe3QQBt3bvXVzbxZVgPWWKoEIZSaUoKHFfgotkKb9unWJOnKCZVKXg4pkFUMxjYO+Bv9bNvu+yovRWvdpquv7p4ovFbSg4f3uobAcbr1W/OXrwlYstsHimd2c2yd6k7DTKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709031252; c=relaxed/simple;
-	bh=PwLisQd0EelziiSm3SmIZjWasG/wzOm57XHS0YJKHTg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fdU9PDNy48ZzaSLt+A7rJNT2E9kWfYPxfl5A4MpjANRy5fOZDWCSGtmYPGdDB4gTDAowUIu0qa8Eudas4TitT1sOn6jZBgSWyN6jmyVhaupjfe+xiAmk19ljIupLRBbFBrYN8uqjuG9dNGsXMT4zuMLG3WptQYXBoPYOhAmSaNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nDlxXaXT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABF8BC43390;
-	Tue, 27 Feb 2024 10:54:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709031252;
-	bh=PwLisQd0EelziiSm3SmIZjWasG/wzOm57XHS0YJKHTg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nDlxXaXT+hEHByhmkXTKK9ngosXmGxEwZjh/bNcRmVh172231mNSYb6LcQ+XLHHTu
-	 EGrFeyw9MRq5VOaARrxI/XmOVrIoKdGqKrjp6A4USV9Q8Ru652SsMxE5KCc2lyTc05
-	 QvnE0XLDUQnvYraDbEHvUVKA3G8jmlLFOZ8FTqhfmTlnC9p6fOAgeNRGD1oTd7n0lA
-	 pTnekJzufj1zt0vXcCVl+OVklwJnmHlA+q/kNf0o5LHkZOHWPeH/X2SPegSWkU+JZg
-	 GmNZAm4mNWoa9R/vNBp8NffXj7ugj7vPpLp7X9R7uwHGb+xzrUCj40OyWmTfe4c6xl
-	 2Q5JMCgUEttTQ==
-From: Christian Brauner <brauner@kernel.org>
-To: jack@suse.cz,
-	jlayton@kernel.org,
-	zhouchengming@bytedance.com,
-	chengming.zhou@linux.dev
-Cc: Christian Brauner <brauner@kernel.org>,
-	reiserfs-devel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	vbabka@suse.cz,
-	roman.gushchin@linux.dev,
-	Xiongwei.Song@windriver.com
-Subject: Re: [PATCH] reiserfs: remove SLAB_MEM_SPREAD flag usage
-Date: Tue, 27 Feb 2024 11:52:50 +0100
-Message-ID: <20240227-molch-kanzlei-19a6f2a8c45d@brauner>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240224135126.830110-1-chengming.zhou@linux.dev>
-References: <20240224135126.830110-1-chengming.zhou@linux.dev>
+	s=arc-20240116; t=1709049904; c=relaxed/simple;
+	bh=HBH/mlGn1GKuD1rLuQCa/9qkGT6/IzdMQvpWS/cMWy0=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=g4rSzJjYPddV7vVfYH3YNeXx0/wpp1AAnV7OnCQ2A0ZeyyUxa2otLxQ1lklFNKoT9CL89d4uVbTwtSDPVT1FMtUe0PUSAhTo+co3cCnWskc9Jkf/QCZdUku0KzJM0fYDGZMwmAF51Ek5UVEMjYGL2Wc17w37qIlUdihI97A0bFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7c7a733ce70so300832439f.3
+        for <reiserfs-devel@vger.kernel.org>; Tue, 27 Feb 2024 08:05:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709049902; x=1709654702;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yln7e3X50hPzjP07hatAlBcYIA7D/0apOIsor57CCn4=;
+        b=JU30ZL+Tho+p+K3qr/iNlWy9iYKrqPA43yy99jDJbUqfffdlWp2reylesQABmPUTZo
+         c/kK5/q+UbY1AOiNptOriw1oFh7kpgAA2EVUjn2lQhkCkg37XV3FWXFwoNm1TlsQAhT1
+         fjBWBa0X3UVHrk7gfhSKM98Mvpn7Ls7kUPrpURbTD24jdiUsBBe+4OXEojWIUf11Ak/j
+         9CjqKRbpM1+D+WN+37A1siicydvhtaI8wxZCCJT+Ox+JqwhYz5xEs7vAwNZB5ss9m1bC
+         8VhDmjy9UHmOu4LyzkXE+OkU1iyHNOmPXf5o4qKbRG3lpOBR3kHLEFWt5gEqbsl2Wbdw
+         iA1A==
+X-Forwarded-Encrypted: i=1; AJvYcCUUH0xnaiU91xMlPIQK54+ORJGbbN+qQnF8TLsdUN6qEDr4TNYbjBGhOpzL+oXXnOQiQF12f6ylhNIlxWQ6pRt8oPe9WPpQRchEpPzi2+c=
+X-Gm-Message-State: AOJu0Yyg9srpj1ytqwB7t+pcagk6PLPp5rtCipBKDYjT0b9JR4HVeQZs
+	NbwNKSF93XnrXy4+Q40/TwAauuYlPkIOu/2wtjI/UqCKnIUl/vv1pI1WD2CKZrt0q8yB+AgF9xE
+	rlJwTjbRmWiTN91a0fLqMGGXEKrtgdbo2aFQ8h1JWRfCoHp6pEa7LHIM=
+X-Google-Smtp-Source: AGHT+IGQrddUrzNg1cM0TuCyUnXm9cGXvL4qtuDHM1W3BsW0ptWD5HvYEy2BneyZBz5v/nqMCzBPdqx+SIOhr4bYRHxVwbUCFvDB
 Precedence: bulk
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 List-Id: <reiserfs-devel.vger.kernel.org>
 List-Subscribe: <mailto:reiserfs-devel+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:reiserfs-devel+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1026; i=brauner@kernel.org; h=from:subject:message-id; bh=PwLisQd0EelziiSm3SmIZjWasG/wzOm57XHS0YJKHTg=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaTe3S/hnWcg7yG3bWvqqdxZvxnSPkgsYxBkCv6yhb1/+ cf8z9w2HaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABO5ZMjIMF917ZeAjqxVZmGc akK39l1ZsHtCjFehUK6V88frK7TnpTEy3D/45bHkxCeW3JGL7i3OqFzxQ9vOefl1vypHEUFTz95 OTgA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6638:2710:b0:474:8b40:13fb with SMTP id
+ m16-20020a056638271000b004748b4013fbmr316654jav.6.1709049902417; Tue, 27 Feb
+ 2024 08:05:02 -0800 (PST)
+Date: Tue, 27 Feb 2024 08:05:02 -0800
+In-Reply-To: <0000000000005a9fab05ff484cc4@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000564c5006125f3087@google.com>
+Subject: Re: [syzbot] [lsm?] [reiserfs?] general protection fault in fsnotify_perm
+From: syzbot <syzbot+1d7062c505b34792ef90@syzkaller.appspotmail.com>
+To: axboe@kernel.dk, bpf@vger.kernel.org, brauner@kernel.org, 
+	ivan.orlov0322@gmail.com, jack@suse.cz, jmorris@namei.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, paul@paul-moore.com, 
+	reiserfs-devel@vger.kernel.org, serge@hallyn.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, 24 Feb 2024 13:51:26 +0000, chengming.zhou@linux.dev wrote:
-> The SLAB_MEM_SPREAD flag is already a no-op as of 6.8-rc1, remove
-> its usage so we can delete it from slab. No functional change.
-> 
-> 
+syzbot suspects this issue was fixed by commit:
 
-Updated commit message to point to slab removal.
+commit 6f861765464f43a71462d52026fbddfc858239a5
+Author: Jan Kara <jack@suse.cz>
+Date:   Wed Nov 1 17:43:10 2023 +0000
 
----
+    fs: Block writes to mounted block devices
 
-Applied to the vfs.misc branch of the vfs/vfs.git tree.
-Patches in the vfs.misc branch should appear in linux-next soon.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17eb1102180000
+start commit:   a92b7d26c743 Merge tag 'drm-fixes-2023-06-23' of git://ano..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=24ce1b2abaee24cc
+dashboard link: https://syzkaller.appspot.com/bug?extid=1d7062c505b34792ef90
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1066cc77280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116850bf280000
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+If the result looks correct, please mark the issue as fixed by replying with:
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+#syz fix: fs: Block writes to mounted block devices
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.misc
-
-[1/1] reiserfs: remove SLAB_MEM_SPREAD flag usage
-      https://git.kernel.org/vfs/vfs/c/e86aa34da713
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
