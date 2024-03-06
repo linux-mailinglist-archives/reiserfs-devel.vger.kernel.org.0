@@ -1,131 +1,94 @@
-Return-Path: <reiserfs-devel+bounces-95-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <reiserfs-devel+bounces-96-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A9378726F6
-	for <lists+reiserfs-devel@lfdr.de>; Tue,  5 Mar 2024 19:53:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E44A48740E2
+	for <lists+reiserfs-devel@lfdr.de>; Wed,  6 Mar 2024 20:55:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39D9F1F2606A
-	for <lists+reiserfs-devel@lfdr.de>; Tue,  5 Mar 2024 18:53:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0F6A28733F
+	for <lists+reiserfs-devel@lfdr.de>; Wed,  6 Mar 2024 19:55:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C9DF1A5BA;
-	Tue,  5 Mar 2024 18:53:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZXMB/EMq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C603140E22;
+	Wed,  6 Mar 2024 19:55:07 +0000 (UTC)
 X-Original-To: reiserfs-devel@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60FA6241E3;
-	Tue,  5 Mar 2024 18:53:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F5313BAF4
+	for <reiserfs-devel@vger.kernel.org>; Wed,  6 Mar 2024 19:55:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709664791; cv=none; b=jPiKLzFOJJ2PJ8yRlwYfixNwxTtn/POxbAWRpwnF1EsNMbjMj9DfcJSIbRaodIGkeucKi5AQa4HCxH9ICAIy2M0Kd2rO/YuzSS7FZTdxpaZtZ7MKACDEG5aY0aWxvHJf2w58IdyjtAk+CLg2mL5gPlEqoCadiqQnfHwrmN9QbY8=
+	t=1709754907; cv=none; b=I0dVSKw3l79nBWmHwNDjysRs2zxy83brPKeW86pK/jzAGGbyCH+C634KLLOIO0ND3AUlN6kxldhCiCpcDpt2Plg3Yrdklc6Mu1LhjrqxoJG7852tgIYzTe9h1rotJG4Red3zMivP/nG1mHdsPmB/fMW1VOlrpAXnNzvG7jQVoaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709664791; c=relaxed/simple;
-	bh=RlxotYmw5rWlPllP+/fOtrGSdBEVKU7H7JyM3ifCs5M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oxutSvbm118kJqEuEoPhulha2exl5bwC+Gj2OmMaJz3OP29FnIoCMjOkRQlVJm3bZ5MUFjISuAQD7gmr3uZ9f8Tu7R84vK0ZVruwCfxWTLIOS5pPn35z8JTTHkAycgKEG70pqcxaOgdyn0c4wfs/pI0c7oG6cMX5r51JkYZCuM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ZXMB/EMq; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=lSJrdvz86yrqh9l2Sx5QNPyc/+eHatak3sGtDFJpvhU=; b=ZXMB/EMqHF69Zw+0R25mw2xsv3
-	14Q1Zh9G9VfOXmAXq9lj2qQJQIEc+YuVsBRVwOJit0trAg3TizjxnoBiGWN7x8tOeYeKDknBJs3kF
-	1zF6186bHVPfXJMKYiOKozwfArFTUJZwQkIzhzznAn2CpLPbwFiIAdhG7OjzsyFn7xFvBhHtXcJ7T
-	7riYI8E286dVpnD36IS6N76dIlKZ1UEAYoAZ73hJDromBqBNI/V5I2wtjMghLwuj7QCZ3fCVodWzA
-	kTSzm9D7tEkJjKiRsMclElIWVUxSMJZj7F22NhQMpptCBrm4mDxbl2DHbsJryG2vT4VgoKXiU66co
-	SYBaV+Vg==;
-Received: from willy by casper.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rhZuW-000000052HO-2ZW8;
-	Tue, 05 Mar 2024 18:53:08 +0000
-Date: Tue, 5 Mar 2024 18:53:08 +0000
-From: Matthew Wilcox <willy@infradead.org>
-To: reiserfs-devel@vger.kernel.org
-Cc: linux-fsdevel@vger.kernel.org, Jan Kara <jack@suse.cz>
-Subject: Re: [PATCH] reiserfs: Convert to writepages
-Message-ID: <ZedqFFiVyntHkxLZ@casper.infradead.org>
-References: <20240305185208.1200166-1-willy@infradead.org>
+	s=arc-20240116; t=1709754907; c=relaxed/simple;
+	bh=KNE4j+Z5IwZtEzYq+J/luvtWvN5sVuzSZmIOQVAnfsA=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=HVNnt64gEJk7Tptt852jI6oMI1kyS1ulZj3fTWbptasHtXbUMJxLA15tNdFDf3LfIGyYoAsz98kghoywk0uKJ//kf68+kkCT6iaqnjReqfDAg+yLJAfWPESCsWeY+1hdx7eD3yvGpvpraA6Wd4r1PKrpf2hBDtwdJ59wGlUkTQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7c000114536so15324139f.2
+        for <reiserfs-devel@vger.kernel.org>; Wed, 06 Mar 2024 11:55:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709754905; x=1710359705;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cm71RN2EZA1lVxvXDjeI/SyYZjhQ9Ei/MLh6kpMY8Vk=;
+        b=OLdRJ3S3dhcnbl7oRsgWQ3pNySRUKBUHmPxD5HCW2sxdi4gmw+Arkt3va0ClTp3/Qv
+         9LkNY3htD2sFWfPmIywIx0j9CToXqbrMihzS8I3p9HUdGqTlaLonlwpG4d9ctGmK7pV/
+         R9BYkqtoaqW0BRScgZGmQsc2lx2yRMr78Msdf0HBHy/09QpnUYfaRxwvALei6nAZSBL0
+         crlTLb/x/rV2UcRcFE+Ja4F8xkIq+/nOnWnxZX8wMi2kiod2mjErFcLlGhOFTfXJa9YU
+         Em+BdNxWsh3Wg8fUq5FXR3X9YL8WVVw5NjYutLszZW9/psQnINdSn7yWW05QdcrjxDHZ
+         Gafw==
+X-Forwarded-Encrypted: i=1; AJvYcCVime00NRgO7N5VMYYIsD6aZvKayzwlhio0k23wWJT3FrfHEIc0L4UR2atKffDWiEUT6Uk12veBVqCHyJuMFTZoT8R5Dfc2SpeVUyho2hc=
+X-Gm-Message-State: AOJu0Yz6cLSBUpeimwnLQV5bK20F2GjNPkH19KLpHKZqV42viQzXZFjm
+	RyPBhNoAsbJHkK8NQOCrMDvGLi79PUy5SuY4gjduEqxQy+sxZwvWloIdeeBaqpnDZfV4d+2fKum
+	ehdXT9Gg/99MDwLqxhEAO8240+VGP/wPviTemajW+U6dplvFXWg7AhLI=
+X-Google-Smtp-Source: AGHT+IGJnFc+ACMpaoLbA/hXZPjn2ydhowA9DoK6at8Bca9PlFNFrEgMECF+pCA+FpueB9foHP7V09ocm/gknBdB8SAYS4YIFDL+
 Precedence: bulk
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 List-Id: <reiserfs-devel.vger.kernel.org>
 List-Subscribe: <mailto:reiserfs-devel+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:reiserfs-devel+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240305185208.1200166-1-willy@infradead.org>
+X-Received: by 2002:a05:6638:480f:b0:475:5ee3:52f7 with SMTP id
+ cp15-20020a056638480f00b004755ee352f7mr181086jab.1.1709754905093; Wed, 06 Mar
+ 2024 11:55:05 -0800 (PST)
+Date: Wed, 06 Mar 2024 11:55:05 -0800
+In-Reply-To: <00000000000043463e05ee9c4277@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c5790906130355ca@google.com>
+Subject: Re: [syzbot] [reiserfs?] WARNING in journal_end
+From: syzbot <syzbot+d43f346675e449548021@syzkaller.appspotmail.com>
+To: akpm@linux-foundation.org, axboe@kernel.dk, brauner@kernel.org, 
+	bvanassche@acm.org, damien.lemoal@opensource.wdc.com, jack@suse.cz, 
+	jlayton@kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org, song@kernel.org, 
+	syzkaller-bugs@googlegroups.com, willy@infradead.org, yi.zhang@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 
+syzbot suspects this issue was fixed by commit:
 
-Apologies, copy-and-paste error on the email address.
+commit 6f861765464f43a71462d52026fbddfc858239a5
+Author: Jan Kara <jack@suse.cz>
+Date:   Wed Nov 1 17:43:10 2023 +0000
 
-On Tue, Mar 05, 2024 at 06:52:05PM +0000, Matthew Wilcox (Oracle) wrote:
-> Use buffer_migrate_folio to handle folio migration instead of writing
-> out dirty pages and reading them back in again.  Use writepages to write
-> out folios more efficiently.  We now only do that wait_on_write_block
-> check once per call to writepages instead of once per page.  It would be
-> possible to do one transaction per writeback run, but that's a bit of a
-> big change to do to this old filesystem, so leave it as one transaction
-> per folio (and leave reiserfs supporting only one page per folio).
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> ---
->  fs/reiserfs/inode.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/fs/reiserfs/inode.c b/fs/reiserfs/inode.c
-> index 1d825459ee6e..c1daedc50f4c 100644
-> --- a/fs/reiserfs/inode.c
-> +++ b/fs/reiserfs/inode.c
-> @@ -2503,8 +2503,8 @@ static int map_block_for_writepage(struct inode *inode,
->   * start/recovery path as __block_write_full_folio, along with special
->   * code to handle reiserfs tails.
->   */
-> -static int reiserfs_write_full_folio(struct folio *folio,
-> -				    struct writeback_control *wbc)
-> +static int reiserfs_write_folio(struct folio *folio,
-> +		struct writeback_control *wbc, void *data)
->  {
->  	struct inode *inode = folio->mapping->host;
->  	unsigned long end_index = inode->i_size >> PAGE_SHIFT;
-> @@ -2721,12 +2721,11 @@ static int reiserfs_read_folio(struct file *f, struct folio *folio)
->  	return block_read_full_folio(folio, reiserfs_get_block);
->  }
->  
-> -static int reiserfs_writepage(struct page *page, struct writeback_control *wbc)
-> +static int reiserfs_writepages(struct address_space *mapping,
-> +		struct writeback_control *wbc)
->  {
-> -	struct folio *folio = page_folio(page);
-> -	struct inode *inode = folio->mapping->host;
-> -	reiserfs_wait_on_write_block(inode->i_sb);
-> -	return reiserfs_write_full_folio(folio, wbc);
-> +	reiserfs_wait_on_write_block(mapping->host->i_sb);
-> +	return write_cache_pages(mapping, wbc, reiserfs_write_folio, NULL);
->  }
->  
->  static void reiserfs_truncate_failed_write(struct inode *inode)
-> @@ -3405,7 +3404,7 @@ int reiserfs_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
->  }
->  
->  const struct address_space_operations reiserfs_address_space_operations = {
-> -	.writepage = reiserfs_writepage,
-> +	.writepages = reiserfs_writepages,
->  	.read_folio = reiserfs_read_folio,
->  	.readahead = reiserfs_readahead,
->  	.release_folio = reiserfs_release_folio,
-> @@ -3415,4 +3414,5 @@ const struct address_space_operations reiserfs_address_space_operations = {
->  	.bmap = reiserfs_aop_bmap,
->  	.direct_IO = reiserfs_direct_IO,
->  	.dirty_folio = reiserfs_dirty_folio,
-> +	.migrate_folio = buffer_migrate_folio,
->  };
-> -- 
-> 2.43.0
-> 
+    fs: Block writes to mounted block devices
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16d5d3de180000
+start commit:   aea6bf908d73 Merge tag 'f2fs-for-6.7-rc1' of git://git.ker..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=93ac5233c138249e
+dashboard link: https://syzkaller.appspot.com/bug?extid=d43f346675e449548021
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=161d67f3680000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12eda928e80000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: fs: Block writes to mounted block devices
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
