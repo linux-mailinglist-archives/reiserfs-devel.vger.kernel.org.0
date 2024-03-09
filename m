@@ -1,71 +1,74 @@
-Return-Path: <reiserfs-devel+bounces-104-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <reiserfs-devel+bounces-105-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C73A877192
-	for <lists+reiserfs-devel@lfdr.de>; Sat,  9 Mar 2024 15:09:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8CFD877417
+	for <lists+reiserfs-devel@lfdr.de>; Sat,  9 Mar 2024 23:20:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CD041F21669
-	for <lists+reiserfs-devel@lfdr.de>; Sat,  9 Mar 2024 14:09:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2B251C215ED
+	for <lists+reiserfs-devel@lfdr.de>; Sat,  9 Mar 2024 22:20:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 679A640871;
-	Sat,  9 Mar 2024 14:09:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D31E51C4A;
+	Sat,  9 Mar 2024 22:20:05 +0000 (UTC)
 X-Original-To: reiserfs-devel@vger.kernel.org
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F6736AF9
-	for <reiserfs-devel@vger.kernel.org>; Sat,  9 Mar 2024 14:09:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 123CF51005
+	for <reiserfs-devel@vger.kernel.org>; Sat,  9 Mar 2024 22:20:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709993346; cv=none; b=WyvcLNx1Y32cGpYr6kkOZ9IWHhUFeVUOnyLM8xwzGDiERqGfhUhIW1sarl9iM0VEy02nA0QsJ1CFS0J8f+hv+6FDabDPAYRD6zcmkFx4DARtVXSnxUG1S+LeoGDEkLTe4SYDb4fmWAdLc8kYLkIAHScrXA87iCtjj9je6N3cLZc=
+	t=1710022805; cv=none; b=YCe9BlbAQoM367UBU8Ie21jGgtkbMANQ+VWXecMTl4h2Uaco7QHtohJHEJINod1pWHtv6JzfPBH4nkYI6SFsHo/80/3IbdLlJ/qDYWzux8nPXZobAXs5XIywYLTr33Gx9ryGp6Q4iHme89d5iTFmiuHnWlWM7EC2I3XIMhse3/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709993346; c=relaxed/simple;
-	bh=2+frEfNY9kCZ1DL3xeqyryfAD6b5yyHATCqZqM5CrB8=;
+	s=arc-20240116; t=1710022805; c=relaxed/simple;
+	bh=zFhNXKbHLt203SwwQ+ckq7WpijojBJ+o7aN23dGfPCo=;
 	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=SNFKfUCcJYdi1nJ8kZCS7BNHpiwmJMpLm61F4mfvIuccgzbF7Ws//zjKoEiFjDQgX9Q2spsl7JFrskIaMzK76Z9Oql+PltA5/oG06lM8tKOvuG1oqQeMLgR/MbIufbjE5+Pb9bk0CptsR82BkTNttsBuWGDGL1efWgPAqp1/A+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+	 Content-Type; b=VOva9j2LXV6XohdKjJOzBG/wk2lmORTI7+1n06jV3RNa02O2zrjiISITOhQTwGFORUmVxN52cG6riDgteD9j+BC+DAWQUAyZ0QwBUXG8LcSrpXPEIRiwB4qjUXYlAQEkhCLBQpNQVT8vEVXo2xUsI1GGamYtcxUMQOOH7BE/F1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7c8a98e52b5so14463039f.1
-        for <reiserfs-devel@vger.kernel.org>; Sat, 09 Mar 2024 06:09:04 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7c8ae14c2ccso18767739f.2
+        for <reiserfs-devel@vger.kernel.org>; Sat, 09 Mar 2024 14:20:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709993344; x=1710598144;
+        d=1e100.net; s=20230601; t=1710022803; x=1710627603;
         h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2LGzq8t2cO0APm/rv1jJdipgtRW0jr2Ew9T+G34Z8Vk=;
-        b=DNFisx3wLHsbSEmYvGzJP1HV/MpuWOVicw1hzrz+l0x7TAnNjT9hNhAsKaT5T6ZVaq
-         5VbaPkJJAuC009egvZJcuhObIFs0PjpcfjZtnluKdfAqdcJSvWb189i+83v5vJuef4Z4
-         sIoEM8FvCeQxGxW0kGmScyjFnML6W1S/40Xr5rBjKKwk+5Lhu1VGP3iCbZymPsTVghLt
-         VTKDh/3ld8yVtf/A3NBXMxKEWMAgcak3Zno8Eaik1NDXXxgCFHea/7A7f6gXeOM/a4fp
-         V3NKcDxfKe9xKEkR+Ylp3WdgVKwW9UvXA9x2V0yTfaQfRZOAgEBQWfadHnSVlvfytQq0
-         W4Sw==
-X-Forwarded-Encrypted: i=1; AJvYcCWb0kLJFK6bMD8zKwPcUxnRDK1dFpo9B/GoZVl3pRUM+K23DE7udCTvf6HCZDH/0XzAUphd9ESDCTt5T7ekhz7gAOauTV8oGtfJeINxYBk=
-X-Gm-Message-State: AOJu0YxZwGahF3klXB5YU8LWPlAlNQD/xU2uIH+IOGI7H4S8IBucj1PK
-	SlGrQxFQIaVllMXcRqLfDUymdfc1mAQX8uGrycFAWPs4OxVtMRJa9gduTIpSnND4Hrs9L1M5+Wp
-	Q4e1qObUZibtk4TDtJHVnFrJUpTsqmYPffu05QASuq9iZPP5rhY9YcjU=
-X-Google-Smtp-Source: AGHT+IEwvoaxIjpkkmAaqdrdf8pyKru+spENnqat1cc0Qzw8RLRm6Fge27YlG5LX18apnrqnwtvO3b/C7CB8oBa7ib0ryoatqXZ2
+        bh=TPIQ5P+kw5ZjaCXLN4LFGtLM3L78K1ihJHtxoWuotIA=;
+        b=iXzV0zgahyzh59Qubns4m4lRiygY08Quud9jDS9sTM3jFNttTLdetovpaJul0O8XtQ
+         ghcbztUsCGeBCrkosGWYaWN1Mjlfq2QOm+Fm8ZYBsILC4ErNPBnUJpD2OST0hCNDpeuC
+         d42m5EjIMwWSLeb4KkggLkLfpqP+OUwD1GpsqFTA3L6Zx4rzMzUR3ElAlfX+KnzSSdRG
+         FY113BQAoFo5wKae4UIr61tRDx6UfR4xmOG8rreB390fE/tBJnnF4wwlizDQD1hLI+CT
+         6fJOAFA8Ro1r4UV2Km9TXx2Zp83DXmU2GooZnBoCsuv2DxiDgAJUF/FZaBW6rKDXfP/z
+         87Hw==
+X-Forwarded-Encrypted: i=1; AJvYcCVYLrsV6N5Z9k4EkOFgi3XQDlWGZVQNK8ENs9d1DSawXTi5cAjdlVuV0MTNtEtOG3Gx8IffmrAH8A8Bs3raLhW8o9nb2Dgpx0TaV1OaM10=
+X-Gm-Message-State: AOJu0YwQ5/08cGHCmiKL/HKOdF5//jHnoLLGVAIhXt6XtO54PAdkUiI5
+	Ap5Y2so5XacCovK5Bi+zFnnHb6Gs+UchYUgZca8Ru0mphdCPUW1LvaKFYAQbeFEGZa+6Z4nMVCK
+	wVpZNXgnHh0sFdSlRPvpjZ4ZGzKzZAwVPMbDm1Vokx7V8m7Mqf8ZQ6U0=
+X-Google-Smtp-Source: AGHT+IGSVfooHSgQwTj5YVYCcfxioZPTQ9PhJk3trwjRuYHiOmZVPRfAANHZslMUL0ge14sAYcOQNmNuc8GVHbuxjaDiEEOQB1Xi
 Precedence: bulk
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 List-Id: <reiserfs-devel.vger.kernel.org>
 List-Subscribe: <mailto:reiserfs-devel+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:reiserfs-devel+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1654:b0:476:d5dc:b729 with SMTP id
- a20-20020a056638165400b00476d5dcb729mr79848jat.4.1709993344002; Sat, 09 Mar
- 2024 06:09:04 -0800 (PST)
-Date: Sat, 09 Mar 2024 06:09:03 -0800
-In-Reply-To: <000000000000f250a605ec981d41@google.com>
+X-Received: by 2002:a05:6638:2b09:b0:474:8aed:36d2 with SMTP id
+ fm9-20020a0566382b0900b004748aed36d2mr204238jab.2.1710022803352; Sat, 09 Mar
+ 2024 14:20:03 -0800 (PST)
+Date: Sat, 09 Mar 2024 14:20:03 -0800
+In-Reply-To: <0000000000007bedb605f119ed9f@google.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d682ec06133ad9d2@google.com>
-Subject: Re: [syzbot] [reiserfs?] possible deadlock in mnt_want_write_file
-From: syzbot <syzbot+1047e42179f502f2b0a2@syzkaller.appspotmail.com>
+Message-ID: <000000000000c07a08061341b549@google.com>
+Subject: Re: [syzbot] [reiserfs?] possible deadlock in open_xa_dir
+From: syzbot <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com>
 To: axboe@kernel.dk, brauner@kernel.org, hdanton@sina.com, jack@suse.cz, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+	jeffm@suse.com, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	mingo@redhat.com, paul@paul-moore.com, peterz@infradead.org, 
+	reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com, 
+	roberto.sassu@huaweicloud.com, syzkaller-bugs@googlegroups.com, 
+	will@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
 syzbot suspects this issue was fixed by commit:
@@ -76,13 +79,13 @@ Date:   Wed Nov 1 17:43:10 2023 +0000
 
     fs: Block writes to mounted block devices
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=164f208e180000
-start commit:   ac865f00af29 Merge tag 'pci-v6.7-fixes-2' of git://git.ker..
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11c28556180000
+start commit:   5eff55d725a4 Merge tag 'platform-drivers-x86-v6.7-7' of gi..
 git tree:       upstream
 kernel config:  https://syzkaller.appspot.com/x/.config?x=655f8abe9fe69b3b
-dashboard link: https://syzkaller.appspot.com/bug?extid=1047e42179f502f2b0a2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=116d8055e80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15687d81e80000
+dashboard link: https://syzkaller.appspot.com/bug?extid=8fb64a61fdd96b50f3b8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12d80b99e80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=148cccdee80000
 
 If the result looks correct, please mark the issue as fixed by replying with:
 
