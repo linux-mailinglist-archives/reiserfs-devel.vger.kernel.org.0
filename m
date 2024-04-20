@@ -1,155 +1,88 @@
-Return-Path: <reiserfs-devel+bounces-114-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <reiserfs-devel+bounces-115-lists+reiserfs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+reiserfs-devel@lfdr.de
 Delivered-To: lists+reiserfs-devel@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B6F88A2E86
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 12 Apr 2024 14:39:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E50938AB8F7
+	for <lists+reiserfs-devel@lfdr.de>; Sat, 20 Apr 2024 04:52:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6408AB22340
-	for <lists+reiserfs-devel@lfdr.de>; Fri, 12 Apr 2024 12:39:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE13C1C20E4E
+	for <lists+reiserfs-devel@lfdr.de>; Sat, 20 Apr 2024 02:52:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F88DE542;
-	Fri, 12 Apr 2024 12:38:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8204D17730;
+	Sat, 20 Apr 2024 02:51:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="hMBqsBAa";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="8YGf30Fw";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="hMBqsBAa";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="8YGf30Fw"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="EtAa4y1y"
 X-Original-To: reiserfs-devel@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CFB554F87;
-	Fri, 12 Apr 2024 12:38:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B431758C;
+	Sat, 20 Apr 2024 02:50:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712925532; cv=none; b=plIs/YDvFkfuEpKB+VtNTlbgd2KDpYxUMJj7PoEMHZhYPz7/kl2unJRpyQItN3fUaKzZxXZbDGO0de0rpCftDnpkwhzqvbDwzh3OZjhbkhABSzJNcCQkNxdN8kS+L2rHUixY4Pw6ALAOYgrHsaF2gSsCCaKoQ945GgQ4nFKx5pw=
+	t=1713581460; cv=none; b=qI04bhINv81VQYZ1n+mq5W0O0mq+hy2/2rW35G2eOnMg3gMEJ4DoAWgH9vYIfL1wYMExK0LMSHeOlQgYio+YalFkFilCCnM+ITeMT6ychb/llTpWSthXJ1mJrBG/s2SeXy83oWZrJlur4yB0Odpy0YB9il0FP95mIS/NHDgWmLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712925532; c=relaxed/simple;
-	bh=b/VfblD6S05RaA1RCAGojBZh50mufHTpEjwfpHh6eQU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I7ZguEi8cF4gigy+3Mfs6kz5o/prFjv6iAUXw3c70k3drIAxEey0X7R3A88ISxm9WcCe47dY8zLJWfJJ9y+t/ZX+ulBxEHlvWLHvmfUlm6sU2Bdv/VdNXtV5y8FtBn7ENl/Yec4njEXinhHt9FAd8q58SCdx2h0aFseqFrwiCow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=hMBqsBAa; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=8YGf30Fw; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=hMBqsBAa; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=8YGf30Fw; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 8452338262;
-	Fri, 12 Apr 2024 12:38:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1712925528; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nEBw+49UxZSpAkG7MYUNf10c5mjLpsm+3+mJDHW/cro=;
-	b=hMBqsBAa/fJqI4EOM+eKmmEVPeL2Yri9Pz83j8BShmnsZprbbHTb2bPSTtU78pRO9zkNcw
-	tCVc/ycnjY4CI+B0i9V/CcobT1+P7UiaYZ2aMdgvuDNPjTT3Nf7RbSVHd/6qVv0nnh7/bM
-	NEX6Rd383BRXRO663COpAfHPkC7OF90=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1712925528;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nEBw+49UxZSpAkG7MYUNf10c5mjLpsm+3+mJDHW/cro=;
-	b=8YGf30FweZ30bzBVb21uaRIrYuQxDa6Dln3jkKvAJ4RxwLRaHrJm6oPaPBuFyy/nDUJ6r9
-	NUFYN6NDNbQp50Cw==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1712925528; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nEBw+49UxZSpAkG7MYUNf10c5mjLpsm+3+mJDHW/cro=;
-	b=hMBqsBAa/fJqI4EOM+eKmmEVPeL2Yri9Pz83j8BShmnsZprbbHTb2bPSTtU78pRO9zkNcw
-	tCVc/ycnjY4CI+B0i9V/CcobT1+P7UiaYZ2aMdgvuDNPjTT3Nf7RbSVHd/6qVv0nnh7/bM
-	NEX6Rd383BRXRO663COpAfHPkC7OF90=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1712925528;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nEBw+49UxZSpAkG7MYUNf10c5mjLpsm+3+mJDHW/cro=;
-	b=8YGf30FweZ30bzBVb21uaRIrYuQxDa6Dln3jkKvAJ4RxwLRaHrJm6oPaPBuFyy/nDUJ6r9
-	NUFYN6NDNbQp50Cw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 79B571368B;
-	Fri, 12 Apr 2024 12:38:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id R3qxHVgrGWaLTgAAD6G6ig
-	(envelope-from <jack@suse.cz>); Fri, 12 Apr 2024 12:38:48 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 32027A071E; Fri, 12 Apr 2024 14:38:48 +0200 (CEST)
-Date: Fri, 12 Apr 2024 14:38:48 +0200
-From: Jan Kara <jack@suse.cz>
-To: Matthew Wilcox <willy@infradead.org>
-Cc: reiserfs-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	Jan Kara <jack@suse.cz>
-Subject: Re: [PATCH] reiserfs: Convert to writepages
-Message-ID: <20240412123848.mv5y56uuz4tjdyaz@quack3>
-References: <20240305185208.1200166-1-willy@infradead.org>
- <ZedqFFiVyntHkxLZ@casper.infradead.org>
- <ZhgnMsJ9AGAkgFXT@casper.infradead.org>
+	s=arc-20240116; t=1713581460; c=relaxed/simple;
+	bh=MNGQdCHzW25/+wHhXwXH/NMqYp82RBGV7NnH0nnxDOs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=p3ktFgMiQKwAb5RL9yG+kMsCqVbK+YFfOJr3s1EJ30YwHULbvBT4g/U3QgexoMJz9Ibv2QkW8vxfgLKRMWDtBhVAB194ccx6pBTc45pSzYp2KjNX/0Kpw7XMF4syKEle+LNHIvsP30EIHbLQyUIi/YNFpCwpRurpCbr9QLqr0oQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=EtAa4y1y; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description;
+	bh=sKwEaDMykkWblPGLhfvrNLPmAWo/K3PNSs0OffOfMK8=; b=EtAa4y1yR6TJYpH8imzwFAjDLY
+	MJeab18QUoywR2LAOQ0hU5sraZ21/85GG3H0cyGiNFNzXgIhUtXeKheylmMWa0SZ3NuioxS0/ICn/
+	kQfxrhBCSZ481qcZ00WQtW4JGTXCqz3qp+tmEi7DNfiQiS13lA/hIYlK7mJDOPI45lQlZn7g1d4qW
+	OklBbpTCXBqGYqCNxtDWguw6usp6Ls18o3hkkexexZXxb0Oui9/iOZJXPZJ0ZBoKw/W86oylFaOQ/
+	PoyJNmDrwuQ0JHAwkciyNtzi+s6cnFYSNzt0iJyAW6I8QAbUuIQkDxRqWxZEOZ1CSQp8Yqtf13rMQ
+	ek51IygA==;
+Received: from willy by casper.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1ry0oZ-000000095fy-3vKs;
+	Sat, 20 Apr 2024 02:50:56 +0000
+From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	reiserfs-devel@vger.kernel.org
+Subject: [PATCH 19/30] reiserfs: Remove call to folio_set_error()
+Date: Sat, 20 Apr 2024 03:50:14 +0100
+Message-ID: <20240420025029.2166544-20-willy@infradead.org>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240420025029.2166544-1-willy@infradead.org>
+References: <20240420025029.2166544-1-willy@infradead.org>
 Precedence: bulk
 X-Mailing-List: reiserfs-devel@vger.kernel.org
 List-Id: <reiserfs-devel.vger.kernel.org>
 List-Subscribe: <mailto:reiserfs-devel+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:reiserfs-devel+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZhgnMsJ9AGAkgFXT@casper.infradead.org>
-X-Spam-Flag: NO
-X-Spam-Score: -2.31
-X-Spam-Level: 
-X-Spamd-Result: default: False [-2.31 / 50.00];
-	BAYES_HAM(-1.51)[91.79%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.com:email,infradead.org:email]
+Content-Transfer-Encoding: 8bit
 
-On Thu 11-04-24 19:08:50, Matthew Wilcox wrote:
-> On Tue, Mar 05, 2024 at 06:53:08PM +0000, Matthew Wilcox wrote:
-> > On Tue, Mar 05, 2024 at 06:52:05PM +0000, Matthew Wilcox (Oracle) wrote:
-> > > Use buffer_migrate_folio to handle folio migration instead of writing
-> > > out dirty pages and reading them back in again.  Use writepages to write
-> > > out folios more efficiently.  We now only do that wait_on_write_block
-> > > check once per call to writepages instead of once per page.  It would be
-> > > possible to do one transaction per writeback run, but that's a bit of a
-> > > big change to do to this old filesystem, so leave it as one transaction
-> > > per folio (and leave reiserfs supporting only one page per folio).
-> > > 
-> > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> 
-> This patch is not yet in linux-next.  Do I need to do anything to
-> make that happen?
+The error flag is never tested for reiserfs folios, so stop setting it.
 
-Hum, usually Andrew picks these up but he was not on CC this time. Queued
-into my tree.
+Cc: reiserfs-devel@vger.kernel.org
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+---
+ fs/reiserfs/inode.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-								Honza
+diff --git a/fs/reiserfs/inode.c b/fs/reiserfs/inode.c
+index c1daedc50f4c..9b43a81a6488 100644
+--- a/fs/reiserfs/inode.c
++++ b/fs/reiserfs/inode.c
+@@ -2699,7 +2699,6 @@ static int reiserfs_write_folio(struct folio *folio,
+ 		}
+ 		bh = bh->b_this_page;
+ 	} while (bh != head);
+-	folio_set_error(folio);
+ 	BUG_ON(folio_test_writeback(folio));
+ 	folio_start_writeback(folio);
+ 	folio_unlock(folio);
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.43.0
+
 
